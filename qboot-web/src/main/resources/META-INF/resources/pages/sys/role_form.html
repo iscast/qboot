@@ -1,0 +1,113 @@
+<!-- 表单弹窗 -->
+<form id="role-form" lay-filter="role-form" class="layui-form model-form">
+        <input id="id" name="id" type="hidden"/>
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-i18n" i18n-key="sys.form.label.roleName"></label>
+            <div class="layui-input-inline">
+                <input id="name" name="name" i18n-key="sys.form.hint.inputRoleName" type="text" class="layui-input i18n-input-hint" maxlength="200"
+                       lay-verify="required" required/>
+            </div>
+            <div class="layui-form-mid">*</div>
+        </div>
+		<div class="layui-form-item">
+        <label class="layui-form-label layui-i18n" i18n-key="sys.form.label.permissions"></label>
+        	<div class="layui-input-block">
+	            <input id="authMenuIds" name="authMenuIds" type="hidden"/>
+	            <div id="roleAuthIds" name="roleAuthIds" style="overflow-y: auto;height:300px;"></div>
+        	</div>
+    	</div>
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-i18n" i18n-key="sys.form.label.remark">备注</label>
+            <div class="layui-input-block">
+                <textarea id="remarks" name="remarks" class="layui-textarea" maxlength="2000"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item model-form-footer">
+            <button class="layui-btn layui-btn-primary layui-btn-cancel" ew-event="closeDialog" type="button"></button>
+            <button class="layui-btn layui-btn-save" lay-filter="role-form-submit" lay-submit></button>
+        </div> 
+</form>
+<style>
+    .layui-form-mid{
+        color: red;
+    }
+</style>
+<script>
+    layui.use(['layer', 'admin', 'form', 'formSelects', 'table', '_config', 'authtree','_i18n'], function () {
+        var layer = layui.layer;
+        var admin = layui.admin;
+        var form = layui.form;
+        var _config = layui._config;
+        var formSelects = layui.formSelects;
+        var table = layui.table;
+    	var authtree = layui.authtree;
+        var _i18n = layui._i18n;
+        var msgs = _i18n.getMsg('sys');
+
+        form.render('radio');
+
+        layer.load(2);
+        
+     // 回显role数据
+        var role = admin.getTempData('t_role');
+        $('#role-form').attr('method', 'POST');
+        _i18n.initPage();
+        if (role) {
+            form.val('role-form', role);
+        }
+
+
+        // 表单提交事件
+        form.on('submit(role-form-submit)', function (data) {
+            layer.load(2);
+            var roleId = $('#id').val();
+            var url = '/sys/role/save';
+            if(roleId != null && roleId != ''){
+            	url = '/sys/role/update';
+            }
+
+            var checkedIds = authtree.getChecked('#roleAuthIds');
+            var menus = "";
+            for(var i=0; i<checkedIds.length; i++){
+            	menus = menus +","+ checkedIds[i];
+            }
+    		$('#authMenuIds').val(menus);
+    		data.field.authMenuIds=menus;
+    		
+            admin.req(url, data.field, function (data) {
+                layer.closeAll('loading');
+                if (data.code == 0) {
+                    layer.msg(data.msg, {icon: 1});
+                    table.reload('role-table');
+                    layer.closeAll('page');
+                } else {
+                    layer.msg(data.msg, {icon: 2});
+                }
+            }, 'post');
+            return false;
+        });
+        
+     	// 初始化,获取所有菜单
+    	$.ajax({
+    		url: _config.base_server + '/sys/menu/qryAllMenus?roleId='+$('#id').val(),
+    		dataType: 'json',
+    		method: 'get',
+    		success: function(data){
+    			if(0 == data.code){
+    				// 渲染时传入渲染目标ID，树形结构数据（具体结构看样例，checked表示默认选中），以及input表单的名字
+        			authtree.render('#roleAuthIds', data.data.trees, {
+        				inputname: 'authids[]', 
+        				layfilter: 'lay-check-auth', 
+        				autowidth: true,
+        			});
+    			}else{
+    				layer.msg(msgs['权限加载失败'], {icon: 2});
+    			}
+    		}
+    	});
+
+        layer.closeAll('loading');
+        form.render();//表单重新渲染，要不然添加完显示不出来新的option
+    });
+
+</script>

@@ -1,0 +1,213 @@
+<div class="layui-card">
+    <div class="layui-card-body">
+        <div class="layui-form toolbar">
+            <span class="layui-i18n" i18n-key="sys.form.label.loginName"></span>
+            <input id="sel_loginName" name="sel_loginName" class="layui-input search-input i18n-input-hint" type="text" i18n-key="sys.form.hint.inputLoginName"/>&emsp;
+            <span class="layui-i18n" i18n-key="sys.form.label.name"></span>
+            <input id="name" name="name" class="layui-input search-input i18n-input-hint" type="text" i18n-key="sys.form.hint.inputName"/>&emsp;
+            <span class="layui-i18n" i18n-key="sys.form.label.tel"></span>
+            <input id="mobile" name="mobile" class="layui-input search-input i18n-input-hint" type="text" i18n-key="sys.form.hint.inputTel"/>&emsp;
+            <button id="user-btn-search" class="layui-btn icon-btn user_auth layui-btn-search" data-auth="sys:user:qry"><i class="layui-icon">&#xe615;</i>搜索</button><br><br>
+            
+            <div class="layui-btn-group">
+			    <button id="user-btn-add" class="layui-btn layui-btn-add" data-auth="sys:user:save"><i class="layui-icon">&#xe608;</i>添加</button>
+            </div>
+        </div>
+        
+		<div id="userLayTable">
+        	<table class="layui-table" id="user-table" lay-filter="user-table"></table>
+        </div>
+    </div>
+</div>
+<script>
+    layui.use(['form', 'table', 'util', '_config', 'admin','_i18n'], function () {
+        var form = layui.form;
+        var table = layui.table;
+        var _config = layui._config;
+        var layer = layui.layer;
+        var util = layui.util;
+        var admin = layui.admin;
+        var _i18n = layui._i18n;
+        var msgs = _i18n.getMsg('sys') ;
+        var loginName = $('#sel_loginName').val();
+        var realName = $('#name').val();
+        var mobile = $('#mobile').val();
+
+        // 渲染表格
+        table.render({
+            elem: '#user-table',
+            url: _config.base_server + '/sys/user/qryPage',
+            method: 'GET',
+            where: {
+                access_token: _config.getToken().access_token,
+                loginName: loginName, name: realName,mobile:mobile
+            },
+            page: true,
+            even: true, //开启隔行背景
+            cols: [[
+                {type: 'numbers'},
+                {field: 'loginName', sort: true, title: msgs['sys.form.label.loginName']},
+                {field: 'name', sort: true, title: msgs['sys.form.label.name']},
+                {field: 'mobile', sort: true, title: msgs['sys.form.label.tel']},
+                {
+                    sort: true, templet: function (d) {
+                        return util.toDateString(d.createDate);
+                    }, title: msgs['sys.table.title.createTime']
+                },
+                {align: 'center', field: 'status', sort: false, templet: function(d){
+                	var auth = JSON.parse(sessionStorage.getItem("auth"));
+                	var page = location.hash.substring(2);
+                	if(auth[page] && auth[page]['sys:user:update']){
+                		var swiftBtn = '<input type="checkbox" lay-filter="user-tpl-state" value="'+d.id
+                            +'" lay-skin="switch" lay-text="'
+                            + msgs['sys.table.operation.valid']+'|'+ msgs['sys.table.operation.invalid'] +'"';
+                		if(d.status == 0){
+                			swiftBtn+='/>';
+                		}else{
+                			swiftBtn+=' checked="checked" />';
+                		}
+            	        return swiftBtn;
+            	    }else{
+            	    	var status = msgs['sys.table.operation.valid'];
+            	    	if(d.status == 0){
+            	    		status = msgs['sys.table.operation.invalid'];
+                		}
+            	    	return status;
+            	    }
+                }, title: msgs['sys.table.title.userStatus']},
+                {align: 'center', templet: function(d){
+                	var auth = JSON.parse(sessionStorage.getItem("auth"));
+                	var page = location.hash.substring(2);
+                	var btn = '';
+                	if(auth[page] && auth[page]['sys:user:update']){
+                		btn = '<a class="layui-btn layui-btn-xs" lay-event="edit">'+msgs['sys.form.operation.edit']+'</a>'
+                			+ '<a class="layui-btn layui-btn-xs" lay-event="reset">'+msgs['sys.form.operation.resetPwd']+'</a>';
+            	    }
+                	if(btn == ''){
+                		return _i18n.getGlobalVal('layui.operation.tips.noPermission');
+                	}else{
+                		return btn;
+                	}
+                }, title: msgs['sys.table.title.operation']}
+            ]], done: function(res, curr, count){
+                //分页条国际化
+                _i18n.initPage();
+            }
+        });
+
+        // 添加按钮点击事件
+        $('#user-btn-add').click(function () {
+            showEditModel();
+        });
+
+        // 工具条点击事件
+        table.on('tool(user-table)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+
+            if (layEvent === 'edit') { // 修改
+                showEditModel(data);
+            } else if (layEvent === 'reset') { // 重置密码
+                layer.confirm(msgs['layer.confirm.msg.resetPwd'],_i18n.getBtns(), function (i) {
+                    layer.close(i);
+                    layer.load(2);
+                    admin.req('/sys/user/initPwd?id=' + obj.data.id, {}, function (data) {
+                        layer.closeAll('loading');
+                        if (data.code == 0) {
+                            layer.msg(data.msg, {icon: 1, time: 5000});
+                        } else {
+                            layer.msg(data.msg, {icon: 2});
+                        }
+                    }, 'post');
+                });
+            }
+        });
+
+        //显示表单弹窗
+        var showEditModel = function (data) {
+            var title = data ? msgs['layer.confirm.title.editUser'] : msgs['layer.confirm.title.addUser'];
+            
+            if(data){
+            	admin.req('/sys/user/get', {
+                    id: data.id
+                }, function (data) {
+                    layer.closeAll('loading');
+                    if (data.code == 0) {
+                        admin.putTempData('t_user', data.data);
+                        admin.popupCenter({
+                            title: title,
+                            path: 'pages/sys/user_form.html',
+                            finish: function () {
+                                table.reload('user-table', {});
+                            }
+                        });
+                    } else {
+                        layer.msg(data.msg, {icon: 2});
+                    }
+                }, 'post');
+            }else{
+                admin.putTempData('t_user', {});
+                admin.popupCenter({
+                    title: title,
+                    path: 'pages/sys/user_form.html',
+                    finish: function () {
+                        table.reload('user-table', {});
+                    }
+                });
+            }
+            
+        };
+
+        table.on('sort(user-table)',function () {
+            _i18n.initPage();
+        });
+
+        // 搜索按钮点击事件
+        $('#user-btn-search').click(function () {
+            var loginName = $('#sel_loginName').val();
+            var realName = $('#name').val();
+            var mobile = $('#mobile').val();
+            table.reload('user-table', {where: {loginName: loginName, name: realName,mobile:mobile}});
+        });
+        
+        //点击行变色
+        $('#userLayTable').on('click', 'tbody tr', function (e) {
+        	var parent = $(this).parent();
+            var fals = $(this).hasClass('layui-table-click');
+        	if(!fals){
+        		$(this).addClass('layui-table-click');
+        	}else{
+        		$(this).removeClass('layui-table-click');
+        	}
+        });
+
+        // 修改user状态
+        form.on('switch(user-tpl-state)', function (obj) {
+            layer.load(2);
+            admin.req('/sys/user/setStatus', {
+                id: obj.elem.value,
+                status: obj.elem.checked ? 1 : 0
+            }, function (data) {
+                layer.closeAll('loading');
+                if (data.code == 0) {
+                    layer.msg(data.msg, {icon: 1});
+                } else {
+                    layer.msg(data.msg, {icon: 2});
+                    $(obj.elem).prop('checked', !obj.elem.checked);
+                    form.render('checkbox');
+                }
+            }, 'post');
+        });
+        
+    });
+
+	var auth = JSON.parse(sessionStorage.getItem("auth"));
+	var page = location.hash.substring(2);
+	$(".user_auth").each(function(index, item) {
+	    var buttonAuth = $(item).attr("data-auth");
+	    if( !auth[page] || auth[page][buttonAuth] != 1 ){
+	        $(item).remove();
+	    }
+	});
+
+</script>

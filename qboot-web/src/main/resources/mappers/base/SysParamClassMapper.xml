@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.iscast.base.dao.SysParamClassDao" >
+  <resultMap id="BaseResultMap" type="SysParamClass" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="param_type_class" property="paramTypeClass" jdbcType="VARCHAR" />
+    <result column="param_type_name" property="paramTypeName" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+    <result column="visible" property="visible" jdbcType="INTEGER" />
+    <result column="physics_flag" property="physicsFlag" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, param_type_class, param_type_name, visible, physics_flag, create_by, create_date, update_by, update_date, remarks
+  </sql>
+  
+  <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from sys_param_class
+    where id = #{id} 
+  </select>
+  
+  <select id="classIsUsed" resultMap="BaseResultMap" parameterType="SysParamClass" >
+    select 
+    <include refid="Base_Column_List" />
+    from sys_param_class
+    where param_type_class = #{paramTypeClass}
+  </select>
+  
+  <select id="findList" resultMap="BaseResultMap" parameterType="SysParamClass" >
+    select 
+    <include refid="Base_Column_List" />
+    from sys_param_class
+    <where>
+    		<if test="paramTypeClass !=null and paramTypeClass != '' ">
+    			and param_type_class like concat('%',#{paramTypeClass},'%')
+    		</if>
+    		<if test="paramTypeName !=null and paramTypeName != '' ">
+    			and param_type_name like concat('%',#{paramTypeName},'%')
+    		</if>
+    		<if test="visible !=null and visible > 0 ">
+    			and visible = #{visible}
+    		</if>
+    		<if test="physicsFlag !=null and physicsFlag > 0 ">
+    			and physics_flag = #{physicsFlag}
+    		</if>
+    </where>
+    <choose>
+    	<!-- 有注入安全漏洞 后台系统忽略可以提高开发速度 -->
+		<when test="sortField != null and sortField != '' and direction != null and direction !=''">
+			order by ${sortField} ${direction}
+		</when>
+		<otherwise>
+			order by create_date desc
+		</otherwise>
+    </choose>
+  </select>
+  
+  <update id="changeById" parameterType="SysParamClass" >
+    update sys_param_class
+    <set >
+      <if test="visible != null" >
+        visible = #{visible,jdbcType=INTEGER},
+      </if>
+      <if test="physicsFlag != null" >
+        physics_flag = #{physicsFlag,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id} 
+  </update>
+  
+  <insert id="insert" parameterType="SysParamClass" >
+    insert into sys_param_class (param_type_class, param_type_name, visible, physics_flag, create_by, create_date, update_by, update_date, remarks)
+    values (#{paramTypeClass,jdbcType=VARCHAR}, #{paramTypeName,jdbcType=VARCHAR}, #{visible,jdbcType=INTEGER}, #{physicsFlag,jdbcType=INTEGER}, #{createBy,jdbcType=VARCHAR}
+    	, #{createDate,jdbcType=TIMESTAMP},  #{updateBy,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, #{remarks,jdbcType=VARCHAR}
+      )
+  </insert>
+  
+  <update id="update" parameterType="SysParamClass" >
+    update sys_param_class
+    <set >
+      <if test="paramTypeClass != null" >
+        param_type_class = #{paramTypeClass,jdbcType=VARCHAR},
+      </if>
+      <if test="paramTypeName != null" >
+        param_type_name = #{paramTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="updateBy != null" >
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remarks != null" >
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id} 
+  </update>
+  
+</mapper>

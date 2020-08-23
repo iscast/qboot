@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.iscast.base.dao.SysTaskLogDao">
+
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="SysTaskLog">
+		insert into sys_task_log
+			(task_id,begin_time,end_time,cost_time,exec_ip,exec_status,exec_result,create_date,update_date,create_by,update_by) 
+		values 
+			(#{taskId},#{beginTime},#{endTime},#{costTime},#{execIp},#{execStatus},#{execResult},#{createDate},#{updateDate},#{createBy},#{updateBy})
+	</insert>
+
+	<select id="findAll" resultType="SysTaskLog">
+		SELECT * FROM sys_task_log
+	</select>
+
+	<select id="findList" parameterType="SysTaskLog" resultType="SysTaskLog">
+		select t.* from sys_task_log t  
+		where t.task_id = #{taskId} 
+		order by t.begin_time desc 
+	</select>
+
+	<update id="updateById" parameterType="SysTaskLog">
+		update sys_task_log
+		<set>
+			<if test="endTime != null">
+				end_time = #{endTime},
+			</if>
+			<if test="costTime != null">
+				cost_time = #{costTime},
+			</if>
+			<if test="execStatus != null">
+				exec_status = #{execStatus},
+			</if>
+			<if test="execResult != null and execResult != ''">
+				exec_result = #{execResult},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<delete id="deleteById" parameterType="java.lang.Long">
+		delete from sys_task_log where id = #{id}
+	</delete>
+	<!-- 清空日志,仅保留最后一条 -->
+	<delete id="deleteByTaskId" parameterType="java.lang.Long">
+		DELETE FROM sys_task_log WHERE task_id = #{taskId} 
+			AND id NOT IN (
+			SELECT a.maxId FROM 
+			(SELECT MAX(t1.id) AS maxId FROM sys_task_log t1 WHERE t1.task_id=#{taskId}) AS a
+			)
+	</delete>
+
+	<select id="findById" parameterType="java.lang.Long" resultType="SysTaskLog">
+		select * from sys_task_log where id = #{id}
+	</select>
+	
+</mapper>   

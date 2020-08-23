@@ -1,0 +1,98 @@
+<div class="layui-card">
+    <div class="layui-card-body">
+        <div class="layui-form toolbar">
+            <span class="layui-i18n" i18n-key="sys.form.label.time"></span>
+            <input type="text" id="optStartDate" name="optStartDate" class="layui-input search-input i18n-input-hint"  i18n-key="sys.form.hint.startTime"> -
+	        <input type="text" id="optEndDate" name="optEndDate" class="layui-input search-input i18n-input-hint" i18n-key="sys.form.hint.endTime">
+	        <button id="operateLog-btn-search" class="layui-btn icon-btn layui-btn-search"></button><br><br>
+	        
+          <div class="layui-btn-group">
+			  <button id="log-btn-set" class="layui-btn layui-icon layui-icon-set-sm layui-i18n" i18n-key="sys.btn.configLog" data-auth="sys:operateinfo:qry" onclick="logSet()"></button>
+          </div>
+        </div>
+        <!-- 数据表格 -->
+        <div id="operateLogLayTable">
+        	<table class="layui-table operateLog_auth" id="operateLog-table" lay-filter="operateLog-table" data-auth="sys:operatelog:qry"></table>
+        </div>
+    </div>
+</div>
+<script>
+    layui.use(['laydate', 'form', 'table', 'util', '_config', 'admin', 'formSelects', 'index'], function () {
+    	 var laydate = layui.laydate;
+        var form = layui.form;
+        var table = layui.table;
+        var _config = layui._config;
+        var layer = layui.layer;
+        var util = layui.util;
+        var index = layui.index;
+        var admin = layui.admin;
+        var formSelects = layui.formSelects;
+        var _i18n = layui._i18n;
+        var msgs = _i18n.getMsg('sys') ;
+        //渲染表格
+        table.render({
+            elem: '#operateLog-table',
+            url: _config.base_server + '/sys/operatelog/qryPage',
+            where: {
+                access_token: _config.getToken().access_token,
+                startDate:$('#optStartDate').val(),endDate:$('#optEndDate').val()
+            },
+            method: 'post',
+            page: true,
+            even: true, //开启隔行背景
+            cols: [[
+                {type: 'numbers'},
+                {field: 'uriName', sort: true, title: msgs['sys.table.title.uriName']},
+                {field: 'requestUri', sort: true, title: msgs['sys.table.title.requestAddr']},
+                {field: 'requestDate', sort: true, templet: function (d) {
+                    return util.toDateString(d.requestDate);
+                }, title: msgs['sys.table.title.requestTime']},
+                {field: 'requestIP', sort: true, title: msgs['sys.table.title.requestIP']},
+                {field: 'requestUserId', sort: true, title: msgs['sys.table.title.userName']},
+                {field: 'responseTime', sort: true, templet: function (d) {
+                    return d.responseTime+'ms';
+                }, title: msgs['sys.table.title.responseDuration']}
+            ]], done: function(res, curr, count){
+                //分页条国际化
+                _i18n.initPage();
+            }
+        });
+        //点击行变色
+        $('#operateLogLayTable').on('click', 'tbody tr', function (e) {
+            var fals = $(this).hasClass('layui-table-click');
+        	if(!fals){
+        		$(this).addClass('layui-table-click');
+        	}else{
+        		$(this).removeClass('layui-table-click');
+        	}
+        });
+
+        // 搜索按钮点击事件
+        $('#operateLog-btn-search').click(function () {
+            table.reload('operateLog-table', {where: {startDate:$('#optStartDate').val(),endDate:$('#optEndDate').val()}});
+        });
+
+      //日期时间选择器
+        laydate.render({
+          elem: '#optStartDate'
+          ,type: 'datetime'
+        });
+      //日期时间选择器
+        laydate.render({
+          elem: '#optEndDate'
+          ,type: 'datetime'
+        });
+
+        /*table.on('sort(operateLog-table)',function () {
+            _i18n.initPage();
+        });*/
+
+        // 日志操作界面
+        $('#log-btn-set').click(function () {
+        	index.loadView("sys_operateinfo", 'pages/sys/operateinfo.html', msgs['sys.btn.configLog']);
+            location.hash = '#!sys_operateinfo';
+        });
+        
+    });
+    
+</script>

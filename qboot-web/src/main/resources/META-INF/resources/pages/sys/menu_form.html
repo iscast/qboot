@@ -1,0 +1,204 @@
+<!-- menu表单弹窗 -->
+<form id="menu-form" lay-filter="menu-form" class="layui-form model-form">
+    <input id="id" name="id" type="hidden"/>
+    <input id="menuType" name="menuType" type="hidden"/>
+    <div class="layui-form-item">
+        <label class="layui-form-label layui-i18n" i18n-key="sys.table.title.menuName"></label>
+        <div class="layui-input-inline">
+            <input id="name" name="name" i18n-key="sys.form.hint.inputMenuName" type="text" class="layui-input i18n-input-hint" maxlength="200"
+                   lay-verify="required" required/>
+        </div>
+        <div class="layui-form-mid">*</div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label layui-i18n" i18n-key="sys.table.title.menuAddr"></label>
+        <div class="layui-input-block">
+            <input id="href" name="href" i18n-key="sys.form.hint.inputPathName" type="text" class="layui-input i18n-input-hint" maxlength="200"/>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label layui-i18n" i18n-key="sys.table.title.authority"></label>
+        <div class="layui-input-inline">
+            <input id="permission" name="permission" i18n-key="sys.form.hint.inputAuthority" type="text" class="layui-input i18n-input-hint" maxlength="200"
+                   lay-verify="required" required/>
+        </div>
+        <div class="layui-form-mid">*</div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label layui-i18n" i18n-key="sys.table.title.order"></label>
+        <div class="layui-input-inline">
+            <input id="sort" name="sort" i18n-key="sys.form.hint.inputOrder" type="text" class="layui-input i18n-input-hint" maxlength="200"
+                   lay-verify="required|number" required/>
+        </div>
+        <div class="layui-form-mid">*</div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label layui-i18n" i18n-key="sys.form.label.icon"></label>
+        <div class="layui-input-block">
+            <input id="icon" name="icon" type="hidden">
+            <input type="text" id="iconPic" lay-filter="iconPic" class="layui-input">
+        </div>
+    </div>
+        
+    <div class="layui-form-item">
+        <label class="layui-form-label layui-i18n" i18n-key="sys.form.label.menuType"></label>
+        <div class="layui-input-block">
+            <select id="type" name="type" lay-filter="type">
+		        <!-- <option value="0">功能模块</option>
+	            <option value="1" selected="selected">菜单</option>
+	            <option value="999">按钮</option> -->
+		    </select>
+        </div>
+    </div>
+   <div class="layui-form-item">
+        <label class="layui-form-label layui-i18n" i18n-key="sys.form.label.parentMenu"></label>
+        <div class="layui-input-block">
+        	<input id="parentId" name="parentId" type="hidden">
+            <select id="parentMenu" name="parentMenu" >
+		        <option value="">请选择父级菜单</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item model-form-footer">
+        <button class="layui-btn layui-btn-primary layui-btn-cancel" ew-event="closeDialog" type="button"></button>
+        <button class="layui-btn layui-btn-save" lay-filter="menu-form-submit" lay-submit></button>
+    </div>
+</form>
+<style>
+    .layui-form-mid{
+        color: red;
+    }
+</style>
+<script>
+    layui.use(['layer', '_config', 'admin', 'form', 'formSelects', 'iconPicker'], function () {
+        var layer = layui.layer;
+        var admin = layui.admin;
+        var form = layui.form;
+        var formSelects = layui.formSelects;
+        var m_parentId = null;
+        var menuType = null;
+        var iconPicker = layui.iconPicker;
+        var _i18n = layui._i18n;
+        var msgs = _i18n.getMsg('sys');
+
+        iconPicker.render({
+            // 选择器，推荐使用input
+            elem: '#iconPic',
+            // 数据类型：fontClass/unicode，推荐使用fontClass
+            type: 'fontClass',
+            // 是否开启搜索：true/false
+            search: true,
+            // 点击回调
+            click: function (data) {
+                $('#icon').val(data.icon);
+            }
+        });
+
+        // 回显menu数据
+        var menu = admin.getTempData('t_menu');
+        $('#menu-form').attr('method', 'POST');
+        _i18n.initPage();
+        if (menu) {
+        	if(menu.id != null && menu.id != ''){
+        		m_parentId = menu.parentId;
+        	}else{
+        		m_parentId = menu.parentMenuId;
+        	}
+        	menuType = menu.type;
+            form.val('menu-form', menu);
+            if(menu.icon){
+            /**
+              * 选中图标 （常用于更新时默认选中图标）
+               * @param filter lay-filter
+               * @param iconName 图标名称，自动识别fontClass/unicode
+               */
+              iconPicker.checkIcon('iconPic', menu.icon);
+            }
+        }
+        
+        form.on('select(parentMenu)', function(data){
+        	var selectVal = $('#parentMenu').find('option:selected').val();
+        	$('#parentId').val(selectVal);
+        });
+
+        // 表单提交事件
+        form.on('submit(menu-form-submit)', function (data) {
+        	var selectVal = $('#parentMenu').find('option:selected').val();
+        	var menuType = $('#type').val();
+        	if(menuType != 0 && (selectVal == null || selectVal == '')){
+        		layer.msg('请选择父级菜单', {icon: 2});
+        		return false;
+        	}
+        	$('#parentId').val(selectVal);
+        	data.field.parentId = selectVal;
+            layer.load(2);
+            var menuId = $('#id').val();
+            var postUrl = "/sys/menu/save";
+            if(menuId != null && menuId != ''){
+            	postUrl = "/sys/menu/update";
+            }
+            admin.req(postUrl, data.field, function (data) {
+                layer.closeAll('loading');
+                if (data.code == 0) {
+                    layer.msg(data.msg, {icon: 1});
+                    admin.refresh();
+                    layer.closeAll('page');
+                } else {
+                    layer.msg(data.msg, {icon: 2});
+                }
+            }, $('#menu-form').attr('method'));
+            return false;
+        });
+
+        var menuId = $('#id').val();
+        if(menuId == null || menuId == ''){
+        	if(menuType == 1){
+            	$("#type").append('<option value="999" selected="selected">按钮</option>'); 
+            	$("#type").attr("disabled","disabled");
+            }else{
+            	$("#type").append('<option value="0" '+(menuType==0?'selected="selected"':'')+'>模块</option>'); 
+            	$("#type").append('<option value="1" '+(menuType==1?'selected="selected"':'')+'>菜单</option>'); 
+            	$("#type").append('<option value="999" '+(menuType==999?'selected="selected"':'')+'>按钮</option>'); 
+            }
+        }else{
+        	if(menuType == 999){
+            	$("#type").append('<option value="999" selected="selected">按钮</option>'); 
+            	$("#type").attr("disabled","disabled");
+            }else{
+            	$("#type").append('<option value="0" '+(menuType==0?'selected="selected"':'')+'>模块</option>'); 
+            	$("#type").append('<option value="1" '+(menuType==1?'selected="selected"':'')+'>菜单</option>'); 
+            	$("#type").append('<option value="999" '+(menuType==999?'selected="selected"':'')+'>按钮</option>'); 
+            }
+        }
+        
+        // 获取所有菜单
+        layer.load(2);
+        admin.req('/sys/menu/qryParentMenus', {}, function (data) {
+            layer.closeAll('loading');
+            if (0 == data.code) {
+                // 渲染多选下拉框
+                var parentMenus = "";
+                for (var i = 0; i < data.data.length; i++) {
+                    var menuName = _i18n.getGlobalVal(data.data[i].name)?_i18n.getGlobalVal(data.data[i].name):data.data[i].name;
+                    if(m_parentId != null && m_parentId == data.data[i].id){
+                    	parentMenus+='<option value="'+data.data[i].id+'" selected="selected" >'+menuName+'</option>';
+                    	$("#parentId").val(m_parentId);
+                    }else{
+                    	parentMenus+='<option value="'+data.data[i].id+'">'+menuName+'</option>';
+                    }
+                } 
+                $("#parentMenu").append(parentMenus);
+                form.render();
+            } else {
+                layer.msg('获取菜单列表失败', {icon: 2});
+            }
+        }, 'GET');
+
+        form.render();//表单重新渲染，要不然添加完显示不出来新的option
+
+        
+    });
+    
+</script>

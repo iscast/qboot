@@ -1,0 +1,291 @@
+<div class="layui-card">
+    <div class="layui-card-body">
+        <div class="layui-form toolbar">
+		  	任务名称：<input id="taskName" name="taskName" class="layui-input search-input" type="text" />&emsp;
+		   	任务分组：<input id="groupName" name="groupName" class="layui-input search-input" type="text" />&emsp;
+			Job实例：<input id="taskTarget" name="taskTarget" class="layui-input search-input" type="text" />&emsp;
+			<select name="status" lay-verify="">
+			  <option value="-1">请选择状态</option>
+			  <option value="1">启用</option>
+			  <option value="0">禁用</option>
+			</select>&emsp;
+			<select name="runStatus" lay-verify="">
+			  <option value="-1">请选择执行状态</option>
+			  <option value="0">初始</option>
+			  <option value="1">执行中</option>
+			</select>&emsp; 
+			<button id="task-btn-search" class="layui-btn icon-btn task_auth" data-auth="sys:task:qry"><i class="layui-icon">&#xe615;</i>搜索</button><br><br>
+			<button id="task-btn-add" class="layui-btn icon-btn task_auth" data-auth="sys:task:save"><i class="layui-icon">&#xe654;</i>新增</button>
+        </div>
+        
+		  <div id="taskLayTable">
+		  	<div class="layui-row">
+			    <div class="layui-col-md7">
+			    	<table class="layui-table" id="task-table" lay-filter="task-table"></table>
+			    </div>
+			    <div class="layui-col-md5">
+			    	<table class="layui-table" id="task-log-table" lay-filter="task-log-table"></table>
+			    </div>
+			</div>
+		  </div>
+        
+    </div>
+</div>
+<style>
+	#taskLayTable tbody .layui-table-click{background-color: #ccffeb !important;}
+</style>
+<script>
+    layui.use(['form', 'table', 'util', '_config', 'admin'], function () {
+        var form = layui.form;
+        var table = layui.table;
+        var _config = layui._config;
+        var layer = layui.layer;
+        var util = layui.util;
+        var admin = layui.admin;
+        
+        var taskName = $('#taskName').val();
+        var groupName = $('#groupName').val();
+        var taskTarget = $('#taskTarget').val();
+
+        // 渲染表格
+        table.render({
+            elem: '#task-table',
+            url: _config.base_server + '/sys/task/qryPage',
+            method: 'GET',
+            loading: true,
+            where: {
+                access_token: _config.getToken().access_token,
+                taskName: taskName, groupName: groupName,taskTarget: taskTarget,status: $('select[name="status"]').val(),runStatus: $('select[name="runStatus"]').val() 
+            },
+            page: true,
+            even: false, 
+            text: {
+                none: "无数据" 
+            },
+            limits:_config.limits,
+            cols: [[
+                {field: 'taskName', sort: true, title: "任务名称",width:200,fixed:'left'},
+                {align: 'center', field: 'status', sort: false, templet: function(d){
+                	var auth = JSON.parse(sessionStorage.getItem("auth"));
+                	var page = location.hash.substring(2);
+                	if(auth[page] && auth[page]['sys:task:edit']){
+                		var swiftBtn = '<input type="checkbox" lay-filter="task-tpl-state" value="'+d.id+'" lay-skin="switch" lay-text="启用|禁用"';
+                		if(d.status == 1){
+                			swiftBtn+=' checked="checked" />';
+                		}else{
+                			swiftBtn+='/>';
+                		}
+            	        return swiftBtn;
+            	    }else{
+            	    	return d.statusName;
+            	    }
+                }, title: "任务状态",width:120},
+                {field: 'runStatusName',templet: function(d){
+                	if(d.runStatus==1){
+                		return '<span style="color:red;">'+d.runStatusName+'</span>'
+                	}else{
+                		return '<span style="color:green;">'+d.runStatusName+'</span>'
+                	}
+                }, sort: false, title: "执行状态",width:100},
+                {field: 'cronExp', sort: true, title: "时间表达式",width:150},
+                {field: 'groupName', sort: true, title: "任务分组",width:150},
+                {field: 'taskTarget', sort: true, title: "Job实例",width:200},
+                {field: 'execType', sort: true,templet: function (d) {
+                		if(d.execType==1){
+                			return "非阻塞" ;
+                		}else{
+                			return "阻塞";
+                		}
+                	}, title: "执行方式",width:150},
+                {field: 'params', sort: false, title: "参数",width:150},
+                {field: 'createDate',sort: true, templet: function (d) {return util.toDateString(d.createDate);}, title: "创建时间",width:160},
+                {field: 'updateDate',sort: true, templet: function (d) {return util.toDateString(d.updateDate);}, title: "更新时间",width:160},
+                {field: 'remarks', sort: false, title: "备注",width:200},
+                {align: 'center', templet: function(d){
+                	var auth = JSON.parse(sessionStorage.getItem("auth"));
+                	var page = location.hash.substring(2);
+                	var btn = '' ;
+                	if(auth[page] && auth[page]['sys:task:edit']){
+                		btn = btn+'<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>' ;
+            	    }
+                	if(auth[page] && auth[page]['sys:task:execute']){
+            	    	btn = btn
+                		+'<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="execute">立即执行</a>'
+                		;
+            	    }
+                	if(btn == ''){
+                		return "无权限";
+                	}else{
+                		return btn;
+                	}
+                }, title: "操作",width:140,fixed:'right'}
+            ]],
+            done: function(res, curr, count){
+            	var data = res.data;
+            }
+        });
+
+        // 添加按钮点击事件
+        $('#task-btn-add').click(function () {
+            showEditModel();
+        });
+
+        // 工具条点击事件
+        table.on('tool(task-table)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (layEvent === 'edit') { // 修改
+                showEditModel(data);
+            }else if(layEvent === 'execute'){
+            	layer.confirm("确认立即执行?", {icon: 3, title:"提示"}, function(index){
+            		admin.req('/sys/task/execute', {
+                        id: data.id
+                    }, function (data) {
+                    	admin.doneTip(data);
+                    	reloadTable();
+                    }, 'post');
+           		  layer.close(index);
+           		});
+            }else if(layEvent === 'delete'){
+            	layer.confirm("确认删除?", {icon: 3, title:"提示"}, function(index){
+            		admin.req('/sys/task/delete', {
+                        id: data.id
+                    }, function (data) {
+                    	admin.doneTip(data);
+                    	reloadTable();
+                    }, 'post');
+           		  layer.close(index);
+           		});
+            }else if(layEvent === 'deleteLog'){
+            	layer.confirm("确认清空日志?", {icon: 3, title:"标题"}, function(index){
+            		admin.req('/sys/tasklog/deleteLog', {
+                        taskId: data.id
+                    }, function (data) {
+                       admin.doneTip(data);
+                       reloadTable();
+                    }, 'post');
+           		  layer.close(index);
+           		});
+            }
+        });
+        
+        table.on('row(task-table)', function(obj){
+        	showTaskLog('#task-log-table',obj.data);
+       	});
+      
+        //显示任务日志
+        var showTaskLog = function(elem,data){
+        	var taskId = -1 ;
+        	if(data&&data.id){
+        		taskId = data.id ;
+        	}
+	       	 table.render({
+	       		 	elem: elem,
+	                url: _config.base_server + '/sys/tasklog/qryPage',
+	                method: 'GET',
+	                loading: true,
+	                where: {
+	                    access_token: _config.getToken().access_token,
+	                    taskId: taskId
+	                },
+	                page: true,
+	                even: true, //开启隔行背景
+	                text: {
+	                    none: "无数据"
+	                },
+	                limits:_config.limits,
+	                cols: [[
+					{field: 'execStatus',templet:function(d){
+							if(d.execStatus==1){
+								return "成功";
+							}else if(d.execStatus==2){
+								return "失败";
+							}else{
+								return "未知" ;
+							}
+						},sort: true, title: "执行结果",width:120},
+					{field: 'costTime', sort: true,templet: function (d) {return admin.accDiv(d.costTime,1000);}, title: "执行耗时(s)",width:120},
+					{field: 'execIp', sort: false, title: "执行节点IP",width:120},
+					{field: 'execResult', sort: false, title: "描述",width:200},
+					{field: 'beginTime', sort: true,templet: function (d) {return util.toDateString(d.beginTime);}, title: "开始时间",width:160},
+					{field: 'endTime', sort: true,templet: function (d) {return util.toDateString(d.endTime);}, title: "结束时间",width:160},
+	                ]],
+	                done: function(res, curr, count){
+	                	var data = res.data;
+	                }
+	       	 }) ;
+        };
+        showTaskLog('#task-log-table');
+        
+        //显示表单弹窗
+        var showEditModel = function (data) {
+            var title = data ? "编辑" : "新增";
+            if(data){
+            	admin.req('/sys/task/get', {
+                    id: data.id
+                }, function (data) {
+                    layer.closeAll('loading');
+                    if (data.code == 0) {
+                        admin.putTempData('t_task', data.data);
+                        admin.popupCenter({
+                            title: title,
+                            path: 'pages/sys/task_form.html',
+                            finish: function () {
+                            	reloadTable();
+                            }
+                        });
+                    } else {
+                        layer.msg(data.msg, {icon: 2});
+                    }
+                }, 'post');
+            }else{
+                admin.putTempData('t_task', {});
+                admin.popupCenter({
+                    title: title,
+                    path: 'pages/sys/task_form.html',
+                    finish: function () {
+                    	reloadTable();
+                    }
+                });
+            }
+            
+        };
+		var reloadTable = function (){
+			 table.reload('task-table', {where: {taskName: $('#taskName').val(), groupName: $('#groupName').val(),
+	            	taskTarget: $('#taskTarget').val(),status: $('select[name="status"]').val(),runStatus: $('select[name="runStatus"]').val()}});
+		}
+        // 搜索按钮点击事件
+        $('#task-btn-search').click(function () {
+        	reloadTable();
+        });
+
+        // 修改任务状态
+        form.on('switch(task-tpl-state)', function (obj) {
+            layer.load(2);
+            admin.req('/sys/task/updateStatus', {
+                id: obj.elem.value,
+                status: obj.elem.checked ? 1 : 0
+            }, function (data) {
+                layer.closeAll('loading');
+                if (data.code == 0) {
+                    layer.msg(data.msg, {icon: 1});
+                } else {
+                    layer.msg(data.msg, {icon: 2});
+                    $(obj.elem).prop('checked', !obj.elem.checked);
+                    form.render('checkbox');
+                }
+            }, 'post');
+        });
+        
+    });
+
+	var auth = JSON.parse(sessionStorage.getItem("auth"));
+	var page = location.hash.substring(2);
+	$(".task_auth").each(function(index, item) {
+	    var buttonAuth = $(item).attr("data-auth");
+	    if( !auth[page] || auth[page][buttonAuth] != 1 ){
+	        $(item).remove();
+	    }
+	});
+
+</script>

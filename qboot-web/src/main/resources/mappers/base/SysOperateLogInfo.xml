@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.iscast.base.dao.SysOperateLogInfoDao">
+
+	<resultMap id="SysOperateLogInfoDtoResult" type="SysOperateLogInfoDto">
+		<result column="LOG_ID" jdbcType="BIGINT" property="logId" />
+		<result column="REQ_URI" jdbcType="VARCHAR" property="reqUri" />
+		<result column="URI_NAME" jdbcType="VARCHAR" property="uriName" />
+		<result column="URI_TYPE" jdbcType="INTEGER" property="uriType" />
+		<result column="PHYSICS_FLAG" jdbcType="INTEGER" property="physicsFlag" />
+		<result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate" />
+		<result column="UPDATE_DATE" jdbcType="TIMESTAMP" property="updateDate" />
+		<result column="UPDATE_BY" jdbcType="VARCHAR" property="updateBy" />
+		<result column="CREATE_BY" jdbcType="VARCHAR" property="createBy" />
+		<result column="REMARKS" jdbcType="VARCHAR" property="remarks" />
+	</resultMap>
+	
+	<sql id="Base_Column_List" >
+	    LOG_ID, REQ_URI, URI_NAME, URI_TYPE, PHYSICS_FLAG, CREATE_DATE, UPDATE_DATE, UPDATE_BY, CREATE_BY, REMARKS
+	</sql>
+
+	<insert id="insert" parameterType="SysOperateLogInfoDto" keyProperty="LOG_ID" useGeneratedKeys="true">
+		INSERT INTO sys_operate_log_info 
+		(REQ_URI, URI_NAME, URI_TYPE, PHYSICS_FLAG, CREATE_DATE, UPDATE_DATE, UPDATE_BY, CREATE_BY, REMARKS)
+		VALUES
+		(#{reqUri, jdbcType=VARCHAR},#{uriName, jdbcType=VARCHAR},#{uriType, jdbcType=INTEGER}
+		,#{physicsFlag, jdbcType=INTEGER},#{createDate, jdbcType=TIMESTAMP},#{updateDate, jdbcType=TIMESTAMP}
+		,#{updateBy, jdbcType=INTEGER},#{createBy, jdbcType=VARCHAR},#{remarks, jdbcType=VARCHAR})
+	</insert>
+	
+    <select id="findList" parameterType="SysOperateLogInfoDto" resultMap="SysOperateLogInfoDtoResult">
+        SELECT 
+        <include refid="Base_Column_List" />
+        from sys_operate_log_info
+        <where>
+           <include refid="search_conditions" />
+        </where>
+    </select>
+    
+    <select id="findById" resultMap="SysOperateLogInfoDtoResult" parameterType="java.lang.String" >
+	    select 
+	    <include refid="Base_Column_List" />
+	    from sys_operate_log_info
+	    where LOG_ID = #{logId}
+	</select>
+	
+    <select id="findByUri" resultMap="SysOperateLogInfoDtoResult" parameterType="SysOperateLogInfoDto" >
+	    select 
+	    <include refid="Base_Column_List" />
+	    from sys_operate_log_info
+	    where req_uri = #{reqUri}
+	</select>
+    
+     <!-- 查询条件 -->
+     <sql id = "search_conditions">
+       <if test="reqUri != null and reqUri != '' ">
+           AND req_uri like concat('%',#{reqUri},'%')
+       </if>
+       <if test="uriName != null and uriName != '' ">
+           AND URI_NAME like concat('%',#{uriName},'%')
+       </if>
+       <if test="uriType != null and uriType > 0">
+           AND URI_TYPE = #{uriType}
+       </if>
+     </sql>
+    
+  <delete id="deleteById" >
+    delete from sys_operate_log_info where LOG_ID = #{logId}
+  </delete>
+  
+    <insert id="update" parameterType="SysOperateLogInfoDto">
+		update sys_operate_log_info 
+		<set >
+	      <if test="reqUri != null" >
+	        REQ_URI = #{reqUri,jdbcType=VARCHAR},
+	      </if>
+	      <if test="uriName != null" >
+	        URI_NAME = #{uriName,jdbcType=VARCHAR},
+	      </if>
+	      <if test="uriType != null" >
+	        URI_TYPE = #{uriType,jdbcType=INTEGER},
+	      </if>
+	      <if test="physicsFlag != null" >
+	        PHYSICS_FLAG = #{physicsFlag,jdbcType=INTEGER},
+	      </if>
+	      <if test="updateBy != null" >
+	        update_by = #{updateBy,jdbcType=VARCHAR},
+	      </if>
+	      <if test="updateDate != null" >
+	        update_date = #{updateDate,jdbcType=TIMESTAMP},
+	      </if>
+	      <if test="remarks != null" >
+	        remarks = #{remarks,jdbcType=VARCHAR},
+	      </if>
+	    </set>
+	    where LOG_ID = #{logId}
+	</insert>
+</mapper>   

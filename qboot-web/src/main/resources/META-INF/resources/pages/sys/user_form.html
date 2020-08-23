@@ -1,0 +1,219 @@
+<!-- user表单弹窗 -->
+<form id="user-form" lay-filter="user-form" class="layui-form model-form">
+    <!-- <div style="height:500px;width:440px;overflow:auto"> -->
+    	<input id="id" name="id" type="hidden"/>
+	    <div class="layui-form-item">
+	        <label class="layui-form-label layui-i18n" i18n-key="sys.form.label.loginName"></label>
+	        <div class="layui-input-inline">
+	            <input id="loginName" name="loginName" i18n-key="sys.form.hint.inputLoginName" type="text" class="layui-input i18n-input-hint" maxlength="200"
+	                   lay-verify="required"/>
+	        </div>
+			<div class="layui-form-mid">*</div>
+	    </div>
+	    <div class="layui-form-item">
+	        <label class="layui-form-label layui-i18n" i18n-key="sys.form.label.name"></label>
+	        <div class="layui-input-inline">
+	            <input id="name" name="name" i18n-key="sys.form.label.name"  type="text" class="layui-input i18n-input-hint" maxlength="200"
+	                   lay-verify="required" required/>
+	        </div>
+			<div class="layui-form-mid">*</div>
+	    </div>
+	    <div class="layui-form-item">
+	        <label class="layui-form-label layui-i18n" i18n-key="sys.form.label.userType"></label>
+	        <div class="layui-input-inline">
+	            <select id="userType" name="userType" lay-filter="userType" lay-verify="required">
+	            	<option value="">--用户类型--</option>
+	            </select>
+	        </div>
+			<div class="layui-form-mid">*</div>
+	   </div>
+	    <div class="layui-form-item">
+	        <label class="layui-form-label layui-i18n" i18n-key="sys.form.label.expandField"></label>
+	        <div class="layui-input-inline">
+	            <input id="fldS1" name="fldS1" type="text" class="layui-input i18n-input-hint" i18n-key="sys.form.hint.3rdPartyAccount"/>
+	        </div>
+	    </div>
+	    <div class="layui-form-item">
+	        <label class="layui-form-label layui-i18n" i18n-key="sys.form.label.tel"></label>
+	        <div class="layui-input-inline">
+	            <input id="mobile" name="mobile" i18n-key="sys.form.label.tel" type="text" class="layui-input i18n-input-hint" lay-verify="required|tel"
+	                   required/>
+	        </div>
+			<div class="layui-form-mid">*</div>
+	    </div>
+	    
+	     <div class="layui-form-item">
+	        <label class="layui-form-label layui-i18n" i18n-key="sys.form.label.email"></label>
+	        <div class="layui-input-inline">
+	            <input id="email" name="email" i18n-key="sys.form.label.email" type="text" class="layui-input i18n-input-hint" maxlength="200"
+	                   lay-verify="required|email" required/>
+	        </div>
+			 <div class="layui-form-mid">*</div>
+	    </div>
+	    <div class="layui-form-item">
+	        <label class="layui-form-label layui-i18n" i18n-key="sys.form.label.role"></label>
+	        <div class="layui-input-inline">
+	            <select id="roleId" name="roleId" xm-select="roleId">
+	            </select>
+	        </div>
+	    </div>
+	    <!-- <div class="layui-form-item">
+	        <label class="layui-form-label">部门</label>
+	        <div class="layui-input-inline">
+	            <select id="deptId" name="deptId" lay-filter="deptId" lay-verify="required">
+	            	<option value="">--请选择部门--</option>
+	            </select>
+	        </div>
+	    </div> -->
+	      <div class="layui-form-item">
+	        <label class="layui-form-label layui-i18n" i18n-key="sys.form.label.remark"></label>
+	        <div class="layui-input-inline">
+	            <input id="remarks" name="remarks" placeholder="" type="text" class="layui-input" maxlength="200"/>
+	        </div>
+	    </div>
+   <!--  </div> -->
+    <div class="layui-form-item model-form-footer">
+        <button class="layui-btn layui-btn-primary layui-btn-cancel" ew-event="closeDialog" type="button"></button>
+        <button class="layui-btn layui-btn-save" lay-filter="user-form-submit" lay-submit>保存</button>
+    </div>
+</form>
+<style>
+	.layui-form-mid{
+		color: red;
+	}
+</style>
+<script>
+var userId = null
+var userType = null;
+    layui.use(['layer', 'admin', 'form', 'formSelects','_i18n'], function () {
+        var layer = layui.layer;
+        var admin = layui.admin;
+        var form = layui.form;
+        var formSelects = layui.formSelects;
+		var _i18n = layui._i18n;
+		var msgs = _i18n.getMsg('sys');
+
+     // 回显user数据
+        var user = admin.getTempData('t_user');
+        $('#user-form').attr('method', 'POST');
+		_i18n.initPage();
+        if (user) {
+        	userId = user.id;
+        	userType = user.userType;
+            form.val('user-form', user);
+        }
+
+        form.render('radio');
+
+        // 获取所有角色
+        layer.load(2);
+        admin.req('/sys/role/qryAllWithScope', {}, function (data) {
+            layer.closeAll('loading');
+            if (0 == data.code) {
+                // 渲染多选下拉框
+                var roleSelectData = new Array();
+                for (var i = 0; i < data.data.length; i++) {
+                    roleSelectData.push({name: data.data[i].name, value: data.data[i].id});
+                }
+                formSelects.data('roleId', 'local', {arr: roleSelectData});
+
+                // 回显user数据
+                if (user) {
+                    form.val('user-form', user);
+                    var rds = new Array();
+                    if(user.roleIds){
+                    	for (var i = 0; i < user.roleIds.length; i++) {
+                            rds.push(user.roleIds[i]);
+                        }
+                    }
+                    formSelects.value('roleId', rds);
+                }
+                form.render('select');//表单重新渲染，要不然添加完显示不出来新的option
+            } else {
+                layer.msg('获取角色失败', {icon: 2});
+            }
+        }, 'post');
+        
+        //获取部门
+        /* layer.load(2);
+        admin.req('/sys/dept/qryAll', {}, function (data) {
+            layer.closeAll('loading');
+            if (0 == data.code) {
+                // 渲染多选下拉框
+                var deptSelectData = new Array();
+                for (var i = 0; i < data.data.length; i++) {
+                    $("#deptId").append("<option value="+data.data[i].id+">"+data.data[i].name+"</option>"); 
+                }
+                
+                form.render();//表单重新渲染，要不然添加完显示不出来新的option
+            } else {
+                layer.msg('获取部门失败', {icon: 2});
+            }
+        }, 'GET'); */
+        
+      //获取用户类型
+        layer.load(2);
+        admin.req('/sys/paramtype/getParamType', {paramType:'SYS_USER_TYPE'}, function (data) {
+            layer.closeAll('loading');
+            if (0 == data.code) {
+                // 渲染多选下拉框
+            	var seled = "";
+            	for (var i = 0; i < data.data.length; i++) {
+            		if(userType == 2){
+            			if(userType == data.data[i].paramTypeId){
+                    		seled = 'selected="selected"';
+                    		$("#userType").append('<option value="'+data.data[i].paramTypeId+'" '+seled+'>'+data.data[i].paramTypeName+'</option>');
+                    	}
+            		}else{
+            			if(userType == data.data[i].paramTypeId){
+                    		seled = 'selected="selected"';
+                    	}
+                        $("#userType").append('<option value="'+data.data[i].paramTypeId+'" '+seled+'>'+data.data[i].paramTypeName+'</option>');
+            		}
+            	}
+                
+                var userId = $('#id').val();
+                if(userId != null && userId != ''){
+                	$('#loginName').disabled='disabled';
+                	$('#loginName').attr('disabled',true);
+                }
+                form.render();//表单重新渲染，要不然添加完显示不出来新的option
+                form.render('select');//表单重新渲染，要不然添加完显示不出来新的option
+            } else {
+                layer.msg('获取用户类型失败', {icon: 2});
+            }
+        }, 'GET');
+
+        // 表单提交事件
+        form.on('submit(user-form-submit)', function (data) {
+            layer.load(2);
+            var userId = $('#id').val();
+            var url = "/sys/user/save";
+            var isSave = true;
+            if(userId != null && userId != ''){
+            	url = "/sys/user/updateSelect";
+            	isSave = false;
+            }
+            admin.req(url, data.field, function (data) {
+                layer.closeAll('loading');
+                if (data.code == 0) {
+                    if(isSave){
+                    	layer.msg(data.msg, {icon: 1, time: 5000});
+                    }else{
+                    	layer.msg(data.msg, {icon: 1});
+                    }
+                    admin.finishPopupCenter();
+                } else {
+                    layer.msg(data.msg, {icon: 2});
+                }
+            }, $('#user-form').attr('method'));
+            return false;
+        });
+
+        //自定义验证规则
+        form.verify({
+            tel: [/^((0\d{2,3}-\d{7,8})|(1[35784]\d{9}))$/, '请输入正确的手机号！']
+        });
+    });
+    
+</script>

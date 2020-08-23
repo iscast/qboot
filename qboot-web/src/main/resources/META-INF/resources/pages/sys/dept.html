@@ -1,0 +1,201 @@
+<style>
+    .dept_treeTable_box .layui-border-box{
+        position: absolute;
+        top: 5px;
+        right: 15px;
+        left: 15px;
+        bottom: 10px;
+        background-color: #fff;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+	.tableBG{
+		background-color: white;
+	}
+</style>
+
+<div class="layui-card tableBG" id="sys_dept_page" style="display: none">
+    <div class="dept_treeTable_box tableBG" id="deptLayTable">
+        <table id="sys_dept_treeTable" lay-filter="sys_dept_treeTable" class="dept_auth" data-auth="sys:dept:qry"></table>
+    </div>
+</div>
+
+<script>
+    var auth = JSON.parse(sessionStorage.getItem("auth"));
+    var page = location.hash.substring(2);
+
+    $(".dept_auth").each(function(index, item) {
+        var buttonAuth = $(item).attr("data-auth");
+        if( !auth[page] || auth[page][buttonAuth] != 1 ){
+            $(item).remove();
+        }
+    });
+
+    $("#sys_dept_page").show();
+
+    var ptable=null,treeGrid=null,depttableId='sys_dept_treeTable',layer=null;
+    var admin = null;
+    var form = null;
+    layui.use(['jquery','treeGrid', 'table', 'layer', '_config', 'form', 'admin'], function(){
+        var $=layui.jquery;
+        var _config=layui._config;
+        var table = layui.table;//很重要
+        form = layui.form;
+        treeGrid = layui.treeGrid;//很重要
+        layer=layui.layer;
+        admin = layui.admin;
+        ptable=treeGrid.render({
+            id:depttableId
+            ,elem: '#'+depttableId
+            ,idField:'id'
+            ,url: _config.base_server + '/sys/dept/qryDepts'
+            ,method: "get"
+            ,treeId:'id'//树形id字段名称
+            ,treeUpId:'parentId'//树形父id字段名称
+            ,treeShowName:'name'//以树形式显示的字段
+            ,height:'full-140'
+            ,dataType: 999
+            ,isFilter:false
+            // ,iconOpen:true//是否显示图标【默认显示】
+            ,isOpenDefault: false//节点默认是展开还是折叠【默认展开】
+            ,cols: [[
+                {type:'numbers', width: '5%'}
+                ,{field:'name', title: '部门名称', width: '20%'}
+                ,{field:'sort', title: '部门顺序', width: '10%'}
+                ,{align: 'center', templet: function(d){
+                	var auth = JSON.parse(sessionStorage.getItem("auth"));
+                	var page = location.hash.substring(2);
+                	var addBtn = '';
+                	var upBtn = '';
+                	var delBtn = '';
+                	if(auth[page] && auth[page]['sys:dept:save']){
+                		addBtn = '<button class="layui-btn layui-btn-xs" lay-event="add" data-auth="sys:dept:save">添加</button>';
+            	    }
+                	
+                	if(auth[page] && auth[page]['sys:dept:update']){
+                		upBtn = '&nbsp;<button class="layui-btn layui-btn-xs" lay-event="edit" data-auth="sys:dept:update">修改</button>';
+            	    }
+                	
+                	if(auth[page] && auth[page]['sys:dept:delete']){
+                		delBtn = '&nbsp;<button class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del" data-auth="sys:dept:delete">删除</button>';
+            	    }
+                	if((addBtn+upBtn+delBtn) == ''){
+                		return '无权限';
+                	}else{
+                		return addBtn+upBtn+delBtn;
+                	}
+                }, title: '操作'}
+            ]],
+            getMenu: function(id, index) {
+            	var load = layer.load(2);
+                $.get( _config.base_server + '/sys/dept/qryDepts?parentId=' + id, function(res) {
+                    for( var i = 0; i < res.data.length; i ++ ) {
+                        treeGrid.addRow(depttableId, index + i, res.data[i]);
+                    }
+                    layer.close(load);
+                } )
+            }
+        });
+        treeGrid.on('tool(sys_dept_treeTable)',function (obj) {
+            if(obj.event === 'del'){//删除行
+                del(obj);
+            }else if(obj.event==="add"){//添加行
+                add(obj);
+            }else if(obj.event==="edit"){//添加行
+            	edit(obj);
+            }
+        });
+        
+        function del(obj) {
+            layer.confirm("你确定删除数据吗？如果存在下级节点则一并删除，此操作不能撤销！", {icon: 3, title:'提示'},
+                function(index){//确定回调
+                    admin.req('/sys/dept/delete?id=' + obj.data.id, {}, function (data) {
+                        layer.closeAll('loading');
+                        if (data.code == 0) {
+                            layer.msg(data.msg, {icon: 1});
+                            obj.del();
+                            admin.refresh();
+                        } else {
+                            layer.msg(data.msg, {icon: 2});
+                        }
+                    }, 'post');
+                },function (index) {//取消回调
+                   layer.close(index);
+                }
+            );
+        }
+        
+        function add(pObj) {
+        	admin.putTempData('t_dept', {parentId:pObj.data.id});
+        	var title = '添加部门';
+            admin.popupCenter({
+                title: title,
+                path: 'pages/sys/dept_form.html',
+                finish: function () {
+                    table.reload('dept-table', {});
+                    admin.refresh();
+                }
+            });
+        }
+        
+        function edit(pObj) {
+        	admin.putTempData('t_dept', pObj.data);
+        	var title = '修改部门';
+            admin.popupCenter({
+                title: title,
+                path: 'pages/sys/dept_form.html',
+                finish: function () {
+                    table.reload('dept-table', {});
+                    admin.refresh();
+                }
+            });
+        }
+        
+        // 添加按钮点击事件
+        $('#dept-btn-add').click(function () {
+            showEditModel();
+        });
+        
+        
+     // 工具条点击事件
+        table.on('tool(dept-table)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (layEvent == 'edit') { // 修改
+                showEditModel(data);
+            } else if (layEvent == 'del') { // 重置密码
+                layer.confirm('确定删除此部门的密码吗？', function (i) {
+                    layer.close(i);
+                    layer.load(2);
+                    admin.req('/sys/dept/delete?id=' + obj.data.id, {}, function (data) {
+                        layer.closeAll('loading');
+                        if (data.code == 0) {
+                            layer.msg(data.msg, {icon: 1});
+                            admin.finishPopupCenter();
+                            obj.del();
+                            admin.refresh();
+                        } else {
+                            layer.msg(data.msg, {icon: 2});
+                        }
+                    }, 'GET');
+                });
+            }
+        });
+     
+      //显示表单弹窗
+        var showEditModel = function (data) {
+            admin.putTempData('t_dept', data);
+            var title = data ? '修改部门' : '添加部门';
+            admin.popupCenter({
+                title: title,
+                path: 'pages/sys/dept_form.html',
+                finish: function () {
+                    table.reload('dept-table', {});
+                    admin.refresh();
+                }
+            });
+        };
+
+    });
+
+</script>

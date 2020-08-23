@@ -1,0 +1,345 @@
+
+<style>
+	.tableBG{
+		background-color: white;
+	}
+</style>
+<div class="layui-card" id="sys_type_page">
+    <div class="layui-form toolbar">
+	      <br>&emsp;<span class="layui-i18n" i18n-key="sys.form.label.paramTypeName"></span>
+		<input id="paramTypeName" name="paramTypeName" class="layui-input search-input i18n-input-hint" type="text" i18n-key="sys.form.label.inputParamTypeName" type="text"/>&emsp;
+		<span class="layui-i18n" i18n-key="sys.form.label.paramTypeClass"></span>
+		<input id="paramTypeClass" name="paramTypeClass" class="layui-input search-input i18n-input-hint" type="text" i18n-key="sys.form.hint.inputParamTypeClass"/>&emsp;
+	            <button id="param-btn-search" class="layui-btn icon-btn layui-btn-search"><i class="layui-icon">&#xe615;</i>搜索</button><br><br>
+        </div>
+</div>
+<div class="layui-row layui-col-space10 tableBG">
+	<div class="layui-col-md8 tableBG">
+		<div class="layui-btn-group">
+			<button id="param-btn-add" class="layui-btn icon-btn layui-icon layui-icon-add-circle-fine layui-i18n" i18n-key="layer.confirm.title.addParamType" data-auth="sys:param:save"></button>
+        </div>
+		<div class="grid-demo grid-demo-bg1 tableBG" id="classLayTable">
+			<table id="sys_typeclass_table" lay-filter="sys_typeclass_table"></table>
+		</div>
+	</div>
+	<div class="layui-col-md4 tableBG">
+		<div class="layui-btn-group">
+			<button id="param-btn-add1" class="layui-btn icon-btn layui-icon layui-icon-add-circle-fine layui-i18n" i18n-key="layer.confirm.title.addParamTypeElem" data-auth="sys:param:save"></button>
+        </div>
+		<div class="grid-demo tableBG" id="typeLayTable">
+			<input type="hidden" id="paramTypeClass" name="paramTypeClass"/>
+			<table id="sys_type_table" lay-filter="sys_type_table"></table>
+		</div>
+	</div>
+</div>
+<script>
+var form,table, table1,_config,layer,util,admin,formSelects;
+    layui.use(['form', 'table', 'util', '_config', 'admin', 'formSelects','_i18n'], function () {
+        form = layui.form;
+        table = layui.table;
+        table1 = layui.table;
+        _config = layui._config;
+        layer = layui.layer;
+        util = layui.util;
+        admin = layui.admin;
+        formSelects = layui.formSelects;
+		var _i18n = layui._i18n;
+		var msgs = _i18n.getMsg('sys');
+        //渲染表格
+        table.render({
+            elem: '#sys_typeclass_table',
+            url: _config.base_server + '/sys/paramclass/qryPage',
+            where: {
+                access_token: _config.getToken().access_token,
+                paramTypeName: $('#paramTypeName').val(), paramTypeClass: $('#paramTypeClass').val()
+            },
+            method: 'post',
+            page: true,
+            even: true, //开启隔行背景
+            height:460,
+            cols: [[
+                {type: 'numbers', width: '5%'},
+                {field: 'paramTypeClass', sort: true, title: msgs['sys.form.label.paramTypeClass'], width: '14%'},
+                {field: 'paramTypeName', sort: true, title: msgs['sys.form.label.paramTypeName']},
+                {field: 'remarks', sort: true, title: msgs['sys.form.label.remark'], width: '14%'},
+                {
+                    field: 'updateDate', sort: true, templet: function (d) {
+                        if(d.createDate != null){
+                        	return util.toDateString(d.createDate);
+                        }else{
+                        	return '';
+                        }
+                    }, title: msgs['sys.table.title.updateDate'], width: '16%'
+                },
+                {align: 'center', field: 'physicsFlag', sort: false, templet: function(d){
+                	var auth = JSON.parse(sessionStorage.getItem("auth"));
+                	var page = location.hash.substring(2);
+                	var swiftBtn = '';
+                	if(auth[page] && auth[page]['sys:param:update']){
+                		swiftBtn+='<a class="layui-btn layui-btn-xs" lay-event="edit" data-auth="sys:param:update" onclick="showEditModel('+d.id+')">'+msgs['sys.form.operation.edit']+'</a>';
+            	    }
+                	if(swiftBtn == ''){
+                		return _i18n.getGlobalVal('layui.operation.tips.noPermission');
+                	}else{
+                		return swiftBtn;
+                	}
+                }, title: msgs['sys.table.title.operation'], width: '14%'}
+            ]], done: function(res, curr, count){
+				//分页条国际化
+				_i18n.initPage();
+			}
+        });
+
+    	loadTypeClass(null);
+
+        // 添加按钮点击事件
+        $('#param-btn-add').click(function () {
+            showEditModel(null);
+        });
+     // 添加按钮点击事件
+        $('#param-btn-add1').click(function () {
+        	var paramTypeClass = $('#paramTypeClass').val();
+        	if(paramTypeClass == null || paramTypeClass == ''){
+        		layer.msg('请选择类型!', {icon: 2});
+        		return ;
+        	}
+        	var data = {paramTypeClass:paramTypeClass};
+        	admin.putTempData('t_paramtype', data);
+            admin.popupCenter({
+                title: data.paramTypeClass+msgs['layer.confirm.title.addParamTypeElem'],
+                path: 'pages/sys/paramtype_form.html',
+                area: ['800px','600px'],
+                finish: function () {
+                    table.reload('sys_typeclass_table', {paramTypeClass:paramTypeClass});
+                }
+            });
+        });
+
+        // 工具条点击事件
+        table.on('tool(sys_typeclass_table)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'edit') {
+                //showEditModel(data);
+            } else if (obj.event == 'add') { //添加
+            	
+            }
+        });
+        
+        $('#classLayTable').on('click', 'tbody tr', function (e) {
+        	var data = $(this);
+        	var paramTypeClass = data[0].cells[1].innerText;
+			var index = $(this).attr('data-index');
+        	$('#paramTypeClass').val(paramTypeClass);
+        	loadTypeClass(paramTypeClass);
+        	
+        	var parent = data.parent();
+        	var allRows = parent[0].childElementCount;
+            for(var id=0; id<allRows; id++){
+            	var tr = parent.find('tr[data-index="'+ id +'"]')
+            	if($(tr).hasClass('layui-table-click')){
+            		$(tr).removeClass('layui-table-click');
+            	}
+            }
+        	
+            var fals = $(this).hasClass('layui-table-click');
+        	if(!fals){
+        		$(this).addClass('layui-table-click');
+        	}else{
+        		$(this).removeClass('layui-table-click');
+        	}
+        });
+        
+        // 修改状态
+        form.on('switch(paramclass-tpl-state)', function (obj) {
+            layer.load(2);
+            admin.req('/sys/paramclass/delete', {
+                id: obj.elem.value,
+                phyFlag: obj.elem.checked ? 1 : 0
+            }, function (data) {
+                layer.closeAll('loading');
+                if (data.code == 0) {
+                    layer.msg(data.msg, {icon: 1});
+                } else {
+                    layer.msg(data.msg, {icon: 2});
+                    $(obj.elem).prop('checked', !obj.elem.checked);
+                    form.render('checkbox');
+                }
+            }, 'post');
+        });
+
+        
+        // 搜索按钮点击事件
+        $('#param-btn-search').click(function () {
+            table.reload('sys_typeclass_table', {where: {paramTypeName: $('#paramTypeName').val(), paramTypeClass: $('#paramTypeClass').val()}});
+        });
+        
+     // 显示编辑弹窗
+        var addParamType = function (data) {
+            admin.putTempData('t_param_type', {});
+            admin.popupCenter({
+                title: '添加',
+                path: 'pages/sys/paramtype_form.html',
+				area: ['800px','600px'],
+                finish: function () {
+                    table.reload('sys_typeclass_table', {});
+                }
+            });
+            
+        };
+        
+
+    	function loadTypeClass(typeClass) {
+    		table1.render({
+            	elem: '#sys_type_table',
+                url: _config.base_server + '/sys/paramtype/qryPage',
+                where: {
+                    access_token: _config.getToken().access_token,
+                    paramTypeClass: typeClass
+                },
+                method: 'post',
+                page: true,
+                even: true, //开启隔行背景
+                height:460,
+                cols: [[
+                    {type: 'numbers', width: '30'},
+                    {field: 'paramTypeClass', sort: true, title: msgs['sys.form.label.paramTypeClass'], width: '140'},
+                    {field: 'paramTypeId', sort: true, title: msgs['sys.form.hint.inputParamTypeId'], width: '140'},
+                    {field: 'paramTypeCode', sort: true, title: msgs['sys.form.hint.inputParamTypeCode'], width: '150'},
+                    {field: 'paramTypeName', sort: true, title: msgs['sys.form.label.paramTypeName'], width: '150'},
+                    {align: 'center', field: 'physicsFlag', sort: false, templet: function(d){
+                    	var auth = JSON.parse(sessionStorage.getItem("auth"));
+                    	var page = location.hash.substring(2);
+                    	var swiftBtn = '';
+                    	if(auth[page] && auth[page]['sys:param:update']){
+                    		swiftBtn+='<a class="layui-btn layui-btn-xs" lay-event="edit" data-auth="sys:param:update">'+msgs['sys.form.operation.edit']+'</a>';
+                	    }
+                    	if(swiftBtn == ''){
+                    		return _i18n.getGlobalVal('layui.operation.tips.noPermission');
+                    	}else{
+                    		return swiftBtn;
+                    	}
+                    }, title: msgs['sys.table.title.operation'], width: '150'}
+                ]]
+            });
+            
+        }
+    	// 工具条点击事件
+        table1.on('tool(sys_type_table)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'edit') {
+                showEditTypeModel(data);
+            }
+        });
+    	
+        $('#typeLayTable').on('click', 'tbody tr', function (e) {
+            var fals = $(this).hasClass('layui-table-click');
+        	if(!fals){
+        		$(this).addClass('layui-table-click');
+        	}else{
+        		$(this).removeClass('layui-table-click');
+        	}
+        });
+    	
+        // 修改状态
+        form.on('switch(paramtype-tpl-state)', function (obj) {
+            layer.load(2);
+            admin.req('/sys/paramtype/delete', {
+                id: obj.elem.value,
+                phyFlag: obj.elem.checked ? 1 : 0
+            }, function (data) {
+                layer.closeAll('loading');
+                if (data.code == 0) {
+                    layer.msg(data.msg, {icon: 1});
+                } else {
+                    layer.msg(data.msg, {icon: 2});
+                    $(obj.elem).prop('checked', !obj.elem.checked);
+                    form.render('checkbox');
+                }
+            }, 'post');
+        });
+
+        // 显示编辑弹窗
+        var showEditTypeModel = function (data) {
+        	var title = data ? msgs['sys.form.operation.edit'] : msgs['sys.form.operation.add'];
+            if(data){
+            	$.ajax({
+            		url: _config.base_server + '/sys/paramtype/get?id=' + data.id,
+            		dataType: 'json',
+            		method: 'get',
+            		success: function(data){
+            			layer.closeAll('loading');
+                        if (data.code == 0) {
+                            admin.putTempData('t_paramtype', data.data);
+                            admin.popupCenter({
+                                title: title,
+                                path: 'pages/sys/paramtype_form.html',
+                                area: ['800px','600px'],
+                                finish: function () {
+                                    table1.reload('sys_type_table', {});
+                                }
+                            });
+                        } else {
+                            layer.msg(data.msg, {icon: 2});
+                        }
+            		}
+            	});
+            }else{
+            	admin.putTempData('t_paramtype', {});
+            	admin.popupCenter({
+                    title: title,
+                    path: 'pages/sys/paramtype_form.html',
+                    area: ['800px','600px'],
+                    finish: function () {
+                        table1.reload('sys_type_table', {});
+                    }
+                });
+            }
+        };
+    });
+
+    // 显示编辑弹窗
+    function showEditModel(dataID) {
+    	admin.putTempData('t_param', {});
+        var title = dataID ? '修改' : '添加';
+        if(dataID){
+        	$.ajax({
+        		url: _config.base_server + '/sys/paramclass/get?id=' + dataID,
+        		dataType: 'json',
+        		method: 'get',
+        		success: function(data){
+        			layer.closeAll('loading');
+                    if (data.code == 0) {
+                        admin.putTempData('t_param', data.data);
+                        admin.popupCenter({
+                            title: title,
+                            path: 'pages/sys/param_form.html',
+                            finish: function () {
+                                table.reload('sys_typeclass_table', {});
+                            }
+                        });
+                    } else {
+                        layer.msg(data.msg, {icon: 2});
+                    }
+        		}
+        	});
+        }else{
+        	admin.popupCenter({
+                title: title,
+                path: 'pages/sys/param_form.html',
+                finish: function () {
+                    table.reload('sys_typeclass_table', {});
+                }
+            });
+        }
+    };
+    
+	var auth = JSON.parse(sessionStorage.getItem("auth"));
+	var page = location.hash.substring(2);
+	$(".param_auth").each(function(index, item) {
+	    var buttonAuth = $(item).attr("data-auth");
+	    if( !auth[page] || auth[page][buttonAuth] != 1 ){
+	        $(item).remove();
+	    }
+	});
+	
+</script>

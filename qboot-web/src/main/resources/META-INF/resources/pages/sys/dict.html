@@ -1,0 +1,210 @@
+<div class="layui-card">
+    <div class="layui-card-body">
+        <div class="layui-form toolbar">
+            <span class="layui-i18n" i18n-key="sys.form.label.paramName"></span>
+            <input id="dictName" name="dictName" class="layui-input search-input i18n-input-hint" type="text" i18n-key="sys.form.hint.inputParamName"/>&emsp;
+            <span class="layui-i18n" i18n-key="sys.form.label.paramKey"></span>
+            <input id="type" name="type" class="layui-input search-input i18n-input-hint" type="text" i18n-key="sys.form.hint.inputParamKey"/>&emsp;
+            <span class="layui-i18n" i18n-key="sys.form.label.paramValue"></span>
+            <input id="code" name="code" class="layui-input search-input i18n-input-hint" type="text" i18n-key="sys.form.hint.inputParamValue"/>&emsp;
+            <button id="dict-btn-search" class="layui-btn icon-btn  layui-btn-search"></button><br><br>
+            
+            <div class="layui-btn-group">
+			    <button id="dict-btn-add" class="layui-btn  layui-btn-add" data-auth="sys:dict:save"></button>
+            </div>
+        </div>
+
+        <!-- 数据表格 -->
+        <div id="dictLayTable">
+        	<table class="layui-table dict_auth" id="dict-table" lay-filter="dict-table" data-auth="sys:dict:qry"></table>
+        </div>
+    </div>
+</div>
+<script>
+    layui.use(['form', 'table', 'util', '_config', 'admin', 'formSelects','_i18n'], function () {
+        var form = layui.form;
+        var table = layui.table;
+        var _config = layui._config;
+        var layer = layui.layer;
+        var util = layui.util;
+        var admin = layui.admin;
+        var formSelects = layui.formSelects;
+        var _i18n = layui._i18n;
+        var msgs = _i18n.getMsg('sys') ;
+        //渲染表格
+        table.render({
+            elem: '#dict-table',
+            url: _config.base_server + '/sys/dict/qryPage',
+            where: {
+                access_token: _config.getToken().access_token,
+                name: $('#dictName').val(), type: $('#dictType').val(),code:$('#code').val()
+            },
+            method: 'post',
+            page: true,
+            even: true, //开启隔行背景
+            cols: [[
+                {type: 'numbers'},
+                {field: 'name', sort: true, title: msgs['sys.form.label.paramName'], width: '14%'},
+                {field: 'type', sort: true, title: msgs['sys.form.label.paramKey'], width: '14%'},
+                {field: 'code', sort: true, title: msgs['sys.form.label.paramValue']},
+                {field: 'createBy', sort: true, title: msgs['sys.table.title.createdBy'], width: '10%'},
+                {
+                    field: 'createDate', sort: true, templet: function (d) {
+                        return util.toDateString(d.createDate);
+                    }, title: msgs['sys.table.title.createDate'], width: '15%'
+                },
+                {
+                    field: 'updateDate', sort: true, templet: function (d) {
+                        if(d.updateDate != null){
+                        	return util.toDateString(d.updateDate);
+                        }else{
+                        	return '';
+                        }
+                    }, title: msgs['sys.table.title.updateDate'], width: '15%'
+                },
+                {align: 'center', templet: function(d){
+                	var auth = JSON.parse(sessionStorage.getItem("auth"));
+                	var page = location.hash.substring(2);
+                	var upBtn = '';
+                	var delBtn = '';
+                	if(auth[page] && auth[page]['sys:dict:update']){
+                		upBtn = '<a class="layui-btn layui-btn-xs" lay-event="edit" data-auth="sys:dict:update">'+msgs['sys.form.operation.edit']+'</a>';
+            	    }
+                	
+                	if(auth[page] && auth[page]['sys:dict:delete']){
+                		delBtn = '<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" data-auth="sys:dict:delete">'+msgs['sys.table.operation.delete']+'</a>';
+            	    }
+                	if((upBtn+delBtn) == ''){
+                        return _i18n.getGlobalVal('layui.operation.tips.noPermission');
+                	}else{
+                		return upBtn+delBtn;
+                	}
+                }, title: msgs['sys.table.title.operation'], width: '14%'}
+            ]], done: function(res, curr, count){
+                //分页条国际化
+                _i18n.initPage();
+            }
+        });
+
+        //点击行变色
+        $('#dictLayTable').on('click', 'tbody tr', function (e) {
+            var fals = $(this).hasClass('layui-table-click');
+        	if(!fals){
+        		$(this).addClass('layui-table-click');
+        	}else{
+        		$(this).removeClass('layui-table-click');
+        	}
+        });
+
+        // 添加按钮点击事件
+        $('#dict-btn-add').click(function () {
+            showEditModel();
+        });
+
+        // 工具条点击事件
+        table.on('tool(dict-table)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'edit') {
+                showEditModel(data);
+            } else if (obj.event == 'del') { //删除
+                doDelete(obj);
+            }
+        });
+
+        table.on('sort(dict-table)',function () {
+            _i18n.initPage();
+        });
+        
+     // 修改user状态
+        form.on('switch(dict-tpl-state)', function (obj) {
+            layer.load(2);
+            admin.req('/sys/dict/setStatus', {
+                id: obj.elem.value,
+                status: obj.elem.checked ? 1 : 0
+            }, function (data) {
+                layer.closeAll('loading');
+                if (data.code == 0) {
+                    layer.msg(data.msg, {icon: 1});
+                } else {
+                    layer.msg(data.msg, {icon: 2});
+                    $(obj.elem).prop('checked', !obj.elem.checked);
+                    form.render('checkbox');
+                }
+            }, 'post');
+        });
+        
+        
+        // 搜索按钮点击事件
+        $('#dict-btn-search').click(function () {
+            var dictName = $('#dictName').val();
+            var dictType = $('#type').val();
+            var dictcode = $('#code').val();
+            table.reload('dict-table', {where: {name:dictName, type:dictType, code:dictcode}});
+        });
+
+        // 显示编辑弹窗
+        var showEditModel = function (data) {
+            var title = data ? msgs['layer.confirm.title.editDict'] : msgs['layer.confirm.title.addDict'];
+            if(data){
+            	admin.req('/sys/dict/get', {
+                    id: data.id
+                }, function (data) {
+                    layer.closeAll('loading');
+                    if (data.code == 0) {
+                        admin.putTempData('t_dict', data.data);
+                        admin.popupCenter({
+                            title: title,
+                            path: 'pages/sys/dict_form.html',
+                            finish: function () {
+                                table.reload('dict-table', {});
+                            }
+                        });
+                    } else {
+                        layer.msg(data.msg, {icon: 2});
+                    }
+                }, 'get');
+            }else{
+            	admin.putTempData('t_dict', {});
+            	admin.popupCenter({
+                    title: title,
+                    path: 'pages/sys/dict_form.html',
+                    finish: function () {
+                        table.reload('dict-table', {});
+                    }
+                });
+            }
+            
+            
+            
+        };
+
+        // 删除
+        var doDelete = function (obj) {
+            layer.confirm(_i18n.getGlobalVal('layer.confirm.delete.msg'),
+                _i18n.getBtns(), function (i) {
+                layer.close(i);
+                layer.load(2);
+                admin.req('/sys/dict/delete?id=' + obj.data.id, {}, function (data) {
+                    layer.closeAll('loading');
+                    if (data.code == 0) {
+                        layer.msg(data.msg, {icon: 1});
+                        obj.del();
+                    } else {
+                        layer.msg(data.msg, {icon: 2});
+                    }
+                }, 'POST');
+            });
+        };
+
+    });
+
+	var auth = JSON.parse(sessionStorage.getItem("auth"));
+	var page = location.hash.substring(2);
+	$(".dict_auth").each(function(index, item) {
+	    var buttonAuth = $(item).attr("data-auth");
+	    if( !auth[page] || auth[page][buttonAuth] != 1 ){
+	        $(item).remove();
+	    }
+	});
+
+</script>

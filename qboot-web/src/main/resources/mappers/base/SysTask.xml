@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.iscast.base.dao.SysTaskDao">
+
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="SysTask">
+		insert into 
+			sys_task(task_name,group_name,cron_exp,task_target,status,last_run_time,last_result,remarks,params,create_date,update_date,create_by,update_by,exec_type) 
+			values(#{taskName},#{groupName},#{cronExp},#{taskTarget},#{status},#{lastRunTime},#{lastResult},#{remarks},#{params},#{createDate},#{updateDate},#{createBy},#{updateBy},#{execType})
+	</insert>
+
+	<select id="findAll" resultType="SysTask">
+		SELECT * FROM sys_task
+	</select>
+
+	<select id="findList" parameterType="SysTask" resultType="SysTask">
+		SELECT * FROM sys_task t
+		<where>
+			<if test="status != null">
+				AND t.status = #{status}
+			</if>
+			<if test="id != null">
+				AND t.id = #{id}
+			</if>
+			<if test="taskName != null and taskName != ''">
+				AND t.task_name like "%"#{taskName}"%"
+			</if>
+			<if test="groupName != null and groupName != ''">
+				AND t.group_name like "%"#{groupName}"%"
+			</if>
+			<if test="lastResult != null and lastResult != ''">
+				AND t.last_result = #{lastResult}
+			</if>
+			<if test="remarks != null and remarks != ''">
+				AND t.remarks = #{remarks}
+			</if>
+		</where> 
+		order by t.id desc 
+	</select>
+
+	<update id="updateById" parameterType="SysTask">
+		update sys_task 
+		<set>
+			params = #{params},remarks = #{remarks},group_name = #{groupName},
+			<if test="taskName != null and taskName != ''">
+				task_name = #{taskName},
+			</if>
+			<if test="cronExp != null and cronExp != ''">
+				cron_exp = #{cronExp},
+			</if>
+			<if test="taskTarget != null and taskTarget != ''">
+				task_target = #{taskTarget},
+			</if>
+			<if test="status != null">
+				status = #{status},
+			</if>
+			<if test="lastRunTime != null">
+				last_run_time = #{lastRunTime},
+			</if>
+			<if test="lastResult != null and lastResult != ''">
+				last_result = #{lastResult},
+			</if>
+			<if test="updateDate != null">
+				update_date = #{updateDate},
+			</if>
+			<if test="execType != null">
+				exec_type = #{execType},
+			</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 记录最后一次执行成功结果 -->
+	<update id="updateResult" parameterType="SysTask">
+		update sys_task 
+			set last_run_time = #{lastRunTime},last_result = #{lastResult},update_date = #{updateDate}
+		WHERE id = #{id} 
+	</update>
+
+	<delete id="deleteById" parameterType="java.lang.Long">
+		delete from sys_task where id = #{id}
+	</delete>
+
+	<select id="findById" parameterType="java.lang.Long" resultType="SysTask">
+		select * from sys_task where id = #{id}
+	</select>
+	
+	<select id="findByName" parameterType="java.lang.String" resultType="SysTask">
+		select * from sys_task where task_name = #{taskName}
+	</select>
+	
+	<update id="updateStatus" parameterType="SysTask">
+		update sys_task set status = #{status} where id = #{id}
+	</update>
+	
+	<!-- 统计同名任务数 -->
+	<select id="countByTaskName" parameterType="SysTask" resultType="java.lang.Long">
+		select count(1) from sys_task t where t.task_name=#{taskName} 
+		<if test="id != null">
+			and t.id != #{id}
+		</if>
+	</select>
+	
+</mapper>   

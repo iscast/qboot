@@ -1,0 +1,151 @@
+<!-- task表单弹窗 -->
+<form id="task-form" lay-filter="task-form" class="layui-form model-form">
+		
+		<input type="hidden" name="id" id="id" />
+		
+	    <div class="layui-form-item">
+	        <label class="layui-form-label">任务名称</label>
+	        <div class="layui-input-block">
+	            <input id="taskName" name="taskName" type="text" class="layui-input" maxlength="64"
+	                   lay-verify="required"/>
+	        </div>
+	    </div>
+	    <div class="layui-form-item">
+	        <label class="layui-form-label">分组名称</label>
+	        <div class="layui-input-block">
+	            <input id="groupName" name="groupName" type="text" class="layui-input" maxlength="32" />
+	        </div>
+	    </div>
+	    <div class="layui-form-item">
+	        <label class="layui-form-label">时间表达式</label>
+	        <div class="layui-input-block">
+	            <input id="cronExp" name="cronExp" type="text" placeholder="如0 0/8 * * * ?" class="layui-input" maxlength="32"
+	                   lay-verify="required" required/>
+	        </div>
+	    </div>
+	    <div class="layui-form-item">
+	        <label class="layui-form-label">Job实例</label>
+	        <div class="layui-input-block">
+	            <input id="taskTarget" name="taskTarget" type="text" class="layui-input" maxlength="128"
+	                   lay-verify="required" required/>
+	        </div>
+	    </div>
+	    <div class="layui-form-item">
+	        <label class="layui-form-label">执行方式</label>
+	            <div class="layui-input-block">
+			      <input type="radio" id="execType_0" name="execType" value="0" title="阻塞" checked>
+			      <input type="radio" id="execType_1" name="execType" value="1" title="非阻塞" >
+			    </div>
+	    </div>
+	    <div class="layui-form-item">
+	        <label class="layui-form-label">附加参数</label>
+	        <div class="layui-input-block">
+	            <input id="params" name="params" placeholder='json串,如:{key:"value"}' type="text" class="layui-input" maxlength="512"/>
+	        </div>
+	    </div>
+	   <div class="layui-form-item">
+		    <label class="layui-form-label">是否启用</label>
+		    <div class="layui-input-block">
+		      <input type="checkbox" id="status" name="status" value="1" lay-skin="switch" lay-text="启用|关闭">
+		    </div>
+	    </div>
+	    
+      <div class="layui-form-item">
+	        <label class="layui-form-label">备注</label>
+	        <div class="layui-input-block">
+	            <input id="remarks" name="remarks" placeholder="" type="text" class="layui-input" maxlength="512"/>
+	        </div>
+	  </div>
+	    
+    <div class="layui-form-item model-form-footer">
+        <button class="layui-btn layui-btn-primary btn-cancel" ew-event="closeDialog" type="button">取消</button>
+        <button class="layui-btn btn-save" lay-filter="task-form-submit" lay-submit>保存</button>
+    </div>
+</form>
+
+<script>
+    layui.use(['layer', 'admin', 'form', 'formSelects'], function () {
+        var layer = layui.layer;
+        var admin = layui.admin;
+        var form = layui.form;
+        var formSelects = layui.formSelects;
+        var t_task = admin.getTempData('t_task');
+        
+        $("#id").val(t_task.id);
+        $("#task-form div.layui-form-item label").each(function(i,n){
+        	switch(i)
+        	{
+        	case 0:
+        		$(n).siblings("div").find("input").val(t_task.taskName);
+        	  break;
+        	case 1:
+        		$(n).siblings("div").find("input").val(t_task.groupName);
+        	  break;
+        	case 2:
+        		$(n).siblings("div").find("input").val(t_task.cronExp);
+        	  break;
+        	case 3:
+        		$(n).siblings("div").find("input").val(t_task.taskTarget);
+        	  break;
+        	case 4:
+        		if(t_task.execType&&t_task.execType==1){
+        			$("#execType_1").attr("checked",true);
+        			$("#execType_0").removeAttr("checked");
+        		}else{
+        			$("#execType_0").attr("checked",true);
+        			$("#execType_1").removeAttr("checked");
+        		}
+        	  break;
+        	case 5:
+        		$(n).siblings("div").find("input").val(t_task.params);
+        	  break;
+        	case 6:
+        		$(n).siblings("div").find("input").attr("lay-text","启用|禁用");
+        		if(t_task.status==1){
+        			$(n).siblings("div").find("input").attr("checked",true);
+        		}else{
+        			$(n).siblings("div").find("input").removeAttr("checked");
+        		}
+        	  break;
+        	case 7:
+        		$(n).siblings("div").find("input").val(t_task.remarks);
+        	  break;
+        	default:
+        		break;
+        	}
+        });
+        
+        form.render();
+
+        // 表单提交事件
+        form.on('submit(task-form-submit)', function (data) {
+            layer.load(2);
+            var id = $('#id').val();
+            var url = "/sys/task/save";
+            var isSave = true;
+            if(id != null && id != ''){
+            	url = "/sys/task/updateSelect";
+            	isSave = false;
+            }
+            if(data.field&&!data.field.status){
+            	data.field.status = 0 ;
+            }
+            console.log(data.field.params);
+            admin.req(url, data.field, function (data) {
+                layer.closeAll('loading');
+                if (data.code == 0) {
+                    if(isSave){
+                    	layer.msg(data.msg, {icon: 1, time: 5000});
+                    }else{
+                    	layer.msg(data.msg, {icon: 1});
+                    }
+                    admin.finishPopupCenter();
+                } else {
+                    layer.msg(data.msg, {icon: 2});
+                }
+            }, "POST");
+            return false;
+        });
+    });
+    
+</script>

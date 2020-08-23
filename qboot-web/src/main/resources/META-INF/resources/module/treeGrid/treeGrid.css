@@ -1,0 +1,12 @@
+.layui-tree-head{
+    cursor: pointer;
+}
+.layui-table-box{
+    border: 1px #e6e6e6 solid;
+}
+.layui-table-body{
+    overflow: hidden;
+}
+.layui-table-view .layui-table{
+    width: 100%;
+}

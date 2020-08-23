@@ -1,0 +1,84 @@
+<!-- 表单弹窗 -->
+<form id="param-form" lay-filter="param-form" class="layui-form model-form">
+        <input id="id" name="id" type="hidden"/>
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-i18n" i18n-key="sys.form.label.paramTypeName"></label>
+            <div class="layui-input-inline">
+                <input id="paramTypeName" name="paramTypeName" i18n-key="sys.form.label.inputParamTypeName"  type="text" class="layui-input i18n-input-hint" maxlength="200"
+                       lay-verify="required" required/>
+            </div>
+            <div class="layui-form-mid">*</div>
+        </div>
+		<div class="layui-form-item">
+        <label class="layui-form-label layui-i18n" i18n-key="sys.form.label.paramTypeClass"></label>
+        	<div class="layui-input-inline">
+	            <input id="paramTypeClass" name="paramTypeClass" i18n-key="sys.form.hint.inputParamTypeClass" type="text" class="layui-input i18n-input-hint" maxlength="200"
+                       lay-verify="required" required/>
+        	</div>
+            <div class="layui-form-mid">*</div>
+    	</div>
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-i18n" i18n-key="sys.form.label.remark"></label>
+            <div class="layui-input-block">
+                <textarea id="remarks" name="remarks" class="layui-textarea" maxlength="2000"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item model-form-footer">
+            <button class="layui-btn layui-btn-primary layui-btn-cancel" ew-event="closeDialog" type="button"></button>
+            <button class="layui-btn layui-btn-save" lay-filter="param-form-submit" lay-submit></button>
+        </div> 
+</form>
+<style>
+    .layui-form-mid{
+        color: red;
+    }
+</style>
+<script>
+    layui.use(['layer', 'admin', 'form', 'formSelects', 'table', '_config','_i18n'], function () {
+        var layer = layui.layer;
+        var admin = layui.admin;
+        var form = layui.form;
+        var _config = layui._config;
+        var formSelects = layui.formSelects;
+        var table = layui.table;
+        var _i18n = layui._i18n;
+        var msgs = _i18n.getMsg('sys');
+        form.render('radio');
+
+        layer.load(2);
+        
+     // 回显param数据
+        var param = admin.getTempData('t_param');
+        $('#param-form').attr('method', 'POST');
+        _i18n.initPage();
+        if (param) {
+            form.val('param-form', param);
+        }
+
+
+        // 表单提交事件
+        form.on('submit(param-form-submit)', function (data) {
+            layer.load(2);
+            var paramId = $('#id').val();
+            var url = '/sys/paramclass/save';
+            if(paramId != null && paramId != ''){
+            	url = '/sys/paramclass/update';
+            }
+
+            admin.req(url, data.field, function (data) {
+                layer.closeAll('loading');
+                if (data.code == 0) {
+                    layer.msg(data.msg, {icon: 1});
+                    table.reload('sys_typeclass_table');
+                    layer.closeAll('page');
+                } else {
+                    layer.msg(data.msg, {icon: 2});
+                }
+            }, 'post');
+            return false;
+        });
+        
+        layer.closeAll('loading');
+    });
+    
+</script>
