@@ -17,6 +17,7 @@ public class BaseEntity<PK extends Serializable> extends QueryEntity {
     private Date updateDate;
     private String remarks;
     private Long version;
+    private Integer physicsFlag;
 
     public BaseEntity() {
     }
@@ -75,5 +76,13 @@ public class BaseEntity<PK extends Serializable> extends QueryEntity {
 
     public void setVersion(Long version) {
         this.version = version;
+    }
+
+    public Integer getPhysicsFlag() {
+        return physicsFlag;
+    }
+
+    public void setPhysicsFlag(Integer physicsFlag) {
+        this.physicsFlag = physicsFlag;
     }
 }

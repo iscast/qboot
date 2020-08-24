@@ -24,6 +24,8 @@
     <result column="fld_n2" property="fldN2" jdbcType="INTEGER" />
     <result column="fld_s1" property="fldS1" jdbcType="VARCHAR" />
     <result column="fld_s2" property="fldS2" jdbcType="VARCHAR" />
+    <result column="PHYSICS_FLAG" property="physicsFlag" jdbcType="BIGINT" />
+    <result column="version" property="version" jdbcType="BIGINT" />
     <!-- DB 字段截止 -->
     <result column="dept_name" property="deptName" jdbcType="VARCHAR" />
   </resultMap>
@@ -53,7 +55,7 @@
   <select id="findList" resultMap="BaseResultMap" parameterType="SysUser" >
     select 
     <include refid="Base_Column_List" />
-    from <include refid="Join_Table" /> 
+    from <include refid="Join_Table" />
     <where>
     		<if test="id !=null">
     			and u.id = #{id}
@@ -223,8 +225,9 @@
       update_by = #{updateBy},
       update_date = #{updateDate},
       remarks = #{remarks},
+      version=#{version}
       FLD_S1 = #{fldS1}
-    where id = #{id} 
+    where id = #{id} and version = #{version}
   </update>
   
   <update id="initPwd" parameterType="SysUser" >

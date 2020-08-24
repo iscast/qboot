@@ -17,7 +17,6 @@ import java.util.Set;
 /**
  * <p>Title: MessageUtil</p>
  * <p>Description: 国际化工具</p>
- *
  * @author history
  * @date 2019-04-03 15:05
  */

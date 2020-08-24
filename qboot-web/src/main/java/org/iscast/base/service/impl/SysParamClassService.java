@@ -12,7 +12,6 @@ import org.iscast.common.service.CrudService;
 /**
  * <p>Title: SysParamClassService</p>
  * <p>Description: 系统类型service</p>
- * 
  * @author history
  * @date 2018-08-08
  */

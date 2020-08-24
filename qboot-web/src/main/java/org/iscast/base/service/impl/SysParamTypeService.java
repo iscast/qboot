@@ -15,7 +15,6 @@ import java.util.List;
 /**
  * <p>Title: SysParamTypeService</p>
  * <p>Description: 系统类型service</p>
- * 
  * @author history
  * @date 2018-08-08
  */
