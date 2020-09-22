@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="org.iscast.base.dao.SysGenDao" >
-  <resultMap id="BaseResultMap" type="org.iscast.base.dto.SysGen" >
+<mapper namespace="org.qboot.base.dao.SysGenDao" >
+  <resultMap id="BaseResultMap" type="org.qboot.base.dto.SysGen" >
     <id column="id" property="id" jdbcType="VARCHAR" />
     <result column="table_name" property="tableName" jdbcType="VARCHAR" />
     <result column="pk_type" property="pkType" jdbcType="VARCHAR" />
@@ -16,7 +16,7 @@
     <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
     <result column="remarks" property="remarks" jdbcType="VARCHAR" />
   </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="org.iscast.base.dto.SysGen" extends="BaseResultMap" >
+  <resultMap id="ResultMapWithBLOBs" type="org.qboot.base.dto.SysGen" extends="BaseResultMap" >
     <result column="columns" property="columns" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
@@ -45,7 +45,7 @@
     where id = #{id,jdbcType=VARCHAR} 
   </select>
   
-   <select id="findList" resultMap="BaseResultMap" parameterType="org.iscast.base.dto.SysGen" >
+   <select id="findList" resultMap="BaseResultMap" parameterType="org.qboot.base.dto.SysGen" >
     select 
     <include refid="Base_Column_List" />
     from sys_gen
@@ -63,7 +63,7 @@
 	</if>
   </select>
   
-  <select id="findTable" parameterType="String" resultType="org.iscast.base.dto.DbTable">
+  <select id="findTable" parameterType="String" resultType="org.qboot.base.dto.DbTable">
   	select table_name name, table_comment comment from information_schema.tables 
 		<where>
 			table_schema = (select database()) 
@@ -83,7 +83,7 @@
 	order by t.ordinal_position asc limit 0,1
   </select>
   
-  <select id="findColumnByTableName" parameterType="String" resultType="org.iscast.base.dto.DbTableColumn">
+  <select id="findColumnByTableName" parameterType="String" resultType="org.qboot.base.dto.DbTableColumn">
 	select
 	t.column_name name,
 	if(t.is_nullable = 'yes' , '1' , '0') nullable,
@@ -110,7 +110,7 @@
     where id = #{id,jdbcType=VARCHAR}
   </delete>
   
-  <insert id="insert" parameterType="org.iscast.base.dto.SysGen" >
+  <insert id="insert" parameterType="org.qboot.base.dto.SysGen" >
     insert into sys_gen (id, table_name,pk_type, menu_name, 
       module_name,function_name, template, class_name, 
       create_by, create_date, update_by, 
@@ -123,7 +123,7 @@
       )
   </insert>
   
-  <update id="updateByPrimaryKeySelective" parameterType="org.iscast.base.dto.SysGen" >
+  <update id="updateByPrimaryKeySelective" parameterType="org.qboot.base.dto.SysGen" >
     update sys_gen
     <set >
       <if test="tableName != null" >
