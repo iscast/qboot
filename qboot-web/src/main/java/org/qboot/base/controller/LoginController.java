@@ -1,16 +1,5 @@
 package org.qboot.base.controller;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import org.qboot.base.dto.SysMenu;
 import org.qboot.base.dto.SysUser;
 import org.qboot.base.service.impl.SysLoginLogService;
@@ -21,11 +10,16 @@ import org.qboot.common.utils.TreeHelper;
 import org.qboot.web.dto.ResponeModel;
 import org.qboot.web.security.QUser;
 import org.qboot.web.security.SecurityUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * <p>Title: LoginController</p>
  * <p>Description: 系统登录</p>
- * 
  * @author history
  * @date 2018-08-08
  */

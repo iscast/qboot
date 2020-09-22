@@ -14,7 +14,7 @@ public class QRedissonTest extends RapidDevelopmentPlatformApplicationTests{
 	
 	@Test
 	public void set(){
-		redisson.set("name", "huang登辉");
+		redisson.set("name", "iscast");
 	}
 	
 	@Test

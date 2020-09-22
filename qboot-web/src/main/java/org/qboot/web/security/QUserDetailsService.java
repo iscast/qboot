@@ -21,7 +21,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import org.qboot.common.constant.QConstants;
+import org.qboot.common.constant.SysConstants;
 
 /**
  * <p>Title: LoginUserService</p>
@@ -74,7 +74,7 @@ public class QUserDetailsService implements UserDetailsService{
 			menus.forEach((v)->{
 				String permissions = v.getPermission();
 				if (StringUtils.isNotEmpty(permissions)) {
-					List<String> asList = Arrays.asList(StringUtils.split(permissions.trim(), QConstants.SEPARATOR));
+					List<String> asList = Arrays.asList(StringUtils.split(permissions.trim(), SysConstants.SEPARATOR));
 					for (String p :asList) {
 						authorities.add(new QPermission(p));
 					}

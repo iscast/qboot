@@ -12,7 +12,7 @@ import java.util.List;
  */
 @Configuration
 @ConfigurationProperties(prefix="rdp.security")
-public class RdpSecurityConfig implements WebMvcConfigurer{
+public class SysSecurityConfig implements WebMvcConfigurer{
 
     /**
      * 是否控制重复登录

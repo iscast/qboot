@@ -6,7 +6,7 @@ import org.qboot.base.dto.SysMenu;
 import org.qboot.base.dto.SysRole;
 import org.qboot.base.service.impl.SysMenuService;
 import org.qboot.base.service.impl.SysRoleService;
-import org.qboot.common.constant.QConstants;
+import org.qboot.common.constant.SysConstants;
 import org.qboot.common.controller.BaseController;
 import org.qboot.common.entity.AuthTreeEntity;
 import org.qboot.common.utils.TreeHelper;
@@ -28,7 +28,6 @@ import java.util.stream.Collectors;
 /**
  * <p>Title: MenuController</p>
  * <p>Description: 系统菜单权限</p>
- * 
  * @author history
  * @date 2018-08-08
  */
@@ -55,7 +54,7 @@ public class MenuController extends BaseController {
 		if(SecurityUtils.isSuperAdmin()) {
 			SysMenu sysMenu = new SysMenu();
 			sysMenu.setSortField("sort,parent_ids");
-			sysMenu.setDirection(QConstants.ASC);
+			sysMenu.setDirection(SysConstants.ASC);
 			list = sysMenuService.findList(sysMenu);
 		}else {
 			list = sysMenuService.qryAuth(SecurityUtils.getUserId());
@@ -90,7 +89,7 @@ public class MenuController extends BaseController {
 			}else {
 				SysMenu sysMenu = new SysMenu();
 				sysMenu.setSortField("sort,parent_ids");
-				sysMenu.setDirection(QConstants.ASC);
+				sysMenu.setDirection(SysConstants.ASC);
 				list = sysMenuService.findList(sysMenu);
 			}
 			
@@ -118,7 +117,7 @@ public class MenuController extends BaseController {
 	public ResponeModel qryParentMenus(@Validated SysMenu sysMenu, BindingResult bindingResult) {
 		sysMenu.setIsShow(sysMenu.getIsShow());
 		sysMenu.setSortField("id,sort");
-		sysMenu.setDirection(QConstants.DESC);
+		sysMenu.setDirection(SysConstants.DESC);
 		List<SysMenu> list = sysMenuService.findParentMenuList(sysMenu);
 		return ResponeModel.ok(list);
 	}

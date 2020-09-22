@@ -1,7 +1,8 @@
 package org.qboot.base.controller;
 
-import java.io.Serializable;
-
+import com.github.pagehelper.PageInfo;
+import org.qboot.base.dto.SysLoginLog;
+import org.qboot.base.service.impl.SysLoginLogService;
 import org.qboot.common.controller.BaseController;
 import org.qboot.web.dto.ResponeModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,15 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.github.pagehelper.PageInfo;
-
-import org.qboot.base.dto.SysLoginLog;
-import org.qboot.base.service.impl.SysLoginLogService;
+import java.io.Serializable;
 
 /**
  * <p>Title: LoginLogController</p>
  * <p>Description: 系统登陆日志</p>
- * 
  * @author history
  * @date 2018-08-08
  */

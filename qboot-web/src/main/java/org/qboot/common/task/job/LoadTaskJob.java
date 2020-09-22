@@ -20,7 +20,7 @@ import org.qboot.base.service.impl.SysTaskService;
  * @date 2018年11月8日 下午8:12:11
  */
 @Component
-@ConfigurationProperties(prefix="rdp.common.task")
+@ConfigurationProperties(prefix="sys.common.task")
 public class LoadTaskJob {
 	Logger logger = LoggerFactory.getLogger(getClass()) ;
 	@Autowired

@@ -1,12 +1,7 @@
 package org.qboot.web.security;
 
-import java.io.IOException;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.qboot.common.config.RdpSecurityConfig;
+import org.qboot.common.config.SysSecurityConfig;
+import org.qboot.common.utils.SpringContextHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +21,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
 import org.springframework.util.CollectionUtils;
 
-import org.qboot.common.utils.SpringContextHolder;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * <p>Title: WebSecurityConfig</p>
@@ -52,13 +50,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Value("${admin.path}")
 	private String adminPath;
 	@Autowired
-    private RdpSecurityConfig rdpSecurityConfig;
+    private SysSecurityConfig sysSecurityConfig;
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		//将自定义的登录配置放入链中
-        if(!CollectionUtils.isEmpty(rdpSecurityConfig.getSecurityConfigurerNames())){
-            for (String confName : rdpSecurityConfig.getSecurityConfigurerNames()) {
+        if(!CollectionUtils.isEmpty(sysSecurityConfig.getSecurityConfigurerNames())){
+            for (String confName : sysSecurityConfig.getSecurityConfigurerNames()) {
                 SecurityConfigurer securityConfigurer = SpringContextHolder.getBean(confName, SecurityConfigurer.class);
                 http.apply(securityConfigurer);
             }

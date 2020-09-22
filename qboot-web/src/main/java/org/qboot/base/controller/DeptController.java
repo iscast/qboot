@@ -1,11 +1,9 @@
 package org.qboot.base.controller;
 
-import java.io.Serializable;
-import java.util.List;
-
 import org.apache.commons.lang3.StringUtils;
 import org.qboot.base.dto.SysDept;
-import org.qboot.common.constant.QConstants;
+import org.qboot.base.service.impl.SysDeptService;
+import org.qboot.common.constant.SysConstants;
 import org.qboot.common.controller.BaseController;
 import org.qboot.common.utils.TreeHelper;
 import org.qboot.web.dto.ResponeModel;
@@ -16,18 +14,14 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import org.qboot.base.service.impl.SysDeptService;
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * <p>Title: DeptController</p>
  * <p>Description: 部门controller</p>
- * 
  * @author history
  * @date 2018-08-08
  */
@@ -63,7 +57,7 @@ public class DeptController extends BaseController {
 	@GetMapping("/qryAll")
 	public ResponeModel qryAll(SysDept sysDept) {
 		sysDept.setSortField("sort,parent_ids");
-		sysDept.setDirection(QConstants.ASC);
+		sysDept.setDirection(SysConstants.ASC);
 		List<SysDept> list = sysDeptService.findList(sysDept);
 		//数据机构调整
 		return ResponeModel.ok(treeHelper.treeGridList(list));

@@ -10,7 +10,7 @@ import org.qboot.base.dto.DbTableColumn;
 import org.qboot.base.dto.GenColumnInfo;
 import org.qboot.base.dto.SysGen;
 import org.qboot.base.vo.SysProjectGenVo;
-import org.qboot.common.constant.Constants;
+import org.qboot.common.constant.SysConstants;
 import org.qboot.common.exception.ServiceException;
 import org.qboot.common.service.BaseService;
 import org.qboot.common.utils.FreeMarkerUtils;
@@ -123,13 +123,13 @@ public class GeneratorService extends BaseService {
 			genColumnInfo.setNullable(column.getNullable());
 			//自增默认不插入
 			if (!"auto_increment".equals(column.getExtra())) {
-				genColumnInfo.setInsert(Constants.YES);
+				genColumnInfo.setInsert(SysConstants.YES);
 			}
 			if (!ArrayUtils.contains(defaultNotUpdates, column.getName())) {
-				genColumnInfo.setUpdate(Constants.YES);
+				genColumnInfo.setUpdate(SysConstants.YES);
 			}
 			if (!ArrayUtils.contains(defaultNotLists, column.getName())) {
-				genColumnInfo.setList(Constants.YES);
+				genColumnInfo.setList(SysConstants.YES);
 			}
 			if ("id".equals(column.getName())) {//默认是隐藏
 				genColumnInfo.setInputType(GenEnum.InputType.HIDDEN.value());
@@ -142,7 +142,7 @@ public class GeneratorService extends BaseService {
 			}
 			if ("LONGVARCHAR".equals(genColumnInfo.getJdbcType())) {//大文本
 				genColumnInfo.setInputType(GenEnum.InputType.TEXTAREA.value());
-				genColumnInfo.setList(Constants.NO);
+				genColumnInfo.setList(SysConstants.NO);
 			}
 			if (!"id".equals(column.getName()) && ("Integer".equals(genColumnInfo.getJavaType()) || "Long".equals(genColumnInfo.getJavaType()))) {//整数框
 				genColumnInfo.setInputType(GenEnum.InputType.ZHENGSHU.value());
@@ -169,7 +169,7 @@ public class GeneratorService extends BaseService {
 				if ("Date".equals(javaType)) {
 					sysGen.setHasDate(true);
 				}
-				if (Constants.YES.equals(column.getSearch())) {
+				if (SysConstants.YES.equals(column.getSearch())) {
 					sysGen.setHasSearch(true);
 				}
 			}

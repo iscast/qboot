@@ -1,10 +1,8 @@
 package org.qboot.base.controller;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
+import com.github.pagehelper.PageInfo;
+import org.qboot.base.dto.SysRole;
+import org.qboot.base.service.impl.SysRoleService;
 import org.qboot.common.controller.BaseController;
 import org.qboot.web.dto.ResponeModel;
 import org.qboot.web.security.QUser;
@@ -15,16 +13,12 @@ import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.github.pagehelper.PageInfo;
-
-import org.qboot.base.dto.SysRole;
-import org.qboot.base.service.impl.SysRoleService;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * <p>Title: RoleController</p>

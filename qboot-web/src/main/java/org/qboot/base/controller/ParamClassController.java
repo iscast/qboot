@@ -1,7 +1,8 @@
 package org.qboot.base.controller;
 
-import java.io.Serializable;
-
+import com.github.pagehelper.PageInfo;
+import org.qboot.base.dto.SysParamClass;
+import org.qboot.base.service.impl.SysParamClassService;
 import org.qboot.common.controller.BaseController;
 import org.qboot.web.dto.ResponeModel;
 import org.qboot.web.security.SecurityUtils;
@@ -15,15 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.github.pagehelper.PageInfo;
-
-import org.qboot.base.dto.SysParamClass;
-import org.qboot.base.service.impl.SysParamClassService;
+import java.io.Serializable;
 
 /**
  * <p>Title: ParamClassController</p>
  * <p>Description: 系统类型</p>
- * 
  * @author history
  * @date 2018-08-08
  */

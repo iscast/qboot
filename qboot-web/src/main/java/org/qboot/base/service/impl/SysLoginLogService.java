@@ -6,7 +6,7 @@ import java.util.List;
 import org.qboot.common.utils.i18n.MessageUtil;
 import org.qboot.base.dao.SysLoginLogDao;
 import org.qboot.base.dto.SysLoginLog;
-import org.qboot.common.constant.QConstants;
+import org.qboot.common.constant.SysConstants;
 import org.qboot.web.security.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,7 +66,7 @@ public class SysLoginLogService extends CrudService<SysLoginLogDao, SysLoginLog>
 		loginLog.setUserId(userId);
 		loginLog.setStatus(SysLoginLog.SUCCESS);
 		loginLog.setSortField("l.login_time");
-		loginLog.setDirection(QConstants.DESC);
+		loginLog.setDirection(SysConstants.DESC);
 		PageInfo<SysLoginLog> findByPage = this.findByPage(loginLog);
 		List<SysLoginLog> list = findByPage.getList();
 		if (!list.isEmpty()) {

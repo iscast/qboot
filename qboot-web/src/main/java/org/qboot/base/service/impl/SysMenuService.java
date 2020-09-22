@@ -8,7 +8,7 @@ import org.qboot.common.utils.i18n.MessageUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.qboot.base.dao.SysMenuDao;
 import org.qboot.base.dto.SysMenu;
-import org.qboot.common.constant.QConstants;
+import org.qboot.common.constant.SysConstants;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
@@ -93,9 +93,9 @@ public class SysMenuService extends CrudService<SysMenuDao, SysMenu> {
 	
 	public List<SysMenu> findShowMenuAll(){
 		SysMenu menu = new SysMenu();
-		menu.setIsShow(QConstants.YES);
+		menu.setIsShow(SysConstants.YES);
 		menu.setSortField("sort,parent_ids");
-		menu.setDirection(QConstants.ASC);
+		menu.setDirection(SysConstants.ASC);
 		return this.findList(menu);
 	} 
 	

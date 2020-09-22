@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface SysGenDao extends CrudDao<SysGen>{
     
-	public List<DbTable> findTable(@Param("tableName") String tableName);
-	public List<DbTableColumn> findColumnByTableName(@Param("tableName") String tableName);
-	public String findPkType(@Param("tableName") String tableName);
+	List<DbTable> findTable(@Param("tableName") String tableName);
+	List<DbTableColumn> findColumnByTableName(@Param("tableName") String tableName);
+	String findPkType(@Param("tableName") String tableName);
 }

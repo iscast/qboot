@@ -9,7 +9,7 @@ import org.qboot.base.dto.SysTaskLog;
 import org.qboot.base.service.impl.SysTaskLogService;
 import org.qboot.base.service.impl.SysTaskService;
 import org.qboot.common.constant.CacheConstants;
-import org.qboot.common.constant.QConstants;
+import org.qboot.common.constant.SysConstants;
 import org.qboot.common.exception.QExceptionCode;
 import org.qboot.common.exception.ServiceException;
 import org.qboot.common.utils.QRedisson;
@@ -110,9 +110,9 @@ public class JobProxy{
 			}
 		
 			//放入TaskID
-			params.put(QConstants.TASK_MAP_PARAMS_KEY_TASKID, sysTask.getId());
-			params.put(QConstants.TASK_MAP_PARAMS_KEY_LAST_RUNTIME, sysTask.getLastRunTime()) ;
-			params.put(QConstants.TASK_MAP_PARAMS_KEY_LAST_RESULT, sysTask.getLastResult()) ;
+			params.put(SysConstants.TASK_MAP_PARAMS_KEY_TASKID, sysTask.getId());
+			params.put(SysConstants.TASK_MAP_PARAMS_KEY_LAST_RUNTIME, sysTask.getLastRunTime()) ;
+			params.put(SysConstants.TASK_MAP_PARAMS_KEY_LAST_RESULT, sysTask.getLastResult()) ;
 			String execResult = job.execute(params);
 			updateTasktLog(logId, QExceptionCode.TASK_EXEC_STATUS_SUCCESS,execResult,sysTask);
 			logger.info("任务执行结束：{}", sysTask.toString());

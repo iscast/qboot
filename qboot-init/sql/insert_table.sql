@@ -13,15 +13,9 @@ BEGIN;
 INSERT INTO `sys_dict` VALUES (1, 'YES_NO', '1', '是', 1, '1', '1', '2018-04-05 18:30:36', '1', '2018-04-07 17:38:00', '');
 INSERT INTO `sys_dict` VALUES (2, 'YES_NO', '0', '否', 2, '1', '1', '2018-04-06 08:43:50', '1', '2018-04-06 08:43:50', '');
 INSERT INTO `sys_dict` VALUES (3, 'SYS_USER_TYPE', '0', '系统管理员', 1, '0', '1', '2018-04-07 16:48:51', '1', '2018-04-15 00:13:37', '');
-INSERT INTO `sys_dict` VALUES (4, 'SEX', '1', '男', 1, '1', '1', '2018-06-02 11:02:55', '1', '2018-06-02 11:02:55', '');
-INSERT INTO `sys_dict` VALUES (5, 'SEX', '2', '女', 2, '1', '1', '2018-06-02 11:03:04', '1', '2018-06-02 11:03:04', '');
-INSERT INTO `sys_dict` VALUES (6, 'SYS_USER_TYPE', '1', '普通用户', 2, '1', '1', '2018-04-07 16:49:04', '1', '2018-04-15 00:13:41', '');
-INSERT INTO `sys_dict` VALUES (7, 'coupons_type', '1', '时长减免', 0, '1', 'swiftpass', '2019-07-03 11:09:28', NULL, '2019-07-03 11:09:28', '优惠卷类型');
-INSERT INTO `sys_dict` VALUES (8, 'coupons_time', '1', '小时', 0, '1', 'swiftpass', '2019-07-03 11:10:46', NULL, '2019-07-03 11:10:46', '时长减免单位');
-INSERT INTO `sys_dict` VALUES (9, 'coupons_lines', '1', '显示额度_1', 0, '1', 'swiftpass', '2019-07-03 11:13:02', NULL, '2019-07-03 11:13:02', '显示额度');
-INSERT INTO `sys_dict` VALUES (10, 'coupons_lines', '2', '显示额度_2', 0, '1', 'swiftpass', '2019-07-03 11:13:38', NULL, '2019-07-03 11:13:38', '显示额度_2');
-INSERT INTO `sys_dict` VALUES (11, 'coupons_lines', '10', '配置优惠额度优惠10小时', 0, '1', 'swiftpass', '2019-07-29 20:45:26', 'swiftpass', '2019-07-31 11:32:42', '');
-INSERT INTO `sys_dict` VALUES (12, '5', '5', '配置优惠额度优惠5小时', 0, '1', 'swiftpass', '2019-08-02 11:39:27', NULL, '2019-08-02 11:39:27', '');
+INSERT INTO `sys_dict` VALUES (4, 'SYS_USER_TYPE', '1', '普通用户', 2, '1', '1', '2018-04-07 16:49:04', '1', '2018-04-15 00:13:41', '');
+INSERT INTO `sys_dict` VALUES (5, 'SEX', '1', '男', 1, '1', '1', '2018-06-02 11:02:55', '1', '2018-06-02 11:02:55', '');
+INSERT INTO `sys_dict` VALUES (6, 'SEX', '2', '女', 2, '1', '1', '2018-06-02 11:03:04', '1', '2018-06-02 11:03:04', '');
 COMMIT;
 
 -- ----------------------------

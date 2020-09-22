@@ -6,7 +6,7 @@ import java.util.List;
 import org.qboot.common.service.CrudService;
 import org.qboot.base.dao.SysDeptDao;
 import org.qboot.base.dto.SysDept;
-import org.qboot.common.constant.QConstants;
+import org.qboot.common.constant.SysConstants;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -25,7 +25,7 @@ public class SysDeptService extends CrudService<SysDeptDao, SysDept> {
 		//Assert.hasLength(parentIds,"parentIds 不能为空");
 		SysDept sysDept = new SysDept();
 		sysDept.setSortField("sort");
-		sysDept.setDirection(QConstants.ASC);
+		sysDept.setDirection(SysConstants.ASC);
 		sysDept.setParentId(parentId==null?"0":parentId);
 		return this.findList(sysDept);
 	}

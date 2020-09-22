@@ -1,9 +1,11 @@
 package org.qboot.base.controller;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
-
+import com.github.pagehelper.PageInfo;
+import org.qboot.base.dto.SysDict;
+import org.qboot.base.service.impl.SysDictService;
+import org.qboot.common.controller.BaseController;
+import org.qboot.web.dto.ResponeModel;
+import org.qboot.web.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
@@ -13,18 +15,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.github.pagehelper.PageInfo;
-
-import org.qboot.base.dto.SysDict;
-import org.qboot.base.service.impl.SysDictService;
-import org.qboot.common.controller.BaseController;
-import org.qboot.web.dto.ResponeModel;
-import org.qboot.web.security.SecurityUtils;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 
 /**
  * <p>Title: DictController</p>
  * <p>Description: 系统字典参数</p>
- * 
  * @author history
  * @date 2018-08-08
  */

@@ -1,13 +1,12 @@
 package org.qboot.common.constant;
 
 /**
- * <p>Title: RdpConstants</p>
+ * <p>Title: SysConstants</p>
  * <p>Description: 常量类</p>
- * 
  * @author history
  * @date 2018-09-08
  */
-public class QConstants {
+public class SysConstants {
 
 	public static final String YES = "1";
 	
@@ -18,7 +17,13 @@ public class QConstants {
 	public static final String DESC = "desc";
 	
 	public static final String SEPARATOR = ",";
-	
+
+
+	/**
+	 * 系统超级管理员
+	 */
+	public static final String SUPER_ADMIN_ID = "1";
+
 	/**
 	 * 当前执行任务ID map key
 	 */

@@ -2,7 +2,7 @@ package org.qboot.common.utils;
 
 import org.apache.commons.lang3.StringUtils;
 import org.qboot.base.dto.SysMenu;
-import org.qboot.common.constant.QConstants;
+import org.qboot.common.constant.SysConstants;
 import org.qboot.common.entity.AuthTreeEntity;
 import org.qboot.common.entity.TreeEntity;
 import org.springframework.util.CollectionUtils;
@@ -62,11 +62,11 @@ public class TreeHelper<T extends TreeEntity<String>> {
 	public void setParent(T t,T parent) {
 		if (StringUtils.isEmpty(t.getParentId())) {
 			t.setParentId(DEFAULT_PARENTID);
-			t.setParentIds(DEFAULT_PARENTID + QConstants.SEPARATOR);
+			t.setParentIds(DEFAULT_PARENTID + SysConstants.SEPARATOR);
 		} else {
 			if (null != parent) {
 				t.setParentId(parent.getId());
-				t.setParentIds(parent.getParentIds() + QConstants.SEPARATOR + parent.getId());
+				t.setParentIds(parent.getParentIds() + SysConstants.SEPARATOR + parent.getId());
 			}
 		}
 	}
