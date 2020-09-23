@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
  * @author history
  * @date 2018-08-08
  */
-
 @SpringBootApplication
 @MapperScan("org.qboot.**.dao")
 @ComponentScan(basePackages="org.qboot")

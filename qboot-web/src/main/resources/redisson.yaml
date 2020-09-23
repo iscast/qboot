@@ -7,10 +7,10 @@ singleServerConfig:
     retryInterval: 1500
     reconnectionTimeout: 3000
     failedAttempts: 3
-    password: SpreDis+dsfjiaDad23SD
+    password: 666666
     subscriptionsPerConnection: 5
     clientName: null
-    address: "redis://192.168.1.73:6379"
+    address: "redis://49.235.117.164:6379"
     subscriptionConnectionMinimumIdleSize: 1
     subscriptionConnectionPoolSize: 50
     connectionMinimumIdleSize: 2

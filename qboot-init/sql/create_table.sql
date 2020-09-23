@@ -111,7 +111,6 @@ CREATE TABLE `sys_login_log`
     `REMARKS`      varchar(255)  DEFAULT NULL COMMENT '备注信息',
     `FIRST_LOGIN`  int(4)        DEFAULT '0' COMMENT '是否需要修改密码：0-正常；1-初始化密码；2-已修改密码',
     `PHYSICS_FLAG` tinyint(4) DEFAULT '1' COMMENT '删除标识：1-正常；0-删除',
-    `version` bigint DEFAULT '1' COMMENT '版本',
     PRIMARY KEY (`ID`) USING BTREE,
     KEY `USER_ID` (`USER_ID`) USING BTREE,
     KEY `IP` (`IP`) USING BTREE,
