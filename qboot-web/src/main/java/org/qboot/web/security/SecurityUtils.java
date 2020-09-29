@@ -5,14 +5,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
  * <p>Title: LoginUser</p>
- * <p>Description: 当前登录用户工具类</p>
- * 
+ * <p>Description: current login user tool</p>
  * @author history
  * @date 2018-09-08
  */
 public class SecurityUtils {
 	
-	private static final String SUPER_NAME = "swiftpass";
+	private static final String SUPER_NAME = "superadmin";
 	
 	public static Long getUserId() {
 		QUser user = getUser() ;

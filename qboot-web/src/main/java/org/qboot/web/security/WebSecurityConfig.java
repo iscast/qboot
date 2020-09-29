@@ -28,9 +28,9 @@ import java.io.IOException;
 
 /**
  * <p>Title: WebSecurityConfig</p>
- * <p>Description: WEB安全配置:</p>
+ * <p>Description: WEB safe config:</p>
  * @author history
- * @EnableWebSecurity 启用Web安全功能
+ * @EnableWebSecurity enable Web saft function
  * configure(WebSecurity) 配置Spring Security的Filter链
  * configure(HttpSecurity) 配置如何通过拦截器保护请求
  * configure(AuthenticationManagerBuilder) 配置user-detail服务
@@ -61,8 +61,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 http.apply(securityConfigurer);
             }
         }
-		http.authorizeRequests().antMatchers("/public/**").permitAll()
-		.antMatchers("/**/*.html").permitAll()
+		http.authorizeRequests()
+		.antMatchers("/public/**", "/**/*.html", "/module/encrypt/jsencrypt.js", "/assets/**", "/module/_config.js").permitAll()
 		.antMatchers((adminPath + "/sys/user/getPublicKey")).permitAll()
 		.antMatchers((adminPath + "/**")).authenticated()
 		// 允许跨域

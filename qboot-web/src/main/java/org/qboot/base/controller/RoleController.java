@@ -22,7 +22,7 @@ import java.util.List;
 
 /**
  * <p>Title: RoleController</p>
- * <p>Description: 系统角色</p>
+ * <p>Description: sysRole</p>
  * 
  * @author history
  * @date 2018-08-08

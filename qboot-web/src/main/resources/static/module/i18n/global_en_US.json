@@ -63,7 +63,7 @@
     "layui.menu.area.list":"Area Management",
     "layui.menu.category.list":"Category List",
     "layui.menu.home":"Home",
-	"layui.menu.sysName":"Coupon Manage System",
+	"layui.menu.sysName":"Service Manage System",
 	"login.form.title.userLogin": "User Login",
 	"login.form.title.login": "Login",
 	"login.form.hint.inputUserName": "account",

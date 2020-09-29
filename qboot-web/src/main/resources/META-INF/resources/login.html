@@ -15,7 +15,7 @@
 <div class="login-wrapper">
 
     <div class="login-header">
-        <img src="assets/images/logo.png"> SwiftPass&优惠券管理平台
+        <img src="assets/images/logo.png">后台管理系统
         <span>
             <select id="loginLang" class="layui-input" style="width:140px;">
                 <option value="">Switch Language</option>
@@ -46,29 +46,15 @@
                                class="layui-input i18n-input-hint">
                     </div>
                 </div>
-                <!-- <div class="layui-form-item">
-                    <a href="javascript:;" class="layui-link">帐号注册</a>
-                    <a href="javascript:;" class="layui-link pull-right">忘记密码？</a>
-                </div> -->
                 <div class="layui-form-item">
                     <button lay-filter="login-submit" class="layui-btn layui-btn-fluid layui-i18n" i18n-key="login.form.title.login" lay-submit>登 录</button>
                 </div>
-                <!-- <div class="layui-form-item login-other">
-                    <label>第三方登录</label>
-                    <a href="javascript:;"><i class="layui-icon layui-icon-login-qq"></i></a>
-                    <a href="javascript:;"><i class="layui-icon layui-icon-login-wechat"></i></a>
-                    <a href="javascript:;"><i class="layui-icon layui-icon-login-weibo"></i></a>
-                </div> -->
             </div>
         </div>
     </div>
 
     <div class="login-footer">
         <p></p>
-        <!-- <p>
-            <span><a href="https://www.baidu.com" target="_blank">前往swiftpass</a></span>
-            <span><a href="javascript:;" target="_blank">文档说明</a></span>
-        </p> -->
     </div>
 </div>
 
@@ -113,7 +99,7 @@
             loginLang.change();
         }
 
-        $('.login-footer p').html('© 2013-'+new Date().getUTCFullYear()+' <a href="javascript:;" target="_blank">威富通版权所有</a>');
+        // $('.login-footer p').html('© 2019-'+new Date().getUTCFullYear()+' <a href="javascript:;" target="_blank">QBOOT提供支持</a>');
 
         // 表单提交
         form.on('submit(login-submit)', function (obj) {
@@ -142,7 +128,7 @@
             password = encrypt.encrypt(password);
             layer.load(2);
             $.ajax({
-                url: '/rdp/login',
+                url: '/login',
                 data: {'username':username,'password':password},
                 type: 'POST',
                 dataType: 'JSON',

@@ -58,7 +58,7 @@
   "layui.menu.area.list":"地區管理",
   "layui.menu.category.list":"類目清單",
   "layui.menu.home":"首頁",
-  "layui.menu.sysName":"優惠券管理平臺",
+  "layui.menu.sysName":"後臺管理系統",
   "login.form.title.userLogin": "用戶登錄",
   "login.form.title.login": "登 錄",
   "login.form.hint.inputUserName": "賬號",

@@ -63,7 +63,7 @@
     "layui.menu.area.list":"地区管理",
     "layui.menu.category.list":"类目列表",
     "layui.menu.home":"首页",
-	"layui.menu.sysName":"优惠券管理平台",
+	"layui.menu.sysName":"后台管理系统",
 	"login.form.title.userLogin": "用户登录",
 	"login.form.title.login": "登 录",
 	"login.form.hint.inputUserName": "账号",

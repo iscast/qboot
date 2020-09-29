@@ -18,5 +18,5 @@ public interface ILoginInService extends OptionalServiceSelector {
 	 * 登录后的定制方法，给业务系统调用
 	 * @param adminUserDetails 用户登录详细信息对象
 	 */
-	public void loginInAfter(QUserDetails adminUserDetails);
+	void loginInAfter(QUserDetails adminUserDetails);
 }
