@@ -62,7 +62,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             }
         }
 		http.authorizeRequests()
-		.antMatchers("/public/**", "/**/*.html", "/login.html", "/module/encrypt/jsencrypt.js", "/assets/**", "/module/_config.js").permitAll()
+		.antMatchers("/public/**", "/login.html", "/module/encrypt/jsencrypt.js", "/assets/**", "/module/_config.js").permitAll()
 		.antMatchers((adminPath + "/sys/user/getPublicKey")).permitAll()
 		.antMatchers((adminPath + "/**")).authenticated()
 		// 允许跨域
@@ -82,7 +82,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 					AuthenticationException authException) throws IOException, ServletException {
 				logger.info("{} no login!", request.getRequestURI());
 				//response.setStatus(SecurityStatus.NO_LOGIN.getValue());
-				response.setStatus(401);
+//				response.setStatus(401);
+                response.sendRedirect("/login.html");
 			}
 		}).accessDeniedHandler(new QAccessDeniedHandler());
 

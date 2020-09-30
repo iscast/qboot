@@ -1,19 +1,14 @@
 package org.qboot.web.security;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.apache.commons.lang3.StringUtils;
-import org.qboot.web.security.handle.provider.LoginInServiceProvider;
 import org.qboot.base.dto.SysMenu;
 import org.qboot.base.dto.SysRole;
 import org.qboot.base.dto.SysUser;
 import org.qboot.base.service.impl.SysMenuService;
 import org.qboot.base.service.impl.SysRoleService;
 import org.qboot.base.service.impl.SysUserService;
+import org.qboot.common.constant.SysConstants;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -21,7 +16,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import org.qboot.common.constant.SysConstants;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * <p>Title: LoginUserService</p>
@@ -38,11 +35,7 @@ public class QUserDetailsService implements UserDetailsService{
 	private SysMenuService sysMenuService;
 	@Autowired
 	private SysRoleService sysRoleService;
-	@Autowired
-	private LoginInServiceProvider loginInServiceProvider;
-	@Autowired
-	private Environment env;
-	
+
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		Assert.hasLength(username, "username为空");
@@ -55,9 +48,6 @@ public class QUserDetailsService implements UserDetailsService{
 		List<SysRole> roles = sysRoleService.findByUserId(sysUser.getId());
 		user.setRoles(roles);
 		QUserDetails adminUserDetails = new QUserDetails(user, sysUser.getPassword(), getAuthorities(sysUser.getId(), sysUser.getLoginName()), false);
-		//从application.properties中获取login.in.bussNumber配置的值（定制的流水号，可为空）
-		loginInServiceProvider.getService(env.getProperty("login.in.bussNumber")).loginInAfter(adminUserDetails);
-		
 		return adminUserDetails;
 	}
 	
