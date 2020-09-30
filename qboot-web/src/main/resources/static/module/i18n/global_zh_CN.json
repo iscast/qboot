@@ -6,6 +6,7 @@
 	"layui-laypage-count-end": "条",
 	"layui-laypage-limits": "条/页",
 	"layui-laypage-text-none": "无数据",
+	"layui-window-full-screen": "全屏",
 	"i18n-pic-btn": "上传图片",
 	"layer.confirm.title": "提示",
 	"layer.confirm.btn.yes": "确定",

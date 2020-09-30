@@ -62,19 +62,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             }
         }
 		http.authorizeRequests()
-		.antMatchers("/public/**", "/**/*.html", "/module/encrypt/jsencrypt.js", "/assets/**", "/module/_config.js").permitAll()
+		.antMatchers("/public/**", "/**/*.html", "/login.html", "/module/encrypt/jsencrypt.js", "/assets/**", "/module/_config.js").permitAll()
 		.antMatchers((adminPath + "/sys/user/getPublicKey")).permitAll()
 		.antMatchers((adminPath + "/**")).authenticated()
 		// 允许跨域
 		.antMatchers(HttpMethod.OPTIONS).permitAll() 
-		.and().formLogin().loginProcessingUrl(adminPath + "/login").permitAll()
+		.and().formLogin().loginPage(adminPath + "/login.html").loginProcessingUrl(adminPath + "/login").permitAll()
 		.and().logout().logoutUrl(adminPath + "/logout").logoutSuccessHandler(loginResultHandler())
 
 		.and().csrf().disable()
 		.headers().xssProtection().disable().frameOptions().disable()
-		.and().addFilterBefore(rdpAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+		.and().addFilterBefore(customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 		/** 重复登录  */
-		http.sessionManagement().maximumSessions(1).maxSessionsPreventsLogin(false).expiredSessionStrategy(rdpSessionInformationExpiredStrategy());
+		http.sessionManagement().maximumSessions(1).maxSessionsPreventsLogin(false).expiredSessionStrategy(customSessionInformationExpiredStrategy());
 		/** 登录异常处理  */
 		http.exceptionHandling().authenticationEntryPoint(new AuthenticationEntryPoint() {
 			@Override
@@ -93,26 +93,26 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	 */
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(rdpUserDetailsService()).passwordEncoder(new QPasswordEncoder());
+		auth.userDetailsService(customUserDetailsService()).passwordEncoder(new QPasswordEncoder());
 	}
 	
 	/**
-	 * 自定义登录过滤器 RdpAuthenticationFilter
+	 * 自定义登录过滤器 customAuthenticationFilter
 	 * @return
 	 * @throws Exception
 	 */
 	@Bean
-	public QAuthenticationFilter rdpAuthenticationFilter() throws Exception {
-		QAuthenticationFilter rdpAuthenticationFilter = new QAuthenticationFilter(adminPath + "/login");
-		rdpAuthenticationFilter.setAuthenticationManager(this.authenticationManager());
-		rdpAuthenticationFilter.setAuthenticationSuccessHandler(loginResultHandler());
-		rdpAuthenticationFilter.setAuthenticationFailureHandler(loginResultHandler());
-		rdpAuthenticationFilter.setRememberMeServices(tokenBasedRememberMeServices());
-		return rdpAuthenticationFilter;
+	public QAuthenticationFilter customAuthenticationFilter() throws Exception {
+		QAuthenticationFilter customAuthenticationFilter = new QAuthenticationFilter(adminPath + "/login");
+		customAuthenticationFilter.setAuthenticationManager(this.authenticationManager());
+		customAuthenticationFilter.setAuthenticationSuccessHandler(loginResultHandler());
+		customAuthenticationFilter.setAuthenticationFailureHandler(loginResultHandler());
+		customAuthenticationFilter.setRememberMeServices(tokenBasedRememberMeServices());
+		return customAuthenticationFilter;
 	}
 	
     public TokenBasedRememberMeServices tokenBasedRememberMeServices() {
-        TokenBasedRememberMeServices tbrms = new TokenBasedRememberMeServices("cn.swiftpass", rdpUserDetailsService());
+        TokenBasedRememberMeServices tbrms = new TokenBasedRememberMeServices("org.qboot", customUserDetailsService());
         // 设置cookie过期时间
         tbrms.setTokenValiditySeconds(TOKEN_VALIDITY_SECONDS);
         tbrms.setParameter("rememberMe");
@@ -120,15 +120,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 	@Bean
-	public QUserDetailsService rdpUserDetailsService() {
-		QUserDetailsService rdpUserDetailsService = new QUserDetailsService();
-		return rdpUserDetailsService;
+	public QUserDetailsService customUserDetailsService() {
+		QUserDetailsService customUserDetailsService = new QUserDetailsService();
+		return customUserDetailsService;
 	}
 	
 	@Bean
-	public QSessionInformationExpiredStrategy rdpSessionInformationExpiredStrategy() {
-		QSessionInformationExpiredStrategy rdpSessionInformationExpiredStrategy = new QSessionInformationExpiredStrategy();
-		return rdpSessionInformationExpiredStrategy;
+	public QSessionInformationExpiredStrategy customSessionInformationExpiredStrategy() {
+		QSessionInformationExpiredStrategy customSessionInformationExpiredStrategy = new QSessionInformationExpiredStrategy();
+		return customSessionInformationExpiredStrategy;
 	}
 	
 	@Bean

@@ -6,6 +6,7 @@
 	"layui-laypage-count-end": "records",
 	"layui-laypage-limits": "records/page",
 	"layui-laypage-text-none": "none",
+    "layui-window-full-screen": "full screen",
 	"i18n-pic-btn": "upload pic",
 	"layer.confirm.title": "Tips",
 	"layer.confirm.btn.yes": "Yes",

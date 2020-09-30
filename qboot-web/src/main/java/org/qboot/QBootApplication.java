@@ -12,37 +12,34 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.bind.annotation.RestController;
 
 /**	
- * <p>Title: RapidDevelopmentPlatformApplication</p>
+ * <p>Title: QBootApplication</p>
  * <p>Description: 程序入口</p>
  * @author history
  * @date 2018-08-08
  */
 @SpringBootApplication
 @MapperScan("org.qboot.**.dao")
-@ComponentScan(basePackages="org.qboot")
+//@ComponentScan(basePackages="org.qboot")
 @EnableTransactionManagement(proxyTargetClass=true)
-@PropertySource(value= {"classpath:/qboot.properties"})
 @EnableRedissonHttpSession(maxInactiveIntervalInSeconds=2*60*60, keyPrefix="qsession")
 @RestController
 @EnableCaching
-public class RapidDevelopmentPlatformApplication extends SpringBootServletInitializer{
+public class QBootApplication extends SpringBootServletInitializer{
 	
 	/**
 	 * 启动服务main
 	 */
 	public static void main(String[] args) {
-		SpringApplication.run(RapidDevelopmentPlatformApplication.class, args);
+		SpringApplication.run(QBootApplication.class, args);
 	}
 	
 	@Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(RapidDevelopmentPlatformApplication.class);
+        return application.sources(QBootApplication.class);
     }
 	
 	/**

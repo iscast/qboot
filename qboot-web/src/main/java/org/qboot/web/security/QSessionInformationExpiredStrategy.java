@@ -8,7 +8,7 @@ import org.springframework.security.web.session.SessionInformationExpiredEvent;
 import org.springframework.security.web.session.SessionInformationExpiredStrategy;
 
 /**
- * <p>Title: RdpSessionInformationExpiredStrategy</p>
+ * <p>Title: QSessionInformationExpiredStrategy</p>
  * <p>Description: 重复登录</p>
  * 
  * @author history

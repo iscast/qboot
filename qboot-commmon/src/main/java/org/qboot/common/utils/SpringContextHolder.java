@@ -26,8 +26,7 @@ public class SpringContextHolder implements ApplicationContextAware {
         if (applicationContext != null) {
             logger.warn("SpringContextHolder中的ApplicationContext被覆盖, 原有ApplicationContext为:" + applicationContext);
         }
-
-        applicationContext = applicationContext;
+        this.applicationContext = applicationContext;
     }
 
     public void destroy() throws Exception {

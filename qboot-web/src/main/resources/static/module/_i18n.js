@@ -5,7 +5,7 @@ layui.define(['_config', 'admin'], function (exports) {
     var localeData = lang ? {lang: lang} : {};
     $.get('/i18n/getLocale', localeData, function (d) {
         locale = d.data;
-        //获取全局国际化资源
+        //get all global
         var msgs;
         $.ajax({
             url: 'module/i18n/global_' + locale + '.json',

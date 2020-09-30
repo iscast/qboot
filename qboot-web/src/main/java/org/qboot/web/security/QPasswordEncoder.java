@@ -6,8 +6,7 @@ import org.springframework.util.Assert;
 
 /**
  * <p>Title: LoginPasswordEncoder</p>
- * <p>Description: 自定义登录密码加密</p>
- * 
+ * <p>Description: custom password encode</p>
  * @author history
  * @date 2018-09-11
  */
@@ -15,7 +14,7 @@ public class QPasswordEncoder implements PasswordEncoder{
 
 	@Override
 	public String encode(CharSequence rawPassword) {
-		Assert.notNull(rawPassword, "密码为空");
+		Assert.notNull(rawPassword, "password is empty");
 		return DigestUtils.sha256Hex(rawPassword.toString());
 	}
 
