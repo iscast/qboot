@@ -219,7 +219,8 @@
                 <configuration>
                     <excludes>
                         <exclude>application.properties</exclude>
-                        <exclude>redison.yaml</exclude>
+                        <exclude>redisson.yaml</exclude>
+                        <exclude>logback-spring.xml</exclude>
                     </excludes>
                 </configuration>
             </plugin>
