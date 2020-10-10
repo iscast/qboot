@@ -16,11 +16,13 @@ import org.qboot.web.dto.ResponeModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -31,6 +33,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -104,6 +107,8 @@ public class LoginResultHandler implements AuthenticationSuccessHandler,Authenti
 	@Override
 	public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
 			throws IOException, ServletException {
+        AnonymousAuthenticationToken anonymous = new AnonymousAuthenticationToken("anonymous", "anonymous", new ArrayList());
+        SecurityContextHolder.getContext().setAuthentication(anonymous);
 		ResponeModel ok = ResponeModel.ok();
 		String userName = this.obtainUsername(request);
 		ok.setData(userName);
