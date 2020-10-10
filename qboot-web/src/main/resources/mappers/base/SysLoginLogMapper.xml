@@ -38,7 +38,7 @@
     where l.id = #{id}
   </select>
   
-  <select id="findList" resultMap="BaseResultMap" parameterType="SysLoginLog" >
+  <select id="findList" resultMap="BaseResultMap" parameterType="org.qboot.base.dto.SysLoginLog" >
     select 
     <include refid="Base_Column_List" />
     from <include refid="Join_Table" />
@@ -79,7 +79,7 @@
     delete l from sys_login_log l  where l.id = #{id}
   </delete>
   
-  <insert id="insert" parameterType="SysLoginLog" >
+  <insert id="insert" parameterType="org.qboot.base.dto.SysLoginLog" >
     insert into sys_login_log (user_id,status,login_time,ip,area,user_agent,device_name,browser_name,create_by,create_date,update_by,update_date,remarks, first_login)
     values (#{userId},#{status},#{loginTime},#{ip},#{area},#{userAgent},#{deviceName},#{browserName},#{createBy},#{createDate},#{updateBy},#{updateDate},#{remarks},#{firstLogin})
   </insert>

@@ -41,7 +41,7 @@
     where permission = #{permission}
   </select>
   
-  <select id="findParentMenuList" resultMap="BaseResultMap" parameterType="SysMenu" >
+  <select id="findParentMenuList" resultMap="BaseResultMap" parameterType="org.qboot.base.dto.SysMenu" >
   	select 
     <include refid="Base_Column_List" />
     from sys_menu
@@ -54,7 +54,7 @@
 	</if>
   </select>
   
-  <select id="findList" resultMap="BaseResultMap" parameterType="SysMenu" >
+  <select id="findList" resultMap="BaseResultMap" parameterType="org.qboot.base.dto.SysMenu" >
     select 
     <include refid="Base_Column_List" />
     , (select count(1) from sys_menu where parent_id = m.id and type <![CDATA[<>]]> '999' ) as hasSub
@@ -110,7 +110,7 @@
     delete from sys_menu where id = #{id}
   </delete>
   
-  <insert id="insert" parameterType="SysMenu" >
+  <insert id="insert" parameterType="org.qboot.base.dto.SysMenu" >
     insert into sys_menu (parent_id, parent_ids, 
       name, sort, href, target, 
       type, icon, is_show, permission, 
@@ -123,7 +123,7 @@
       #{updateDate,jdbcType=TIMESTAMP}, #{remarks,jdbcType=VARCHAR})
   </insert>
   
-  <update id="update" parameterType="SysMenu" >
+  <update id="update" parameterType="org.qboot.base.dto.SysMenu" >
     update sys_menu
     <set >
       <if test="parentId != null" >
@@ -169,7 +169,7 @@
     where id = #{id} 
   </update>
   
-  <update id="updateSelecter" parameterType="SysMenu" >
+  <update id="updateSelecter" parameterType="org.qboot.base.dto.SysMenu" >
     update sys_menu
     <set >
       <if test="parentId != null" >
@@ -224,7 +224,7 @@
 	select #{menuId}
   </select>
   
-  <update id="changeShowFlag" parameterType="SysMenu" >
+  <update id="changeShowFlag" parameterType="org.qboot.base.dto.SysMenu" >
     update sys_menu
     <set >
       <if test="isShow != null" >

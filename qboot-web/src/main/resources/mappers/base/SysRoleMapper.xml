@@ -29,8 +29,7 @@
 		where name = #{name}
 	</select>
 	
-	<select id="findList" resultMap="BaseResultMap"
-		parameterType="SysRole">
+	<select id="findList" resultMap="BaseResultMap" parameterType="org.qboot.base.dto.SysRole">
 		select
 		<include refid="Base_Column_List" />
 		from sys_role
@@ -104,13 +103,13 @@
 		select menu_id from sys_role_menu where role_id = #{roleId}
 	</select>
 	
-	<insert id="insert" parameterType="SysRole">
+	<insert id="insert" parameterType="org.qboot.base.dto.SysRole">
 		insert into sys_role (name, create_by, create_date, update_by, update_date, remarks)
 		values (#{name,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR},
 		#{updateDate,jdbcType=TIMESTAMP}, #{remarks,jdbcType=VARCHAR})
 	</insert>
 	
-	<update id="update" parameterType="SysRole">
+	<update id="update" parameterType="org.qboot.base.dto.SysRole">
 		update sys_role
 		<set>
 			<if test="name != null">
@@ -129,7 +128,7 @@
 		where id = #{id} 
 	</update>
 	
-	<update id="updateByPrimaryKey" parameterType="SysRole">
+	<update id="updateByPrimaryKey" parameterType="org.qboot.base.dto.SysRole">
 		update sys_role set name = #{name,jdbcType=VARCHAR}, update_by = #{updateBy,jdbcType=VARCHAR},
 		update_date = #{updateDate,jdbcType=TIMESTAMP}, remarks = #{remarks,jdbcType=VARCHAR}
 		where id = #{id} 

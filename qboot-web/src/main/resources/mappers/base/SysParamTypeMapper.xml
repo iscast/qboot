@@ -61,7 +61,7 @@
 		</if>
   </select>
   
-  <update id="changeById" parameterType="SysParamType" >
+  <update id="changeById" parameterType="org.qboot.base.dto.SysParamType" >
     update sys_param_type
     <set >
       <if test="physicsFlag != null" >
@@ -71,7 +71,7 @@
     where id = #{id} 
   </update>
   
-  <insert id="insert" parameterType="SysParamType" >
+  <insert id="insert" parameterType="org.qboot.base.dto.SysParamType" >
     insert into sys_param_type (param_type_id, param_type_class, param_type_code, param_type_name, physics_flag, create_by, create_date, update_by, update_date, remarks, i18n_field)
     values (#{paramTypeId,jdbcType=INTEGER}, #{paramTypeClass,jdbcType=VARCHAR}, #{paramTypeCode,jdbcType=VARCHAR}, #{paramTypeName,jdbcType=VARCHAR}
     	, #{physicsFlag,jdbcType=INTEGER}, #{createBy,jdbcType=VARCHAR}
@@ -80,7 +80,7 @@
       )
   </insert>
   
-  <update id="update" parameterType="SysParamType" >
+  <update id="update" parameterType="org.qboot.base.dto.SysParamType" >
     update sys_param_type
     <set >
       <if test="paramTypeId != null" >

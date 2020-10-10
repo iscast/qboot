@@ -55,11 +55,11 @@
     delete from sys_area
     where id = #{id}
   </delete>
-  <insert id="insert" parameterType="SysArea" >
+  <insert id="insert" parameterType="org.qboot.base.dto.SysArea" >
     insert into sys_area (id,name,parent_id,sort,type,status,create_by,create_date,update_by,update_date,remarks)
     values (#{id},#{name},#{parentId},#{sort},#{type},#{status},#{createBy},#{createDate},#{updateBy},#{updateDate},#{remarks})
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="SysArea" >
+  <update id="updateByPrimaryKeySelective" parameterType="org.qboot.base.dto.SysArea" >
     update sys_area
     <set>
       <if test="name != null" >
@@ -89,7 +89,7 @@
     </set>
     where id = #{id}
   </update>
-  <update id="updateByPrimaryKey" parameterType="SysArea" >
+  <update id="updateByPrimaryKey" parameterType="org.qboot.base.dto.SysArea" >
     update sys_area
     set 
         name = #{name}

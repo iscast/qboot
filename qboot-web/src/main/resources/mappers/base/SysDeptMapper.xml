@@ -27,7 +27,7 @@
     where id = #{id}
   </select>
   
-  <select id="findList" resultMap="BaseResultMap" parameterType="SysDept" >
+  <select id="findList" resultMap="BaseResultMap" parameterType="org.qboot.base.dto.SysDept" >
     select 
     <include refid="Base_Column_List" />
     	, (select count(1) from sys_dept where parent_id = d.id) as hasSub
@@ -57,7 +57,7 @@
 		delete from sys_role_dept where dept_id= #{deptId}
   </delete>
 	
-  <insert id="insert" parameterType="SysDept" >
+  <insert id="insert" parameterType="org.qboot.base.dto.SysDept" >
     insert into sys_dept (parent_id, parent_ids, name, sort, create_by, create_date, update_by, update_date, remarks)
     values (#{parentId,jdbcType=VARCHAR}, #{parentIds,jdbcType=VARCHAR}, 
       #{name,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER}, #{createBy,jdbcType=VARCHAR}, 

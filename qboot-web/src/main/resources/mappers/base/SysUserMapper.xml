@@ -52,7 +52,7 @@
     where u.login_name = #{loginName}
   </select>
   
-  <select id="findList" resultMap="BaseResultMap" parameterType="SysUser" >
+  <select id="findList" resultMap="BaseResultMap" parameterType="org.qboot.base.dto.SysUser" >
     select 
     <include refid="Base_Column_List" />
     from <include refid="Join_Table" />
@@ -123,7 +123,7 @@
 		</foreach>
   </insert>
 	
-  <insert id="insert" parameterType="SysUser" useGeneratedKeys="true" keyProperty="id">
+  <insert id="insert" parameterType="org.qboot.base.dto.SysUser" useGeneratedKeys="true" keyProperty="id">
     insert into sys_user (dept_id, login_name, password, salt, name, mobile, photo, email, user_type, status, create_by, create_date, update_by, 
     update_date, remarks, fld_n1, fld_n2, fld_s1, fld_s2)
     values (
@@ -137,7 +137,7 @@
      )
   </insert>
   
-  <insert id="insertBak" parameterType="SysUser" >
+  <insert id="insertBak" parameterType="org.qboot.base.dto.SysUser" >
     insert into sys_user_bak (dept_id, login_name, password, salt, name, mobile, photo, email, 
       user_type, status, create_by, create_date, update_by, update_date, remarks)
     values (#{deptId,jdbcType=VARCHAR}, #{loginName,jdbcType=VARCHAR}, 
@@ -151,7 +151,7 @@
       </selectKey>
   </insert>
   
-  <update id="update" parameterType="SysUser" >
+  <update id="update" parameterType="org.qboot.base.dto.SysUser" >
     update sys_user u
     <set >
       <if test="deptId != null" >
@@ -214,7 +214,7 @@
   </update>
   
   
-  <update id="updateSelect" parameterType="SysUser" >
+  <update id="updateSelect" parameterType="org.qboot.base.dto.SysUser" >
     update sys_user
     set dept_id = #{deptId},
       login_name = #{loginName},
@@ -230,11 +230,11 @@
     where id = #{id} and version = #{version}
   </update>
   
-  <update id="initPwd" parameterType="SysUser" >
+  <update id="initPwd" parameterType="org.qboot.base.dto.SysUser" >
     update sys_user set password = #{password}, fld_n1 = #{fldN1} where id = #{id} 
   </update>
   
-  <update id="setStatus" parameterType="SysUser" >
+  <update id="setStatus" parameterType="org.qboot.base.dto.SysUser" >
     update sys_user set status = #{status} where id = #{id} 
   </update>
 </mapper>

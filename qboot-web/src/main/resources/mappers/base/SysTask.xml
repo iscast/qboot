@@ -10,11 +10,11 @@
 			values(#{taskName},#{groupName},#{cronExp},#{taskTarget},#{status},#{lastRunTime},#{lastResult},#{remarks},#{params},#{createDate},#{updateDate},#{createBy},#{updateBy},#{execType})
 	</insert>
 
-	<select id="findAll" resultType="SysTask">
+	<select id="findAll" resultType="org.qboot.base.dto.SysTask">
 		SELECT * FROM sys_task
 	</select>
 
-	<select id="findList" parameterType="SysTask" resultType="SysTask">
+	<select id="findList" parameterType="org.qboot.base.dto.SysTask" resultType="org.qboot.base.dto.SysTask">
 		SELECT * FROM sys_task t
 		<where>
 			<if test="status != null">
@@ -39,7 +39,7 @@
 		order by t.id desc 
 	</select>
 
-	<update id="updateById" parameterType="SysTask">
+	<update id="updateById" parameterType="org.qboot.base.dto.SysTask">
 		update sys_task 
 		<set>
 			params = #{params},remarks = #{remarks},group_name = #{groupName},
@@ -72,7 +72,7 @@
 	</update>
 	
 	<!-- 记录最后一次执行成功结果 -->
-	<update id="updateResult" parameterType="SysTask">
+	<update id="updateResult" parameterType="org.qboot.base.dto.SysTask">
 		update sys_task 
 			set last_run_time = #{lastRunTime},last_result = #{lastResult},update_date = #{updateDate}
 		WHERE id = #{id} 
@@ -82,20 +82,20 @@
 		delete from sys_task where id = #{id}
 	</delete>
 
-	<select id="findById" parameterType="java.lang.Long" resultType="SysTask">
+	<select id="findById" parameterType="java.lang.Long" resultType="org.qboot.base.dto.SysTask">
 		select * from sys_task where id = #{id}
 	</select>
 	
-	<select id="findByName" parameterType="java.lang.String" resultType="SysTask">
+	<select id="findByName" parameterType="java.lang.String" resultType="org.qboot.base.dto.SysTask">
 		select * from sys_task where task_name = #{taskName}
 	</select>
 	
-	<update id="updateStatus" parameterType="SysTask">
+	<update id="updateStatus" parameterType="org.qboot.base.dto.SysTask">
 		update sys_task set status = #{status} where id = #{id}
 	</update>
 	
 	<!-- 统计同名任务数 -->
-	<select id="countByTaskName" parameterType="SysTask" resultType="java.lang.Long">
+	<select id="countByTaskName" parameterType="org.qboot.base.dto.SysTask" resultType="java.lang.Long">
 		select count(1) from sys_task t where t.task_name=#{taskName} 
 		<if test="id != null">
 			and t.id != #{id}

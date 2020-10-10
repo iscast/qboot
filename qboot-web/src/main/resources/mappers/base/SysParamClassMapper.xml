@@ -61,7 +61,7 @@
     </choose>
   </select>
   
-  <update id="changeById" parameterType="SysParamClass" >
+  <update id="changeById" parameterType="org.qboot.base.dto.SysParamClass" >
     update sys_param_class
     <set >
       <if test="visible != null" >
@@ -74,14 +74,14 @@
     where id = #{id} 
   </update>
   
-  <insert id="insert" parameterType="SysParamClass" >
+  <insert id="insert" parameterType="org.qboot.base.dto.SysParamClass" >
     insert into sys_param_class (param_type_class, param_type_name, visible, physics_flag, create_by, create_date, update_by, update_date, remarks)
     values (#{paramTypeClass,jdbcType=VARCHAR}, #{paramTypeName,jdbcType=VARCHAR}, #{visible,jdbcType=INTEGER}, #{physicsFlag,jdbcType=INTEGER}, #{createBy,jdbcType=VARCHAR}
     	, #{createDate,jdbcType=TIMESTAMP},  #{updateBy,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, #{remarks,jdbcType=VARCHAR}
       )
   </insert>
   
-  <update id="update" parameterType="SysParamClass" >
+  <update id="update" parameterType="org.qboot.base.dto.SysParamClass" >
     update sys_param_class
     <set >
       <if test="paramTypeClass != null" >

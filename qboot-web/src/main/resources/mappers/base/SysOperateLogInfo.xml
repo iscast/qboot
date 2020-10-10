@@ -21,7 +21,7 @@
 	    LOG_ID, REQ_URI, URI_NAME, URI_TYPE, PHYSICS_FLAG, CREATE_DATE, UPDATE_DATE, UPDATE_BY, CREATE_BY, REMARKS
 	</sql>
 
-	<insert id="insert" parameterType="SysOperateLogInfoDto" keyProperty="LOG_ID" useGeneratedKeys="true">
+	<insert id="insert" parameterType="org.qboot.base.dto.SysOperateLogInfoDto" keyProperty="LOG_ID" useGeneratedKeys="true">
 		INSERT INTO sys_operate_log_info 
 		(REQ_URI, URI_NAME, URI_TYPE, PHYSICS_FLAG, CREATE_DATE, UPDATE_DATE, UPDATE_BY, CREATE_BY, REMARKS)
 		VALUES
@@ -30,7 +30,7 @@
 		,#{updateBy, jdbcType=INTEGER},#{createBy, jdbcType=VARCHAR},#{remarks, jdbcType=VARCHAR})
 	</insert>
 	
-    <select id="findList" parameterType="SysOperateLogInfoDto" resultMap="SysOperateLogInfoDtoResult">
+    <select id="findList" parameterType="org.qboot.base.dto.SysOperateLogInfoDto" resultMap="SysOperateLogInfoDtoResult">
         SELECT 
         <include refid="Base_Column_List" />
         from sys_operate_log_info
@@ -46,7 +46,7 @@
 	    where LOG_ID = #{logId}
 	</select>
 	
-    <select id="findByUri" resultMap="SysOperateLogInfoDtoResult" parameterType="SysOperateLogInfoDto" >
+    <select id="findByUri" resultMap="SysOperateLogInfoDtoResult" parameterType="org.qboot.base.dto.SysOperateLogInfoDto" >
 	    select 
 	    <include refid="Base_Column_List" />
 	    from sys_operate_log_info
@@ -70,7 +70,7 @@
     delete from sys_operate_log_info where LOG_ID = #{logId}
   </delete>
   
-    <insert id="update" parameterType="SysOperateLogInfoDto">
+    <insert id="update" parameterType="org.qboot.base.dto.SysOperateLogInfoDto">
 		update sys_operate_log_info 
 		<set >
 	      <if test="reqUri != null" >
