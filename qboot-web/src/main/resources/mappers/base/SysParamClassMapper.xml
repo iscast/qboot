@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.qboot.base.dao.SysParamClassDao" >
-  <resultMap id="BaseResultMap" type="SysParamClass" >
+  <resultMap id="BaseResultMap" type="org.qboot.base.dto.SysParamClass" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="param_type_class" property="paramTypeClass" jdbcType="VARCHAR" />
     <result column="param_type_name" property="paramTypeName" jdbcType="VARCHAR" />
@@ -25,14 +25,14 @@
     where id = #{id} 
   </select>
   
-  <select id="classIsUsed" resultMap="BaseResultMap" parameterType="SysParamClass" >
+  <select id="classIsUsed" resultMap="BaseResultMap" parameterType="org.qboot.base.dto.SysParamClass" >
     select 
     <include refid="Base_Column_List" />
     from sys_param_class
     where param_type_class = #{paramTypeClass}
   </select>
   
-  <select id="findList" resultMap="BaseResultMap" parameterType="SysParamClass" >
+  <select id="findList" resultMap="BaseResultMap" parameterType="org.qboot.base.dto.SysParamClass" >
     select 
     <include refid="Base_Column_List" />
     from sys_param_class

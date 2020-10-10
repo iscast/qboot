@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.qboot.base.dao.SysAreaDao" >
-  <resultMap id="BaseResultMap" type="SysArea" >
+  <resultMap id="BaseResultMap" type="org.qboot.base.dto.SysArea" >
     <id column="id" property="id" jdbcType="VARCHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="parent_id" property="parentId" jdbcType="VARCHAR" />
@@ -24,7 +24,7 @@
     from sys_area
     where id = #{id}
   </select>
-  <select id="findList" resultMap="BaseResultMap" parameterType="SysArea" >
+  <select id="findList" resultMap="BaseResultMap" parameterType="org.qboot.base.dto.SysArea" >
     select 
     <include refid="Base_Column_List" />
     from sys_area

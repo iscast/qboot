@@ -4,7 +4,7 @@
 
 <mapper namespace="org.qboot.base.dao.SysOperateLogDao">
 
-	<resultMap id="SysOperateLogDtoResult" type="SysOperateLogDto">
+	<resultMap id="SysOperateLogDtoResult" type="org.qboot.base.dto.SysOperateLogDto">
 		<result column="id" jdbcType="BIGINT" property="id" />
 		<result column="log_id" jdbcType="BIGINT" property="logId" />
 		<result column="uri_name" jdbcType="VARCHAR" property="uriName" />
