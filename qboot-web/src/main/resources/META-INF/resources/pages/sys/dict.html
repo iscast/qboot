@@ -139,7 +139,7 @@
             var dictName = $('#dictName').val();
             var dictType = $('#type').val();
             var dictcode = $('#code').val();
-            table.reload('dict-table', {where: {name:dictName, type:dictType, code:dictcode}});
+            table.reload('dict-table', {where: {name:dictName, type:dictType, code:dictcode}, page:1});
         });
 
         // 显示编辑弹窗

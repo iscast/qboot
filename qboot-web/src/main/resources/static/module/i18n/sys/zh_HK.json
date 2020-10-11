@@ -85,5 +85,7 @@
   "sys.form.hint.inputOriginalPwd":"請輸入原密碼",
   "sys.form.hint.inputNewPwd":"請輸入新密碼",
   "sys.form.hint.confirmNewPwd":"再次輸入新密碼",
-  "sys.form.hint.confirmChange":"確認修改"
+  "sys.form.hint.confirmChange":"確認修改",
+  "sys.option.optAddress":"操作地址",
+  "sys.option.other":"其他"
 }

@@ -1,0 +1,62 @@
+<div class="layui-card">
+    <form id="projectGen-form" lay-filter="projectGen-form" class="layui-form model-form">
+	    <div class="layui-form-item">
+	        <label class="layui-form-label">项目名称</label>
+	        <div class="layui-input-block">
+	            <input id="projectName" name="projectName" placeholder="请输入项目名称" type="text" class="layui-input" maxlength="200"
+	                   lay-verify="required"/>
+	        </div>
+	    </div>
+	    <div class="layui-form-item">
+	        <label class="layui-form-label">项目类型</label>
+	        <div class="layui-input-block">
+	            <select id="projectType" name="projectType" lay-filter="projectType" lay-verify="required">
+	            	<option value="1">--web项目--</option>
+	            	<option value="2">--interface项目--</option>
+	            	<option value="3">--web+interface项目--</option>
+	            </select>
+	        </div>
+	   </div>
+    <div class="layui-form-item model-form-footer">
+        <button id="project-btn-gen" class="layui-btn icon-btn">生成</button>   
+        <button id="project-btn-reset" class="layui-btn icon-btn">重置</button>
+    </div>
+	</form>
+</div>
+<script>
+    layui.use(['form', 'table', 'util', '_config', 'admin'], function () {
+    	 var form = layui.form;
+         var table = layui.table;
+         var _config = layui._config;
+         var layer = layui.layer;
+         var util = layui.util;
+         var admin = layui.admin;
+         var formSelects = layui.formSelects;
+    	
+        //项目生成
+        $('#project-btn-gen').click(function () {
+            var projectName = $('#projectName').val();
+            var projectType = $('#projectType').val();
+            layer.confirm('确定要生成吗？', function (i) {
+             	layer.close(i);
+                layer.load(2);
+             	window.location.href= _config.base_server + '/sys/gen/projectGen?projectName=' + projectName + '&projectType=' + projectType;
+             	layer.closeAll('loading');
+             });
+        });
+      	 
+      	 // 表单数据重置
+      	 $('#project-btn-reset').click(function () {
+      		form.val("projectGen-form", {});
+        });
+    });
+	var auth = JSON.parse(sessionStorage.getItem("auth"));
+	var page = location.hash.substring(2);
+	$(".user_auth").each(function(index, item) {
+	    var buttonAuth = $(item).attr("data-auth");
+	    if( !auth[page] || auth[page][buttonAuth] != 1 ){
+	        $(item).remove();
+	    }
+	});
+
+</script>

@@ -55,16 +55,16 @@ public class GeneratorService extends BaseService {
 			,"projectgen/logback-spring.xml.ftl","projectgen/mybatis-config.xml.ftl","projectgen/redisson.yaml.ftl"
 			,"projectgen/RapidDevelopmentPlatformApplication.java.ftl"};
 	
-	private static final String javaFolder = "/swiftpass-code/src/main/java/cn/swiftpass/";
-	private static final String resourcesFolder = "/swiftpass-code/src/main/resources/";
-	private static final String staticFolder = "/swiftpass-code/src/main/webapp/static/";
+	private static final String javaFolder = "/code/src/main/java/org/qboot/";
+	private static final String resourcesFolder = "/code/src/main/resources/";
+	private static final String staticFolder = "/code/src/main/webapp/static/";
 	
-	private static final String projectStaticFolder = "/swiftpass-code/src/main/resources/static/";
-	private static final String moduleFolder = "/swiftpass-code/src/main/resources/static/module/";
-	private static final String pagesFolder = "/swiftpass-code/src/main/resources/static/pages/";
-	private static final String testFolder = "/swiftpass-code/src/test/java/cn/swiftpass/";
-	private static final String webFolder = "/swiftpass-code/src/main/webapp/WEB-INF/";
-	private static final String folder = "/swiftpass-code/";
+	private static final String projectStaticFolder = "/code/src/main/resources/static/";
+	private static final String moduleFolder = "/code/src/main/resources/static/module/";
+	private static final String pagesFolder = "/code/src/main/resources/static/pages/";
+	private static final String testFolder = "/code/src/test/java/org/qboot/";
+	private static final String webFolder = "/code/src/main/webapp/WEB-INF/";
+	private static final String folder = "/code/";
 
 
 	/**

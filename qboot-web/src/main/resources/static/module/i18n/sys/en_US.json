@@ -87,5 +87,7 @@
 	"sys.form.hint.inputOriginalPwd":"please input original password",
 	"sys.form.hint.inputNewPwd":"please input new password",
 	"sys.form.hint.confirmNewPwd":"please input new password again",
-	"sys.form.hint.confirmChange":"confirm the change"
+	"sys.form.hint.confirmChange":"confirm the change",
+	"sys.option.optAddress":"action address",
+	"sys.option.other":"other"
 }

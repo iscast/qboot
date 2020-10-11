@@ -170,7 +170,7 @@ var form,table, table1,_config,layer,util,admin,formSelects;
         
         // 搜索按钮点击事件
         $('#param-btn-search').click(function () {
-            table.reload('sys_typeclass_table', {where: {paramTypeName: $('#paramTypeName').val(), paramTypeClass: $('#paramTypeClass').val()}});
+            table.reload('sys_typeclass_table', {where: {paramTypeName: $('#paramTypeName').val(), paramTypeClass: $('#paramTypeClass').val()}, page:1});
         });
         
      // 显示编辑弹窗

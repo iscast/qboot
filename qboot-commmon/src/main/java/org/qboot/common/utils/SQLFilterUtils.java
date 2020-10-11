@@ -23,7 +23,7 @@ public class SQLFilterUtils {
             str = str.toLowerCase();
             String[] keywords = new String[]{"master", "truncate", "insert", "select", "delete", "update", "declare", "alert", "drop"};
             if (ArrayUtils.contains(keywords, str)) {
-                throw new RuntimeException("sql语句有注入风险");
+                throw new RuntimeException("risk of sql injection");
             } else {
                 return str;
             }

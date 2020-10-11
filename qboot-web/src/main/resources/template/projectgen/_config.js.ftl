@@ -1,11 +1,9 @@
 layui.define(function (exports) {
-
     var _config = {
         url: {
           host: "/"
         },
-        // base_server: '/rdp', // 接口地址，实际项目请换成http形式的地址
-        base_server: '', // 接口地址，实际项目请换成http形式的地址
+        base_server: '/${projectName}', // 接口地址，实际项目请换成http形式的地址
         tableName: 'qboot',  // 存储表名
         autoRender: false,  // 窗口大小改变后是否自动重新渲染表格，解决layui数据表格非响应式的问题，目前实现的还不是很好，暂时关闭该功能
         pageTabs: true,   // 是否开启多标签
@@ -58,14 +56,15 @@ layui.define(function (exports) {
                 hidden: true
             }
         ],
-        // current login user
+        // 当前登录的用户
         getUser: function () {
             var u = layui.sessionData(_config.tableName).login_user;
+            debugger;
             if (u) {
                 return JSON.parse(u);
             }
         },
-        // cache user
+        // 缓存user
         putUser: function (user) {
             layui.sessionData(_config.tableName, {
                 key: 'login_user',

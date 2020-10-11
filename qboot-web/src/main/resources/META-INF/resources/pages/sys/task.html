@@ -252,7 +252,7 @@
         };
 		var reloadTable = function (){
 			 table.reload('task-table', {where: {taskName: $('#taskName').val(), groupName: $('#groupName').val(),
-	            	taskTarget: $('#taskTarget').val(),status: $('select[name="status"]').val(),runStatus: $('select[name="runStatus"]').val()}});
+	            	taskTarget: $('#taskTarget').val(),status: $('select[name="status"]').val(),runStatus: $('select[name="runStatus"]').val()}, page:1});
 		}
         // 搜索按钮点击事件
         $('#task-btn-search').click(function () {

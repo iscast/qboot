@@ -1,0 +1,205 @@
+
+<div class="layui-card big-layui-card">
+    <div class="layui-card-body">
+        <div class="layui-form toolbar">
+            菜单名称：<input id="menuName" name="menuName" class="layui-input search-input" type="text" placeholder="输入菜单名称"/>&emsp;
+            模块名称：<input id="moduleName" name="moduleName" class="layui-input search-input" type="text" placeholder="输入模块名称"/>&emsp;
+            <button id="gen-btn-search" class="layui-btn icon-btn gen_auth" data-auth="sys:gen:qry"><i class="layui-icon">&#xe615;</i>搜索</button><br><br>
+            <button id="gen-btn-add" class="layui-btn icon-btn gen_auth" data-auth="sys:gen:save"><i class="layui-icon">&#xe654;</i>添加</button>
+        </div>
+        
+		<div id="genLayTable">
+        	<table class="layui-table" id="gen-table" lay-filter="gen-table"></table>
+        </div>
+    </div>
+</div>
+<style>
+	#genLayTable tbody .layui-table-click{background-color: #ccffeb !important;}
+</style>
+<script>
+    layui.use(['form', 'table', 'util', '_config', 'admin'], function () {
+        var form = layui.form;
+        var table = layui.table;
+        var _config = layui._config;
+        var layer = layui.layer;
+        var util = layui.util;
+        var admin = layui.admin;
+        var menuName = $('#menuName').val();
+        var moduleName = $('#moduleName').val();
+
+        // 渲染表格
+        table.render({
+            elem: '#gen-table',
+            url: _config.base_server + '/sys/gen/qryPage',
+            method: 'POST',
+            where: {
+                access_token: _config.getToken().access_token,
+                menuName: menuName, moduleName: moduleName
+            },
+            page: true,
+            even: true, //开启隔行背景
+            cols: [[
+            	{type: 'numbers'},
+                {field: 'tableName', width: 280,  sort: true, title: '表名'},
+                {field: 'menuName', width: 200, sort: true, title: '菜单名称'},
+                {field: 'moduleName', width: 80, sort: true, title: '模块名称'},
+                {field: 'className', width: 180, sort: true, title: '类名'},
+                { 
+                	sort: true, templet: function (d) {
+                		if (d.template == '1'){//基本增删改查
+                			return "<span class='label label-success'>增删改查</span>";
+        				} else if (d.template == '2') {//树形结构
+        					return "<span class='label label-danger'>树结构</span>"
+        				}
+	                }, title: '生成模板'
+	            },
+                {
+                    sort: true, templet: function (d) {
+                        return util.toDateString(d.updateDate);
+                    }, title: '更新时间'
+                },
+                {align: 'center', templet: function(d){
+                	var auth = JSON.parse(sessionStorage.getItem("auth"));
+                	var page = location.hash.substring(2);
+                	var genBtn = '';
+                	var upBtn = '';
+                	var delBtn = '';
+                	if(auth[page] && auth[page]['sys:gen:qry']){
+                		genBtn = '<button class="layui-btn layui-btn-primary layui-btn-xs" lay-event="codeGen">生成</button>';
+            	    }
+                	
+                	if(auth[page] && auth[page]['sys:gen:update']){
+                		upBtn = '&nbsp;<button class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</button>';
+            	    }
+                	
+                	if(auth[page] && auth[page]['sys:gen:delete']){
+                		delBtn = '&nbsp;<button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</button>';
+            	    }
+                	if((genBtn+upBtn+delBtn) == ''){
+                		return '无权限';
+                	}else{
+                		return genBtn+upBtn+delBtn;
+                	}
+                }, title: '操作'}
+            ]],
+            done: function(res, curr, count){
+            	var data = res.data;
+            	$('.layui-table-body tr').each(function(i){
+	            	var index = $(this).attr('data-index');
+	            	$(this).click(function(){
+	            		var fals = $(this).hasClass('layui-table-click');
+	                	if(!fals){
+	                		$(this).addClass('layui-table-click');
+	                	}else{
+	                		$(this).removeClass('layui-table-click');
+	                	}
+	            	});
+
+            	});
+            }
+        });
+        
+     	// 工具条点击事件
+        table.on('tool(gen-table)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'codeGen') {
+            	codeGen(obj);
+            } else if (obj.event === 'edit') {
+            	showEditModel(data);
+            } else if (obj.event === 'del') {
+            	doDelete(obj);
+            } 
+        });
+     	
+        //代码生成
+        var codeGen = function (obj) {
+            layer.confirm('确定要生成吗？', function (i) {
+            	layer.close(i);
+                layer.load(2);
+            	window.location.href= _config.base_server + '/sys/gen/codeGen?id=' + obj.data.id;
+            	layer.closeAll('loading');
+            });
+        };
+        
+      	//删除
+        var doDelete = function (obj) {
+        	layer.confirm('确定要删除吗？', function (i) {
+                layer.close(i);
+                layer.load(2);
+                admin.req('/sys/gen/delete?id=' + obj.data.id, {}, function (data) {
+                    layer.closeAll('loading');
+                    if (data.code == 0) {
+                        layer.msg(data.msg, {icon: 1});
+                        obj.del();
+                    } else {
+                        layer.msg(data.msg, {icon: 2});
+                    }
+                }, 'POST');
+            });
+        };
+
+        // 添加按钮点击事件
+        $('#gen-btn-add').click(function () {
+            showEditModel();
+        });
+
+        //显示表单弹窗
+        var showEditModel = function (data) {
+            var title = data ? '编辑' : '新增';
+            
+            if(data){
+            	admin.req('/sys/gen/get', {
+                    id: data.id
+                }, function (data) {
+                    layer.closeAll('loading');
+                    if (data.code == 0) {
+                        admin.putTempData('t_gen', data.data);
+                        admin.popupCenter({
+                            title: title,
+                            area: ['1400px', '600px'],
+                            offset:'20px',
+                            path: 'pages/sys/gen_form.html',
+                            finish: function () {
+                                table.reload('gen-table', {});
+                            }
+                        });
+                    } else {
+                        layer.msg(data.msg, {icon: 2});
+                    }
+                }, 'post');
+            }else{
+                admin.putTempData('t_gen', {});
+                admin.popupCenter({
+                    title: title,
+                    area: ['1400px', '700px'],
+                    // area:'1400px',
+                    // maxHeight:'400',
+                    offset:'5px',
+                    path: 'pages/sys/gen_form.html',
+                    finish: function () {
+                        table.reload('gen-table', {});
+                    }
+                });
+            }
+            
+        };
+
+        // 搜索按钮点击事件
+        $('#gen-btn-search').click(function () {
+            var menuName = $('#menuName').val();
+            var moduleName = $('#moduleName').val();
+            table.reload('gen-table', {where: {menuName: menuName, moduleName: moduleName}, page:1});
+        });
+        
+    });
+
+	var auth = JSON.parse(sessionStorage.getItem("auth"));
+	var page = location.hash.substring(2);
+	$(".gen_auth").each(function(index, item) {
+	    var buttonAuth = $(item).attr("data-auth");
+	    if( !auth[page] || auth[page][buttonAuth] != 1 ){
+	        $(item).remove();
+	    }
+	});
+
+</script>

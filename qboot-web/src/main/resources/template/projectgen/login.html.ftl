@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta charset="utf-8"/>
-    <title>userLogin</title>
+    <title>用户登录</title>
     <link rel="stylesheet" href="assets/libs/layui/css/layui.css"/>
     <link rel="stylesheet" href="assets/css/login.css" media="all">
 </head>
@@ -14,46 +14,38 @@
 <div class="login-wrapper">
 
     <div class="login-header">
-        <!--<img src="assets/images/logo.png">management system-->
-        <span>
-            <select id="loginLang" class="layui-input" style="width:140px;">
-                <option value="">Switch Language</option>
-                <option value="zh_CN">中文简体</option>
-                <option value="en_US">English</option>
-                <option value="zh_HK">中文繁體</option>
-            </select>
-        </span>
+        <img src="assets/images/logo.png"> qboot
     </div>
 
     <div class=" login-body">
         <div class="layui-card">
             <div class="layui-card-header">
-                <i class="layui-icon layui-icon-engine"></i>&nbsp;&nbsp;<span class="layui-i18n" i18n-key="login.form.title.userLogin">用户登录</span>
+                <i class="layui-icon layui-icon-engine"></i>&nbsp;&nbsp;用户登录
             </div>
             <div class="layui-card-body layui-form layui-form-pane">
                 <div class="layui-form-item">
                     <label class="layui-form-label"><i class="layui-icon layui-icon-username"></i></label>
                     <div class="layui-input-block">
-                        <input id="username" name="username" type="text" lay-verify="required" i18n-key="login.form.hint.inputUserName"
-                               class="layui-input i18n-input-hint">
+                        <input id="username" name="username" type="text" lay-verify="required" placeholder="账号"
+                               class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label"><i class="layui-icon layui-icon-password"></i></label>
                     <div class="layui-input-block">
-                        <input id="password" name="password" type="password" lay-verify="required" i18n-key="login.form.hint.inputPwd"
-                               class="layui-input i18n-input-hint">
+                        <input id="password" name="password" type="password" lay-verify="required" placeholder="密码"
+                               class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <button lay-filter="login-submit" class="layui-btn layui-btn-fluid layui-i18n" i18n-key="login.form.title.login" lay-submit>登 录</button>
+                    <button lay-filter="login-submit" class="layui-btn layui-btn-fluid" lay-submit>登 录</button>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="login-footer">
-        <p></p>
+        <p>© 2018 <a href="javascript:;" target="_blank">威富通版权所有</a></p>
     </div>
 </div>
 
@@ -66,40 +58,10 @@
         var $ = layui.jquery;
         var form = layui.form;
         var _config = layui._config;
-
-        // 防止重复不断刷新登录页面
-        // if (_config.getToken()) {
-        //     location.replace('./');
-        //     return;
-        // }
-        var msgs;
-        var loginLang = $('#loginLang');
-        loginLang.change(function () {
-            if($(this).val()){
-                sessionStorage.setItem("lang",$(this).val());
-                $.ajax({
-                    url: 'module/i18n/global_' + $(this).val() + '.json',
-                    type: "get",
-                    dataType: "json",
-                    async: false,
-                    success: function (obj) {
-                        msgs = obj;
-                    }
-                });
-                $(".layui-i18n").each(function (i,n) {
-                    var msgKey = $(this).attr("i18n-key");
-                    if(msgs&&msgKey) {
-                        $(this).text(msgs[msgKey]?msgs[msgKey]:msgKey);
-                    }
-                });
-            }
-        });
-        if(sessionStorage.getItem("lang")){
-            loginLang.val(sessionStorage.getItem("lang"));
-            loginLang.change();
+        if (_config.getToken()) {
+            location.replace('./');
+            return;
         }
-
-        // $('.login-footer p').html('© 2019-'+new Date().getUTCFullYear()+' <a href="javascript:;" target="_blank">QBOOT提供支持</a>');
 
         // 表单提交
         form.on('submit(login-submit)', function (obj) {
@@ -109,7 +71,7 @@
             var publicKey;
             //获取公钥
             $.ajax({
-                url: _config.base_server + "/sys/user/getPublicKey",
+                url: _config.base_server + "/sys/security/getPublicKey",
                 async: false,
                 type: 'get',
                 success: function (data) {
@@ -128,7 +90,7 @@
             password = encrypt.encrypt(password);
             layer.load(2);
             $.ajax({
-                url: '/login',
+                url: _config.base_server + '/login',
                 data: {'username':username,'password':password},
                 type: 'POST',
                 dataType: 'JSON',
@@ -144,7 +106,7 @@
                 error: function (xhr) {
                     layer.closeAll('loading');
                     if (xhr.status == 400) {
-                        layer.msg((msgs&&msgs['login.error.msg.loginInfo'])?msgs['login.error.msg.loginInfo']:'账号或密码错误', {icon: 5});
+                        layer.msg('账号或密码错误', {icon: 5});
                     }
                 }
             });

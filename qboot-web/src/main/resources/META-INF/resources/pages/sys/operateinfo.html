@@ -49,11 +49,11 @@
                 {field: 'reqUri', sort: true, title: msgs['sys.table.title.uriAddr'], width:'17%'},
                 {field: 'uriType', sort: true, templet: function (d) {
                 	if(d.uriType == 1){
-                		return '菜单地址';
+                		return msgs['sys.table.title.menuAddr'];
                 	}else if(d.uriType == 2){
-                		return '操作地址';
+                        return msgs['sys.option.optAddress'];
                 	}else{
-                		return '其他其他';
+                        return msgs['sys.option.other'];
                 	}
                 }, title: msgs['sys.table.title.uriType'], width:'10%'},
                 {field: 'createBy', sort: true, title: msgs['sys.table.title.createdBy'], width:'10%'},
@@ -135,7 +135,7 @@
                 title: title,
                 path: 'pages/sys/operateinfo_form.html',
                 finish: function () {
-                	table.reload('operateLogInfo-table', {where: {uriName:$('#uriName').val(), reqUri:$('#reqUri').val()}});
+                	table.reload('operateLogInfo-table', {where: {uriName:$('#uriName').val(), reqUri:$('#reqUri').val()}, page:1});
                 }
             });
             
@@ -161,7 +161,7 @@
 
         // 搜索按钮点击事件
         $('#operateLogInfo-btn-search').click(function () {
-            table.reload('operateLogInfo-table', {where: {uriName:$('#uriName').val(), reqUri:$('#reqUri').val()}});
+            table.reload('operateLogInfo-table', {where: {uriName:$('#uriName').val(), reqUri:$('#reqUri').val()}, page:1});
         });
 
     });

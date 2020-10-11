@@ -35,6 +35,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * <p>Title: LoginResultHandler</p>
@@ -107,10 +108,16 @@ public class LoginResultHandler implements AuthenticationSuccessHandler,Authenti
 	@Override
 	public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
 			throws IOException, ServletException {
-        AnonymousAuthenticationToken anonymous = new AnonymousAuthenticationToken("anonymous", "anonymous", new ArrayList());
-        SecurityContextHolder.getContext().setAuthentication(anonymous);
-		ResponeModel ok = ResponeModel.ok();
+		List list = new ArrayList<>();
+		list.add(new QPermission("anonymous"));
+		AnonymousAuthenticationToken anonymous = new AnonymousAuthenticationToken("anonymous", "anonymous", list);
+		SecurityContextHolder.getContext().setAuthentication(anonymous);
+
 		String userName = this.obtainUsername(request);
+		if(StringUtils.isNotBlank(userName)) {
+			loginSecurityService.clearUserSessions(userName);
+		}
+		ResponeModel ok = ResponeModel.ok();
 		ok.setData(userName);
 		this.print(response, JSON.toJSONString(ok));
 	}

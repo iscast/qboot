@@ -1,0 +1,634 @@
+<!-- gen表单弹窗 -->
+<form id="gen-form" lay-filter="gen-form" class="layui-form model-form layui-form-maxheight">
+    	<input id="id" name="id" type="hidden"/>
+	    <div class="layui-form-item">
+	    		<div class="item_float_left">
+			        <label class="layui-form-label">表名</label>
+			        <div class="layui-input-block">
+			        	<select id="tableName" name="tableName" lay-filter="tableName" lay-verify="required">
+			            	<option value="">--请选择--</option>
+			            </select>
+			        </div>
+		        </div>
+		        
+		        <div class="item_float_left">
+			        <label class="layui-form-label">菜单名</label>
+			        <div class="layui-input-block">
+			            <input id="menuName" name="menuName" placeholder="如：用户管理" type="text" class="layui-input" maxlength="200"
+			                   lay-verify="required" required/>
+			        </div>
+		        </div>
+	    </div>
+	    
+	    <div class="layui-form-item">
+	    	<div class="item_float_left">
+		        <label class="layui-form-label">模块名</label>
+		        <div class="layui-input-block">
+		            <input id="moduleName" name="moduleName" placeholder="如：sys" type="text" class="layui-input" maxlength="200"
+		                   lay-verify="required"/>
+		        </div>
+		    </div>
+		    <div class="item_float_left">
+		        <label class="layui-form-label">功能模块</label>
+		        <div class="layui-input-block">
+		            <input id="functionName" name="functionName" placeholder="如：param" type="text" class="layui-input" lay-verify="required"
+		                   required/>
+		        </div>
+		    </div>
+	   </div>
+	    
+	   <div class="layui-form-item">
+	   		<div class="item_float_left">
+				<label class="layui-form-label">类名</label>
+			    <div class="layui-input-block">
+			            <input id="className" name="className" placeholder="如：SysParam" type="text" class="layui-input" maxlength="200"
+			                   lay-verify="required" required/>
+		        </div>
+		    </div>
+		    <div class="item_float_left">
+		        <label class="layui-form-label">模板</label>
+		        <div class="layui-input-block">
+		            <select id="template" name="template" lay-filter="template" lay-verify="required">
+		            	<option value="">--请选择--</option>
+		            	<option value="1">--基本增删改查--</option>
+		            </select>
+		        </div>
+		    </div>         
+	   </div>  
+	    
+	   <div id="genTableLayTable" style="height:300px; overflow:scroll; padding-left:45px;">
+<!--	   <div id="genTableLayTable" style="padding-left:45px;">-->
+       		<table class="layui-table" id="gen-table-form" lay-filter="gen-table-form">
+       		</table>
+       </div>
+
+    <div class="layui-form-item model-form-footer">
+        <button class="layui-btn layui-btn-primary" ew-event="closeDialog" type="button">取消</button>
+        <button class="layui-btn" lay-filter="gen-form-submit" lay-submit>保存</button>
+    </div>
+</form>
+
+<script>
+    layui.use(['layer', 'table', '_config', 'admin', 'form', 'formSelects'], function () {
+        var layer = layui.layer;
+        var table = layui.table;
+        var _config = layui._config;
+        var admin = layui.admin;
+        var form = layui.form;
+        var formSelects = layui.formSelects;
+        
+        form.render('radio');
+
+        // 获取所有表名
+        layer.load(2);
+        admin.req('/sys/gen/qryTables', {}, function (data) {
+        	layer.closeAll('loading');
+            if (0 == data.code) {
+                // 渲染多选下拉框
+                var tableSelectData = new Array();
+                for (var i = 0; i < data.data.length; i++) {
+                    $("#tableName").append("<option value="+data.data[i].name+">"+data.data[i].name+"</option>"); 
+                }
+                
+                // 回显user数据
+                var gen = admin.getTempData('t_gen');
+                $('#gen-form').attr('method', 'POST');
+                if (gen) {
+                    form.val('gen-form', gen);
+                }
+                form.render();//表单重新渲染，要不然添加完显示不出来新的option
+            } else {
+                layer.msg('获取表名失败', {icon: 2});
+            }
+        }, 'post');
+
+        // 表单提交事件
+        form.on('submit(gen-form-submit)', function (data) {
+            layer.load(2);
+            var genId = $('#id').val();
+            var url = "/sys/gen/save";
+            var isSave = true;
+            if(genId != null && genId != ''){
+            	url = "/sys/gen/update";
+            	isSave = false;
+            }
+            
+            admin.reqGen(url, JSON.stringify(data.field), function (data) {
+                layer.closeAll('loading');
+                if (data.code == 0) {
+                    layer.msg(data.msg, {icon: 1});
+                    table.reload('gen-table');
+                    layer.closeAll('page');
+                } else {
+                    layer.msg(data.msg, {icon: 2});
+                }
+            }, 'post', 'application/json;charset=UTF-8');
+            return false;
+        });
+        
+        form.on('select(tableName)', function(data){
+        	var tableName = data.value;
+        	tableNameTep = tableName;
+            table.render({
+                elem: '#gen-table-form',
+                url: _config.base_server + '/sys/gen/qryTableInfos',
+                method: 'POST',
+                where: {
+                    access_token: _config.getToken().access_token,
+                    tableName: tableName
+                },
+                page: false,
+                even: true, //开启隔行背景
+                cols: [[
+                	{
+                		field: 'dbColumnName', templet: function (d) {
+                			return "<input name='columnInfos[][dbColumnName]' type='hidden' value='" + d.dbColumnName + "'/>"
+                			+"<input name='columnInfos[][columnType]' type='hidden' value='" + d.columnType + "'/>"
+                			+"<input name='columnInfos[][columnKey]' type='hidden' value='" + d.columnKey + "'/>"
+                			+"<input name='columnInfos[][extra]' type='hidden' value='" + d.extra + "'/>"
+                			+"<input name='columnInfos[][dataType]' type='hidden' value='" + d.extra + "'/>"
+                			+"<input name='columnInfos[][jdbcType]' type='hidden' value='" + d.jdbcType + "'/>"
+                			+"<input name='columnInfos[][maxLength]' type='hidden' value='" + d.maxLength + "'/>"
+                			+d.dbColumnName;
+                    	}, title: '列名'
+                    },
+                    { 
+                    	templet: function (d) {
+                    		return "<input name='columnInfos[][columnComment]' type='text' value='" + d.columnComment + "' class='layui-input'/>";
+    	                }, title: '备注'
+    	            },
+                    { 
+                    	templet: function (d) {
+                    		if(d.javaType=='String'){
+                    			return "<select name='columnInfos[][columnType]'>"
+                        		+"<option value='String' selected='selected'>String</option><option value='Short'>Short</option>"
+                        		+"<option value='Integer'>Integer</option><option value='Double'>Double</option>"
+                        		+"<option value='Float'>Float</option><option value='Date'>Date</option>"
+                        		+"<option value='BigDecimal'>BigDecimal</option><option value='Long'>Long</option>"
+                        		+"</select>";
+                    		}else if(d.javaType=='Short'){
+                    			return "<select name='columnInfos[][columnType]'>"
+                        		+"<option value='String'>String</option><option value='Short' selected='selected'>Short</option>"
+                        		+"<option value='Integer'>Integer</option><option value='Double'>Double</option>"
+                        		+"<option value='Float'>Float</option><option value='Date'>Date</option>"
+                        		+"<option value='BigDecimal'>BigDecimal</option><option value='Long'>Long</option>"
+                        		+"</select>";
+                    		}else if(d.javaType=='Integer'){
+                    			return "<select name='columnInfos[][columnType]'>"
+                        		+"<option value='String'>String</option><option value='Short'>Short</option>"
+                        		+"<option value='Integer' selected='selected'>Integer</option><option value='Double'>Double</option>"
+                        		+"<option value='Float'>Float</option><option value='Date'>Date</option>"
+                        		+"<option value='BigDecimal'>BigDecimal</option><option value='Long'>Long</option>"
+                        		+"</select>";
+                    		}else if(d.javaType=='Double'){
+                    			return "<select name='columnInfos[][columnType]'>"
+                        		+"<option value='String'>String</option><option value='Short'>Short</option>"
+                        		+"<option value='Integer'>Integer</option><option value='Double' selected='selected'>Double</option>"
+                        		+"<option value='Float'>Float</option><option value='Date'>Date</option>"
+                        		+"<option value='BigDecimal'>BigDecimal</option><option value='Long'>Long</option>"
+                        		+"</select>";
+                    		}else if(d.javaType=='Float'){
+                    			return "<select name='columnInfos[][columnType]'>"
+                        		+"<option value='String'>String</option><option value='Short'>Short</option>"
+                        		+"<option value='Integer'>Integer</option><option value='Double'>Double</option>"
+                        		+"<option value='Float' selected='selected'>Float</option><option value='Date'>Date</option>"
+                        		+"<option value='BigDecimal'>BigDecimal</option><option value='Long'>Long</option>"
+                        		+"</select>";
+                    		}else if(d.javaType=='Date'){
+                    			return "<select name='columnInfos[][columnType]'>"
+                        		+"<option value='String'>String</option><option value='Short'>Short</option>"
+                        		+"<option value='Integer'>Integer</option><option value='Double'>Double</option>"
+                        		+"<option value='Float'>Float</option><option value='Date' selected='selected'>Date</option>"
+                        		+"<option value='BigDecimal'>BigDecimal</option><option value='Long'>Long</option>"
+                        		+"</select>";
+                    		}else if(d.javaType=='BigDecimal'){
+                    			return "<select name='columnInfos[][columnType]'>"
+                        		+"<option value='String'>String</option><option value='Short'>Short</option>"
+                        		+"<option value='Integer'>Integer</option><option value='Double'>Double</option>"
+                        		+"<option value='Float'>Float</option><option value='Date'>Date</option>"
+                        		+"<option value='BigDecimal' selected='selected'>BigDecimal</option><option value='Long'>Long</option>"
+                        		+"</select>";
+                    		}else if(d.javaType=='Long'){
+                    			return "<select name='columnInfos[][columnType]'>"
+                        		+"<option value='String'>String</option><option value='Short'>Short</option>"
+                        		+"<option value='Integer'>Integer</option><option value='Double'>Double</option>"
+                        		+"<option value='Float'>Float</option><option value='Date'>Date</option>"
+                        		+"<option value='BigDecimal'>BigDecimal</option><option value='Long' selected='selected'>Long</option>"
+                        		+"</select>";
+                    		}
+    	                }, title: '类型'
+    	            },
+                    {field: 'dataType',templet: function (d) {
+            			return "<input name='columnInfos[][dataType]' type='hidden' value='" + d.dataType + "' class='layui-input'/>"
+            			+d.dataType;
+                	}, title: 'java类型'},
+                    { 
+                    	templet: function (d) {
+                    		return "<input name='columnInfos[][javaFieldName]' type='text' value='" + d.javaFieldName + "' class='layui-input'/>";
+    	                }, title: '字段名称'
+    	            },
+                    { 
+                    	templet: function (d) {
+                    		return "<input name='columnInfos[][nullable]' type='checkbox' value='" + d.nullable + "' class='layui-input'/>";
+    	                }, title: '可空'
+    	            },
+                    { 
+                    	templet: function (d) {
+                    		return "<input name='columnInfos[][insert]' type='checkbox' value='" + d.insert + "' class='layui-input'/>";
+    	                }, title: '插入'
+    	            },
+                    { 
+                    	templet: function (d) {
+                    		return "<input name='columnInfos[][update]' type='checkbox' value='" + d.update + "' class='layui-input'/>";
+    	                }, title: '更新'
+    	            },
+                    { 
+                    	templet: function (d) {
+                    		return "<input name='columnInfos[][search]' type='checkbox' value='" + d.search + "' class='layui-input'/>";
+    	                }, title: '查询'
+    	            },
+                    { 
+                    	templet: function (d) {
+                    		if(d.queryType=="="){
+                    			return "<select name='columnInfos[][queryType]'>"
+                        		+"<option value=''>请选择</option><option value='=' selected='selected'>=</option>"
+                        		+"<option value='!='>!=</option><option value='>='>&gt;=</option>"
+                        		+"<option value='>'>&gt;</option><option value='<='>&lt;=</option>"
+                        		+"<option value='<'>&lt;</option><option value='between'>between</option>"
+                        		+"<option value='like'>like</option><option value='left like'>left like</option>"
+                        		+"<option value='right like'>right like</option>"
+                        		+"</select>";
+                    		} else if(d.queryType=="!="){
+                    			return "<select name='columnInfos[][queryType]'>"
+                        		+"<option value=''>请选择</option><option value='=' selected='selected'>=</option>"
+                        		+"<option value='!='>!=</option><option value='>='>&gt;=</option>"
+                        		+"<option value='>'>&gt;</option><option value='<='>&lt;=</option>"
+                        		+"<option value='<'>&lt;</option><option value='between'>between</option>"
+                        		+"<option value='like'>like</option><option value='left like'>left like</option>"
+                        		+"<option value='right like'>right like</option>"
+                        		+"</select>";
+                    		} else if(d.queryType==">="){
+                    			return "<select name='columnInfos[][queryType]'>"
+                        		+"<option value=''>请选择</option><option value='='>=</option>"
+                        		+"<option value='!='>!=</option><option value='>=' selected='selected'>&gt;=</option>"
+                        		+"<option value='>'>&gt;</option><option value='<='>&lt;=</option>"
+                        		+"<option value='<'>&lt;</option><option value='between'>between</option>"
+                        		+"<option value='like'>like</option><option value='left like'>left like</option>"
+                        		+"<option value='right like'>right like</option>"
+                        		+"</select>";
+                    		} else if(d.queryType==">"){
+                    			return "<select name='columnInfos[][queryType]'>"
+                        		+"<option value=''>请选择</option><option value='='>=</option>"
+                        		+"<option value='!='>!=</option><option value='>='>&gt;=</option>"
+                        		+"<option value='>' selected='selected'>&gt;</option><option value='<='>&lt;=</option>"
+                        		+"<option value='<'>&lt;</option><option value='between'>between</option>"
+                        		+"<option value='like'>like</option><option value='left like'>left like</option>"
+                        		+"<option value='right like'>right like</option>"
+                        		+"</select>";
+                    		}else if(d.queryType=="<="){
+                    			return "<select name='columnInfos[][queryType]'>"
+                        		+"<option value=''>请选择</option><option value='='>=</option>"
+                        		+"<option value='!='>!=</option><option value='>='>&gt;=</option>"
+                        		+"<option value='>'>&gt;</option><option value='<=' selected='selected'>&lt;=</option>"
+                        		+"<option value='<'>&lt;</option><option value='between'>between</option>"
+                        		+"<option value='like'>like</option><option value='left like'>left like</option>"
+                        		+"<option value='right like'>right like</option>"
+                        		+"</select>";
+                    		} else if(d.queryType=="<"){
+                    			return "<select name='columnInfos[][queryType]'>"
+                        		+"<option value=''>请选择</option><option value='='>=</option>"
+                        		+"<option value='!='>!=</option><option value='>='>&gt;=</option>"
+                        		+"<option value='>'>&gt;</option><option value='<='>&lt;=</option>"
+                        		+"<option value='<' selected='selected'>&lt;</option><option value='between'>between</option>"
+                        		+"<option value='like'>like</option><option value='left like'>left like</option>"
+                        		+"<option value='right like'>right like</option>"
+                        		+"</select>";
+                    		}  else if(d.queryType=="between"){
+                    			return "<select name='columnInfos[][queryType]'>"
+                        		+"<option value=''>请选择</option><option value='='>=</option>"
+                        		+"<option value='!='>!=</option><option value='>='>&gt;=</option>"
+                        		+"<option value='>'>&gt;</option><option value='<='>&lt;=</option>"
+                        		+"<option value='<'>&lt;</option><option value='between' selected='selected'>between</option>"
+                        		+"<option value='like'>like</option><option value='left like'>left like</option>"
+                        		+"<option value='right like'>right like</option>"
+                        		+"</select>";
+                    		} else if(d.queryType=="like"){
+                    			return "<select name='columnInfos[][queryType]'>"
+                        		+"<option value=''>请选择</option><option value='='>=</option>"
+                        		+"<option value='!='>!=</option><option value='>='>&gt;=</option>"
+                        		+"<option value='>'>&gt;</option><option value='<='>&lt;=</option>"
+                        		+"<option value='<'>&lt;</option><option value='between'>between</option>"
+                        		+"<option value='like' selected='selected'>like</option><option value='left like'>left like</option>"
+                        		+"<option value='right like'>right like</option>"
+                        		+"</select>";
+                    		} else if(d.queryType=="left like"){
+                    			return "<select name='columnInfos[][queryType]'>"
+                        		+"<option value=''>请选择</option><option value='='>=</option>"
+                        		+"<option value='!='>!=</option><option value='>='>&gt;=</option>"
+                        		+"<option value='>'>&gt;</option><option value='<='>&lt;=</option>"
+                        		+"<option value='<'>&lt;</option><option value='between'>between</option>"
+                        		+"<option value='like'>like</option><option value='left like' selected='selected'>left like</option>"
+                        		+"<option value='right like'>right like</option>"
+                        		+"</select>";
+                    		} else if(d.queryType=="right like"){
+                    			return "<select name='columnInfos[][queryType]'>"
+                        		+"<option value=''>请选择</option><option value='='>=</option>"
+                        		+"<option value='!='>!=</option><option value='>='>&gt;=</option>"
+                        		+"<option value='>'>&gt;</option><option value='<='>&lt;=</option>"
+                        		+"<option value='<'>&lt;</option><option value='between'>between</option>"
+                        		+"<option value='like'>like</option><option value='left like'>left like</option>"
+                        		+"<option value='right like' selected='selected'>right like</option>"
+                        		+"</select>";
+                    		} else{
+                    			return "<select name='columnInfos[][queryType]'>"
+                        		+"<option value='' selected='selected'>请选择</option><option value='='>=</option>"
+                        		+"<option value='!='>!=</option><option value='>='>&gt;=</option>"
+                        		+"<option value='>'>&gt;</option><option value='<='>&lt;=</option>"
+                        		+"<option value='<'>&lt;</option><option value='between'>between</option>"
+                        		+"<option value='like'>like</option><option value='left like'>left like</option>"
+                        		+"<option value='right like'>right like</option>"
+                        		+"</select>";
+                    		}
+                    	}, title: '查询方式'
+    	            },
+                    { 
+                    	templet: function (d) {
+                    		return "<input name='columnInfos[][dictType]' type='text' value='" + d.dictType + "' class='layui-input'/>";
+    	                }, title: '字典'
+    	            },
+    	            { 
+                    	templet: function (d) {
+                    		return "<input name='columnInfos[][sort]' type='text' value='" + d.sort + "' class='layui-input'/>";
+    	                }, title: '排序'
+    	            }
+                ]],
+                done: function(res, curr, count){
+                	var data = res.data;
+                	$('.layui-table-body tr').each(function(i){
+                    	var index = $(this).attr('data-index');
+                    	$(this).click(function(){
+                    		var fals = $(this).hasClass('layui-table-click');
+                        	if(!fals){
+                        		$(this).addClass('layui-table-click');
+                        	}else{
+                        		$(this).removeClass('layui-table-click');
+                        	}
+                    	});
+
+                	});
+                }
+            });
+        });
+        
+     	// 渲染表格
+        /* table.render({
+            elem: '#gen-table-form',
+            url: _config.base_server + '/sys/gen/qryTableInfos',
+            method: 'POST',
+            where: {
+                access_token: _config.getToken().access_token,
+                tableName: 'sys_file'
+            },
+            page: false,
+            even: true, //开启隔行背景
+            cols: [[
+            	{
+            		field: 'dbColumnName', templet: function (d) {
+            			return "<input name='columnInfos[][dbColumnName]' type='hidden'/>"
+            			+"<input name='columnInfos[][columnType]' type='hidden'/>"
+            			+"<input name='columnInfos[][columnKey]' type='hidden'/>"
+            			+"<input name='columnInfos[][extra]' type='hidden'/>"
+            			+"<input name='columnInfos[][dataType]' type='hidden'/>"
+            			+"<input name='columnInfos[][jdbcType]' type='hidden'/>"
+            			+"<input name='columnInfos[][maxLength]' type='hidden'/>";
+                	}, title: '列名'
+                },
+                { 
+                	templet: function (d) {
+                		return "<input name='columnInfos[][columnComment]' type='text' value='" + d.columnComment + "'/>";
+	                }, title: '备注'
+	            },
+                { 
+                	templet: function (d) {
+                		if(d.javaType=='Short'){
+                			return "<select name='columnInfos[][javaType]'>"
+                    		+"<option value='String'>String</option><option value='Short' selected='selected'>Short</option>"
+                    		+"<option value='Integer'>Integer</option><option value='Double'>Double</option>"
+                    		+"<option value='Float'>Float</option><option value='Date'>Date</option>"
+                    		+"<option value='BigDecimal'>BigDecimal</option><option value='Long'>Long</option>"
+                    		+"</select>";
+                		}else if(d.javaType=='Integer'){
+                			return "<select name='columnInfos[][javaType]'>"
+                    		+"<option value='String'>String</option><option value='Short'>Short</option>"
+                    		+"<option value='Integer' selected='selected'>Integer</option><option value='Double'>Double</option>"
+                    		+"<option value='Float'>Float</option><option value='Date'>Date</option>"
+                    		+"<option value='BigDecimal'>BigDecimal</option><option value='Long'>Long</option>"
+                    		+"</select>";
+                		}else if(d.javaType=='Double'){
+                			return "<select name='columnInfos[][javaType]'>"
+                    		+"<option value='String'>String</option><option value='Short'>Short</option>"
+                    		+"<option value='Integer'>Integer</option><option value='Double' selected='selected'>Double</option>"
+                    		+"<option value='Float'>Float</option><option value='Date'>Date</option>"
+                    		+"<option value='BigDecimal'>BigDecimal</option><option value='Long'>Long</option>"
+                    		+"</select>";
+                		}else if(d.javaType=='Float'){
+                			return "<select name='columnInfos[][javaType]'>"
+                    		+"<option value='String'>String</option><option value='Short'>Short</option>"
+                    		+"<option value='Integer'>Integer</option><option value='Double'>Double</option>"
+                    		+"<option value='Float' selected='selected'>Float</option><option value='Date'>Date</option>"
+                    		+"<option value='BigDecimal'>BigDecimal</option><option value='Long'>Long</option>"
+                    		+"</select>";
+                		}else if(d.javaType=='Date'){
+                			return "<select name='columnInfos[][javaType]'>"
+                    		+"<option value='String'>String</option><option value='Short'>Short</option>"
+                    		+"<option value='Integer'>Integer</option><option value='Double'>Double</option>"
+                    		+"<option value='Float'>Float</option><option value='Date' selected='selected'>Date</option>"
+                    		+"<option value='BigDecimal'>BigDecimal</option><option value='Long'>Long</option>"
+                    		+"</select>";
+                		}else if(d.javaType=='BigDecimal'){
+                			return "<select name='columnInfos[][javaType]'>"
+                    		+"<option value='String'>String</option><option value='Short'>Short</option>"
+                    		+"<option value='Integer'>Integer</option><option value='Double'>Double</option>"
+                    		+"<option value='Float'>Float</option><option value='Date'>Date</option>"
+                    		+"<option value='BigDecimal' selected='selected'>BigDecimal</option><option value='Long'>Long</option>"
+                    		+"</select>";
+                		}else if(d.javaType=='Long'){
+                			return "<select name='columnInfos[][javaType]'>"
+                    		+"<option value='String'>String</option><option value='Short'>Short</option>"
+                    		+"<option value='Integer'>Integer</option><option value='Double'>Double</option>"
+                    		+"<option value='Float'>Float</option><option value='Date'>Date</option>"
+                    		+"<option value='BigDecimal'>BigDecimal</option><option value='Long' selected='selected'>Long</option>"
+                    		+"</select>";
+                		}else{
+                			return "<select name='columnInfos[][javaType]'>"
+                    		+"<option value='String' selected='selected'>String</option><option value='Short'>Short</option>"
+                    		+"<option value='Integer'>Integer</option><option value='Double'>Double</option>"
+                    		+"<option value='Float'>Float</option><option value='Date'>Date</option>"
+                    		+"<option value='BigDecimal'>BigDecimal</option><option value='Long'>Long</option>"
+                    		+"</select>";
+                		}
+	                }, title: '类型'
+	            },
+                {field: 'dataType',templet: function (d) {
+        			return "<input name='columnInfos[][dataType]' type='hidden'/>";
+            	}, title: 'java类型'},
+                { 
+                	templet: function (d) {
+                		return "<input name='columnInfos[][javaFieldName]' type='text' value='" + d.javaFieldName + "'/>";
+	                }, title: '字段名称'
+	            },
+                { 
+                	templet: function (d) {
+                		return "<input name='columnInfos[][nullable]' type='checkbox' value='" + d.nullable + "'/>";
+	                }, title: '可空'
+	            },
+                { 
+                	templet: function (d) {
+                		return "<input name='columnInfos[][insert]' type='checkbox' value='" + d.insert + "'/>";
+	                }, title: '插入'
+	            },
+                { 
+                	templet: function (d) {
+                		return "<input name='columnInfos[][update]' type='checkbox' value='" + d.update + "'/>";
+	                }, title: '更新'
+	            },
+                { 
+                	templet: function (d) {
+                		return "<input name='columnInfos[][search]' type='checkbox' value='" + d.search + "'/>";
+	                }, title: '查询'
+	            },
+                { 
+                	templet: function (d) {
+                		if(d.queryType=="="){
+                			return "<select name='columnInfos[][queryType]'>"
+                    		+"<option value=''>请选择</option><option value='=' selected='selected'>=</option>"
+                    		+"<option value='!='>!=</option><option value='>='>&gt;=</option>"
+                    		+"<option value='>'>&gt;</option><option value='<='>&lt;=</option>"
+                    		+"<option value='<'>&lt;</option><option value='between'>between</option>"
+                    		+"<option value='like'>like</option><option value='left like'>left like</option>"
+                    		+"<option value='right like'>right like</option>"
+                    		+"</select>";
+                		} else if(d.queryType=="!="){
+                			return "<select name='columnInfos[][queryType]'>"
+                    		+"<option value=''>请选择</option><option value='=' selected='selected'>=</option>"
+                    		+"<option value='!='>!=</option><option value='>='>&gt;=</option>"
+                    		+"<option value='>'>&gt;</option><option value='<='>&lt;=</option>"
+                    		+"<option value='<'>&lt;</option><option value='between'>between</option>"
+                    		+"<option value='like'>like</option><option value='left like'>left like</option>"
+                    		+"<option value='right like'>right like</option>"
+                    		+"</select>";
+                		} else if(d.queryType==">="){
+                			return "<select name='columnInfos[][queryType]'>"
+                    		+"<option value=''>请选择</option><option value='='>=</option>"
+                    		+"<option value='!='>!=</option><option value='>=' selected='selected'>&gt;=</option>"
+                    		+"<option value='>'>&gt;</option><option value='<='>&lt;=</option>"
+                    		+"<option value='<'>&lt;</option><option value='between'>between</option>"
+                    		+"<option value='like'>like</option><option value='left like'>left like</option>"
+                    		+"<option value='right like'>right like</option>"
+                    		+"</select>";
+                		} else if(d.queryType==">"){
+                			return "<select name='columnInfos[][queryType]'>"
+                    		+"<option value=''>请选择</option><option value='='>=</option>"
+                    		+"<option value='!='>!=</option><option value='>='>&gt;=</option>"
+                    		+"<option value='>' selected='selected'>&gt;</option><option value='<='>&lt;=</option>"
+                    		+"<option value='<'>&lt;</option><option value='between'>between</option>"
+                    		+"<option value='like'>like</option><option value='left like'>left like</option>"
+                    		+"<option value='right like'>right like</option>"
+                    		+"</select>";
+                		}else if(d.queryType=="<="){
+                			return "<select name='columnInfos[][queryType]'>"
+                    		+"<option value=''>请选择</option><option value='='>=</option>"
+                    		+"<option value='!='>!=</option><option value='>='>&gt;=</option>"
+                    		+"<option value='>'>&gt;</option><option value='<=' selected='selected'>&lt;=</option>"
+                    		+"<option value='<'>&lt;</option><option value='between'>between</option>"
+                    		+"<option value='like'>like</option><option value='left like'>left like</option>"
+                    		+"<option value='right like'>right like</option>"
+                    		+"</select>";
+                		} else if(d.queryType=="<"){
+                			return "<select name='columnInfos[][queryType]'>"
+                    		+"<option value=''>请选择</option><option value='='>=</option>"
+                    		+"<option value='!='>!=</option><option value='>='>&gt;=</option>"
+                    		+"<option value='>'>&gt;</option><option value='<='>&lt;=</option>"
+                    		+"<option value='<' selected='selected'>&lt;</option><option value='between'>between</option>"
+                    		+"<option value='like'>like</option><option value='left like'>left like</option>"
+                    		+"<option value='right like'>right like</option>"
+                    		+"</select>";
+                		}  else if(d.queryType=="between"){
+                			return "<select name='columnInfos[][queryType]'>"
+                    		+"<option value=''>请选择</option><option value='='>=</option>"
+                    		+"<option value='!='>!=</option><option value='>='>&gt;=</option>"
+                    		+"<option value='>'>&gt;</option><option value='<='>&lt;=</option>"
+                    		+"<option value='<'>&lt;</option><option value='between' selected='selected'>between</option>"
+                    		+"<option value='like'>like</option><option value='left like'>left like</option>"
+                    		+"<option value='right like'>right like</option>"
+                    		+"</select>";
+                		} else if(d.queryType=="like"){
+                			return "<select name='columnInfos[][queryType]'>"
+                    		+"<option value=''>请选择</option><option value='='>=</option>"
+                    		+"<option value='!='>!=</option><option value='>='>&gt;=</option>"
+                    		+"<option value='>'>&gt;</option><option value='<='>&lt;=</option>"
+                    		+"<option value='<'>&lt;</option><option value='between'>between</option>"
+                    		+"<option value='like' selected='selected'>like</option><option value='left like'>left like</option>"
+                    		+"<option value='right like'>right like</option>"
+                    		+"</select>";
+                		} else if(d.queryType=="left like"){
+                			return "<select name='columnInfos[][queryType]'>"
+                    		+"<option value=''>请选择</option><option value='='>=</option>"
+                    		+"<option value='!='>!=</option><option value='>='>&gt;=</option>"
+                    		+"<option value='>'>&gt;</option><option value='<='>&lt;=</option>"
+                    		+"<option value='<'>&lt;</option><option value='between'>between</option>"
+                    		+"<option value='like'>like</option><option value='left like' selected='selected'>left like</option>"
+                    		+"<option value='right like'>right like</option>"
+                    		+"</select>";
+                		} else if(d.queryType=="right like"){
+                			return "<select name='columnInfos[][queryType]'>"
+                    		+"<option value=''>请选择</option><option value='='>=</option>"
+                    		+"<option value='!='>!=</option><option value='>='>&gt;=</option>"
+                    		+"<option value='>'>&gt;</option><option value='<='>&lt;=</option>"
+                    		+"<option value='<'>&lt;</option><option value='between'>between</option>"
+                    		+"<option value='like'>like</option><option value='left like'>left like</option>"
+                    		+"<option value='right like' selected='selected'>right like</option>"
+                    		+"</select>";
+                		} else{
+                			return "<select name='columnInfos[][queryType]'>"
+                    		+"<option value='' selected='selected'>请选择</option><option value='='>=</option>"
+                    		+"<option value='!='>!=</option><option value='>='>&gt;=</option>"
+                    		+"<option value='>'>&gt;</option><option value='<='>&lt;=</option>"
+                    		+"<option value='<'>&lt;</option><option value='between'>between</option>"
+                    		+"<option value='like'>like</option><option value='left like'>left like</option>"
+                    		+"<option value='right like'>right like</option>"
+                    		+"</select>";
+                		}
+                	}, title: '查询方式'
+	            },
+                { 
+                	templet: function (d) {
+                		return "<input name='columnInfos[][dictType]' type='text' value='" + d.dictType + "'/>";
+	                }, title: '字典'
+	            },
+	            { 
+                	templet: function (d) {
+                		return "<input name='columnInfos[][sort]' type='text' value='" + d.sort + "'/>";
+	                }, title: '排序'
+	            }
+            ]],
+            done: function(res, curr, count){
+            	var data = res.data;
+            	$('.layui-table-body tr').each(function(i){
+                	var index = $(this).attr('data-index');
+                	$(this).click(function(){
+                		var fals = $(this).hasClass('layui-table-click');
+                    	if(!fals){
+                    		$(this).addClass('layui-table-click');
+                    	}else{
+                    		$(this).removeClass('layui-table-click');
+                    	}
+                	});
+
+            	});
+            }
+        }); */
+
+    });
+    
+</script>

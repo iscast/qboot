@@ -167,7 +167,7 @@
             var loginName = $('#sel_loginName').val();
             var realName = $('#name').val();
             var mobile = $('#mobile').val();
-            table.reload('user-table', {where: {loginName: loginName, name: realName,mobile:mobile}});
+            table.reload('user-table', {where: {loginName: loginName, name: realName,mobile:mobile}, page:1});
         });
         
         //点击行变色

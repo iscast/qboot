@@ -1,7 +1,9 @@
 package org.qboot.web.security;
 
+import com.alibaba.fastjson.JSON;
 import org.qboot.common.config.SysSecurityConfig;
 import org.qboot.common.utils.SpringContextHolder;
+import org.qboot.web.dto.ResponeModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,8 +64,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             }
         }
 		http.authorizeRequests()
-		.antMatchers("/public/**", "/login.html", "/module/encrypt/jsencrypt.js", "/assets/**", "/module/_config.js").permitAll()
-		.antMatchers((adminPath + "/sys/user/getPublicKey")).permitAll()
+		.antMatchers("/public/**",
+				"/module/encrypt/jsencrypt.js",
+				"/assets/**",
+				"/module/i18n/*",
+				"/sys/user/getPublicKey",
+				"/module/_config.js").permitAll()
 		.antMatchers((adminPath + "/**")).authenticated()
 		// 允许跨域
 		.antMatchers(HttpMethod.OPTIONS).permitAll() 
@@ -80,13 +86,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			@Override
 			public void commence(HttpServletRequest request, HttpServletResponse response,
 					AuthenticationException authException) throws IOException, ServletException {
-				logger.info("{} no login!", request.getRequestURI());
-				//response.setStatus(SecurityStatus.NO_LOGIN.getValue());
-//				response.setStatus(401);
-                response.sendRedirect("/login.html");
+				String requestURI = request.getRequestURI();
+				logger.info("request uri address :{} current user no login!", requestURI);
+
+				if("/".equals(requestURI)) {
+					response.sendRedirect("/login.html");
+				} else {
+					ResponeModel expired = ResponeModel.error(String.valueOf(SecurityStatus.NO_LOGIN.getValue()));
+					response.setContentType("application/json;charset=UTF-8");
+					response.getWriter().print(JSON.toJSONString(expired));
+				}
 			}
 		}).accessDeniedHandler(new QAccessDeniedHandler());
-
 	}
 	
 	/**
