@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @author history
  * @date 2018-08-08
  */
-@SpringBootApplication
-@MapperScan("org.qboot.**.dao")
+@SpringBootApplication(scanBasePackages= {"org.qboot","com.yoopay"})
+@MapperScan({"org.qboot.**.dao", "com.yoopay.**.dao"})
 //@ComponentScan(basePackages="org.qboot")
 @EnableTransactionManagement(proxyTargetClass=true)
 @EnableRedissonHttpSession(maxInactiveIntervalInSeconds=2*60*60, keyPrefix="qsession")
