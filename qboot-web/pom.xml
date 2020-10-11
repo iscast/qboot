@@ -208,6 +208,7 @@
                         <exclude>application.properties</exclude>
                         <exclude>redisson.yaml</exclude>
                         <exclude>logback-spring.xml</exclude>
+                        <exclude>rebel.xml</exclude>
                     </excludes>
                 </configuration>
             </plugin>
