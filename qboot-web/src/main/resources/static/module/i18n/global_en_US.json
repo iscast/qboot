@@ -69,6 +69,8 @@
 	"login.form.title.login": "Login",
 	"login.form.hint.inputUserName": "account",
 	"login.form.hint.inputPwd": "password",
+	"login.form.hint.verifyCode":"verify code",
+	"login.form.hint.verifyCode.error":"verify code error",
 	"login.error.msg.loginInfo": "please input correct account or password!",
 	"layui.btn.closeCurTab":"close current tab",
 	"layui.btn.closeOtherTabs":"close other tabs",

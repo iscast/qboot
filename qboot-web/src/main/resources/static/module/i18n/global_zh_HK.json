@@ -64,6 +64,8 @@
   "login.form.title.login": "登 錄",
   "login.form.hint.inputUserName": "賬號",
   "login.form.hint.inputPwd": "密碼",
+  "login.form.hint.verifyCode":"驗證碼",
+  "login.form.hint.verifyCode.error":"驗證碼錯誤",
   "login.error.msg.loginInfo": "賬號或密碼錯誤",
   "layui.menu.coupon.manage":"優惠劵管理",
   "layui.menu.coupon.list":"優惠劵清單",

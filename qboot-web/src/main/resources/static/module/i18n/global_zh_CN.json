@@ -69,6 +69,8 @@
 	"login.form.title.login": "登 录",
 	"login.form.hint.inputUserName": "账号",
 	"login.form.hint.inputPwd":"密码",
+	"login.form.hint.verifyCode":"验证码",
+	"login.form.hint.verifyCode.error":"验证码错误",
 	"login.error.msg.loginInfo":"账号或密码错误",
 	"layui.btn.closeCurTab":"关闭当前标签页",
 	"layui.btn.closeOtherTabs":"关闭其它标签页",
