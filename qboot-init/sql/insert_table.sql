@@ -149,6 +149,17 @@ COMMIT;
 # INSERT INTO `sys_task` VALUES (1, '心跳检测', 'heartBeatJob', '0 */5 * * * ?', 'heartBeatJob', 0, now(), '执行成功,发送心跳数据到设备台数:26', '', '', now(), now(), '1', '1', 0);
 # COMMIT;
 
+
+-- ----------------------------
+-- Records of sys_param_class
+-- Records of sys_param_type
+-- ----------------------------
+BEGIN;
+INSERT INTO sys_param_class (PARAM_TYPE_CLASS, PARAM_TYPE_NAME, VISIBLE, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS, PHYSICS_FLAG, version) VALUES ('SYS_USER_TYPE', 'SYS_USER_TYPE', 1, '1', now(), '1', now(), 'SYS_USER_TYPE', 1, 1);
+INSERT INTO sys_param_type (PARAM_TYPE_CLASS, PARAM_TYPE_ID, PARAM_TYPE_CODE, PARAM_TYPE_NAME, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS, PHYSICS_FLAG, i18n_field, version) VALUES ('SYS_USER_TYPE', 1, 'MANAGER', '管理员', '1', now(), null, now(), '', 1, '[{"key":"zh_CN","value":"管理员","name":"中文简体"}]', 1);
+INSERT INTO sys_param_type (PARAM_TYPE_CLASS, PARAM_TYPE_ID, PARAM_TYPE_CODE, PARAM_TYPE_NAME, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS, PHYSICS_FLAG, i18n_field, version) VALUES ('SYS_USER_TYPE', 2, 'USER', '普通用户', '1', now(), null, now(), '', 1, '[{"key":"zh_CN","value":"普通用户","name":"中文简体"}]', 1);
+COMMIT;
+
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
