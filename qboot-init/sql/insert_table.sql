@@ -11,8 +11,8 @@ COMMIT;
 BEGIN;
 INSERT INTO `sys_dict`(ID, TYPE, CODE, NAME, SORT, STATUS, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS) VALUES (1, 'YES_NO', '1', '是', 1, '1', '1', now(), '1', now(), '');
 INSERT INTO `sys_dict`(ID, TYPE, CODE, NAME, SORT, STATUS, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS) VALUES (2, 'YES_NO', '0', '否', 2, '1', '1', now(), '1', now(), '');
-INSERT INTO `sys_dict`(ID, TYPE, CODE, NAME, SORT, STATUS, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS) VALUES (3, 'SYS_USER_TYPE', '0', '系统管理员', 1, '0', '1', now(), '1', now(), '');
-INSERT INTO `sys_dict`(ID, TYPE, CODE, NAME, SORT, STATUS, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS) VALUES (4, 'SYS_USER_TYPE', '1', '普通用户', 2, '1', '1', now(), '1', now(), '');
+INSERT INTO `sys_dict`(ID, TYPE, CODE, NAME, SORT, STATUS, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS) VALUES (3, 'SYS_USER_TYPE', '1', '系统管理员', 1, '1', '1', now(), '1', now(), '');
+INSERT INTO `sys_dict`(ID, TYPE, CODE, NAME, SORT, STATUS, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS) VALUES (4, 'SYS_USER_TYPE', '2', '普通用户', 2, '1', '1', now(), '1', now(), '');
 INSERT INTO `sys_dict`(ID, TYPE, CODE, NAME, SORT, STATUS, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS) VALUES (5, 'SEX', '1', '男', 1, '1', '1', now(), '1', now(), '');
 INSERT INTO `sys_dict`(ID, TYPE, CODE, NAME, SORT, STATUS, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS) VALUES (6, 'SEX', '2', '女', 2, '1', '1', now(), '1', now(), '');
 COMMIT;
@@ -154,6 +154,6 @@ COMMIT;
 -- ----------------------------
 BEGIN;
 INSERT INTO `sys_user`(ID, DEPT_ID, LOGIN_NAME, PASSWORD, SALT, NAME, MOBILE, PHOTO, EMAIL, USER_TYPE, STATUS, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS, lang) VALUES
-(1, NULL, 'superadmin', '573cb6da1a1c15ebe3040eb9f7b46c483355b8e7edbd4d531bf8a0c0201ab064', 'rNBdNtjuefmwLGzXjHoN', '超级管理员', '18999999999', '/2018/06/02/60d2e10d1c714076ac972c492ddeb822.png', '21221@qq.com', '2', '1', '1', now(), '1', now(), '超级管理员', 'zh_CN');
+(1, NULL, 'superadmin', '573cb6da1a1c15ebe3040eb9f7b46c483355b8e7edbd4d531bf8a0c0201ab064', 'rNBdNtjuefmwLGzXjHoN', '超级管理员', '18999999999', '/2018/06/02/60d2e10d1c714076ac972c492ddeb822.png', '21221@qq.com', '1', '1', '1', now(), '1', now(), '超级管理员', 'zh_CN');
 COMMIT;
 
