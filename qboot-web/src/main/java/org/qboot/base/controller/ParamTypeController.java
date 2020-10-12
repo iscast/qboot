@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -119,15 +118,7 @@ public class ParamTypeController extends BaseController {
 
 	@RequestMapping("/getParamType")
 	public ResponeModel getParamType(@RequestParam String paramType) {
-		List<SysParamType> types = new ArrayList<>();
-		if("SYS_USER_TYPE".equalsIgnoreCase(paramType)) {
-			SysParamType sysParamType = new SysParamType();
-			sysParamType.setParamTypeId(Integer.valueOf(sysUserService.findById(SecurityUtils.getUserId()).getUserType()));
-			sysParamType.setParamTypeClass(paramType);
-			types = sysParamService.findList(sysParamType);
-		}else {
-			types = sysParamService.findParamTypes(paramType);
-		}
+		List<SysParamType> types = sysParamService.findParamTypes(paramType);
 		return ResponeModel.ok(types);
 	}
 }
