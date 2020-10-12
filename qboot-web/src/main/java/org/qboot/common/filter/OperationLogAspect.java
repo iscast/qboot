@@ -65,7 +65,7 @@ public class OperationLogAspect {
 		
 	}
 
-    @Pointcut("execution(public * org.qboot..controller.*.*(..))")
+    @Pointcut("execution(public * org.qboot..controller.*.*(..))  || execution(* com.yoopay..controller.*.*(..))")
     public void webRequestLog() { }
 
     @Before("webRequestLog()")
