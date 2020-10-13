@@ -22,17 +22,11 @@
 	        <label class="layui-form-label layui-i18n" i18n-key="sys.form.label.userType"></label>
 	        <div class="layui-input-inline">
 	            <select id="userType" name="userType" lay-filter="userType" lay-verify="required">
-	            	<option value="">--用户类型--</option>
+	            	<option value="">--</option>
 	            </select>
 	        </div>
 			<div class="layui-form-mid">*</div>
 	   </div>
-	    <div class="layui-form-item">
-	        <label class="layui-form-label layui-i18n" i18n-key="sys.form.label.expandField"></label>
-	        <div class="layui-input-inline">
-	            <input id="fldS1" name="fldS1" type="text" class="layui-input i18n-input-hint" i18n-key="sys.form.hint.3rdPartyAccount"/>
-	        </div>
-	    </div>
 	    <div class="layui-form-item">
 	        <label class="layui-form-label layui-i18n" i18n-key="sys.form.label.tel"></label>
 	        <div class="layui-input-inline">
@@ -71,6 +65,12 @@
 	            <input id="remarks" name="remarks" placeholder="" type="text" class="layui-input" maxlength="200"/>
 	        </div>
 	    </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-i18n" i18n-key="sys.form.label.expandField"></label>
+            <div class="layui-input-inline">
+                <input id="fldS1" name="fldS1" type="text" class="layui-input i18n-input-hint" i18n-key="sys.form.hint.3rdPartyAccount"/>
+            </div>
+        </div>
    <!--  </div> -->
     <div class="layui-form-item model-form-footer">
         <button class="layui-btn layui-btn-primary layui-btn-cancel" ew-event="closeDialog" type="button"></button>

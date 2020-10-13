@@ -196,7 +196,6 @@
       <if test="remarks != null" >
         remarks = #{remarks},
       </if>
-      
       <if test="fldN1 != null" >
         fld_n1 = #{fldN1},
       </if>
@@ -216,17 +215,31 @@
   
   <update id="updateSelect" parameterType="org.qboot.base.dto.SysUser" >
     update sys_user
-    set dept_id = #{deptId},
-      login_name = #{loginName},
-      name = #{name},
-      mobile = #{mobile},
-      email = #{email},
-      user_type = #{userType},
+    set
       update_by = #{updateBy},
       update_date = #{updateDate},
-      remarks = #{remarks},
-      version=#{version}
-      FLD_S1 = #{fldS1}
+      <if test="name != null and name != ''" >
+          name = #{name},
+      </if>
+      <if test="mobile != null and mobile != ''" >
+          mobile = #{mobile},
+      </if>
+      <if test="email != null and email != ''" >
+          email = #{email},
+      </if>
+      <if test="userType != null" >
+          user_type = #{userType},
+      </if>
+      <if test="deptId != null" >
+          dept_id = #{deptId},
+      </if>
+      <if test="remarks != null and remarks != ''" >
+          remarks = #{remarks},
+      </if>
+      <if test="fldS1 != null and fldS1 != ''" >
+          fld_s1 = #{fldS1},
+      </if>
+      version=#{version}+1
     where id = #{id} and version = #{version}
   </update>
   

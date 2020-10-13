@@ -85,7 +85,8 @@ public class SysUserService extends CrudService<SysUserDao, SysUser> {
 	public int updateSelect(SysUser t) {
 		SysUser sysUser = this.findById(t.getId());
 		Assert.notNull(sysUser,MessageUtil.getMessage("sys.response.msg.userNotExists","用户不存在"));
-		
+
+		t.setVersion(sysUser.getVersion());
 		int cnt = this.d.updateSelect(t);
 		if(cnt > 0) {
 			// 删除user关联的所有role

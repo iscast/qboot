@@ -712,3 +712,29 @@ body.layui-fluid {
     padding: 0;
     overflow: hidden;
 }
+
+/* 缩小日期控件*/
+.layui-laydate{margin: 2px 0!important;}
+.layui-laydate-main{width: 182px!important;}
+.layui-laydate-header{line-height: 20px!important;padding: 5px 30px 5px!important;}
+.layui-laydate-header i.laydate-prev-y{left:3px!important;}
+.layui-laydate-header i.laydate-prev-m{left:25px!important;}
+.layui-laydate-header i.laydate-next-y{right:3px!important;}
+.layui-laydate-header i.laydate-next-m{right:25px!important;}
+.layui-laydate-header i{top:5px!important;}
+.layui-laydate-content{padding:2px!important;}
+.layui-laydate-content td, .layui-laydate-content th{padding:2px!important;width:26px!important;height: 20px!important;}
+.layui-laydate-footer{padding:3px 5px!important;height: 30px!important;line-height:30px!important;}
+.layui-laydate-footer span{line-height: 24px!important;}
+.laydate-footer-btns{right:5px!important;top: 3px!important;}
+.laydate-footer-btns span{height:22px!important;line-height:22px!important;padding: 0 5px!important;}
+.layui-laydate-list{padding:3px!important;text-align: center;}
+.layui-laydate-list>li{height:22px!important;line-height:22px!important;}
+.laydate-theme-grid .laydate-month-list>li{height:50px!important;line-height:50px!important;}
+.laydate-theme-grid .laydate-year-list>li{height:30px!important;line-height:30px!important;}
+.laydate-month-list>li{margin: 12px 0!important;}
+.laydate-theme-grid .laydate-month-list>li{margin: 0 -1px -1px 0!important;}
+.laydate-time-list p{line-height:22px!important;top: -2px!important;}
+.laydate-time-list ol{height: 121px!important;}
+.laydate-time-list ol li{padding-left: 20px!important;}
+.laydate-theme-grid .laydate-month-list, .laydate-theme-grid .laydate-year-list{margin: 0!important;}

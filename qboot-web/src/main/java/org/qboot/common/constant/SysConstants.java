@@ -18,6 +18,9 @@ public class SysConstants {
 	
 	public static final String SEPARATOR = ",";
 
+	public static final String SUCESS = "sucess";
+	public static final String FAIL = "fail";
+
 
 	/**
 	 * 系统超级管理员

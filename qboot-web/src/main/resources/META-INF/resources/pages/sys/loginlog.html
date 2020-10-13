@@ -71,7 +71,7 @@
 
         // 搜索按钮点击事件
         $('#loginLog-btn-search').click(function () {
-            table.reload('loginLog-table', {where: {userId: $('#userId').val(), loginName: $('#loginName').val(),userName:$('#userName').val(),startDate:$('#startDate').val(),endDate:$('#endDate').val()}});
+            table.reload('loginLog-table', {where: {userId: $('#userId').val(), loginName: $('#loginName').val(),userName:$('#userName').val(),startDate:$('#startDate').val(),endDate:$('#endDate').val()}, page:1});
         });
 
       //日期时间选择器
