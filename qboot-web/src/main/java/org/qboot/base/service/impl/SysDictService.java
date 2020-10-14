@@ -33,7 +33,7 @@ public class SysDictService extends CrudService<SysDictDao, SysDict> {
 		List<SysDict> sdlist = qRedisson.get(type);
 		if(CollectionUtils.isEmpty(sdlist)) {
 			sdlist = this.findList(sysDict);
-			if(CollectionUtils.isEmpty(sdlist)) {
+			if(!CollectionUtils.isEmpty(sdlist)) {
 				qRedisson.set(type, sdlist, 2*60*60);
 			}
 		}
