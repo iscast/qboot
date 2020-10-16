@@ -48,6 +48,19 @@ public class QRedisson {
         this.set(key, value, this.DEFAULT_CACHE_SECONDS);
     }
 
+    public <V> void setNoLimit(String key, V value) {
+
+        RBucket bucket = null;
+        try {
+            bucket = this.redissonClient.getBucket(key);
+            bucket.set(value);
+            logger.debug("set {} = {}", key, bucket.get());
+        } catch (Exception var7) {
+            logger.warn("set {} = {}", new Object[]{key, bucket.get(), ExceptionUtils.getStackTrace(var7)});
+        }
+
+    }
+
     public <V> void set(String key, V value, long cacheSeconds) {
         RBucket bucket = null;
 

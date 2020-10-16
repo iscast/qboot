@@ -1,7 +1,11 @@
 package org.qboot.common.utils;
 
+import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
 import java.io.UnsupportedEncodingException;
@@ -15,6 +19,8 @@ import java.net.URLEncoder;
  */
 public class CodecUtils {
     private static final String DEFAULT_URL_ENCODING = "UTF-8";
+
+    private static final Logger logger = LoggerFactory.getLogger(CodecUtils.class);
 
     public CodecUtils() {
     }
@@ -58,13 +64,17 @@ public class CodecUtils {
         return DigestUtils.sha256Hex(data);
     }
 
-    public static void main(String[] args) {
-        String s = "123456rNBdNtjuefmwLGzXjHoN";
-
-        for(int i = 0; i < 16; ++i) {
-            s = sha256(s);
+    public static String decodeHex(String hex) {
+        try {
+            return new String(Hex.decodeHex(hex.toCharArray()));
+        } catch (DecoderException e) {
+            logger.error("encode hex fail", e);
         }
-
-        System.out.println(s);
+        return null;
     }
+
+    public static String encodeHex(String str) {
+        return new String(Hex.encodeHex(str.getBytes()));
+    }
+
 }
