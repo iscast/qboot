@@ -11,7 +11,7 @@ import java.util.List;
  * @author history
  */
 @Configuration
-@ConfigurationProperties(prefix="rdp.security")
+@ConfigurationProperties(prefix="sys.security")
 public class SysSecurityConfig implements WebMvcConfigurer{
 
     /**

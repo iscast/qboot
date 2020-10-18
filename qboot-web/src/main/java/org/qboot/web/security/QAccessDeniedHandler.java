@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 /**
- * <p>Title: RdpAccessDeniedHandler</p>
+ * <p>Title: QAccessDeniedHandler</p>
  * <p>Description: 定义未授权访问处理器/p>
  * 
  * @author history

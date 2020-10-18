@@ -40,10 +40,10 @@
             even: true, //开启隔行背景
             cols: [[
             	{type: 'numbers'},
-                {field: 'tableName', width: 280,  sort: true, title: '表名'},
-                {field: 'menuName', width: 200, sort: true, title: '菜单名称'},
-                {field: 'moduleName', width: 80, sort: true, title: '模块名称'},
-                {field: 'className', width: 180, sort: true, title: '类名'},
+                {field: 'tableName', width:'10%',  sort: true, title: '表名'},
+                {field: 'menuName', width: '12%', sort: true, title: '菜单名称'},
+                {field: 'moduleName', width: '12%', sort: true, title: '模块名称'},
+                {field: 'className', width: '12%', sort: true, title: '类名'},
                 { 
                 	sort: true, templet: function (d) {
                 		if (d.template == '1'){//基本增删改查
@@ -56,7 +56,7 @@
                 {
                     sort: true, templet: function (d) {
                         return util.toDateString(d.updateDate);
-                    }, title: '更新时间'
+                    }, width: '15%', title: '更新时间'
                 },
                 {align: 'center', templet: function(d){
                 	var auth = JSON.parse(sessionStorage.getItem("auth"));
@@ -94,7 +94,6 @@
 	                		$(this).removeClass('layui-table-click');
 	                	}
 	            	});
-
             	});
             }
         });

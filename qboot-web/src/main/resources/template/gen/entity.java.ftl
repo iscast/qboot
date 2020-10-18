@@ -1,4 +1,4 @@
-package org.qboot.${functionName}.${moduleName}.entity;
+package ${moduleName}.entity;
 
 import org.qboot.common.entity.BaseEntity;
 import javax.validation.constraints.NotNull;

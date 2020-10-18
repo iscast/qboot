@@ -35,7 +35,7 @@ public class SysGen extends BaseEntity<String> {
 	private String menuName;
 
 	/**
-	 * 模块名
+	 * 系统包名
 	 */
 	@NotNull
 	@Length(min = 1, max = 10)

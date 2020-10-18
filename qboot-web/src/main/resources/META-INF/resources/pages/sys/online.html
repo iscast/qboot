@@ -1,4 +1,92 @@
 <br><br><br><br><br><br><br><br>
 <div style="text-align: center; ">
-	<img src="assets/images/building.jpg" style="display: inline-block; vertical-align: middle;" />
+    <img src="assets/images/building.jpg" style="display: inline-block; vertical-align: middle;" />
 </div>
+<!--<div class="layui-card">-->
+<!--    <div class="layui-card-body">-->
+<!--        <div class="layui-form toolbar">-->
+<!--            用户ID：<input id="userId" name="userId" class="layui-input search-input" type="text" placeholder="输入用户ID"/>&emsp;-->
+<!--            登录名：<input id="loginName" name="loginName" class="layui-input search-input" type="text" placeholder="输入登录名"/>&emsp;-->
+<!--            用户名：<input id="userName" name="userName" class="layui-input search-input" type="text" placeholder="输入用户名"/>&emsp;-->
+<!--            登录时间：<input type="text" id="startDate" name="startDate" class="layui-input search-input" placeholder="开始时间"> - -->
+<!--            <input type="text" id="endDate" name="endDate" class="layui-input search-input" placeholder="结束时间">-->
+
+<!--            <button id="loginLog-btn-search" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button><br><br>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; 数据表格 &ndash;&gt;-->
+<!--        <div id="loginLogLayTable">-->
+<!--            <table class="layui-table loginLog_auth" id="loginLog-table" lay-filter="loginLog-table" data-auth="sys:loginLog:qry"></table>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<!--<script>-->
+<!--    layui.use(['laydate', 'form', 'table', 'util', '_config', 'admin', 'formSelects'], function () {-->
+<!--        var laydate = layui.laydate;-->
+<!--        var form = layui.form;-->
+<!--        var table = layui.table;-->
+<!--        var _config = layui._config;-->
+<!--        var layer = layui.layer;-->
+<!--        var util = layui.util;-->
+<!--        var admin = layui.admin;-->
+<!--        var formSelects = layui.formSelects;-->
+
+<!--        //渲染表格-->
+<!--        table.render({-->
+<!--            elem: '#loginLog-table',-->
+<!--            url: _config.base_server + '/sys/loginlog/qryOnlineUser',-->
+<!--            where: {-->
+<!--                access_token: _config.getToken().access_token,-->
+<!--                userId: $('#userId').val(), loginName: $('#loginName').val(),userName:$('#userName').val(),startDate:$('#startDate').val(),endDate:$('#endDate').val()-->
+<!--            },-->
+<!--            method: 'post',-->
+<!--            page: true,-->
+<!--            even: true, //开启隔行背景-->
+<!--            cols: [[-->
+<!--                {type: 'numbers'},-->
+<!--                {field: 'userId', sort: true, title: '用户ID'},-->
+<!--                {field: 'loginName', sort: true, title: '登录名'},-->
+<!--                {field: 'userName', sort: true, title: '用户名'},-->
+<!--                {field: 'loginTime', sort: true, templet: function (d) {-->
+<!--                        return util.toDateString(d.loginTime);-->
+<!--                    }, title: '登录时间'},-->
+<!--                {field: 'ip', sort: true, title: 'IP地址'},-->
+<!--                {field: 'firstLogin', sort: false, templet: function (data){-->
+<!--                        var vname = '正常';-->
+<!--                        if(data.firstLogin == 1){-->
+<!--                            vname = '初始化密码';-->
+<!--                        }else if(data.firstLogin == 2){-->
+<!--                            vname = '修改密码';-->
+<!--                        }-->
+<!--                        return vname;-->
+<!--                    }, title: '状态标识'}-->
+<!--            ]]-->
+<!--        });-->
+
+<!--        //点击行变色-->
+<!--        $('#loginLogLayTable').on('click', 'tbody tr', function (e) {-->
+<!--            var fals = $(this).hasClass('layui-table-click');-->
+<!--            if(!fals){-->
+<!--                $(this).addClass('layui-table-click');-->
+<!--            }else{-->
+<!--                $(this).removeClass('layui-table-click');-->
+<!--            }-->
+<!--        });-->
+
+<!--        // 搜索按钮点击事件-->
+<!--        $('#loginLog-btn-search').click(function () {-->
+<!--            table.reload('loginLog-table', {where: {userId: $('#userId').val(), loginName: $('#loginName').val(),userName:$('#userName').val(),startDate:$('#startDate').val(),endDate:$('#endDate').val()}, page:1});-->
+<!--        });-->
+
+<!--        //日期时间选择器-->
+<!--        laydate.render({-->
+<!--            elem: '#startDate'-->
+<!--            ,type: 'datetime'-->
+<!--        });-->
+<!--        //日期时间选择器-->
+<!--        laydate.render({-->
+<!--            elem: '#endDate'-->
+<!--            ,type: 'datetime'-->
+<!--        });-->
+<!--    });-->
+<!--</script>-->

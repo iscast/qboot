@@ -55,7 +55,7 @@ public class GeneratorService extends BaseService {
 			,"projectgen/logback-spring.xml.ftl","projectgen/mybatis-config.xml.ftl","projectgen/redisson.yaml.ftl"
 			,"projectgen/RapidDevelopmentPlatformApplication.java.ftl"};
 	
-	private static final String javaFolder = "/code/src/main/java/org/qboot/";
+	private static final String javaFolder = "/code/src/main/java/";
 	private static final String resourcesFolder = "/code/src/main/resources/";
 	private static final String staticFolder = "/code/src/main/webapp/static/";
 	
@@ -213,23 +213,27 @@ public class GeneratorService extends BaseService {
 	private String getZipEntryName(String ftl,SysGen sysGen) {
 		String name = null;
 		String moduleName = sysGen.getModuleName();
+		if(StringUtils.isNotBlank(moduleName)) {
+			moduleName = moduleName.replace(".", "/");
+		}
+
 		String className = sysGen.getClassName();
 		String functionName = sysGen.getFunctionName();
 
 		if (ftl.contains("entity.java")) {
-			name = javaFolder + functionName + "/" + moduleName + "/entity/" + className + ".java";
+			name = javaFolder + moduleName + "/" + functionName + "/entity/" + className + "Dto.java";
 		} else if (ftl.contains("dao.java")) {
-			name = javaFolder + functionName + "/" + moduleName + "/dao/" + className + "Dao.java";
+			name = javaFolder + moduleName + "/" + functionName + "/dao/" + className + "Dao.java";
 		} else if (ftl.contains("service.java")) {
-			name = javaFolder + functionName + "/" + moduleName + "/service/" + className + "Service.java";
+			name = javaFolder + moduleName + "/" + functionName + "/service/" + className + "Service.java";
 		} else if (ftl.contains("serviceImpl.java")) {
-			name = javaFolder + functionName + "/" + moduleName + "/service/" + className + "ServiceImpl.java";
+			name = javaFolder + moduleName + "/" + functionName + "/service/" + className + "ServiceImpl.java";
 		} else if (ftl.contains("controller.java")) {
-			name = javaFolder + functionName + "/" + moduleName + "/web/" + className + "Controller.java";
+			name = javaFolder + moduleName + "/" + functionName + "/web/" + className + "Controller.java";
 		} else if (ftl.contains("mapper.xml")) {
-			name = resourcesFolder + "mappings/" + moduleName + "/" + className + "Mapper.xml";
+			name = resourcesFolder + "mappings/" + functionName + "/" + className + "Mapper.xml";
 		} else if (ftl.contains("page.html")) {
-			name = staticFolder + "pages/" + moduleName + "/" + functionName + ".html";
+			name = staticFolder + "pages/" + functionName + ".html";
 		} else if (ftl.contains("menu.sql")) {
 			name = resourcesFolder + "db/" + "sys_menu.sql";
 		}

@@ -3,7 +3,7 @@ package org.qboot.web.security;
 import org.springframework.security.core.GrantedAuthority;
 
 /**
- * <p>Title: RdpPermission</p>
+ * <p>Title: QPermission</p>
  * <p>Description: 权限ID</p>
  * 
  * @author history

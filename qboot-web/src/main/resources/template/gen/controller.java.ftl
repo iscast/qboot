@@ -1,4 +1,4 @@
-package org.qboot.${functionName}.${moduleName}.web;
+package ${moduleName}.controller;
 
 import java.io.Serializable;
 
@@ -15,49 +15,49 @@ import com.github.pagehelper.PageInfo;
 
 import org.qboot.common.controller.BaseController;
 import org.qboot.web.dto.ResponeModel;
-import org.qboot.${functionName}.${moduleName}.dto.${className}Dto;
-import org.qboot.${functionName}.${moduleName}.service.${className}Service;
+import ${moduleName}.entity.${className}Dto;
+import ${moduleName}.service.${className}Service;
 
 /**
  * ${menuName}controller
  * @author systemGenerated ${.now}
  */
 @RestController
-@RequestMapping("${r'${admin.path}'}/${moduleName}/${functionName}")
+@RequestMapping("${r'${admin.path}'}/${functionName}")
 public class ${className}Controller extends BaseController {
 
 	@Autowired
 	private ${className}Service ${className?uncap_first}Service;
 
-	@PreAuthorize("hasAuthority('${moduleName}:${functionName}:qry')")
+	@PreAuthorize("hasAuthority('${functionName}:qry')")
 	@PostMapping("/qryPage")
 	public ResponeModel qryPage(${className}Dto ${className?uncap_first}) {
 		PageInfo<${className}Dto> page = ${className?uncap_first}Service.findByPage(${className?uncap_first});
 		return ResponeModel.ok(page);
 	}
 	
-	@PreAuthorize("hasAuthority('${moduleName}:${functionName}:qry')")
+	@PreAuthorize("hasAuthority('${functionName}:qry')")
 	@RequestMapping("/get")
 	public ResponeModel get(@RequestParam ${pkType} id) {
 		${className}Dto ${className?uncap_first} = ${className?uncap_first}Service.findById(id);
 		return ResponeModel.ok(${className?uncap_first});
 	}
 	
-	@PreAuthorize("hasAuthority('${moduleName}:${functionName}:save')")
+	@PreAuthorize("hasAuthority('${functionName}:save')")
 	@PostMapping("/save")
 	public ResponeModel save(@Validated ${className}Dto ${className?uncap_first}, BindingResult bindingResult) {
 		int cnt = ${className?uncap_first}Service.save(${className?uncap_first});
 		return ResponeModel.ok(cnt);
 	}
 	
-	@PreAuthorize("hasAuthority('${moduleName}:${functionName}:update')")
+	@PreAuthorize("hasAuthority('${functionName}:update')")
 	@PostMapping("/update")
 	public ResponeModel update(@Validated ${className}Dto ${className?uncap_first}, BindingResult bindingResult) {
 		int cnt = ${className?uncap_first}Service.updateById(${className?uncap_first});
 		return ResponeModel.ok(cnt);
 	}
 	
-	@PreAuthorize("hasAuthority('${moduleName}:${functionName}:delete')")
+	@PreAuthorize("hasAuthority('${functionName}:delete')")
 	@PostMapping("/delete")
 	public ResponeModel delete(@RequestParam Serializable id) {
 		int cnt = ${className?uncap_first}Service.deleteById(id);

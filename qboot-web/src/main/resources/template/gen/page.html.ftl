@@ -3,7 +3,7 @@
 
         <!-- 数据表格 -->
         <div id="${functionName}LayTable">
-        	<table class="layui-table ${functionName}_auth" id="${functionName}-table" lay-filter="${functionName}-table" data-auth="${moduleName}:${functionName}:qry"></table>
+        	<table class="layui-table ${functionName}_auth" id="${functionName}-table" lay-filter="${functionName}-table" data-auth="${functionName}:qry"></table>
         </div>
     </div>
 </div>
@@ -24,7 +24,7 @@
         //渲染表格
         table.render({
             elem: '#${functionName}-table',
-            url: _config.base_server + '/${moduleName}/${functionName}/qryPage',
+            url: _config.base_server + '/${functionName}/qryPage',
             where: {
                 access_token: _config.getToken().access_token
             },
@@ -41,12 +41,12 @@
                 	var page = location.hash.substring(2);
                 	var upBtn = '';
                 	var delBtn = '';
-                	if(auth[page] && auth[page]['${moduleName}:${functionName}:update']){
-                		upBtn = '<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit" data-auth="${moduleName}:${functionName}:update">修改</a>';
+                	if(auth[page] && auth[page]['${functionName}:update']){
+                		upBtn = '<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit" data-auth="${functionName}:update">修改</a>';
             	    }
                 	
-                	if(auth[page] && auth[page]['${moduleName}:${functionName}:delete']){
-                		delBtn = '<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" data-auth="${moduleName}:${functionName}:delete">删除</a>';
+                	if(auth[page] && auth[page]['${functionName}:delete']){
+                		delBtn = '<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" data-auth="${functionName}:delete">删除</a>';
             	    }
                 	if((upBtn+delBtn) == ''){
                 		return '无权限';
@@ -90,7 +90,7 @@
      // 修改
         form.on('switch(${functionName}-tpl-state)', function (obj) {
             layer.load(2);
-            admin.req('/${moduleName}/${functionName}/setStatus', {
+            admin.req('/${functionName}/setStatus', {
                 id: obj.elem.value,
                 status: obj.elem.checked ? 0 : 1
             }, function (data) {
@@ -118,7 +118,7 @@
         var showEditModel = function (data) {
             var title = data ? '编辑' : '新增';
             if(data){
-            	admin.req('/${moduleName}/${functionName}/get', {
+            	admin.req('/${functionName}/get', {
                     id: data.id
                 }, function (data) {
                     layer.closeAll('loading');
@@ -126,7 +126,7 @@
                         admin.putTempData('t_${functionName}', data.data);
                         admin.popupCenter({
                             title: title,
-                            path: 'pages/${moduleName}/${functionName}_form.html',
+                            path: 'pages/${functionName}_form.html',
                             finish: function () {
                                 table.reload('${functionName}-table', {});
                             }
@@ -139,7 +139,7 @@
             	admin.putTempData('t_${functionName}', {});
             	admin.popupCenter({
                     title: title,
-                    path: 'pages/${moduleName}/${functionName}_form.html',
+                    path: 'pages/${functionName}_form.html',
                     finish: function () {
                         table.reload('${functionName}-table', {});
                     }
@@ -155,7 +155,7 @@
             layer.confirm('确定要删除吗？', function (i) {
                 layer.close(i);
                 layer.load(2);
-                admin.req('/${moduleName}/${functionName}/delete?id=' + obj.data.id, {}, function (data) {
+                admin.req('/${functionName}/delete?id=' + obj.data.id, {}, function (data) {
                     layer.closeAll('loading');
                     if (data.code == 0) {
                         layer.msg(data.msg, {icon: 1});

@@ -1,7 +1,7 @@
-package org.qboot.${functionName}.${moduleName}.dao;
+package ${moduleName}.dao;
 
 import org.qboot.common.dao.CrudDao;
-import org.qboot.${functionName}.${moduleName}.dto.${className}Dto;
+import ${moduleName}.entity.${className}Dto;
 
 /**
  * ${menuName}Dao

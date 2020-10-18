@@ -10,7 +10,7 @@ public class CacheConstants {
 	/**
 	 * 任务信息缓存前缀
 	 */
-	public static final String TASK_INFO = "RDP_TASK_INFO_";
+	public static final String TASK_INFO = "SYS_TASK_INFO_";
 	/**
 	 * @see org.quartz.JobDetailI#getJobDataMap()
 	 */
@@ -18,7 +18,7 @@ public class CacheConstants {
 	/**
 	 * 执行任务锁
 	 */
-	public static final String TASK_LOCK = "RDP_TASK_LOCK_";
+	public static final String TASK_LOCK = "SYS_TASK_LOCK_";
 	
 	
 }

@@ -19,7 +19,7 @@ import java.beans.PropertyEditorSupport;
 import java.util.Date;
 
 /**
- * <p>Title: RdpControllerAdvice</p>
+ * <p>Title: QControllerAdvice</p>
  * <p>Description: 自定义逻辑处理、异常捕获处理</p>
  * 
  * @author history

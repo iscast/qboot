@@ -1,8 +1,8 @@
-package org.qboot.${functionName}.${moduleName}.service;
+package ${moduleName}.service;
 
 import org.qboot.common.facade.CrudService;
-import org.qboot.${functionName}.${moduleName}.dao.${className}Dao;
-import org.qboot.${functionName}.${moduleName}.dto.${className}Dto;
+import ${moduleName}.dao.${className}Dao;
+import ${moduleName}.entity.${className}Dto;
 import org.springframework.stereotype.Service;
 
 /**

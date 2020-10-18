@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="org.qboot.${functionName}.${moduleName}.dao.${className}Dao" >
-  <resultMap id="BaseResultMap" type="org.qboot.${functionName}.${moduleName}.dto.${className}Dto" >
+<mapper namespace="${moduleName}.dao.${className}Dao" >
+  <resultMap id="BaseResultMap" type="${moduleName}.entity.${className}Dto" >
 <#list columnInfos as columnInfo>
     <${(columnInfo.columnKey == "PRI") ? string("id","result")} column="${columnInfo.dbColumnName}" property="${columnInfo.javaFieldName}" jdbcType="${columnInfo.jdbcType}" />
 </#list>
@@ -30,7 +30,7 @@
       </#if>
    </#list>
   </select>
-  <select id="findList" resultMap="BaseResultMap" parameterType="org.qboot.${functionName}.${moduleName}.dto.${className}Dto" >
+  <select id="findList" resultMap="BaseResultMap" parameterType="${moduleName}.entity.${className}Dto" >
     select 
     <include refid="Base_Column_List" />
     from ${tableName}
@@ -85,12 +85,12 @@
    </#list>
   </delete>
   <#assign notFirst = false>
-  <insert id="insert" parameterType="org.qboot.${functionName}.${moduleName}.dto.${className}Dto"  useGeneratedKeys="true" keyProperty="id">
+  <insert id="insert" parameterType="${moduleName}.entity.${className}Dto"  useGeneratedKeys="true" keyProperty="id">
     insert into ${tableName} (<#list columnInfos as columnInfo><#if columnInfo.insert! ="1"><#if notFirst>,</#if>${columnInfo.dbColumnName}<#assign notFirst = true></#if></#list>)
     <#assign notFirst = false>
     values (<#list columnInfos as columnInfo><#if columnInfo.insert! ="1"><#if notFirst>,</#if>${"#"}{${columnInfo.javaFieldName}}<#assign notFirst = true></#if></#list>)
   </insert>
-  <update id="updateById" parameterType="org.qboot.${functionName}.${moduleName}.dto.${className}Dto" >
+  <update id="updateById" parameterType="${moduleName}.entity.${className}Dto" >
     update ${tableName}
     <set>
       <#assign notFirst = false>
@@ -109,7 +109,7 @@
     </#list>
 
   </update>
-  <update id="update" parameterType="org.qboot.${functionName}.${moduleName}.dto.${className}Dto" >
+  <update id="update" parameterType="${moduleName}.entity.${className}Dto" >
     update ${tableName}
     <set> 
     	<#assign notFirst = false>

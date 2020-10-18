@@ -45,27 +45,6 @@ CREATE TABLE `sys_dict`
   AUTO_INCREMENT = 1
   DEFAULT CHARSET = utf8mb4 COMMENT ='字典';
 
-DROP TABLE IF EXISTS `sys_file`;
-CREATE TABLE `sys_file`
-(
-    `ID`            varchar(20)  NOT NULL COMMENT '编号',
-    `NAME`          varchar(200) NOT NULL COMMENT '名称',
-    `CONTENT_TYPE`  varchar(100) NOT NULL COMMENT '文件类型',
-    `FILE_SIZE`     int(11)      NOT NULL,
-    `RELATIVE_PATH` varchar(200) NOT NULL COMMENT '地址',
-    `CREATE_BY`     varchar(32)  NOT NULL COMMENT '创建者',
-    `CREATE_DATE`   datetime     NOT NULL COMMENT '创建时间',
-    `UPDATE_BY`     varchar(32)  NOT NULL COMMENT '更新者',
-    `UPDATE_DATE`   datetime     NOT NULL COMMENT '更新时间',
-    `REMARKS`       varchar(255) DEFAULT NULL COMMENT '备注信息',
-    `PHYSICS_FLAG`  tinyint(4) DEFAULT '1' COMMENT '删除标识：1-正常；0-删除',
-    `version` bigint DEFAULT '1' COMMENT '版本',
-    PRIMARY KEY (`ID`) USING BTREE,
-    KEY `CREATE_DATE` (`CREATE_DATE`) USING BTREE,
-    KEY `CREATE_BY` (`CREATE_BY`) USING BTREE
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4 COMMENT ='文件';
-
 DROP TABLE IF EXISTS `sys_gen`;
 CREATE TABLE `sys_gen`
 (
@@ -73,7 +52,7 @@ CREATE TABLE `sys_gen`
     `TABLE_NAME`    varchar(64) NOT NULL COMMENT '表名',
     `PK_TYPE`       varchar(10) NOT NULL COMMENT '主键类型',
     `MENU_NAME`     varchar(50) NOT NULL COMMENT '菜单名',
-    `MODULE_NAME`   varchar(10) NOT NULL COMMENT '模块名',
+    `MODULE_NAME`   varchar(10) NOT NULL COMMENT '系统包名',
     `FUNCTION_NAME` varchar(20) NOT NULL COMMENT '功能模块',
     `TEMPLATE`      varchar(1)  NOT NULL COMMENT '生成模板',
     `CLASS_NAME`    varchar(50) NOT NULL COMMENT '类名',
@@ -229,26 +208,6 @@ CREATE TABLE `sys_param_type`
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
   DEFAULT CHARSET = utf8mb4 COMMENT ='系统参数';
-
-DROP TABLE IF EXISTS `sys_project_gen`;
-CREATE TABLE `sys_project_gen`
-(
-    `ID`           bigint(20)  NOT NULL COMMENT '编号',
-    `PROJECT_NAME` varchar(32) NOT NULL COMMENT '项目名',
-    `PROJECT_TYPE` tinyint(4)      NOT NULL COMMENT '项目类型；1.web项目2.interface项目3.web+interface项目',
-    `CREATE_BY`    varchar(32) NOT NULL COMMENT '创建者',
-    `CREATE_DATE`  datetime    NOT NULL COMMENT '创建时间',
-    `UPDATE_BY`    varchar(32) NOT NULL COMMENT '更新者',
-    `UPDATE_DATE`  datetime    NOT NULL COMMENT '更新时间',
-    `REMARKS`      varchar(255) DEFAULT NULL COMMENT '备注信息',
-    `PHYSICS_FLAG`     tinyint(4)      DEFAULT '1' COMMENT '删除标识：1-正常；0-删除',
-    `version`      bigint DEFAULT '1' COMMENT '版本',
-    PRIMARY KEY (`ID`) USING BTREE,
-    KEY `CREATE_DATE` (`CREATE_DATE`) USING BTREE,
-    KEY `CREATE_BY` (`CREATE_BY`) USING BTREE,
-    KEY `TABLE_NAME` (`PROJECT_NAME`) USING BTREE
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4 COMMENT ='项目生成';
 
 DROP TABLE IF EXISTS `sys_role`;
 CREATE TABLE `sys_role`
