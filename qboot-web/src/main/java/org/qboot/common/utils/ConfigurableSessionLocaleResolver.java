@@ -27,10 +27,10 @@ public class ConfigurableSessionLocaleResolver extends SessionLocaleResolver {
         if(langCtry.length==2){
             Locale locale = new Locale(langCtry[0], langCtry[1]) ;
             this.setDefaultLocale(locale);
-            logger.info("设置默认locale成功,language_country={}.",language_country);
+            logger.info("set default locale成功,language_country={}.",language_country);
             return ;
         }
-        logger.warn("设置默认locale失败,language_country={}!",language_country);
+        logger.warn("set default locale fail,language_country={}!",language_country);
     }
 
 }

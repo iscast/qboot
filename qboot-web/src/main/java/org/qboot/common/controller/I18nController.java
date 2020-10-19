@@ -40,8 +40,7 @@ public class I18nController extends BaseController {
             String[] i18nStr = user.getLang().split("_");
             if(i18nStr.length==2){
                 Locale userLocale = new Locale(i18nStr[0],i18nStr[1]);
-                session.setAttribute(
-                        SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, userLocale);
+                session.setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, userLocale);
             }
         }
         Locale locale = LocaleContextHolder.getLocale();

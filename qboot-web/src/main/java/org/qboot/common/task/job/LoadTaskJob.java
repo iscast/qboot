@@ -45,7 +45,8 @@ public class LoadTaskJob {
 			//检测任务信息变更
 			this.checkTaskUpdate();
 		}else{
-			logger.info("当前节点不参与任务竞争,不进行任务初始化,不执行任务.");
+		    // 当前节点不参与任务竞争,不进行任务初始化,不执行任务.
+			logger.info("current system don't config task , do not init task");
 		}
 	}
 	/**

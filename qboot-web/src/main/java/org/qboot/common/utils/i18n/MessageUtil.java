@@ -60,7 +60,8 @@ public class MessageUtil {
     public static void addLocation(String locationPattern){
         try {
             Resource[] resources = resourcePatternResolver.getResources(locationPattern);
-            for (int i = 0; i < resources.length; i++) { String url = resources[i].getURL().toString();
+            for (int i = 0; i < resources.length; i++) {
+                String url = resources[i].getURL().toString();
                 int lastIndex = url.lastIndexOf("/");
                 String prefix = url.substring(0,lastIndex + 1);
                 String suffix = url.substring(lastIndex+1);
