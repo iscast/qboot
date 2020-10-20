@@ -10,19 +10,20 @@
         <button id="loginLog-btn-search" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button><br><br>
         </div>
 
-        <!-- 数据表格 -->
         <div id="loginLogLayTable">
         	<table class="layui-table loginLog_auth" id="loginLog-table" lay-filter="loginLog-table" data-auth="sys:loginLog:qry"></table>
         </div>
     </div>
 </div>
 <script>
-    layui.use(['laydate', 'form', 'table', 'util', '_config', 'admin', 'formSelects'], function () {
+    layui.use(['laydate', 'form', 'table', 'util', '_config', 'admin', 'formSelects','_i18n'], function () {
     	 var laydate = layui.laydate;
         var form = layui.form;
         var table = layui.table;
         var _config = layui._config;
         var layer = layui.layer;
+        var _i18n = layui._i18n;
+        var msgs = _i18n.getMsg('sys') ;
         var util = layui.util;
         var admin = layui.admin;
         var formSelects = layui.formSelects;
