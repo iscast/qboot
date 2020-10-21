@@ -14,15 +14,19 @@ public class SecurityUtils {
 	private static final String SUPER_NAME = "superadmin";
 	
 	public static Long getUserId() {
-		QUser user = getUser() ;
+		QUser user = getUser();
 		if(null!=user){
-			return user.getUserId() ;
+			return user.getUserId();
 		}
 		return null;
 	}
 
 	public static String getLoginName() {
-		return getUser().getLoginName();
+        QUser user = getUser();
+        if(null!=user){
+            return user.getLoginName();
+        }
+        return null;
 	}
 	
 	public static QUser getUser() {

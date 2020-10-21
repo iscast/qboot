@@ -40,7 +40,6 @@ import java.util.List;
 /**
  * <p>Title: LoginResultHandler</p>
  * <p>Description: 登录结果处理器</p>
- *
  * @author history
  * @date 2018-09-11
  */
@@ -84,9 +83,8 @@ public class LoginResultHandler implements AuthenticationSuccessHandler,Authenti
 			Authentication authentication) throws IOException, ServletException {
 		ResponeModel ok = ResponeModel.ok();
 		String loginName = this.obtainUsername(request);
-		loginName = RSAsecurity.getInstance().decrypt(String.valueOf(request.getSession().getAttribute("privateKey")), loginName.trim());
 		loginLog(SysLoginLog.SUCCESS, loginName, request);
-		logger.info("{}, 登录成功！", loginName);
+		logger.info("user:[{}] login sucess ！", loginName);
 		String sessionId = request.getSession().getId();
 		loginSecurityService.setUserSessionId(loginName, sessionId);
 		loginSecurityService.clearLoginFailTimes(loginName);
@@ -102,7 +100,8 @@ public class LoginResultHandler implements AuthenticationSuccessHandler,Authenti
 	}
 	
 	private String obtainUsername(HttpServletRequest request) {
-		return request.getParameter("username");
+        String loginName = request.getParameter("username");
+        return RSAsecurity.getInstance().decrypt(String.valueOf(request.getSession().getAttribute("privateKey")), loginName.trim());
 	}
 
 	@Override
@@ -150,9 +149,38 @@ public class LoginResultHandler implements AuthenticationSuccessHandler,Authenti
 					}
 				}
 			}
+            new LogThread(status, loginName, ip, userAgentStr, browserStr, deviceName, area).run();
 		} catch (Exception e) {
 			logger.error("登录日记记录异常，{}....", ExceptionUtils.getStackTrace(e));
 		}
-		sysLoginLogService.loginLogByLoginName(SysLoginLog.SUCCESS, loginName, ip, userAgentStr, browserStr, deviceName, area, 0);
 	}
+
+	private class LogThread extends Thread {
+
+
+        private String status;
+        private String loginName;
+        private String ip;
+        private String userAgentStr;
+        private String browserStr;
+        private String deviceName;
+        private String area;
+
+        public LogThread(String status, String loginName, String ip, String userAgentStr, String browserStr, String deviceName, String area) {
+            super();
+            this.status = status;
+            this.loginName = loginName;
+            this.ip = ip;
+            this.userAgentStr = userAgentStr;
+            this.browserStr = browserStr;
+            this.deviceName = deviceName;
+            this.area = area;
+        }
+
+        @Override
+        public void run() {
+            sysLoginLogService.loginLogByLoginName(status, loginName, ip, userAgentStr, browserStr, deviceName, area, 0);
+        }
+    }
+
 }

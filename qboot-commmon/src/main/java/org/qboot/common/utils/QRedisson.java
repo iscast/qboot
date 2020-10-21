@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @Description:
+ * common redis tools
  * @Author: iscast
  * @Date: 2020/8/22 19:20
  */
@@ -155,19 +155,20 @@ public class QRedisson {
     }
 
     public Long incr(String key, Long value) {
-        Long decrVaule = -Math.abs(value);
+        Long incrVaule = Math.abs(value);
         if (StringUtils.isBlank(key)) {
             return -1L;
         } else {
             RAtomicLong atomicLong = this.redissonClient.getAtomicLong(key);
             if (!atomicLong.isExists()) {
-                return -1L;
+                atomicLong.set(incrVaule);
+                return incrVaule;
             } else {
                 try {
-                    Long result = atomicLong.addAndGet(decrVaule);
+                    Long result = atomicLong.addAndGet(incrVaule);
                     return result;
-                } catch (Exception var6) {
-                    logger.error("decr error:{}", ExceptionUtils.getStackTrace(var6));
+                } catch (Exception e) {
+                    logger.error("increase redis longValue error:{}", ExceptionUtils.getStackTrace(e));
                     return -1L;
                 }
             }
