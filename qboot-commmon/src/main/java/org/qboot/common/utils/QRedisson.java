@@ -155,23 +155,32 @@ public class QRedisson {
     }
 
     public Long incr(String key, Long value) {
+        return incrWithTime(key, value, null);
+    }
+
+    public Long incrWithTime(String key, Long value, Long time) {
         Long incrVaule = Math.abs(value);
         if (StringUtils.isBlank(key)) {
             return -1L;
         } else {
             RAtomicLong atomicLong = this.redissonClient.getAtomicLong(key);
+
             if (!atomicLong.isExists()) {
                 atomicLong.set(incrVaule);
-                return incrVaule;
-            } else {
-                try {
-                    Long result = atomicLong.addAndGet(incrVaule);
-                    return result;
-                } catch (Exception e) {
-                    logger.error("increase redis longValue error:{}", ExceptionUtils.getStackTrace(e));
-                    return -1L;
+                if(null != time) {
+                    atomicLong.expire(time, TimeUnit.SECONDS);
                 }
+                return incrVaule;
             }
+
+            try {
+                Long result = atomicLong.addAndGet(incrVaule);
+                return result;
+            } catch (Exception e) {
+                logger.error("increase redis longValue error:{}", ExceptionUtils.getStackTrace(e));
+                return -1L;
+            }
+
         }
     }
 
