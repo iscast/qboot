@@ -2,6 +2,7 @@ package org.qboot.base.service.impl;
 
 import org.qboot.base.dao.SysParamTypeDao;
 import org.qboot.base.dto.SysParamType;
+import org.qboot.common.constant.SysConstants;
 import org.qboot.common.service.CrudService;
 import org.qboot.common.utils.QRedisson;
 import org.qboot.common.utils.i18n.MessageUtil;
@@ -24,8 +25,6 @@ public class SysParamTypeService extends CrudService<SysParamTypeDao, SysParamTy
 	@Autowired
 	QRedisson qRedisson;
 
-	private final String PARAM_KEY_PREFIX = "PARAM_KEY_";
-
 	public SysParamType findByParamKey(String paramKey) {
 		Assert.hasLength("paramKey", MessageUtil.getMessage("sys.response.msg.paramKeyIsEmpty","paramKey不能为空"));
 		SysParamType sysParam = new SysParamType();
@@ -40,7 +39,8 @@ public class SysParamTypeService extends CrudService<SysParamTypeDao, SysParamTy
 	
 	public List<SysParamType> findParamTypes(String paramKey) {
 		Assert.hasLength("paramKey",MessageUtil.getMessage("sys.response.msg.paramKeyIsEmpty","paramKey不能为空"));
-		List<SysParamType> list = qRedisson.get(PARAM_KEY_PREFIX+paramKey);
+        String key = SysConstants.CACHE_PREFIX_PARAMTYPE_KEY + paramKey;
+		List<SysParamType> list = qRedisson.get(key);
 		if(!CollectionUtils.isEmpty(list)){
 			return list;
 		}
@@ -48,7 +48,7 @@ public class SysParamTypeService extends CrudService<SysParamTypeDao, SysParamTy
 		SysParamType sysParam = new SysParamType();
 		sysParam.setParamTypeClass(paramKey);
 		list = this.findList(sysParam);
-		qRedisson.set(PARAM_KEY_PREFIX+paramKey,list,60*5);
+		qRedisson.set(key, list, 60*5);
 		return list;
 	}
 }

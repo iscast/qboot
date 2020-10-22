@@ -2,6 +2,7 @@ package org.qboot.base.service.impl;
 
 import org.qboot.base.dao.SysOperateLogInfoDao;
 import org.qboot.base.dto.SysOperateLogInfoDto;
+import org.qboot.common.constant.SysConstants;
 import org.qboot.common.service.CrudService;
 import org.qboot.common.utils.QRedisson;
 import org.slf4j.Logger;
@@ -18,8 +19,7 @@ import java.util.List;
 
 /**
  * <p>Title: SysOperateLogInfoService</p>
- * <p>Description: 日志管理service</p>
- * 
+ * <p>Description: opt log manage service</p>
  * @author history
  * @date 2018-08-08
  */
@@ -54,7 +54,8 @@ public class SysOperateLogInfoService extends CrudService<SysOperateLogInfoDao, 
 
 	@Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
 	public Long findLogIdByUri(String reqUri) {
-		SysOperateLogInfoDto sol = qRedisson.get("sys_operate_log_uri_key_"+reqUri);
+        String key = SysConstants.CACHE_PREFIX_OPTLOG_URL + reqUri;
+		SysOperateLogInfoDto sol = qRedisson.get(key);
 		if(sol != null) {
 			return sol.getLogId();
 		}
@@ -72,7 +73,7 @@ public class SysOperateLogInfoService extends CrudService<SysOperateLogInfoDao, 
 			this.d.insert(solid);
 			solid = this.d.findByUri(solid).get(0);
 		}
-		qRedisson.set("sys_operate_log_uri_key_"+reqUri, solid, 24*60*60);
+		qRedisson.set(key, solid, 24*60*60);
 		return solid.getLogId();
 	}
 	

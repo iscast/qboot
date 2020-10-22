@@ -3,6 +3,7 @@ package org.qboot.base.controller;
 import com.github.pagehelper.PageInfo;
 import org.qboot.base.dto.SysDict;
 import org.qboot.base.service.impl.SysDictService;
+import org.qboot.common.constant.SysConstants;
 import org.qboot.common.controller.BaseController;
 import org.qboot.web.dto.ResponeModel;
 import org.qboot.web.security.SecurityUtils;
@@ -49,9 +50,12 @@ public class DictController extends BaseController {
 	@PreAuthorize("hasAuthority('sys:dict:save')")
 	@PostMapping("/save")
 	public ResponeModel save(@Validated SysDict sysDict, BindingResult bindingResult) {
-		sysDict.setCreateBy(SecurityUtils.getLoginName());
-		sysDict.setStatus("1");
-		sysDict.setSort(0);
+
+		if(null == sysDict.getSort()) {
+            sysDict.setSort(0);
+        }
+        sysDict.setStatus(SysConstants.SYS_ENABLE);
+        sysDict.setCreateBy(SecurityUtils.getLoginName());
 		int cnt = sysDictService.save(sysDict);
 		if(cnt > 0) {
 			return ResponeModel.ok();
@@ -90,7 +94,7 @@ public class DictController extends BaseController {
 	public ResponeModel delete(@RequestParam String id) {
 		SysDict sysDict = new SysDict();
 		sysDict.setId(id);
-		sysDict.setStatus("0");
+		sysDict.setStatus(SysConstants.SYS_DISABLE);
 		sysDict.setUpdateBy(SecurityUtils.getLoginName());
 		sysDict.setUpdateDate(new Date());
 		int cnt = sysDictService.setStatus(sysDict);
@@ -99,7 +103,6 @@ public class DictController extends BaseController {
 		}
 		return ResponeModel.error();
 	}
-	
 
 	@RequestMapping("/getDictType")
 	public ResponeModel getDictType(@RequestParam String dictType) {

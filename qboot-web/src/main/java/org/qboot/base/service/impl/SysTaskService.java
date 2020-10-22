@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import org.qboot.base.dao.SysTaskDao;
 import org.qboot.base.dto.SysTask;
 import org.qboot.common.constant.CacheConstants;
+import org.qboot.common.constant.SysConstants;
 import org.qboot.common.exception.QExceptionCode;
 import org.qboot.common.exception.ServiceException;
 import org.qboot.common.service.CrudService;
@@ -22,19 +23,18 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 任务服务层
+ * task service
  * @author history
  */
 @Service
 public class SysTaskService extends CrudService<SysTaskDao, SysTask> {
-	
-	public static final String DEFAULT_GROUP = "DEFAULT_GROUP";
+
 	@Resource
 	private Scheduler scheduler;
 	@Resource
 	private QRedisson qRedisson;
 	@Resource
-	SysTaskLogService sysTaskLogService ;
+	SysTaskLogService sysTaskLogService;
 
 	@Override
 	public PageInfo<SysTask> findByPage(SysTask sysTask) {
@@ -82,7 +82,7 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTask> {
 	
 	/**
 	 * 更新启用状态
-	 * @param sysTask
+	 * @param task
 	 * @return
 	 */
 	@Transactional
@@ -109,6 +109,7 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTask> {
 		logger.info("任务状态变更成功:{}.",newTask.toString());
 		return  result;
 	}
+
 	@Override
 	@Transactional
 	public int save(SysTask task) {
@@ -213,7 +214,7 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTask> {
 	 * @return
 	 */
 	public JobKey getJobKey(Long taskId) {
-		return JobKey.jobKey(taskId.toString(), DEFAULT_GROUP);
+		return JobKey.jobKey(taskId.toString(), SysConstants.TASK_DEFAULT_GROUP);
 	}
 	/**
 	 * 获取triggerKey
@@ -222,7 +223,7 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTask> {
 	 * @return
 	 */
 	public TriggerKey getTriggerKey(Long taskId) {
-		return TriggerKey.triggerKey(taskId.toString(), DEFAULT_GROUP);
+		return TriggerKey.triggerKey(taskId.toString(), SysConstants.TASK_DEFAULT_GROUP);
 	}
 	/**
 	 * 检测任务是否存在

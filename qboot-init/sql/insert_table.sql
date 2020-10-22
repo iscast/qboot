@@ -164,6 +164,6 @@ COMMIT;
 -- ----------------------------
 BEGIN;
 INSERT INTO `sys_user`(ID, DEPT_ID, LOGIN_NAME, PASSWORD, SALT, NAME, MOBILE, PHOTO, EMAIL, USER_TYPE, STATUS, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS, lang) VALUES
-(1, NULL, 'superadmin', '573cb6da1a1c15ebe3040eb9f7b46c483355b8e7edbd4d531bf8a0c0201ab064', 'rNBdNtjuefmwLGzXjHoN', '超级管理员', '18999999999', '/2018/06/02/60d2e10d1c714076ac972c492ddeb822.png', '21221@qq.com', '1', '1', 'system', now(), 'system', now(), '超级管理员', 'zh_CN');
+(1, NULL, 'superadmin', '573cb6da1a1c15ebe3040eb9f7b46c483355b8e7edbd4d531bf8a0c0201ab064', 'rNBdNtjuefmwLGzXjHoN', 'Administrator', '18999999999', '', '21221@gmail.com', '1', '1', 'system', now(), 'system', now(), 'super Administrator', 'zh_CN');
 COMMIT;
 

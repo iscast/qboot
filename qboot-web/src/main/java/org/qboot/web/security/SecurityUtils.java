@@ -1,5 +1,6 @@
 package org.qboot.web.security;
 
+import org.qboot.common.constant.SysConstants;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -10,8 +11,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
  * @date 2018-09-08
  */
 public class SecurityUtils {
-	
-	private static final String SUPER_NAME = "superadmin";
 	
 	public static Long getUserId() {
 		QUser user = getUser();
@@ -42,7 +41,7 @@ public class SecurityUtils {
 	}
 	
 	public static boolean isSuperAdmin(String userName) {
-		return SUPER_NAME.equals(userName);
+		return SysConstants.SUPER_ADMIN_NAME.equals(userName);
 	}
 	
 	public static boolean isSuperAdmin() {

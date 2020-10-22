@@ -1,4 +1,4 @@
-<!-- 表单弹窗 -->
+<!-- dict form -->
 <form id="dict-form" lay-filter="dict-form" class="layui-form model-form">
         <input id="id" name="id" type="hidden"/>
         <input id="status" name="status" type="hidden"/>
@@ -21,15 +21,22 @@
 		<div class="layui-form-item">
         <label class="layui-form-label layui-i18n" i18n-key="sys.form.label.paramValue"></label>
         	<div class="layui-input-inline">
-	            <input id="code" name="code" placeholder="sys.form.hint.inputParamValue" type="text" class="layui-input i18n-input-hint" maxlength="200"
+	            <input id="code" name="code" i18n-key="sys.form.hint.inputParamValue" type="text" class="layui-input i18n-input-hint" maxlength="200"
                        lay-verify="required" required/>
         	</div>
             <div class="layui-form-mid">*</div>
     	</div>
         <div class="layui-form-item">
+            <label class="layui-form-label layui-i18n" i18n-key="sys.table.title.order"></label>
+            <div class="layui-input-inline">
+                <input id="sort" name="sort" i18n-key="sys.table.title.order" type="text" class="layui-input i18n-input-hint" maxlength="200" />
+            </div>
+            <div class="layui-form-mid">*</div>
+        </div>
+        <div class="layui-form-item">
             <label class="layui-form-label layui-i18n" i18n-key="sys.form.label.remark"></label>
             <div class="layui-input-block">
-                <textarea id="remarks" name="remarks" class="layui-textarea" maxlength="2000"></textarea>
+                <textarea id="remarks" name="remarks" class="layui-textarea" maxlength="512"></textarea>
             </div>
         </div>
         <div class="layui-form-item model-form-footer">
