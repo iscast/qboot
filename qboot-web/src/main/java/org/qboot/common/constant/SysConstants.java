@@ -62,5 +62,17 @@ public class SysConstants {
 	 * 最后一次执行成功的执行结果   map key
 	 */
 	public static final String TASK_MAP_PARAMS_KEY_LAST_RESULT = "lastResult";
-	
+
+
+	/** login status begin */
+    public static final int SYS_USER_PWD_STATUS_NORMAL = 0;
+    public static final int SYS_USER_PWD_STATUS_INIT = 1;
+    public static final int SYS_USER_PWD_STATUS_CHANGED = 2;
+
+    public static final String  SYS_USER_LOGIN_STATUS_SUCCESS = "0";
+    public static final String  SYS_USER_LOGIN_STATUS_PASSWORD_WRONG = "1";
+    public static final String  SYS_USER_LOGIN_STATUS_STAUTS_STOP = "2";
+    public static final String  SYS_USER_LOGIN_STATUS_LOCK_24 = "3";
+
+	/** login status end */
 }

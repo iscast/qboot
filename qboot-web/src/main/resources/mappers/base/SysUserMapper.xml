@@ -211,8 +211,7 @@
     </set>
     where id = #{id} 
   </update>
-  
-  
+
   <update id="updateSelect" parameterType="org.qboot.base.dto.SysUser" >
     update sys_user
     set

@@ -4,9 +4,11 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.qboot.base.dao.SysUserDao;
 import org.qboot.base.dto.SysUser;
 import org.qboot.base.dto.SysUserRole;
+import org.qboot.common.constant.SysConstants;
 import org.qboot.common.service.CrudService;
 import org.qboot.common.utils.CodecUtils;
 import org.qboot.common.utils.i18n.MessageUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -21,6 +23,9 @@ import java.util.List;
  */
 @Service
 public class SysUserService extends CrudService<SysUserDao, SysUser> {
+
+    @Autowired
+    private SysLoginLogService sysLoginLogService;
 
 	public SysUser findByLoginName(String loginName) {
 		Assert.hasLength(loginName, "loginName 为空");
@@ -132,14 +137,14 @@ public class SysUserService extends CrudService<SysUserDao, SysUser> {
 		SysUser sysUser = this.findById(t.getId());
 		Assert.notNull(sysUser,MessageUtil.getMessage("sys.response.msg.userNotExists","用户不存在"));
 		sysUser.setPassword(encryptPwd(t.getPassword(), sysUser.getSalt()));
-		if(initFlag == 2) {
+		if(initFlag == SysConstants.SYS_USER_PWD_STATUS_CHANGED) {
 			sysUser.setFldN1(1);
 		}else {
-			sysUser.setFldN1(0);//首次登录需要修改密码
+            //首次登录需要修改密码
+			sysUser.setFldN1(0);
 		}
 		int cnt = d.initPwd(sysUser);
-		//sysLoginLogService.loginLogByLoginName("0", sysUser.getLoginName(), ip, "", "", "", "", initFlag);
-		
+		sysLoginLogService.loginLogByLoginName(SysConstants.SYS_USER_LOGIN_STATUS_SUCCESS, sysUser.getLoginName(), ip, "", "", "", "", initFlag);
 		return cnt;
 	}
 	

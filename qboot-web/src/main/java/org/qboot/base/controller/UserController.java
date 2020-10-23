@@ -8,6 +8,7 @@ import org.qboot.base.dto.SysUser;
 import org.qboot.base.service.impl.LoginSecurityService;
 import org.qboot.base.service.impl.SysRoleService;
 import org.qboot.base.service.impl.SysUserService;
+import org.qboot.common.constant.SysConstants;
 import org.qboot.common.controller.BaseController;
 import org.qboot.common.utils.IpUtils;
 import org.qboot.common.utils.RSAsecurity;
@@ -236,7 +237,7 @@ public class UserController extends BaseController {
 			SysUser sysUser = new SysUser();
 			sysUser.setId(SecurityUtils.getUserId());
 			sysUser.setPassword(newPsw);
-			int cnt = this.sysUserService.initPwd(sysUser, 2, IpUtils.getIpAddr(request));
+			int cnt = this.sysUserService.initPwd(sysUser, SysConstants.SYS_USER_PWD_STATUS_CHANGED, IpUtils.getIpAddr(request));
 			if(cnt > 0) {
 				loginSecurityService.clearUserSessions(sysUser.getLoginName());
 				return ResponeModel.ok("sys.response.msg.changePwdSuccess");

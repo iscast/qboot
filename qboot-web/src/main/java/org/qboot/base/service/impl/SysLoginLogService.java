@@ -30,19 +30,11 @@ public class SysLoginLogService extends CrudService<SysLoginLogDao, SysLoginLog>
 	@Autowired
 	private SysUserService sysUserService;
 
-
 	public void loginLogByLoginName(String status,String loginName,String ip,String userAgent,String browser,String deviceName, String area, int firstLogin) {
         Assert.hasLength(status, MessageUtil.getMessage("sys.response.msg.loginStatusIsEmpty","登录状态为空"));
 
-        SysLoginLog loginLog = new SysLoginLog();
-        loginLog.setFirstLogin(firstLogin);
-        loginLog.setStatus(status);
-        loginLog.setBrowserName(browser);
-        loginLog.setDeviceName(deviceName);
-        loginLog.setIp(ip);
-        loginLog.setArea(area);
-        loginLog.setUserAgent(userAgent);
-        loginLog.setLoginTime(new Date());
+        SysLoginLog loginLog = initPojo(status, ip, userAgent, browser, deviceName, area, firstLogin);
+
         loginLog.setCreateBy(loginName);
         loginLog.setUpdateBy(loginName);
 
@@ -55,8 +47,22 @@ public class SysLoginLogService extends CrudService<SysLoginLogDao, SysLoginLog>
         logger.info("保存登录记录：{}", loginLog.toString());
         loginLog.setUserId(user.getId().toString());
         this.save(loginLog);
-
 	}
+
+    public void loginLogByLoginId(String status,String userId,String ip,String userAgent,String browser,String deviceName, String area) {
+
+        SysLoginLog loginLog = initPojo(status, ip, userAgent, browser, deviceName, area, SysConstants.SYS_USER_PWD_STATUS_NORMAL);
+        loginLog.setUserId(userId);
+        SysUser user = sysUserService.findById(userId);
+        if (null == user) {
+            logger.warn("userId:[{}] is not exist, login info {}", userId, loginLog.toString());
+            return ;
+        }
+
+        loginLog.setCreateBy(user.getLoginName());
+        loginLog.setUpdateBy(user.getLoginName());
+        this.save(loginLog);
+    }
 
 	public SysLoginLog findLastLoginInfo(String userId) {
 		Assert.hasLength(userId,MessageUtil.getMessage("sys.response.msg.userIdIsEmpty","用户id 为空"));
@@ -64,7 +70,7 @@ public class SysLoginLogService extends CrudService<SysLoginLogDao, SysLoginLog>
 		loginLog.setPage(1);
 		loginLog.setLimit(2);
 		loginLog.setUserId(userId);
-		loginLog.setStatus(SysLoginLog.SUCCESS);
+		loginLog.setStatus(SysConstants.SYS_USER_LOGIN_STATUS_SUCCESS);
 		loginLog.setSortField("l.login_time");
 		loginLog.setDirection(SysConstants.DESC);
 		PageInfo<SysLoginLog> findByPage = this.findByPage(loginLog);
@@ -74,5 +80,18 @@ public class SysLoginLogService extends CrudService<SysLoginLogDao, SysLoginLog>
 		}
 		return null;
 	}
+
+    private SysLoginLog initPojo(String status, String ip, String userAgent, String browser, String deviceName, String area, int firstLogin) {
+        SysLoginLog loginLog = new SysLoginLog();
+        loginLog.setFirstLogin(firstLogin);
+        loginLog.setStatus(status);
+        loginLog.setBrowserName(browser);
+        loginLog.setDeviceName(deviceName);
+        loginLog.setIp(ip);
+        loginLog.setArea(area);
+        loginLog.setUserAgent(userAgent);
+        loginLog.setLoginTime(new Date());
+        return loginLog;
+    }
 	
 }

@@ -7,9 +7,9 @@ import eu.bitwalker.useragentutils.OperatingSystem;
 import eu.bitwalker.useragentutils.UserAgent;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.qboot.base.dto.SysLoginLog;
 import org.qboot.base.service.impl.LoginSecurityService;
 import org.qboot.base.service.impl.SysLoginLogService;
+import org.qboot.common.constant.SysConstants;
 import org.qboot.common.utils.IpUtils;
 import org.qboot.common.utils.RSAsecurity;
 import org.qboot.web.dto.ResponeModel;
@@ -60,20 +60,20 @@ public class LoginResultHandler implements AuthenticationSuccessHandler,Authenti
 			loginSecurityService.incrementLoginFailTimes(loginName);
 			result.setMsg("账户不存在");
 			logger.error("账户不存在");
-			loginLog(SysLoginLog.PASSWORD_WRONG, loginName, request);
+			loginLog(SysConstants.SYS_USER_LOGIN_STATUS_PASSWORD_WRONG, loginName, request);
 		} else if (exception instanceof BadCredentialsException) {
 			loginSecurityService.incrementLoginFailTimes(loginName);
 			result.setMsg("账户密码错误,连续错误5次将锁定24小时");
 			logger.error("账户密码错误");
-			loginLog(SysLoginLog.PASSWORD_WRONG, loginName, request);
+			loginLog(SysConstants.SYS_USER_LOGIN_STATUS_PASSWORD_WRONG, loginName, request);
 		} else if (exception instanceof LockedException) {
 			result.setMsg("账户已被锁定");
 			logger.error("账户已被锁定");
-			loginLog(SysLoginLog.LOCK_24, loginName, request);
+			loginLog(SysConstants.SYS_USER_LOGIN_STATUS_LOCK_24, loginName, request);
 		} else if (exception instanceof DisabledException) {
 			result.setMsg(exception.getMessage());
 			logger.error(exception.getMessage());
-			loginLog(SysLoginLog.USER_STAUTS_STOP, loginName, request);
+			loginLog(SysConstants.SYS_USER_LOGIN_STATUS_STAUTS_STOP, loginName, request);
 		} 
 		this.print(response, JSON.toJSONString(result));
 	}
@@ -83,7 +83,7 @@ public class LoginResultHandler implements AuthenticationSuccessHandler,Authenti
 			Authentication authentication) throws IOException, ServletException {
 		ResponeModel ok = ResponeModel.ok();
 		String loginName = this.obtainUsername(request);
-		loginLog(SysLoginLog.SUCCESS, loginName, request);
+		loginLog(SysConstants.SYS_USER_LOGIN_STATUS_SUCCESS, loginName, request);
 		logger.info("user:[{}] login sucess ！", loginName);
 		String sessionId = request.getSession().getId();
 		loginSecurityService.setUserSessionId(loginName, sessionId);
@@ -179,7 +179,7 @@ public class LoginResultHandler implements AuthenticationSuccessHandler,Authenti
 
         @Override
         public void run() {
-            sysLoginLogService.loginLogByLoginName(status, loginName, ip, userAgentStr, browserStr, deviceName, area, 0);
+            sysLoginLogService.loginLogByLoginName(status, loginName, ip, userAgentStr, browserStr, deviceName, area, SysConstants.SYS_USER_PWD_STATUS_NORMAL);
         }
     }
 

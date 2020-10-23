@@ -6,6 +6,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
+import org.qboot.common.constant.SysConstants;
 import org.qboot.common.entity.BaseEntity;
 
 /**
@@ -84,13 +85,7 @@ public class SysLoginLog extends BaseEntity<String> {
 	/**
 	 * 是否需要修改密码：0-正常；1-初始化密码；2-已修改密码
 	 */
-	private int firstLogin = FIRSTLOGIN;
-
-	public static final int  FIRSTLOGIN = 0;
-	public static final String  SUCCESS = "0";
-	public static final String  PASSWORD_WRONG = "1";
-	public static final String  USER_STAUTS_STOP = "2";
-	public static final String  LOCK_24 = "3";
+	private int firstLogin = SysConstants.SYS_USER_PWD_STATUS_NORMAL;
 
 	public String getUserId() {
 		return userId;
