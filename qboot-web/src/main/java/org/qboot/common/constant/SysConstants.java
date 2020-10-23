@@ -77,4 +77,7 @@ public class SysConstants {
     public static final String  SYS_USER_LOGIN_STATUS_LOCK_24 = "3";
 
 	/** login status end */
+
+    public static final char GAP_VERTICAL = '|';
+
 }

@@ -1,6 +1,7 @@
 package org.qboot.common.controller;
 
 import org.apache.commons.text.StringEscapeUtils;
+import org.qboot.common.constant.SysConstants;
 import org.qboot.common.exception.QExceptionCode;
 import org.qboot.common.exception.ResponeException;
 import org.qboot.common.utils.DateUtils;
@@ -15,13 +16,13 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.beans.PropertyEditorSupport;
 import java.util.Date;
 
 /**
  * <p>Title: QControllerAdvice</p>
  * <p>Description: 自定义逻辑处理、异常捕获处理</p>
- * 
  * @author history
  * @date 2018-09-08
  */
@@ -62,25 +63,42 @@ public class QControllerAdvice {
 
 	@ResponseBody
 	@ExceptionHandler(ResponeException.class)
-	public ResponeModel responeException(ResponeException e) {
-		logger.error("respone exception ", e);
-		ResponeModel responeModel = ResponeModel.error(e.getResponeCode(), e.getResponeMsg());
+	public ResponeModel responeException(ResponeException e, HttpServletRequest request) {
+        logRequest(request, e);
+		ResponeModel responeModel = ResponeModel.error(e.getResponeCode(), "response error");
 		return responeModel;
 	}
 
 	@ResponseBody
 	@ExceptionHandler(BindException.class)
-	public ResponeModel bindException(BindException e) {
-		logger.error("bind exception ", e);
-		ResponeModel responeModel = ResponeModel.error(QExceptionCode.PARAM_BIND_ERROR, "参数绑定错误:{0}",e.getMessage());
+	public ResponeModel bindException(BindException e, HttpServletRequest request) {
+        logRequest(request, e);
+		ResponeModel responeModel = ResponeModel.error(QExceptionCode.PARAM_BIND_ERROR, "param bind error");
 		return responeModel;
 	}
 	
 	@ResponseBody
 	@ExceptionHandler(Exception.class)
-	public ResponeModel exception(Exception e) {
-		logger.error("global exception ", e);
-		ResponeModel responeModel = ResponeModel.error(QExceptionCode.UNKNOWN, e.getMessage());
+	public ResponeModel exception(Exception e, HttpServletRequest request) {
+        logRequest(request, e);
+		ResponeModel responeModel = ResponeModel.error(QExceptionCode.UNKNOWN, "error");
 		return responeModel;
 	}
+
+	private void logRequest(HttpServletRequest request, Exception e) {
+	    if(null == request) {
+	        logger.error("error:", e);
+	        return;
+        }
+
+        String remoteIp = request.getRemoteAddr();
+        String method = request.getMethod();
+        String eMsg = e.getMessage();
+        StackTraceElement[] stackTrace = e.getStackTrace();
+        StringBuffer errBuf = new StringBuffer();
+        errBuf.append(stackTrace[0].toString());
+        errBuf.append(SysConstants.GAP_VERTICAL);
+        errBuf.append(stackTrace[1].toString());
+        logger.error("client ip:[{}] request method:[{}] , errorMsg:[{}], stackTrace:{}", remoteIp, method, eMsg, errBuf.toString());
+    }
 }
