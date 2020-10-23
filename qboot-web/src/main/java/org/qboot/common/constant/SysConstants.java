@@ -45,6 +45,8 @@ public class SysConstants {
      */
     public static final String SUPER_ADMIN_NAME = "superadmin";
 
+    public static final String SYSTEM_CRATER_NAME = "system";
+
     /**
      * task default group
      */

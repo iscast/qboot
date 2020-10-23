@@ -38,7 +38,7 @@ public class RoleController extends BaseController {
 	@PostMapping("/qryPage")
 	public ResponeModel qryPage(@Validated SysRole sysRole, BindingResult bindingResult) {
 		if(!SecurityUtils.isSuperAdmin()) {
-			sysRole.setCreateBy(String.valueOf(SecurityUtils.getUserId()));
+			sysRole.setCreateBy(SecurityUtils.getLoginName());
 		}
 		PageInfo<SysRole> page = sysRoleService.findByPage(sysRole);
 		return ResponeModel.ok(page);
@@ -96,7 +96,7 @@ public class RoleController extends BaseController {
 			return ResponeModel.error("sys.response.msg.roleDuplicate");
 		}
 		
-		sysRole.setCreateBy(String.valueOf(SecurityUtils.getUserId()));
+		sysRole.setCreateBy(SecurityUtils.getLoginName());
 		sysRole.setCreateDate(new Date());
 		int cnt = sysRoleService.save(sysRole);
 		if(cnt > 0) {
@@ -116,7 +116,7 @@ public class RoleController extends BaseController {
 		if(role != null && !String.valueOf(role.getId()).equals(String.valueOf(sysRole.getId()))) {
 			return ResponeModel.error("sys.response.msg.roleDuplicate");
 		}
-		sysRole.setUpdateBy(String.valueOf(SecurityUtils.getUserId()));
+		sysRole.setUpdateBy(SecurityUtils.getLoginName());
 		sysRole.setUpdateDate(new Date());
 		int cnt = sysRoleService.update(sysRole);
 		if(cnt > 0) {

@@ -69,7 +69,7 @@ public class SysOperateLogInfoService extends CrudService<SysOperateLogInfoDao, 
 			solid.setCreateDate(new Date());
 			solid.setUriType(2);
 			solid.setPhysicsFlag(1);
-			solid.setCreateBy("system");
+			solid.setCreateBy(SysConstants.SYSTEM_CRATER_NAME);
 			this.d.insert(solid);
 			solid = this.d.findByUri(solid).get(0);
 		}

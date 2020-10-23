@@ -48,7 +48,7 @@ public class ParamClassController extends BaseController {
 	@PreAuthorize("hasAuthority('sys:param:save')")
 	@PostMapping("/save")
 	public ResponeModel save(@Validated SysParamClass sysParam, BindingResult bindingResult) {
-		sysParam.setCreateBy(String.valueOf(SecurityUtils.getUserId()));
+		sysParam.setCreateBy(SecurityUtils.getLoginName());
 		sysParam.setVisible(1); // 默认可用
 		sysParam.setPhysicsFlag(1);
 		int cnt = sysParamService.save(sysParam);
@@ -61,7 +61,7 @@ public class ParamClassController extends BaseController {
 	@PreAuthorize("hasAuthority('sys:param:update')")
 	@PostMapping("/update")
 	public ResponeModel update(@Validated SysParamClass sysParam, BindingResult bindingResult) {
-		sysParam.setUpdateBy(String.valueOf(SecurityUtils.getUserId()));
+		sysParam.setUpdateBy(SecurityUtils.getLoginName());
 		int cnt = sysParamService.update(sysParam);
 		if(cnt > 0) {
 			return ResponeModel.ok();

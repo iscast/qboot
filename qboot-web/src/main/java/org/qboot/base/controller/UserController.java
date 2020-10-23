@@ -50,7 +50,7 @@ public class UserController extends BaseController {
 	@GetMapping("/qryPage")
 	public ResponeModel qryPage(SysUser user, BindingResult bindingResult) {
 		if(!SecurityUtils.isSuperAdmin()) {
-			user.setCreateBy(String.valueOf(SecurityUtils.getUserId()));
+			user.setCreateBy(SecurityUtils.getLoginName());
 		}
 		PageInfo<SysUser> page = sysUserService.findByPage(user);
 		return ResponeModel.ok(page);
@@ -83,7 +83,7 @@ public class UserController extends BaseController {
 			return ResponeModel.error("sys.response.msg.userDuplicate");
 		}
 		sysUser.setStatus(SysUser.STATUS_NORMAL);
-		sysUser.setCreateBy(String.valueOf(SecurityUtils.getUserId()));
+		sysUser.setCreateBy(SecurityUtils.getLoginName());
 		
 		int password = new Random().nextInt(999999);
 	    if (password < 100000){
@@ -149,7 +149,7 @@ public class UserController extends BaseController {
 		if(StringUtils.isNotBlank(sysUser.getRoleId())) {
 			sysUser.setRoleIds(Arrays.asList(sysUser.getRoleId().split(",")));
 		}
-		sysUser.setUpdateBy(String.valueOf(SecurityUtils.getUserId()));
+		sysUser.setUpdateBy(SecurityUtils.getLoginName());
 		sysUser.setUpdateDate(new Date());
 		int cnt = sysUserService.updateSelect(sysUser);
 		if(cnt > 0) {

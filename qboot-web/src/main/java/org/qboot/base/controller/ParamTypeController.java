@@ -68,7 +68,7 @@ public class ParamTypeController extends BaseController {
 	@PreAuthorize("hasAuthority('sys:param:save')")
 	@PostMapping("/save")
 	public ResponeModel save(@Validated SysParamType sysParam, BindingResult bindingResult, HttpServletRequest request) {
-		sysParam.setCreateBy(String.valueOf(SecurityUtils.getUserId()));
+		sysParam.setCreateBy(SecurityUtils.getLoginName());
 		sysParam.setPhysicsFlag(1);
 		if (StringUtils.isNotBlank(sysParam.getParamTypeName())) {
 			sysParam.setParamTypeName(request.getParameter("paramTypeName"));
@@ -87,7 +87,7 @@ public class ParamTypeController extends BaseController {
 	@PreAuthorize("hasAuthority('sys:param:update')")
 	@PostMapping("/update")
 	public ResponeModel update(@Validated SysParamType sysParam, BindingResult bindingResult, HttpServletRequest request) {
-		sysParam.setUpdateBy(String.valueOf(SecurityUtils.getUserId()));
+		sysParam.setUpdateBy(SecurityUtils.getLoginName());
 		if (StringUtils.isNotBlank(sysParam.getParamTypeName())) {
 			sysParam.setParamTypeName(request.getParameter("paramTypeName"));
 		}

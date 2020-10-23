@@ -51,7 +51,7 @@ public class OperateLogInfoController extends BaseController {
 		if(!uriIsUsed) {
 			return ResponeModel.error("URI地址配置已经存在，请检查！");
 		}
-		logInfoDto.setCreateBy(String.valueOf(SecurityUtils.getUserId()));
+		logInfoDto.setCreateBy(SecurityUtils.getLoginName());
 		int cnt = operationLogInfoService.save(logInfoDto);
 		if(cnt > 0) {
 			return ResponeModel.ok();
@@ -66,7 +66,7 @@ public class OperateLogInfoController extends BaseController {
 		if(!uriIsUsed) {
 			return ResponeModel.error("URI地址配置已经存在，请检查！");
 		}
-		logInfoDto.setUpdateBy(String.valueOf(SecurityUtils.getUserId()));
+		logInfoDto.setUpdateBy(SecurityUtils.getLoginName());
 		int cnt = operationLogInfoService.update(logInfoDto);
 		if(cnt > 0) {
 			return ResponeModel.ok();

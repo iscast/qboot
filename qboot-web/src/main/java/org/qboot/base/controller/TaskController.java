@@ -48,8 +48,8 @@ public class TaskController extends BaseController {
 	public ResponeModel save(SysTask sysTask) {
 		sysTask.setUpdateDate(new Date());
 		sysTask.setCreateDate(new Date());
-		sysTask.setCreateBy(String.valueOf(SecurityUtils.getUserId()));
-		sysTask.setUpdateBy(String.valueOf(SecurityUtils.getUserId()));
+		sysTask.setCreateBy(SecurityUtils.getLoginName());
+		sysTask.setUpdateBy(SecurityUtils.getLoginName());
 		this.checkParams(sysTask);
 		sysTaskService.save(sysTask) ;
 		return ResponeModel.ok();
