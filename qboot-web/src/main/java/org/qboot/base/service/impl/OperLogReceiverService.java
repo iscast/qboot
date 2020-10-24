@@ -16,7 +16,6 @@ import java.util.concurrent.*;
 /**
  * <p>Title: OperLogReceiverService</p>
  * <p>Description: 操作日志接收服务</p>
- * 
  * @author history
  * @date 2018-08-08
  */

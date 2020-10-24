@@ -47,6 +47,7 @@
 	"sys.form.label.menuType":"Menu Type",
 	"sys.form.label.parentMenu":"Parent Menu",
 	"sys.table.title.menuName":"Menu Name",
+	"sys.table.title.menuName.i18n":"internationalised Name",
 	"sys.table.title.type":"Type",
 	"sys.table.title.menuAddr":"Menu Addr",
 	"sys.table.title.authority":"Authority",

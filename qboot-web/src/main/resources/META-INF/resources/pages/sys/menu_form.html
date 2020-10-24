@@ -51,13 +51,21 @@
 		    </select>
         </div>
     </div>
+
    <div class="layui-form-item">
         <label class="layui-form-label layui-i18n" i18n-key="sys.form.label.parentMenu"></label>
         <div class="layui-input-block">
         	<input id="parentId" name="parentId" type="hidden">
             <select id="parentMenu" name="parentMenu" >
-		        <option value="">请选择父级菜单</option>
+		        <option value="">select parent menu</option>
             </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label layui-i18n" i18n-key="sys.table.title.menuName.i18n"></label>
+        <div class="layui-input-block">
+            <input type="text" id="remarks" lay-filter="remarks" class="layui-input">
         </div>
     </div>
 

@@ -3,7 +3,7 @@ package org.qboot.common.dao;
 import org.qboot.common.entity.BaseEntity;
 
 /**
- * @Description:
+ * crud persistence
  * @Author: iscast
  * @Date: 2020/8/22 18:16
  */

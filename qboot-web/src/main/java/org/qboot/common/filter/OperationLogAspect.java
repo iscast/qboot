@@ -9,11 +9,11 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.qboot.base.dto.SysOperateLogDto;
 import org.qboot.base.service.impl.OperLogReceiverService;
 import org.qboot.base.service.impl.SysOperateLogInfoService;
-import org.qboot.common.utils.SpringContextHolder;
 import org.qboot.web.security.QUser;
 import org.qboot.web.security.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -52,6 +52,11 @@ public class OperationLogAspect {
 	 * 日志上报线程池
 	 */
 	private static ThreadPoolExecutor fixedPool =  null;
+
+    @Autowired
+    private OperLogReceiverService receiverService;
+    @Autowired
+    private SysOperateLogInfoService logInfoService;
 	
 	public OperationLogAspect(){
 
@@ -65,13 +70,12 @@ public class OperationLogAspect {
 		
 	}
 
-    @Pointcut("execution(public * org.qboot..controller.*.*(..))  || execution(* com.yoopay..controller.*.*(..))")
+    @Pointcut("execution(public * org.qboot..controller.*.*(..))  || execution(* com..controller.*Controller.*(..))")
     public void webRequestLog() { }
 
     @Before("webRequestLog()")
     public void doBefore(JoinPoint joinPoint) {
         try {
-
             long beginTime = System.currentTimeMillis();
 
             // 接收到请求，记录请求内容
@@ -95,24 +99,22 @@ public class OperationLogAspect {
             	paramSB.append(sb.toString()).append(",");
             }
             paramSB.append("}");
-            
+
+            SysOperateLogDto optLog = new SysOperateLogDto();
+            optLog.setRequestUri(uri);
+            optLog.setBeginTime(beginTime);
+            optLog.setRequestDate(new Date());
+            optLog.setRequestIP(remoteAddr);
+            optLog.setRequestParams(paramSB.toString());
+
             QUser user = SecurityUtils.getUser();
             if(user != null) {
             	String loginName = user.getLoginName();
-                
-                SysOperateLogDto optLog = new SysOperateLogDto();
-                optLog.setRequestUri(uri);
-                optLog.setBeginTime(beginTime);
-                optLog.setRequestDate(new Date());
-                optLog.setRequestIP(remoteAddr);
                 optLog.setRequestUserId(loginName);
-                optLog.setRequestParams(paramSB.toString());
-                
                 tlocal.set(optLog);
-                logger.debug("operateLog_doBefore={}", optLog.toString());
-            }else {
-                logger.debug("operateLog_doBefore, getLoginUser is null.");
             }
+
+            logger.info("operateLog_doBefore={}", optLog.toString());
         } catch (Exception e) {
             logger.error("***操作请求日志记录失败doBefore()***", e);
         }
@@ -125,15 +127,12 @@ public class OperationLogAspect {
         	SysOperateLogDto optLog = tlocal.get();
         	if(optLog != null) {
         		optLog.setResponseTime((System.currentTimeMillis() - optLog.getBeginTime()));
-            	
-            	SysOperateLogInfoService logInfoService = SpringContextHolder.getBean("sysOperateLogInfoService", SysOperateLogInfoService.class);
-                
             	Long logId = logInfoService.findLogIdByUri(optLog.getRequestUri());
             	optLog.setLogId(logId);
             	
         		// 放入线程池
-        		logger.debug("doAfterReturning OperationLog queue used capacity:{}, remaining capacity:{}", fixedPool.getQueue().size()
-        				, fixedPool.getQueue().remainingCapacity());
+        		logger.debug("operateLog_doAfter Returning OperationLog queue used capacity:{}, remaining capacity:{}",
+                        fixedPool.getQueue().size(), fixedPool.getQueue().remainingCapacity());
         		fixedPool.execute(new LogTask(optLog));
         	}
         } catch (Exception e) {
@@ -143,8 +142,7 @@ public class OperationLogAspect {
 
 
     /**
-     * 获取登录用户远程主机ip地址
-     * 
+     * get request user ip
      * @param request
      * @return
      */
@@ -163,7 +161,7 @@ public class OperationLogAspect {
     }
 
     /**
-     * 请求参数拼装
+     * isPsw
      * @param keyName
      * @return
      */
@@ -178,7 +176,7 @@ public class OperationLogAspect {
     class LogTask implements Runnable{
 		
     	/**
-    	 * 操作日志
+    	 * optlog
     	 */
 	    private SysOperateLogDto optLog; 
 	     
@@ -188,13 +186,11 @@ public class OperationLogAspect {
 	    
 	    @Override
 	    public void run() {
-	    	logger.info("Send operatioin Log: {}", optLog);
 	    	try{
-	            OperLogReceiverService receiverService = SpringContextHolder.getBean("operLogReceiverService", OperLogReceiverService.class);
-	            logger.debug("OperationLogReceiverService.receive(operateLog)={}", optLog.toString());
+	    	    logger.info("OperLogReceiverService save Log: {}", optLog);
 	            receiverService.receive(optLog);
 	    	}catch(Exception e){
-	    		logger.error("log upload error:{}", e.getMessage());
+	    		logger.error("OperLogReceiverService save log error:{}", e.getMessage());
 	    	}
 	    }
 	}

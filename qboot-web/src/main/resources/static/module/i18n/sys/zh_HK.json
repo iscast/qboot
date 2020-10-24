@@ -45,6 +45,7 @@
   "sys.form.label.menuType":"菜單類型",
   "sys.form.label.parentMenu":"父級菜單",
   "sys.table.title.menuName":"菜單名稱",
+  "sys.table.title.menuName.i18n":"國際化名稱",
   "sys.table.title.type":"類型",
   "sys.table.title.menuAddr":"菜單地址",
   "sys.table.title.authority":"權限",

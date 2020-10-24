@@ -47,6 +47,7 @@
 	"sys.form.label.menuType":"thực đơn Kiểu",
 	"sys.form.label.parentMenu":"bố thực đơn",
 	"sys.table.title.menuName":"thực đơn Tên",
+	"sys.table.title.menuName.i18n":"toàn cầu hóa Tên",
 	"sys.table.title.type":"Kiểu",
 	"sys.table.title.menuAddr":"thực đơn Địa chỉ",
 	"sys.table.title.authority":"Thẩm quyền",

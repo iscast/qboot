@@ -140,7 +140,7 @@ layui.define(['_config', 'admin', 'layer', 'laytpl', 'element', 'form','_i18n'],
                         var authObject = {};
                         
                         if(data == null || data.length == 0){
-                            layer.msg('获取用户失败', {icon: 2});
+                            layer.msg('get user fail', {icon: 2});
                             _config.removeToken();
                             location.replace('login.html');
                         }

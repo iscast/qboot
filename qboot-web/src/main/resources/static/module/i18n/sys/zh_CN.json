@@ -47,6 +47,7 @@
 	"sys.form.label.menuType":"菜单类型",
 	"sys.form.label.parentMenu":"父级菜单",
 	"sys.table.title.menuName":"菜单名称",
+	"sys.table.title.menuName.i18n":"国际化名称",
 	"sys.table.title.type":"类型",
 	"sys.table.title.menuAddr":"菜单地址",
 	"sys.table.title.authority":"权限",

@@ -12,7 +12,6 @@ import org.qboot.common.entity.TreeEntity;
 /**
  * <p>Title: SysMenu</p>
  * <p>Description: 菜单权限实体</p>
- * 
  * @author history
  * @date 2018-08-08
  */
