@@ -147,13 +147,13 @@ layui.define(['_config', 'admin', 'layer', 'laytpl', 'element', 'form','_i18n'],
                         
                         for( var i = 0; i < data.length; i ++ ) {
                             let originalName = data[i].name;
-                            if('zh_cn' != _i18n.getLang()) {
+                            if('zh_CN' != _i18n.getLang()) {
                                 let ornModule = data[i].permission;
                                 if(ornModule.indexOf(':') != -1) {
                                     ornModule = data[i].permission.split(':')[0];
                                 }
                                 let i18nModuleName = _i18n.getModuleVal(ornModule, data[i].permission);
-                                if(i18nModuleName) {
+                                if(!!i18nModuleName) {
                                     originalName = i18nModuleName;
                                 }
                             }
@@ -189,13 +189,13 @@ layui.define(['_config', 'admin', 'layer', 'laytpl', 'element', 'form','_i18n'],
                         	if(subArray[i].hasSub == 0 || !subArray[i].hasSub) {
                         		var pageName = subArray[i].permission.replace(/\:/g, '_');
                                 let originalName = subArray[i].name;
-                                if('zh_cn' != _i18n.getLang()) {
+                                if('zh_CN' != _i18n.getLang()) {
                                     let ornModule = subArray[i].permission;
                                     if(ornModule.indexOf(':') != -1) {
                                         ornModule = subArray[i].permission.split(':')[0];
                                     }
                                     let i18nModuleName = _i18n.getModuleVal(ornModule, subArray[i].permission);
-                                    if(i18nModuleName) {
+                                    if(!!i18nModuleName) {
                                         originalName = i18nModuleName;
                                     }
                                 }

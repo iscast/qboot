@@ -82,7 +82,7 @@
                                 ornModule = d.permission.split(':')[0];
                             }
                             let i18nModuleName = _i18n.getModuleVal(ornModule, d.permission);
-                            if(i18nModuleName) {
+                            if(!!i18nModuleName) {
                                 originalName = i18nModuleName;
                             }
                         }

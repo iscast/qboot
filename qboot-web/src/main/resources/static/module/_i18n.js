@@ -8,6 +8,7 @@ layui.define(['_config', 'admin'], function (exports) {
         //get all global
         var msgs;
         var moduleMsg = {};
+        var i18nModuleCahe = {};
         $.ajax({
             url: 'module/i18n/global_' + locale + '.json',
             type: "get",
@@ -27,7 +28,13 @@ layui.define(['_config', 'admin'], function (exports) {
                 if (!module) {
                     return '';
                 }
-                var result;
+                let cacheKey = module + '_' + _i18n.locale;
+
+                let result = i18nModuleCahe[cacheKey];
+                if(!!result) {
+                    return result;
+                }
+
                 $.ajax({
                     url: 'module/i18n/' + module + '/' + _i18n.locale + '.json',
                     type: "get",
@@ -37,10 +44,16 @@ layui.define(['_config', 'admin'], function (exports) {
                         result = obj;
                         if(_i18n.modules.indexOf(module)<0){
                             _i18n.mod = $.extend(_i18n.mod,obj);
-                            _i18n.modules.push(module)
+                            _i18n.modules.push(module);
+                            i18nModuleCahe[cacheKey] = _i18n.mod;
                         }
-
+                    },
+                    error:function (e) {
+                        var res = $.parseJSON(e.responseText);
+                        console.log('read i18n error msg:' + res.msg);
+                        i18nModuleCahe[cacheKey] = {};
                     }
+
                 });
                 return _i18n.mod;
             },
@@ -113,8 +126,10 @@ layui.define(['_config', 'admin'], function (exports) {
                     moduleMsg[module] = this.getMsg(module);
                 }
 
-                if(moduleMsg[module]) {
+                if(!!moduleMsg[module]) {
                     return moduleMsg[module][code];
+                } else {
+                    return '';
                 }
             },
             getLang: function () {
