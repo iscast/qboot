@@ -22,8 +22,9 @@
         <span>
             <select id="loginLang" class="layui-input" style="width:140px;">
                 <option value="">Switch Language</option>
-                <option value="zh_CN">中文简体</option>
                 <option value="en_US">English</option>
+                <option value="vi_VN">Tiếng Việt</option>
+                <option value="zh_CN">中文简体</option>
                 <option value="zh_HK">中文繁體</option>
             </select>
         </span>
@@ -32,7 +33,7 @@
     <div class=" login-body">
         <div class="layui-card">
             <div class="layui-card-header">
-                <i class="layui-icon layui-icon-engine"></i>&nbsp;&nbsp;<span class="layui-i18n" i18n-key="login.form.title.userLogin">用户登录</span>
+                <i class="layui-icon layui-icon-engine"></i>&nbsp;&nbsp;<span class="layui-i18n" i18n-key="login.form.title.userLogin">user login</span>
             </div>
             <div class="layui-card-body layui-form layui-form-pane">
                 <div class="layui-form-item">
@@ -59,7 +60,7 @@
                 </div>
 
                 <div class="layui-form-item">
-                    <button lay-filter="login-submit" class="layui-btn layui-btn-fluid layui-i18n" i18n-key="login.form.title.login" lay-submit>登 录</button>
+                    <button lay-filter="login-submit" class="layui-btn layui-btn-fluid layui-i18n" i18n-key="login.form.title.login" lay-submit>login in</button>
                 </div>
             </div>
         </div>
@@ -80,7 +81,7 @@
         var form = layui.form;
         var _config = layui._config;
 
-        // 防止重复不断刷新登录页面
+        // repeat reflash login page
         // if (_config.getToken()) {
         //     location.replace('./');
         //     return;

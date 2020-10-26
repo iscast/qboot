@@ -75,16 +75,27 @@
             ,cols: [[
                 {type:'numbers', width: '30'}
                 ,{field:'name', title: msgs['sys.table.title.menuName'],templet: function(d){
-                	return _i18n.getGlobalVal(d.name);
+                        let originalName = d.name;
+                        if('zh_cn' != _i18n.getLang()) {
+                            let ornModule = d.permission;
+                            if(ornModule.indexOf(':') != -1) {
+                                ornModule = d.permission.split(':')[0];
+                            }
+                            let i18nModuleName = _i18n.getModuleVal(ornModule, d.permission);
+                            if(i18nModuleName) {
+                                originalName = i18nModuleName;
+                            }
+                        }
+                	return originalName;
 					},width: '180', align:'center'}
                 ,{width: '60',
                     sort: false, templet: function (d) {
                     	if(d.type == 0){
-                            return "模块";
+                            return msgs['sys.form.label.menuType.module'];
                     	}else if(d.type == 1){
-                            return "菜单";
+                            return msgs['sys.form.label.menuType.menu'];
                     	}else if(d.type == 999){
-                            return "按钮";
+                            return msgs['sys.form.label.menuType.btn'];
                     	}
                     }, title: msgs['sys.table.title.type'], align:'left'
                 }

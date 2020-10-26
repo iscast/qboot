@@ -7,6 +7,7 @@ layui.define(['_config', 'admin'], function (exports) {
         locale = d.data;
         //get all global
         var msgs;
+        var moduleMsg = {};
         $.ajax({
             url: 'module/i18n/global_' + locale + '.json',
             type: "get",
@@ -107,8 +108,17 @@ layui.define(['_config', 'admin'], function (exports) {
                 }
                 return msgs[code] ? msgs[code] : code;
             },
+            getModuleVal(module, code) {
+                if(!moduleMsg[module]) {
+                    moduleMsg[module] = this.getMsg(module);
+                }
+
+                if(moduleMsg[module]) {
+                    return moduleMsg[module][code];
+                }
+            },
             getLang: function () {
-                return (locale.substr(0, 2) == "zh" ? "cn" : "en");
+                return locale;
             },
             getValByI18nField:function(i18nField){
                 var paramTypeName = '';

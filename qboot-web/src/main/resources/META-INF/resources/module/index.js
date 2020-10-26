@@ -133,7 +133,7 @@ layui.define(['_config', 'admin', 'layer', 'laytpl', 'element', 'form','_i18n'],
                         		url: '#!index_page',
                                 path: 'index_page.html',
                                 icon: 'layui-icon-home',
-                        }
+                            }
                         ];
                         var subArray = [];
                         var menuObejct = {};
@@ -146,8 +146,19 @@ layui.define(['_config', 'admin', 'layer', 'laytpl', 'element', 'form','_i18n'],
                         }
                         
                         for( var i = 0; i < data.length; i ++ ) {
+                            let originalName = data[i].name;
+                            if('zh_cn' != _i18n.getLang()) {
+                                let ornModule = data[i].permission;
+                                if(ornModule.indexOf(':') != -1) {
+                                    ornModule = data[i].permission.split(':')[0];
+                                }
+                                let i18nModuleName = _i18n.getModuleVal(ornModule, data[i].permission);
+                                if(i18nModuleName) {
+                                    originalName = i18nModuleName;
+                                }
+                            }
                             var menu = {
-                                name: data[i].name,
+                                name: originalName,
                                 url: 'javascript:;',
                                 icon: data[i].icon
                             };
@@ -177,8 +188,19 @@ layui.define(['_config', 'admin', 'layer', 'laytpl', 'element', 'form','_i18n'],
                         	var subMenu;
                         	if(subArray[i].hasSub == 0 || !subArray[i].hasSub) {
                         		var pageName = subArray[i].permission.replace(/\:/g, '_');
+                                let originalName = subArray[i].name;
+                                if('zh_cn' != _i18n.getLang()) {
+                                    let ornModule = subArray[i].permission;
+                                    if(ornModule.indexOf(':') != -1) {
+                                        ornModule = subArray[i].permission.split(':')[0];
+                                    }
+                                    let i18nModuleName = _i18n.getModuleVal(ornModule, subArray[i].permission);
+                                    if(i18nModuleName) {
+                                        originalName = i18nModuleName;
+                                    }
+                                }
                                 subMenu = {
-                                    name: subArray[i].name,
+                                    name: originalName,
                                     url: '#!' + pageName,
                                     path: subArray[i].href.substring(1),
                                     icon: subArray[i].icon

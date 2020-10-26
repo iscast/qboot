@@ -38,7 +38,7 @@ public class OperationLogAspect {
 
     private static Logger logger = LoggerFactory.getLogger(OperationLogAspect.class);
 
-    private ThreadLocal<SysOperateLogDto> tlocal = new ThreadLocal<SysOperateLogDto>();
+    private ThreadLocal<SysOperateLogDto> tlocal = new ThreadLocal<>();
     
 	/**
 	 * 日志上报线程并发数
@@ -116,7 +116,7 @@ public class OperationLogAspect {
 
             logger.info("operateLog_doBefore={}", optLog.toString());
         } catch (Exception e) {
-            logger.error("***操作请求日志记录失败doBefore()***", e);
+            logger.error("***opt request log fail doBefore()***", e);
         }
     }
 
@@ -126,6 +126,7 @@ public class OperationLogAspect {
             // 处理完请求，返回内容
         	SysOperateLogDto optLog = tlocal.get();
         	if(optLog != null) {
+                tlocal.remove();
         		optLog.setResponseTime((System.currentTimeMillis() - optLog.getBeginTime()));
             	Long logId = logInfoService.findLogIdByUri(optLog.getRequestUri());
             	optLog.setLogId(logId);
@@ -134,9 +135,10 @@ public class OperationLogAspect {
         		logger.debug("operateLog_doAfter Returning OperationLog queue used capacity:{}, remaining capacity:{}",
                         fixedPool.getQueue().size(), fixedPool.getQueue().remainingCapacity());
         		fixedPool.execute(new LogTask(optLog));
+
         	}
         } catch (Exception e) {
-            logger.error("***操作请求日志记录失败doAfterReturning()***", e);
+            logger.error("***opt request log fail doAfterReturning()***", e);
         }
     }
 
