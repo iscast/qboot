@@ -18,14 +18,14 @@ import java.util.concurrent.TimeUnit;
  * @Date: 2020/8/22 19:20
  */
 @Component
-public class QRedisson {
-    private static Logger logger = LoggerFactory.getLogger(QRedisson.class);
+public class RedisTools {
+    private static Logger logger = LoggerFactory.getLogger(RedisTools.class);
     @Autowired
     private RedissonClient redissonClient;
     private final Long DEFAULT_CACHE_SECONDS = 3600L;
     private final String LOCK_KEY = "REDISSON_LOCK_";
 
-    public QRedisson() {
+    public RedisTools() {
     }
 
     public <V> V get(String key) {

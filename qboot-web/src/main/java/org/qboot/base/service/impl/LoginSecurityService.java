@@ -4,7 +4,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.qboot.common.service.BaseService;
-import org.qboot.common.utils.QRedisson;
+import org.qboot.common.utils.RedisTools;
 import org.qboot.common.utils.i18n.MessageUtil;
 import org.redisson.api.RSet;
 import org.redisson.api.RedissonClient;
@@ -31,21 +31,21 @@ public class LoginSecurityService extends BaseService {
 	private String USER_NAME_SESSION_ID_PREFIX = "USERNAME_SESSION_ID:";
 
 	@Autowired
-	private QRedisson qRedisson;
+	private RedisTools redisTools;
 	@Autowired(required = false)
 	private RedissonClient redissonClient;
 
 	public void unLock(String loginName) {
 		Assert.hasLength(loginName, MessageUtil.getMessage("sys.response.msg.loginNameIsEmpty", "loginName 为空"));
-		qRedisson.del(LOCK_PREFIX + loginName);
+		redisTools.del(LOCK_PREFIX + loginName);
 	}
 
 	public Long getLoginFailCount(String loginName) {
 		try {
-			Long cnt = qRedisson.get(LOCK_PREFIX + loginName);
+			Long cnt = redisTools.get(LOCK_PREFIX + loginName);
 			return null == cnt ? 0 : cnt;
 		} finally {
-			qRedisson.expire(LOCK_PREFIX + loginName, 24 * 60 * 60);
+			redisTools.expire(LOCK_PREFIX + loginName, 24 * 60 * 60);
 		}
 	}
 
@@ -55,15 +55,15 @@ public class LoginSecurityService extends BaseService {
 
 	public Long incrementLoginFailTimes(String loginName) {
 		try {
-			Long increment = qRedisson.incr(LOCK_PREFIX + loginName, 1L);
+			Long increment = redisTools.incr(LOCK_PREFIX + loginName, 1L);
 			return increment;
 		} finally {
-			qRedisson.expire(LOCK_PREFIX + loginName, 24 * 60 * 60);
+			redisTools.expire(LOCK_PREFIX + loginName, 24 * 60 * 60);
 		}
 	}
 
 	public void clearLoginFailTimes(String loginName) {
-		qRedisson.del(LOCK_PREFIX + loginName);
+		redisTools.del(LOCK_PREFIX + loginName);
 	}
 
 	/**
@@ -76,9 +76,9 @@ public class LoginSecurityService extends BaseService {
 		logger.info("[强制退出] loginName={}", loginName);
 		Set<Object> sessionIdSet = redissonClient.getSet(USER_NAME_SESSION_ID_PREFIX + loginName);
 		if (sessionIdSet != null) {
-			sessionIdSet.forEach((sessionId) -> qRedisson.del("redisson_spring_session:" + sessionId));
+			sessionIdSet.forEach((sessionId) -> redisTools.del("redisson_spring_session:" + sessionId));
 		}
-		qRedisson.del(USER_NAME_SESSION_ID_PREFIX + loginName);
+		redisTools.del(USER_NAME_SESSION_ID_PREFIX + loginName);
 	}
 
 	/**

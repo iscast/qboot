@@ -29,14 +29,16 @@ import java.util.Date;
 
 @Component
 @ControllerAdvice
-public class QControllerAdvice {
+public class WebControllerAdvice {
 	/**
 	 * 日志对象
 	 */
-	private static Logger logger = LoggerFactory.getLogger(QControllerAdvice.class);
+	private static Logger logger = LoggerFactory.getLogger(WebControllerAdvice.class);
 	
 	/**
-	 * 初始化数据绑定 1. 将所有传递进来的String进行HTML编码，防止XSS攻击   2. 将字段中Date类型转换为String类型
+	 * 初始化数据绑定
+     * 1. 将所有传递进来的String进行HTML编码，防止XSS攻击
+     * 2. 将字段中Date类型转换为String类型
 	 */
 	@InitBinder
 	protected void initBinder(WebDataBinder binder) {

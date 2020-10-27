@@ -4,7 +4,6 @@ package org.qboot.common.exception;
 /**
  * <p>Title: LoginPasswordEncoder</p>
  * <p>Description: 自定义登录密码加密</p>
- * 
  * @author history
  * @date 2018-09-11
  */

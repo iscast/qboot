@@ -88,7 +88,7 @@ COMMIT;
 -- Records of sys_role
 -- ----------------------------
 BEGIN;
-INSERT INTO `sys_role`(ID, NAME, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS) VALUES (1, '普通管理员', 'system', now(), 'system', now(), '普通管理员');
+INSERT INTO `sys_role`(ID, NAME, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS) VALUES (1, 'systemManager', 'system', now(), 'system', now(), 'systemManager');
 COMMIT;
 
 -- ----------------------------

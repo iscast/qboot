@@ -21,23 +21,19 @@ import org.qboot.common.utils.RSAsecurity;
 /**
  * <p>Title: LoginPasswordEncoder</p>
  * <p>Description: 自定义登录/p>
- * 
  * @author history
  * @date 2018-09-11
  */
-public class QAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
+public class CustomAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
-	public static final String SPRING_SECURITY_FORM_USERNAME_KEY = "username";
-	public static final String SPRING_SECURITY_FORM_PASSWORD_KEY = "password";
-
-	private String usernameParameter = SPRING_SECURITY_FORM_USERNAME_KEY;
-	private String passwordParameter = SPRING_SECURITY_FORM_PASSWORD_KEY;
+	private String usernameParameter = "username";
+	private String passwordParameter = "password";
 	private boolean postOnly = true;
 
 	@Autowired
 	private SysUserService sysUserService;
 
-	public QAuthenticationFilter(String loginPath) {
+	public CustomAuthenticationFilter(String loginPath) {
 		super(new AntPathRequestMatcher(loginPath, "POST"));
 	}
 	
@@ -62,7 +58,7 @@ public class QAuthenticationFilter extends AbstractAuthenticationProcessingFilte
 		username = RSAsecurity.getInstance().decrypt(String.valueOf(request.getSession().getAttribute("privateKey")), username.trim());
 		SysUser sysUser = sysUserService.findByLoginName(username);
 		if (sysUser == null) {
-			throw new UsernameNotFoundException(username + "账号不存在");
+			throw new UsernameNotFoundException(username + "account not exist");
 		}
 		if (sysUser.getStatus().equals("0")) {
 			throw new DisabledException(username + "账号已锁定，请联系管理员！");

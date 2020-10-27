@@ -1,22 +1,20 @@
 package org.qboot.base.service.impl;
 
-import java.util.Date;
-import java.util.List;
-
-import org.qboot.common.utils.i18n.MessageUtil;
+import com.github.pagehelper.PageInfo;
 import org.qboot.base.dao.SysLoginLogDao;
 import org.qboot.base.dto.SysLoginLog;
+import org.qboot.base.dto.SysUser;
 import org.qboot.common.constant.SysConstants;
+import org.qboot.common.service.CrudService;
+import org.qboot.common.utils.i18n.MessageUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import com.github.pagehelper.PageInfo;
-
-import org.qboot.base.dto.SysUser;
-import org.qboot.common.service.CrudService;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 登录日志Service
@@ -45,11 +43,11 @@ public class SysLoginLogService extends CrudService<SysLoginLogDao, SysLoginLog>
 		}
 
         logger.info("保存登录记录：{}", loginLog.toString());
-        loginLog.setUserId(user.getId().toString());
+        loginLog.setUserId(user.getId());
         this.save(loginLog);
 	}
 
-    public void loginLogByLoginId(String status,String userId,String ip,String userAgent,String browser,String deviceName, String area) {
+    public void loginLogByLoginId(String status,Long userId,String ip,String userAgent,String browser,String deviceName, String area) {
 
         SysLoginLog loginLog = initPojo(status, ip, userAgent, browser, deviceName, area, SysConstants.SYS_USER_PWD_STATUS_NORMAL);
         loginLog.setUserId(userId);
@@ -64,8 +62,8 @@ public class SysLoginLogService extends CrudService<SysLoginLogDao, SysLoginLog>
         this.save(loginLog);
     }
 
-	public SysLoginLog findLastLoginInfo(String userId) {
-		Assert.hasLength(userId,MessageUtil.getMessage("sys.response.msg.userIdIsEmpty","用户id 为空"));
+	public SysLoginLog findLastLoginInfo(Long userId) {
+        Assert.notNull(userId, MessageUtil.getMessage("sys.response.msg.userIdIsEmpty","用户id 为空"));
 		SysLoginLog loginLog = new SysLoginLog();
 		loginLog.setPage(1);
 		loginLog.setLimit(2);
@@ -80,6 +78,8 @@ public class SysLoginLogService extends CrudService<SysLoginLogDao, SysLoginLog>
 		}
 		return null;
 	}
+
+
 
     private SysLoginLog initPojo(String status, String ip, String userAgent, String browser, String deviceName, String area, int firstLogin) {
         SysLoginLog loginLog = new SysLoginLog();

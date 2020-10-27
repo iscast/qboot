@@ -115,8 +115,7 @@ public class SysUser extends BaseEntity<Long> {
 	 */
 	private List<String> roleIds;
 	private List<SysMenu> menus;
-	public static final String STATUS_NORMAL = "1";
-	public static final String STATUS_STOP = "0";
+
 	
 	/**
 	 * 通过角色查询用户

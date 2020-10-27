@@ -82,7 +82,7 @@ public class UserController extends BaseController {
 		if(user) {
 			return ResponeModel.error("sys.response.msg.userDuplicate");
 		}
-		sysUser.setStatus(SysUser.STATUS_NORMAL);
+		sysUser.setStatus(SysConstants.SYS_ENABLE);
 		sysUser.setCreateBy(SecurityUtils.getLoginName());
 		
 		int password = new Random().nextInt(999999);
@@ -120,7 +120,7 @@ public class UserController extends BaseController {
 			return ResponeModel.error("sys.response.msg.dataUpdatedAlready");
 		}
 		
-		if (SecurityUtils.isSuperAdmin(sysUser.getLoginName()) && SysUser.STATUS_STOP.equals(sysUser.getStatus())) {
+		if (SecurityUtils.isSuperAdmin(sysUser.getLoginName()) && SysConstants.SYS_DISABLE.equals(sysUser.getStatus())) {
 			return ResponeModel.error("sys.response.msg.superAdminCannotBeInvalid");
 		}
 		//密码为空则不更新
@@ -143,7 +143,7 @@ public class UserController extends BaseController {
 			return ResponeModel.error("sys.response.msg.userDuplicate");
 		}
 		
-		if (SecurityUtils.isSuperAdmin(sysUser.getLoginName()) && SysUser.STATUS_STOP.equals(sysUser.getStatus())) {
+		if (SecurityUtils.isSuperAdmin(sysUser.getLoginName()) && SysConstants.SYS_DISABLE.equals(sysUser.getStatus())) {
 			return ResponeModel.error("sys.response.msg.superAdminCannotBeInvalid");
 		}
 		if(StringUtils.isNotBlank(sysUser.getRoleId())) {

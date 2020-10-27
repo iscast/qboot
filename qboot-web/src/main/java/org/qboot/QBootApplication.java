@@ -12,6 +12,8 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,8 +23,10 @@ import org.springframework.web.bind.annotation.RestController;
  * @author history
  * @date 2018-08-08
  */
-@SpringBootApplication(scanBasePackages= {"org.qboot","com.yoopay"})
-@MapperScan({"org.qboot.**.dao", "com.yoopay.**.dao"})
+@SpringBootApplication
+@ComponentScan(basePackages = {"org.qboot","com"}, includeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION,
+                classes = {org.springframework.web.bind.annotation.RestController.class, org.springframework.stereotype.Controller.class})})
+@MapperScan({"org.qboot.**.dao", "com.**.dao"})
 @EnableTransactionManagement(proxyTargetClass=true)
 @EnableRedissonHttpSession(maxInactiveIntervalInSeconds=2*60*60, keyPrefix="qsession")
 @RestController

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
  * @date 2018-09-11
  */
 @ControllerAdvice
-public class QAccessDeniedHandler implements AccessDeniedHandler{
+public class WebAccessDeniedHandler implements AccessDeniedHandler{
 
 	@ExceptionHandler(AccessDeniedException.class)
 	@Override

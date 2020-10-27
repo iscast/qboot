@@ -97,7 +97,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 					response.getWriter().print(JSON.toJSONString(expired));
 				}
 			}
-		}).accessDeniedHandler(new QAccessDeniedHandler());
+		}).accessDeniedHandler(new WebAccessDeniedHandler());
 	}
 	
 	/**
@@ -114,8 +114,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	 * @throws Exception
 	 */
 	@Bean
-	public QAuthenticationFilter customAuthenticationFilter() throws Exception {
-		QAuthenticationFilter customAuthenticationFilter = new QAuthenticationFilter(adminPath + "/login");
+	public CustomAuthenticationFilter customAuthenticationFilter() throws Exception {
+		CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(adminPath + "/login");
 		customAuthenticationFilter.setAuthenticationManager(this.authenticationManager());
 		customAuthenticationFilter.setAuthenticationSuccessHandler(loginResultHandler());
 		customAuthenticationFilter.setAuthenticationFailureHandler(loginResultHandler());

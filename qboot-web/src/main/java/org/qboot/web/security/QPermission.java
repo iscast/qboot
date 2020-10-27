@@ -5,7 +5,6 @@ import org.springframework.security.core.GrantedAuthority;
 /**
  * <p>Title: QPermission</p>
  * <p>Description: 权限ID</p>
- * 
  * @author history
  * @date 2018-09-08
  */

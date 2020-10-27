@@ -11,7 +11,7 @@ import org.qboot.common.exception.ServiceException;
 import org.qboot.common.service.CrudService;
 import org.qboot.common.task.job.AllowConcurrentExecutionJob;
 import org.qboot.common.task.job.DisallowConcurrentExecutionJob;
-import org.qboot.common.utils.QRedisson;
+import org.qboot.common.utils.RedisTools;
 import org.quartz.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +32,7 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTask> {
 	@Resource
 	private Scheduler scheduler;
 	@Resource
-	private QRedisson qRedisson;
+	private RedisTools redisTools;
 	@Resource
 	SysTaskLogService sysTaskLogService;
 
@@ -105,7 +105,7 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTask> {
 				throw new ServiceException(QExceptionCode.TASK_INIT_ERROR);
 			}
 		}
-		qRedisson.set(newTask.toCacheKeyString(), newTask);
+		redisTools.set(newTask.toCacheKeyString(), newTask);
 		logger.info("任务状态变更成功:{}.",newTask.toString());
 		return  result;
 	}
@@ -124,7 +124,7 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTask> {
 				throw new ServiceException(QExceptionCode.TASK_INIT_ERROR);
 			}
 		}
-		qRedisson.set(task.toCacheKeyString(), task);
+		redisTools.set(task.toCacheKeyString(), task);
 		logger.info("新增任务成功：{}",task.toString());
 		return result;
 	}
@@ -145,7 +145,7 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTask> {
 			logger.error("重置任务异常：{}", e.getMessage());
 			throw new ServiceException(QExceptionCode.TASK_INIT_ERROR);
 		}
-		qRedisson.set(newTask.toCacheKeyString(), newTask);
+		redisTools.set(newTask.toCacheKeyString(), newTask);
 		logger.info("修改任务信息成功：{}.",task.toString());
 		return result;
 	}
@@ -161,7 +161,7 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTask> {
 		if(isRunning(taskId)){
 			throw new ServiceException("当前任务正在执行中!!!");
 		}
-		qRedisson.set(task.toRunNowCacheNoticeString(), task.getId());
+		redisTools.set(task.toRunNowCacheNoticeString(), task.getId());
 		if(task.isEnabled()){ 
 			// 已启用的任务
 			try {
@@ -418,7 +418,7 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTask> {
 		for (SysTask dbTask : tasks) {
 			try {
 				//更新redis中的任务信息缓存
-				qRedisson.set(dbTask.toCacheKeyString(), dbTask);
+				redisTools.set(dbTask.toCacheKeyString(), dbTask);
 				//1.删除已规划的
 				if(dbTask.isDisabled()&&checkExists(dbTask.getId())){
 					deleteScheduleJob(dbTask);
@@ -460,7 +460,7 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTask> {
 		int result = d.updateResult(systask) ;
 		//更新缓存
 		SysTask newTask = this.findById(systask.getId()) ;
-		qRedisson.set(newTask.toCacheKeyString(), newTask);
+		redisTools.set(newTask.toCacheKeyString(), newTask);
 		return  result;
 	}
 	

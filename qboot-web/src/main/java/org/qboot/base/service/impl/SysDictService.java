@@ -4,7 +4,7 @@ import org.qboot.base.dao.SysDictDao;
 import org.qboot.base.dto.SysDict;
 import org.qboot.common.constant.SysConstants;
 import org.qboot.common.service.CrudService;
-import org.qboot.common.utils.QRedisson;
+import org.qboot.common.utils.RedisTools;
 import org.qboot.common.utils.i18n.MessageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ import java.util.List;
 public class SysDictService extends CrudService<SysDictDao, SysDict> {
 
 	@Autowired
-	private QRedisson qRedisson;
+	private RedisTools redisTools;
 
 	public int setStatus(SysDict t) {
 		SysDict sysDict = this.findById(t.getId());
@@ -37,11 +37,11 @@ public class SysDictService extends CrudService<SysDictDao, SysDict> {
 	public List<SysDict> findTypes(String type) {
         Assert.notNull(type, MessageUtil.getMessage("sys.response.msg.typeIsEmpty","type 不能为空"));
         String key = SysConstants.CACHE_PREFIX_DICT_TYPE + type;
-        List<SysDict> sdlist = qRedisson.get(key);
+        List<SysDict> sdlist = redisTools.get(key);
         if(CollectionUtils.isEmpty(sdlist)) {
             sdlist = this.d.findTypes(type);
             if(!CollectionUtils.isEmpty(sdlist)) {
-                qRedisson.set(key, sdlist, 2*60*60);
+                redisTools.set(key, sdlist, 2*60*60);
             }
         }
 		return sdlist;

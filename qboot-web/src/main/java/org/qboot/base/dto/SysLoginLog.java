@@ -24,7 +24,7 @@ public class SysLoginLog extends BaseEntity<String> {
 	 */
 	@NotNull
 	@Length(min = 1, max = 32)
-	private String userId;
+	private Long userId;
 	/**
 	 * 登录状态0:成功;1.密码错误；2.已禁用;3.系统错误
 	 */
@@ -87,15 +87,15 @@ public class SysLoginLog extends BaseEntity<String> {
 	 */
 	private int firstLogin = SysConstants.SYS_USER_PWD_STATUS_NORMAL;
 
-	public String getUserId() {
-		return userId;
-	}
+    public Long getUserId() {
+        return userId;
+    }
 
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
 
-	public Date getLoginTime() {
+    public Date getLoginTime() {
 		return loginTime;
 	}
 

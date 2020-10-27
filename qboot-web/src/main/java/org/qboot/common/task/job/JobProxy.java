@@ -12,7 +12,7 @@ import org.qboot.common.constant.CacheConstants;
 import org.qboot.common.constant.SysConstants;
 import org.qboot.common.exception.QExceptionCode;
 import org.qboot.common.exception.ServiceException;
-import org.qboot.common.utils.QRedisson;
+import org.qboot.common.utils.RedisTools;
 import org.qboot.common.utils.SpringContextHolder;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -47,7 +47,7 @@ public class JobProxy{
 	private SysTaskService sysTaskService;
 	
 	@Autowired
-	private QRedisson qRedisson;
+	private RedisTools redisTools;
 	
 	@SuppressWarnings("unchecked")
 	public void execute(JobExecutionContext jobCtx) throws JobExecutionException {
@@ -61,13 +61,13 @@ public class JobProxy{
 		try {
 			//获取最新任务信息
 			long taskId = sysTask.getId() ;
-			sysTask = qRedisson.get(sysTask.toCacheKeyString()) ;
+			sysTask = redisTools.get(sysTask.toCacheKeyString()) ;
 			if(sysTask == null){
 				sysTask = sysTaskService.findById(taskId) ;
 				logger.warn("未命中缓存:{}", sysTask.toString());
 			}
 			//重新获取到任务信息后,需要判断任务状态是否有变化,从而感知脚本更改状态的情况,注意:脚本变更需要等缓存失效或者守护线程重新规划了变更任务
-			Object runNow = qRedisson.get(sysTask.toRunNowCacheNoticeString()) ;
+			Object runNow = redisTools.get(sysTask.toRunNowCacheNoticeString()) ;
 			if(sysTask.isDisabled()&&null==runNow){
 				logger.warn("任务状态已变更为关闭,拒绝执行此次任务:{}.",sysTask.toString());
 				try {
@@ -80,7 +80,7 @@ public class JobProxy{
 				return ;
 			}else if(runNow!=null){
 				//立即执行通知完成
-				qRedisson.del(sysTask.toRunNowCacheNoticeString()) ;
+				redisTools.del(sysTask.toRunNowCacheNoticeString()) ;
 			}
 			//插入日志
 			logId = insertTaskLog(jobCtx.getFireTime(),sysTask.getId());

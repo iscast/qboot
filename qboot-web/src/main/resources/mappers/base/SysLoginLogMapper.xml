@@ -68,7 +68,7 @@
 	    <if test="userName !=null and userName != ''">
 	    	and u.name like concat('%',#{userName},'%')
 	    </if>
-	    <if test="userId !=null and userId != ''">
+	    <if test="userId !=null">
 	    	and l.user_id = #{userId}
 	    </if>
     </where>

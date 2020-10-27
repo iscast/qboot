@@ -1,13 +1,18 @@
 <div class="layui-card">
     <div class="layui-card-body">
         <div class="layui-form toolbar">
-            用户ID：<input id="userId" name="userId" class="layui-input search-input" type="text" placeholder="输入用户ID"/>&emsp;
-            登录名：<input id="loginName" name="loginName" class="layui-input search-input" type="text" placeholder="输入登录名"/>&emsp;
-        用户名：<input id="userName" name="userName" class="layui-input search-input" type="text" placeholder="输入用户名"/>&emsp;
-        登录时间：<input type="text" id="startDate" name="startDate" class="layui-input search-input" placeholder="开始时间"> - 
-        <input type="text" id="endDate" name="endDate" class="layui-input search-input" placeholder="结束时间">
-        
-        <button id="loginLog-btn-search" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button><br><br>
+            <span class="layui-i18n" i18n-key="sys.form.label.loginId"></span>
+            <input id="userId" name="userId" class="layui-input search-input i18n-input-hint" type="text" i18n-key="sys.form.label.loginId"/>&emsp;
+            <span class="layui-i18n" i18n-key="sys.form.label.loginName"></span>
+            <input id="loginName" name="loginName" class="layui-input search-input i18n-input-hint" type="text" i18n-key="sys.form.label.loginName"/>&emsp;
+            <span class="layui-i18n" i18n-key="sys.form.label.userName"></span>
+            <input id="userName" name="userName" class="layui-input search-input i18n-input-hint" type="text" i18n-key="sys.form.label.userName"/>&emsp;
+            <span class="layui-i18n" i18n-key="sys.form.label.loginTime"></span>
+            <input id="startDate" name="startDate" class="layui-input search-input i18n-input-hint" type="text" i18n-key="sys.form.hint.startTime"/>
+            -
+            <input id="endDate" name="endDate" class="layui-input search-input i18n-input-hint" type="text" i18n-key="sys.form.hint.endTime"/>
+
+            <button id="loginLog-btn-search" class="layui-btn icon-btn layui-btn-search"><i class="layui-icon">&#xe615;</i>搜索</button><br><br>
         </div>
 
         <div id="loginLogLayTable">
@@ -41,23 +46,25 @@
             even: true, //开启隔行背景
             cols: [[
                 {type: 'numbers'},
-                {field: 'userId', sort: true, title: '用户ID'},
-                {field: 'loginName', sort: true, title: '登录名'},
-                {field: 'userName', sort: true, title: '用户名'},
+                {field: 'userId', sort: true, title: msgs['sys.form.label.loginId']},
+                {field: 'loginName', sort: true, title: msgs['sys.form.label.userName']},
+                {field: 'userName', sort: true, title: msgs['sys.form.label.userName']},
                 {field: 'loginTime', sort: true, templet: function (d) {
                     return util.toDateString(d.loginTime);
-                }, title: '登录时间'},
-                {field: 'ip', sort: true, title: 'IP地址'},
+                }, title: msgs['sys.form.label.loginTime']},
+                {field: 'ip', sort: true, title: msgs['sys.form.label.IpAddress']},
                 {field: 'firstLogin', sort: false, templet: function (data){
-                	var vname = '正常';
+                	var vname = msgs['sys.form.label.user.normal'];
                 	if(data.firstLogin == 1){
-                		vname = '初始化密码';
+                		vname = msgs['sys.form.label.user.initPwd'];
                 	}else if(data.firstLogin == 2){
-                		vname = '修改密码';
+                		vname = msgs['sys.form.label.user.editPwd'];
                 	}
                 	return vname;
-                }, title: '状态标识'}
-            ]]
+                }, title: msgs['sys.table.title.status']}
+            ]], done: function(res, curr, count){
+                _i18n.initPage();
+            }
         });
 
         //点击行变色

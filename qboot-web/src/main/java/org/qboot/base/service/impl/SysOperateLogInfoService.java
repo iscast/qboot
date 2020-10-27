@@ -4,7 +4,7 @@ import org.qboot.base.dao.SysOperateLogInfoDao;
 import org.qboot.base.dto.SysOperateLogInfoDto;
 import org.qboot.common.constant.SysConstants;
 import org.qboot.common.service.CrudService;
-import org.qboot.common.utils.QRedisson;
+import org.qboot.common.utils.RedisTools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class SysOperateLogInfoService extends CrudService<SysOperateLogInfoDao, 
 	
 	private  Logger logger = LoggerFactory.getLogger(this.getClass());
 	@Autowired
-	private QRedisson qRedisson;
+	private RedisTools redisTools;
 
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void insertOperationLogInfo(SysOperateLogInfoDto operationLogInfoDto) {
@@ -55,7 +55,7 @@ public class SysOperateLogInfoService extends CrudService<SysOperateLogInfoDao, 
 	@Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
 	public Long findLogIdByUri(String reqUri) {
         String key = SysConstants.CACHE_PREFIX_OPTLOG_URL + reqUri;
-		SysOperateLogInfoDto sol = qRedisson.get(key);
+		SysOperateLogInfoDto sol = redisTools.get(key);
 		if(sol != null) {
 			return sol.getLogId();
 		}
@@ -73,7 +73,7 @@ public class SysOperateLogInfoService extends CrudService<SysOperateLogInfoDao, 
 			this.d.insert(solid);
 			solid = this.d.findByUri(solid).get(0);
 		}
-		qRedisson.set(key, solid, 24*60*60);
+		redisTools.set(key, solid, 24*60*60);
 		return solid.getLogId();
 	}
 	

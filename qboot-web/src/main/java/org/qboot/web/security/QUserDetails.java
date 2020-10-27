@@ -4,13 +4,13 @@ import java.util.Collection;
 import java.util.List;
 
 import org.qboot.base.dto.SysUser;
+import org.qboot.common.constant.SysConstants;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * <p>Title: LoginUser</p>
  * <p>Description: 登录用户详细信息</p>
- * 
  * @author history
  * @date 2018-09-08
  */
@@ -68,7 +68,7 @@ public class QUserDetails implements UserDetails {
 
 	@Override
 	public boolean isEnabled() {
-		return !SysUser.STATUS_STOP.equals(user.getStatus());
+		return !SysConstants.SYS_DISABLE.equals(user.getStatus());
 	}
 
 	public QUser getUser() {
