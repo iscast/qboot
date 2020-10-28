@@ -3,6 +3,7 @@ package org.qboot.base.controller;
 import com.github.pagehelper.PageInfo;
 import org.qboot.base.dto.SysRole;
 import org.qboot.base.service.impl.SysRoleService;
+import org.qboot.common.annotation.AccLog;
 import org.qboot.common.controller.BaseController;
 import org.qboot.web.dto.ResponeModel;
 import org.qboot.web.security.QUser;
@@ -87,7 +88,8 @@ public class RoleController extends BaseController {
 	public ResponeModel qryDeptIdsByRoleId(@RequestParam String roleId) {
 		return ResponeModel.ok(sysRoleService.findDeptIdsByRoleId(roleId));
 	}
-	
+
+    @AccLog
 	@PreAuthorize("hasAuthority('sys:role:save')")
 	@PostMapping("/save")
 	public ResponeModel save(@Validated SysRole sysRole, BindingResult bindingResult) {
@@ -109,6 +111,7 @@ public class RoleController extends BaseController {
 		return ResponeModel.error();
 	}
 
+    @AccLog
 	@PreAuthorize("hasAuthority('sys:role:update')")
 	@PostMapping("/update")
 	public ResponeModel update(@Validated SysRole sysRole, BindingResult bindingResult) {
@@ -124,7 +127,8 @@ public class RoleController extends BaseController {
 		}
 		return ResponeModel.error();
 	}
-	
+
+    @AccLog
 	@PreAuthorize("hasAuthority('sys:role:update')")
 	@PostMapping("/removeUser")
 	public ResponeModel removeUser(@RequestParam List<Long> userIds,String roleId) {
@@ -135,7 +139,8 @@ public class RoleController extends BaseController {
 		}
 		return ResponeModel.error();
 	}
-	
+
+    @AccLog
 	@PreAuthorize("hasAuthority('sys:role:update')")
 	@PostMapping("/addUser")
 	public ResponeModel addUser(@RequestParam List<Long> userIds,String roleId) {
@@ -146,7 +151,8 @@ public class RoleController extends BaseController {
 		}
 		return ResponeModel.error();
 	}
-	
+
+    @AccLog
 	@PreAuthorize("hasAuthority('sys:role:delete')")
 	@PostMapping("/delete")
 	public ResponeModel delete(@RequestParam Serializable id) {

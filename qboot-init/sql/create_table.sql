@@ -128,14 +128,15 @@ CREATE TABLE `sys_menu`
 DROP TABLE IF EXISTS `sys_operate_log`;
 CREATE TABLE `sys_operate_log`
 (
-    `ID`             bigint(20) NOT NULL AUTO_INCREMENT,
-    `LOG_ID`         bigint(32) NOT NULL COMMENT '日志ID.',
-    `REQUEST_URI`    varchar(128)    DEFAULT NULL COMMENT '用户IP.',
-    `REQUEST_IP`     varchar(64)     DEFAULT NULL COMMENT '终端',
-    `REQUEST_USERID` varchar(128)    DEFAULT NULL COMMENT '请求来源.',
-    `REQUEST_DATE`   timestamp  NULL DEFAULT NULL COMMENT '请求开始时间.',
-    `RESPONSE_TIME`  int(8)          DEFAULT NULL COMMENT '请求耗时.',
-    `REQUEST_PARAMS` varchar(4096)    DEFAULT NULL,
+    `ID`              bigint(20) NOT NULL AUTO_INCREMENT,
+    `LOG_ID`          bigint(32) NOT NULL COMMENT '日志ID.',
+    `REQUEST_URI`     varchar(128)    DEFAULT NULL COMMENT '用户IP.',
+    `REQUEST_IP`      varchar(64)     DEFAULT NULL COMMENT '终端',
+    `REQUEST_USERID`  varchar(128)    DEFAULT NULL COMMENT '请求来源.',
+    `REQUEST_DATE`    timestamp       DEFAULT NULL COMMENT '请求开始时间.',
+    `RESPONSE_TIME`   int(8)          DEFAULT NULL COMMENT '请求耗时.',
+    `REQUEST_PARAMS`  varchar(4096)   DEFAULT NULL comment '请求数据',
+    `RESPONSE_PARAMS` varchar(4096)   DEFAULT NULL comment '返回数据',
     PRIMARY KEY (`ID`) USING BTREE,
     KEY `SYS_OPERATION_LOG_USERID` (`REQUEST_USERID`) USING BTREE,
     KEY `SYS_OPERATION_LOG_REQ_DATE` (`REQUEST_DATE`) USING BTREE,

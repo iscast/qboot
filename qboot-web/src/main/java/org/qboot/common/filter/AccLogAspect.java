@@ -34,9 +34,9 @@ import java.util.concurrent.TimeUnit;
  */
 @Aspect
 @Component
-public class OperationLogAspect {
+public class AccLogAspect {
 
-    private static Logger logger = LoggerFactory.getLogger(OperationLogAspect.class);
+    private static Logger logger = LoggerFactory.getLogger(AccLogAspect.class);
 
     private ThreadLocal<SysOperateLogDto> tlocal = new ThreadLocal<>();
     
@@ -58,7 +58,7 @@ public class OperationLogAspect {
     @Autowired
     private SysOperateLogInfoService logInfoService;
 	
-	public OperationLogAspect(){
+	public AccLogAspect(){
 
 		fixedPool =  new ThreadPoolExecutor(concurrentNum, concurrentNum, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>(queueCapacity),new RejectedExecutionHandler() {
 			@Override
@@ -67,14 +67,16 @@ public class OperationLogAspect {
 				logger.warn("Exceeded the queue of operation log capacity...");
 			}
 		});
-		
+
 	}
 
-    @Pointcut("execution(public * org.qboot..controller.*.*(..))  || execution(* com..controller.*Controller.*(..))")
+    @Pointcut("@annotation(org.qboot.common.annotation.AccLog)")
     public void webRequestLog() { }
 
     @Before("webRequestLog()")
     public void doBefore(JoinPoint joinPoint) {
+
+        SysOperateLogDto optLog = null;
         try {
             long beginTime = System.currentTimeMillis();
 
@@ -100,7 +102,7 @@ public class OperationLogAspect {
             }
             paramSB.append("}");
 
-            SysOperateLogDto optLog = new SysOperateLogDto();
+            optLog = new SysOperateLogDto();
             optLog.setRequestUri(uri);
             optLog.setBeginTime(beginTime);
             optLog.setRequestDate(new Date());
@@ -114,9 +116,12 @@ public class OperationLogAspect {
                 tlocal.set(optLog);
             }
 
-            logger.info("operateLog_doBefore={}", optLog.toString());
         } catch (Exception e) {
-            logger.error("***opt request log fail doBefore()***", e);
+            if(null != optLog) {
+                logger.error("acc log fail before request, optLog:{}", optLog.toString(), e);
+            } else {
+                logger.error("acc log fail before request  ", e);
+            }
         }
     }
 
@@ -130,18 +135,14 @@ public class OperationLogAspect {
         		optLog.setResponseTime((System.currentTimeMillis() - optLog.getBeginTime()));
             	Long logId = logInfoService.findLogIdByUri(optLog.getRequestUri());
             	optLog.setLogId(logId);
-            	
-        		// 放入线程池
-        		logger.debug("operateLog_doAfter Returning OperationLog queue used capacity:{}, remaining capacity:{}",
-                        fixedPool.getQueue().size(), fixedPool.getQueue().remainingCapacity());
+        		logger.debug("operateLog_doAfter Returning OperationLog queue used capacity:{}, remaining capacity:{}, optLog:{}",
+                        optLog.toString(), fixedPool.getQueue().size(), fixedPool.getQueue().remainingCapacity());
         		fixedPool.execute(new LogTask(optLog));
-
         	}
         } catch (Exception e) {
-            logger.error("***opt request log fail doAfterReturning()***", e);
+            logger.error("acc log fail After Returning ", e);
         }
     }
-
 
     /**
      * get request user ip
@@ -189,8 +190,8 @@ public class OperationLogAspect {
 	    @Override
 	    public void run() {
 	    	try{
-	    	    logger.info("OperLogReceiverService save Log: {}", optLog);
 	            receiverService.receive(optLog);
+	    	    logger.info("OperLogReceiverService  LogId: [{}] saveed", optLog.getLogId());
 	    	}catch(Exception e){
 	    		logger.error("OperLogReceiverService save log error:{}", e.getMessage());
 	    	}

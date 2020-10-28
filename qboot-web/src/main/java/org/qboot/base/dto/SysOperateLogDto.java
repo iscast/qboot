@@ -7,7 +7,6 @@ import org.qboot.common.entity.BaseEntity;
 /**
  * <p>Title: SysOperateLogDto</p>
  * <p>Description: 操作日志实体</p>
- * 
  * @author history
  * @date 2018-08-08
  */
@@ -52,6 +51,11 @@ public class SysOperateLogDto extends BaseEntity<Long>{
 	 * 请求参数
 	 */
 	private String requestParams;
+
+    /**
+     * 返回参数
+     */
+    private String responseParams;
 	
 	/**
 	 * 请求记录开始时间
@@ -156,11 +160,19 @@ public class SysOperateLogDto extends BaseEntity<Long>{
 		this.endDate = endDate;
 	}
 
-	@Override
+    public String getResponseParams() {
+        return responseParams;
+    }
+
+    public void setResponseParams(String responseParams) {
+        this.responseParams = responseParams;
+    }
+
+        @Override
 	public String toString() {
 		return "SysOperateLogDto [logId=" + logId + ", uriName=" + uriName + ", requestUri=" + requestUri
 				+ ", requestIP=" + requestIP + ", requestUserId=" + requestUserId + ", requestDate=" + requestDate
-				+ ", responseTime=" + responseTime + ", requestParams=" + requestParams + "]";
+				+ ", responseTime=" + responseTime + ", requestParams=" + requestParams + ", responseParams='" + responseParams  + "']";
 	}
 
 	

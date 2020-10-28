@@ -19,7 +19,6 @@ import org.springframework.util.Assert;
  * <p>
  * Description: 安全登录
  * </p>
- * 
  * @author history
  * @date 2018-08-08
  */
@@ -67,10 +66,8 @@ public class LoginSecurityService extends BaseService {
 	}
 
 	/**
-	 * 清除登录用户session
-	 * 
+	 * clear login user session
 	 * @param loginName
-	 *            loginName
 	 */
 	public void clearUserSessions(String loginName) {
 		logger.info("[强制退出] loginName={}", loginName);
@@ -83,11 +80,8 @@ public class LoginSecurityService extends BaseService {
 
 	/**
 	 * 设置用户名与session对应的缓存集合
-	 * 
 	 * @param loginName
-	 *            loginName
 	 * @param sessionId
-	 *            sessionId
 	 */
 	public void setUserSessionId(String loginName, String sessionId) {
 		RSet<String> set = redissonClient.getSet(USER_NAME_SESSION_ID_PREFIX + loginName);

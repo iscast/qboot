@@ -3,6 +3,7 @@ package org.qboot.base.controller;
 import org.apache.commons.lang3.StringUtils;
 import org.qboot.base.dto.SysDept;
 import org.qboot.base.service.impl.SysDeptService;
+import org.qboot.common.annotation.AccLog;
 import org.qboot.common.constant.SysConstants;
 import org.qboot.common.controller.BaseController;
 import org.qboot.common.utils.TreeHelper;
@@ -82,7 +83,8 @@ public class DeptController extends BaseController {
 		}
 		return ResponeModel.error();
 	}
-	
+
+    @AccLog
 	@PreAuthorize("hasAuthority('sys:dept:save')")
 	@PostMapping("/save")
 	public ResponeModel save(@Validated SysDept sysDept, BindingResult bindingResult) {
@@ -97,7 +99,8 @@ public class DeptController extends BaseController {
 		}
 		return ResponeModel.error();
 	}
-	
+
+    @AccLog
 	@PreAuthorize("hasAuthority('sys:dept:update')")
 	@PostMapping("/update")
 	public ResponeModel update(@Validated SysDept sysDept, BindingResult bindingResult) {
@@ -113,6 +116,7 @@ public class DeptController extends BaseController {
 		return ResponeModel.error();
 	}
 
+    @AccLog
 	@PreAuthorize("hasAuthority('sys:dept:delete')")
 	@PostMapping("/delete")
 	public ResponeModel delete(@RequestParam Serializable id) {

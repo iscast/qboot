@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.qboot.base.dto.SysTask;
 import org.qboot.base.service.impl.SysTaskService;
+import org.qboot.common.annotation.AccLog;
 import org.qboot.common.controller.BaseController;
 import org.qboot.common.exception.ServiceException;
 import org.qboot.web.dto.ResponeModel;
@@ -42,7 +43,8 @@ public class TaskController extends BaseController {
 		SysTask result = sysTaskService.findById(sysTask.getId()) ;
 		return ResponeModel.ok(result);
 	}
-	
+
+    @AccLog
 	@PreAuthorize("hasAuthority('sys:task:save')")
 	@PostMapping("/save")
 	public ResponeModel save(SysTask sysTask) {
@@ -54,7 +56,8 @@ public class TaskController extends BaseController {
 		sysTaskService.save(sysTask) ;
 		return ResponeModel.ok();
 	}
-	
+
+    @AccLog
 	@PreAuthorize("hasAuthority('sys:task:edit')")
 	@PostMapping("/updateSelect")
 	public ResponeModel updateSelect(SysTask sysTask) {
@@ -62,7 +65,8 @@ public class TaskController extends BaseController {
 		sysTaskService.updateById(sysTask) ;
 		return ResponeModel.ok();
 	}
-	
+
+    @AccLog
 	@PreAuthorize("hasAuthority('sys:task:edit')")
 	@PostMapping("/updateStatus")
 	public ResponeModel updateStatus(SysTask sysTask) {

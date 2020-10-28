@@ -7,6 +7,7 @@ import org.qboot.base.dto.GenColumnInfo;
 import org.qboot.base.dto.SysGen;
 import org.qboot.base.service.impl.SysGenService;
 import org.qboot.base.vo.SysProjectGenVo;
+import org.qboot.common.annotation.AccLog;
 import org.qboot.common.constant.SysConstants;
 import org.qboot.common.controller.BaseController;
 import org.qboot.common.utils.CodecUtils;
@@ -46,6 +47,7 @@ public class SysGenController extends BaseController {
 		return ResponeModel.ok(sysGen);
 	}
 
+    @AccLog
 	@PreAuthorize("hasAuthority('sys:gen:save')")
 	@PostMapping("/save")
 	public ResponeModel save(@Validated @RequestBody SysGen sysGen, BindingResult bindingResult) {
@@ -62,6 +64,7 @@ public class SysGenController extends BaseController {
 		return ResponeModel.ok(cnt);
 	}
 
+    @AccLog
 	@PreAuthorize("hasAuthority('sys:gen:update')")
 	@PostMapping("/update")
 	public ResponeModel update(@Validated @RequestBody SysGen sysGen, BindingResult bindingResult) {
@@ -72,6 +75,7 @@ public class SysGenController extends BaseController {
 		return ResponeModel.ok(cnt);
 	}
 
+    @AccLog
 	@PreAuthorize("hasAuthority('sys:gen:delete')")
 	@PostMapping("/delete")
 	public ResponeModel delete(@RequestParam Serializable id) {

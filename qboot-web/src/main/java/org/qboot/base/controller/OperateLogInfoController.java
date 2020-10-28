@@ -3,6 +3,7 @@ package org.qboot.base.controller;
 import com.github.pagehelper.PageInfo;
 import org.qboot.base.dto.SysOperateLogInfoDto;
 import org.qboot.base.service.impl.SysOperateLogInfoService;
+import org.qboot.common.annotation.AccLog;
 import org.qboot.common.controller.BaseController;
 import org.qboot.web.dto.ResponeModel;
 import org.qboot.web.security.SecurityUtils;
@@ -43,7 +44,8 @@ public class OperateLogInfoController extends BaseController {
 		SysOperateLogInfoDto logInfoDto = operationLogInfoService.findById(id);
 		return ResponeModel.ok(logInfoDto);
 	}
-	
+
+    @AccLog
 	@PreAuthorize("hasAuthority('sys:operateinfo:save')")
 	@PostMapping("/save")
 	public ResponeModel save(@Validated SysOperateLogInfoDto logInfoDto, BindingResult bindingResult) {
@@ -58,7 +60,8 @@ public class OperateLogInfoController extends BaseController {
 		}
 		return ResponeModel.error();
 	}
-	
+
+    @AccLog
 	@PreAuthorize("hasAuthority('sys:operateinfo:update')")
 	@PostMapping("/update")
 	public ResponeModel update(@Validated SysOperateLogInfoDto logInfoDto,BindingResult bindingResult) {
@@ -73,7 +76,8 @@ public class OperateLogInfoController extends BaseController {
 		}
 		return ResponeModel.error();
 	}
-	
+
+    @AccLog
 	@PreAuthorize("hasAuthority('sys:operateinfo:delete')")
 	@PostMapping("/delete")
 	public ResponeModel delete(@RequestParam Serializable id) {

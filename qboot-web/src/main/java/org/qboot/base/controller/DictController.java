@@ -3,6 +3,7 @@ package org.qboot.base.controller;
 import com.github.pagehelper.PageInfo;
 import org.qboot.base.dto.SysDict;
 import org.qboot.base.service.impl.SysDictService;
+import org.qboot.common.annotation.AccLog;
 import org.qboot.common.constant.SysConstants;
 import org.qboot.common.controller.BaseController;
 import org.qboot.web.dto.ResponeModel;
@@ -46,7 +47,8 @@ public class DictController extends BaseController {
 		SysDict sysDict = sysDictService.findById(id);
 		return ResponeModel.ok(sysDict);
 	}
-	
+
+    @AccLog
 	@PreAuthorize("hasAuthority('sys:dict:save')")
 	@PostMapping("/save")
 	public ResponeModel save(@Validated SysDict sysDict, BindingResult bindingResult) {
@@ -62,7 +64,8 @@ public class DictController extends BaseController {
 		}
 		return ResponeModel.error();
 	}
-	
+
+    @AccLog
 	@PreAuthorize("hasAuthority('sys:dict:update')")
 	@PostMapping("/update")
 	public ResponeModel update(@Validated SysDict sysDict,BindingResult bindingResult) {
@@ -73,7 +76,8 @@ public class DictController extends BaseController {
 		}
 		return ResponeModel.error();
 	}
-	
+
+    @AccLog
 	@PreAuthorize("hasAuthority('sys:dict:update')")
 	@PostMapping("/setStatus")
 	public ResponeModel setStatus(@RequestParam String id, @RequestParam String status) {
@@ -88,7 +92,8 @@ public class DictController extends BaseController {
 		}
 		return ResponeModel.error();
 	}
-	
+
+    @AccLog
 	@PreAuthorize("hasAuthority('sys:dict:delete')")
 	@PostMapping("/delete")
 	public ResponeModel delete(@RequestParam String id) {

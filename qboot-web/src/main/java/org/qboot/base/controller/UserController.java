@@ -8,6 +8,7 @@ import org.qboot.base.dto.SysUser;
 import org.qboot.base.service.impl.LoginSecurityService;
 import org.qboot.base.service.impl.SysRoleService;
 import org.qboot.base.service.impl.SysUserService;
+import org.qboot.common.annotation.AccLog;
 import org.qboot.common.constant.SysConstants;
 import org.qboot.common.controller.BaseController;
 import org.qboot.common.utils.IpUtils;
@@ -45,7 +46,7 @@ public class UserController extends BaseController {
 	private SysRoleService sysRoleService;
 	@Autowired
 	private LoginSecurityService loginSecurityService;
-	
+
 	@PreAuthorize("hasAuthority('sys:user:qry')")
 	@GetMapping("/qryPage")
 	public ResponeModel qryPage(SysUser user, BindingResult bindingResult) {
@@ -74,7 +75,8 @@ public class UserController extends BaseController {
 		request.getSession().setAttribute("user_update_id_"+request.getRequestedSessionId(), id);
 		return ResponeModel.ok(sysUser);
 	}
-	
+
+    @AccLog
 	@PreAuthorize("hasAuthority('sys:user:save')")
 	@PostMapping("/save")
 	public ResponeModel save(@Validated SysUser sysUser, BindingResult bindingResult) {
@@ -103,7 +105,8 @@ public class UserController extends BaseController {
 		return ResponeModel.error();
 		
 	}
-	
+
+    @AccLog
 	@PreAuthorize("hasAuthority('sys:user:update')")
 	@PostMapping("/update")
 	public ResponeModel update(@Validated SysUser sysUser, BindingResult bindingResult, HttpServletRequest request) {
@@ -134,7 +137,9 @@ public class UserController extends BaseController {
 		loginSecurityService.clearUserSessions(sysUser.getLoginName());
 		return ResponeModel.error();
 	}
-	
+
+
+    @AccLog
 	@PreAuthorize("hasAuthority('sys:user:update')")
 	@PostMapping("/updateSelect")
 	public ResponeModel updateSelect(@Validated SysUser sysUser, BindingResult bindingResult) {
@@ -158,7 +163,8 @@ public class UserController extends BaseController {
 		}
 		return ResponeModel.error();
 	}
-	
+
+    @AccLog
 	@PreAuthorize("hasAuthority('sys:user:delete')")
 	@PostMapping("/delete")
 	public ResponeModel delete(@RequestParam Long id) {
@@ -176,7 +182,8 @@ public class UserController extends BaseController {
 		}
 		return ResponeModel.error();
 	}
-	
+
+    @AccLog
 	@PreAuthorize("hasAuthority('sys:user:update')")
 	@PostMapping("/setStatus")
 	public ResponeModel setStatus(@RequestParam Long id, @RequestParam String status) {
@@ -198,7 +205,8 @@ public class UserController extends BaseController {
 		}
 		return ResponeModel.error();
 	}
-	
+
+    @AccLog
 	@PreAuthorize("hasAuthority('sys:user:update')")
 	@PostMapping("/initPwd")
 	public ResponeModel initPwd(@RequestParam Long id, HttpServletRequest request) {
@@ -224,7 +232,8 @@ public class UserController extends BaseController {
 		}
 		return ResponeModel.error();
 	}
-	
+
+    @AccLog
 	@PostMapping("/resetPwd")
 	public ResponeModel resetPwd(@RequestParam String oldPsw, @RequestParam String newPsw, HttpServletRequest request) {
 		SysUser user = sysUserService.findById(SecurityUtils.getUserId());
@@ -252,6 +261,7 @@ public class UserController extends BaseController {
 	 * @param id
 	 * @return
 	 */
+    @AccLog
 	@PreAuthorize("hasAuthority('sys:user:update')")
 	@PostMapping("/unlock")
 	public ResponeModel setStatus(@RequestParam Long id) {

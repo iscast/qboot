@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.qboot.base.dto.SysParamType;
 import org.qboot.base.service.impl.SysParamTypeService;
 import org.qboot.base.service.impl.SysUserService;
+import org.qboot.common.annotation.AccLog;
 import org.qboot.common.controller.BaseController;
 import org.qboot.web.dto.ResponeModel;
 import org.qboot.web.security.SecurityUtils;
@@ -64,7 +65,8 @@ public class ParamTypeController extends BaseController {
 		SysParamType sysParam = sysParamService.findById(id);
 		return ResponeModel.ok(sysParam);
 	}
-	
+
+    @AccLog
 	@PreAuthorize("hasAuthority('sys:param:save')")
 	@PostMapping("/save")
 	public ResponeModel save(@Validated SysParamType sysParam, BindingResult bindingResult, HttpServletRequest request) {
@@ -83,7 +85,8 @@ public class ParamTypeController extends BaseController {
 		}
 		return ResponeModel.error();
 	}
-	
+
+    @AccLog
 	@PreAuthorize("hasAuthority('sys:param:update')")
 	@PostMapping("/update")
 	public ResponeModel update(@Validated SysParamType sysParam, BindingResult bindingResult, HttpServletRequest request) {
@@ -101,7 +104,8 @@ public class ParamTypeController extends BaseController {
 		}
 		return ResponeModel.error();
 	}
-	
+
+    @AccLog
 	@PreAuthorize("hasAuthority('sys:param:delete')")
 	@PostMapping("/delete")
 	public ResponeModel delete(@RequestParam Serializable id, @RequestParam Integer phyFlag) {

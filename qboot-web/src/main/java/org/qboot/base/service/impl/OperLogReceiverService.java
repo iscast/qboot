@@ -103,24 +103,24 @@ public class OperLogReceiverService extends CrudService<SysOperateLogDao, SysOpe
 					operLogList.add(operationLogDto);
 				}
 
-				// 如果队列中没有日志，休眠一秒
+				// 如果队列中没有日志，休眠五秒
 				if (operationLogDto == null) { 
 					try {
-						TimeUnit.SECONDS.sleep(1);
-						sleepSeconds++;
+						TimeUnit.SECONDS.sleep(5);
+						sleepSeconds +=5;
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
 				} 
 				
-				if(sleepSeconds == 5*60){
+				if(sleepSeconds >= 60){
 					sleepSeconds = 0L;
 					isExec = true;
 				}
-				//日志满了阀值或者等待时间5分钟入库一次
+				//日志满了阀值或者等待时间1分钟入库一次
 				if(isExec || operLogList.size() >= batchInsertSize) {
 					fixedPool.execute(new LogBatchInsertTask(operLogList));
-					operLogList = new ArrayList<SysOperateLogDto>();
+					operLogList = new ArrayList<>();
 					isExec = false;
 				}
 			}

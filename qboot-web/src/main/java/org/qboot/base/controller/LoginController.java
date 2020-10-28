@@ -5,6 +5,7 @@ import org.qboot.base.dto.SysUser;
 import org.qboot.base.service.impl.SysLoginLogService;
 import org.qboot.base.service.impl.SysMenuService;
 import org.qboot.base.service.impl.SysUserService;
+import org.qboot.common.annotation.AccLog;
 import org.qboot.common.controller.BaseController;
 import org.qboot.common.utils.TreeHelper;
 import org.qboot.web.dto.ResponeModel;
@@ -86,6 +87,7 @@ public class LoginController extends BaseController {
 		return ResponeModel.ok();
 	}
 
+    @AccLog
 	@PostMapping("/updatePwd")
 	public ResponeModel updatePwd(@RequestParam String password, @RequestParam String oldPassword) {
 		Long userId = SecurityUtils.getUserId();

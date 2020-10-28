@@ -6,6 +6,7 @@ import org.qboot.base.dto.SysMenu;
 import org.qboot.base.dto.SysRole;
 import org.qboot.base.service.impl.SysMenuService;
 import org.qboot.base.service.impl.SysRoleService;
+import org.qboot.common.annotation.AccLog;
 import org.qboot.common.constant.SysConstants;
 import org.qboot.common.controller.BaseController;
 import org.qboot.common.entity.AuthTreeEntity;
@@ -128,7 +129,8 @@ public class MenuController extends BaseController {
 		SysMenu sysMenu = sysMenuService.findById(id);
 		return ResponeModel.ok(sysMenu);
 	}
-	
+
+    @AccLog
 	@PreAuthorize("hasAuthority('sys:menu:save')")
 	@PostMapping("/save")
 	public ResponeModel save(@Validated SysMenu sysMenu, BindingResult bindingResult) {
@@ -152,7 +154,8 @@ public class MenuController extends BaseController {
 			return ResponeModel.error();
 		}
 	}
-	
+
+    @AccLog
 	@PreAuthorize("hasAuthority('sys:menu:update')")
 	@PostMapping("/update")
 	public ResponeModel update(@Validated SysMenu sysMenu, BindingResult bindingResult) {
@@ -175,7 +178,8 @@ public class MenuController extends BaseController {
 			return ResponeModel.error();
 		}
 	}
-	
+
+    @AccLog
 	@PreAuthorize("hasAuthority('sys:menu:delete')")
 	@GetMapping("/delete")
 	public ResponeModel delete(@RequestParam Serializable id) {
@@ -186,6 +190,8 @@ public class MenuController extends BaseController {
 			return ResponeModel.error();
 		}
 	}
+
+    @AccLog
 	@PreAuthorize("hasAuthority('sys:menu:save')")
 	@PostMapping("/batchSave")
 	public ResponeModel batchSave(@RequestBody List<SysMenu> list ) {

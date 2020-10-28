@@ -3,6 +3,7 @@ package org.qboot.base.controller;
 import com.github.pagehelper.PageInfo;
 import org.qboot.base.dto.SysParamClass;
 import org.qboot.base.service.impl.SysParamClassService;
+import org.qboot.common.annotation.AccLog;
 import org.qboot.common.controller.BaseController;
 import org.qboot.web.dto.ResponeModel;
 import org.qboot.web.security.SecurityUtils;
@@ -44,7 +45,8 @@ public class ParamClassController extends BaseController {
 		SysParamClass sysParam = sysParamService.findById(id);
 		return ResponeModel.ok(sysParam);
 	}
-	
+
+    @AccLog
 	@PreAuthorize("hasAuthority('sys:param:save')")
 	@PostMapping("/save")
 	public ResponeModel save(@Validated SysParamClass sysParam, BindingResult bindingResult) {
@@ -57,7 +59,8 @@ public class ParamClassController extends BaseController {
 		}
 		return ResponeModel.error();
 	}
-	
+
+    @AccLog
 	@PreAuthorize("hasAuthority('sys:param:update')")
 	@PostMapping("/update")
 	public ResponeModel update(@Validated SysParamClass sysParam, BindingResult bindingResult) {
@@ -68,7 +71,8 @@ public class ParamClassController extends BaseController {
 		}
 		return ResponeModel.error();
 	}
-	
+
+    @AccLog
 	@PreAuthorize("hasAuthority('sys:param:delete')")
 	@PostMapping("/delete")
 	public ResponeModel delete(@RequestParam Serializable id, @RequestParam Integer phyFlag) {
@@ -83,6 +87,7 @@ public class ParamClassController extends BaseController {
 		return ResponeModel.error();
 	}
 
+    @AccLog
 	@PreAuthorize("hasAuthority('sys:param:update')")
 	@PostMapping("/visible")
 	public ResponeModel visible(@RequestParam Serializable id, @RequestParam Integer visible) {
