@@ -1,16 +1,15 @@
 package org.qboot.base.service.impl;
 
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
-
 import org.qboot.common.service.BaseService;
 import org.qboot.common.utils.RedisTools;
-import org.qboot.common.utils.i18n.MessageUtil;
 import org.redisson.api.RSet;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -35,7 +34,7 @@ public class LoginSecurityService extends BaseService {
 	private RedissonClient redissonClient;
 
 	public void unLock(String loginName) {
-		Assert.hasLength(loginName, MessageUtil.getMessage("sys.response.msg.loginNameIsEmpty", "loginName 为空"));
+		Assert.hasLength(loginName, "login Name IsEmpty");
 		redisTools.del(LOCK_PREFIX + loginName);
 	}
 

@@ -28,13 +28,13 @@ public class SysUserService extends CrudService<SysUserDao, SysUser> {
     private SysLoginLogService sysLoginLogService;
 
 	public SysUser findByLoginName(String loginName) {
-		Assert.hasLength(loginName, "loginName 为空");
+		Assert.hasLength(loginName, "loginNameIsEmpty");
 		List<SysUser> list = this.d.findByLoginName(loginName);
 		return list.isEmpty() ? null : list.get(0);
 	}
 	
 	public boolean checkLoginName(Long userId, String loginName) {
-		Assert.hasLength(loginName, "loginName 为空");
+		Assert.hasLength(loginName, "loginNameIsEmpty");
 		List<SysUser> list = this.d.findByLoginName(loginName);
 		
 		if(userId != null && list.isEmpty()) {
@@ -71,13 +71,13 @@ public class SysUserService extends CrudService<SysUserDao, SysUser> {
 	@Override
 	public int update(SysUser t) {
 		SysUser sysUser = this.findById(t.getId());
-		Assert.notNull(sysUser, MessageUtil.getMessage("sys.response.msg.userNotExists","用户不存在"));
+		Assert.notNull(sysUser, "userNotExists");
 		return super.update(t);
 	}
 	
 	public int updateUserRoleSelective(SysUser t) {
 		SysUser sysUser = this.findById(t.getId());
-		Assert.notNull(sysUser,MessageUtil.getMessage("sys.response.msg.userNotExists","用户不存在"));
+		Assert.notNull(sysUser, "userNotExists");
 		int cnt = super.update(t);
 		if(cnt > 0) {
 			// 删除user关联的所有role
@@ -89,7 +89,7 @@ public class SysUserService extends CrudService<SysUserDao, SysUser> {
 	
 	public int updateSelect(SysUser t) {
 		SysUser sysUser = this.findById(t.getId());
-		Assert.notNull(sysUser,MessageUtil.getMessage("sys.response.msg.userNotExists","用户不存在"));
+		Assert.notNull(sysUser, "userNotExists");
 
 		t.setVersion(sysUser.getVersion());
 		int cnt = this.d.updateSelect(t);
@@ -120,22 +120,22 @@ public class SysUserService extends CrudService<SysUserDao, SysUser> {
 	}
 	
 	public String encryptPwd(String password,String salt) {
-		Assert.hasLength(password,MessageUtil.getMessage("sys.response.msg.pwdIsEmpty","密码为空"));
-		Assert.hasLength(salt,"盐为空");
+		Assert.hasLength(password, "pwdIsEmpty");
+		Assert.hasLength(salt,"saltIsEmpty");
 		return CodecUtils.sha256(password + salt);
 	}
 	
 	public boolean validatePwd(String password, Long userId) {
-		Assert.hasLength(password,MessageUtil.getMessage("sys.response.msg.pwdIsEmpty","密码为空"));
-		Assert.notNull(userId,MessageUtil.getMessage("sys.response.msg.userIdIsEmpty","用户id为空"));
+		Assert.hasLength(password, "pwdIsEmpty");
+		Assert.notNull(userId, "userIdIsEmpty");
 		SysUser user = this.findById(userId);
-		Assert.notNull(user,MessageUtil.getMessage("sys.response.msg.userNotExists","用户不存在"));
+		Assert.notNull(user, "userNotExists");
 		return user.getPassword().equals(CodecUtils.sha256(password + user.getSalt()));
 	}
 	
 	public int initPwd(SysUser t, int initFlag, String ip) {
 		SysUser sysUser = this.findById(t.getId());
-		Assert.notNull(sysUser,MessageUtil.getMessage("sys.response.msg.userNotExists","用户不存在"));
+		Assert.notNull(sysUser, "userNotExists");
 		sysUser.setPassword(encryptPwd(t.getPassword(), sysUser.getSalt()));
 		if(initFlag == SysConstants.SYS_USER_PWD_STATUS_CHANGED) {
 			sysUser.setFldN1(1);
@@ -150,7 +150,7 @@ public class SysUserService extends CrudService<SysUserDao, SysUser> {
 	
 	public int setStatus(SysUser t) {
 		SysUser sysUser = this.findById(t.getId());
-		Assert.notNull(sysUser,MessageUtil.getMessage("sys.response.msg.userNotExists","用户不存在"));
+		Assert.notNull(sysUser, "userNotExists");
 		sysUser.setStatus(t.getStatus());;
 		return d.setStatus(sysUser);
 	}

@@ -26,7 +26,7 @@ public class SysParamTypeService extends CrudService<SysParamTypeDao, SysParamTy
     RedisTools redisTools;
 
 	public SysParamType findByParamKey(String paramKey) {
-		Assert.hasLength("paramKey", MessageUtil.getMessage("sys.response.msg.paramKeyIsEmpty","paramKey不能为空"));
+		Assert.hasLength("paramKey", "paramKeyIsEmpty");
 		SysParamType sysParam = new SysParamType();
 		sysParam.setParamTypeClass(paramKey);
 		List<SysParamType> list = this.findList(sysParam);
@@ -38,7 +38,7 @@ public class SysParamTypeService extends CrudService<SysParamTypeDao, SysParamTy
 	}
 	
 	public List<SysParamType> findParamTypes(String paramKey) {
-		Assert.hasLength("paramKey",MessageUtil.getMessage("sys.response.msg.paramKeyIsEmpty","paramKey不能为空"));
+		Assert.hasLength("paramKey", "paramKeyIsEmpty");
         String key = SysConstants.CACHE_PREFIX_PARAMTYPE_KEY + paramKey;
 		List<SysParamType> list = redisTools.get(key);
 		if(!CollectionUtils.isEmpty(list)){

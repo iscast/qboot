@@ -59,13 +59,13 @@ public class LoginController extends BaseController {
 		if(sysUser != null) {
 			return ResponeModel.ok(sysUser);
 		}else {
-			return ResponeModel.error("sys.response.msg.failToFindUserInfo");
+			return ResponeModel.error("failToFindUserInfo");
 		}
 	}
 
 	@PostMapping("/updateInfo")
 	public ResponeModel updateInfo(SysUser user) {
-		Assert.hasLength(user.getName(), "sys.response.msg.nameIsEmpty");
+		Assert.hasLength(user.getName(), "userNameIsEmpty");
 		SysUser sysUser = new SysUser();
 		sysUser.setPhoto(user.getPhoto());
 		sysUser.setName(user.getName());
@@ -81,7 +81,7 @@ public class LoginController extends BaseController {
     	if (!SecurityUtils.isSuperAdmin(SecurityUtils.getLoginName())) {
     		boolean firstLogin = sysUserService.selectFirstLoginUser(SecurityUtils.getUserId());
         	if(firstLogin) {
-        		return ResponeModel.error("sys.response.msg.loginFirstTimeHint");
+        		return ResponeModel.error("loginFirstTimeHint");
         	}
 		}
 		return ResponeModel.ok();
@@ -92,7 +92,7 @@ public class LoginController extends BaseController {
 	public ResponeModel updatePwd(@RequestParam String password, @RequestParam String oldPassword) {
 		Long userId = SecurityUtils.getUserId();
 		if (!sysUserService.validatePwd(oldPassword, userId)) {
-			return ResponeModel.error("sys.response.msg.originalPasswordIncorrect");
+			return ResponeModel.error("originalPasswordIncorrect");
 		}
 		SysUser sysUser = new SysUser();
 		sysUser.setId(userId);
@@ -105,7 +105,7 @@ public class LoginController extends BaseController {
 	public ResponeModel switchLanguage(@RequestParam String lang){
 		Long userId = SecurityUtils.getUserId();
 		if (StringUtils.isEmpty(lang)) {
-			return ResponeModel.error("sys.response.msg.langIncorrect");
+			return ResponeModel.error("langIncorrect");
 		}
 		SysUser sysUser = new SysUser();
 		sysUser.setId(userId);

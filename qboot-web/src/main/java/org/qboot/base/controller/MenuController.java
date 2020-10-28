@@ -136,7 +136,7 @@ public class MenuController extends BaseController {
 	public ResponeModel save(@Validated SysMenu sysMenu, BindingResult bindingResult) {
 		SysMenu menu = sysMenuService.findByPermission(sysMenu.getPermission());
 		if(menu != null) {
-			return ResponeModel.error("sys.response.msg.authDuplicate");
+			return ResponeModel.error("authDuplicate");
 		}
 		
 		SysMenu parent = null;
@@ -161,7 +161,7 @@ public class MenuController extends BaseController {
 	public ResponeModel update(@Validated SysMenu sysMenu, BindingResult bindingResult) {
 		SysMenu menu = sysMenuService.findByPermission(sysMenu.getPermission());
 		if(menu != null && !String.valueOf(menu.getId()).equals(sysMenu.getId())) {
-			return ResponeModel.error("sys.response.msg.authDuplicate");
+			return ResponeModel.error("authDuplicate");
 		}
 		
 		SysMenu parent = null;
@@ -212,7 +212,7 @@ public class MenuController extends BaseController {
 			if(sysMenu != null) {
 				if(sysMenu.getPermission().equals("sys:menu") || sysMenu.getPermission().equals("sys:menu:save")  || sysMenu.getPermission().equals("sys:menu:update") 
 						|| sysMenu.getPermission().equals("sys:menu:delete") || sysMenu.getPermission().equals("sys:menu:qry")) {
-					return ResponeModel.error("sys.response.msg.cannotDisableMenu");
+					return ResponeModel.error("cannotDisableMenu");
 				}
 				sysMenu.setIsShow(isShow);
 				int cnt = sysMenuService.changeShowFlag(id, isShow);

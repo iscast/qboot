@@ -19,7 +19,6 @@ import org.qboot.common.service.CrudService;
 /**
  * <p>Title: SysMenuService</p>
  * <p>Description: 菜单service</p>
- * 
  * @author history
  * @date 2018-08-08
  */
@@ -27,7 +26,7 @@ import org.qboot.common.service.CrudService;
 public class SysMenuService extends CrudService<SysMenuDao, SysMenu> {
 
 	public List<SysMenu> findByParentIds(String parentIds){
-		Assert.hasLength(parentIds, MessageUtil.getMessage("sys.response.msg.parentIdIsEmpty","parentIds为空"));
+		Assert.hasLength(parentIds, "parentIdIsEmpty");
 		SysMenu sysMenu = new SysMenu();
 		sysMenu.setParentIds(parentIds);
 		return this.findList(sysMenu);
@@ -51,7 +50,7 @@ public class SysMenuService extends CrudService<SysMenuDao, SysMenu> {
 	public int deleteById(Serializable id) {
 		//删除下级菜单
 		SysMenu sysMenu = this.findById(id);
-		Assert.notNull(sysMenu,MessageUtil.getMessage("sys.response.msg.menuIsEmpty","菜单为空"));
+		Assert.notNull(sysMenu, "menuIsEmpty");
 		List<SysMenu> list = this.findByParentIds(sysMenu.getParentIds() + sysMenu.getId());
 		for (SysMenu smenu : list) {
 			this.d.deleteRoleMenuByMenuId(smenu.getId());
@@ -62,7 +61,7 @@ public class SysMenuService extends CrudService<SysMenuDao, SysMenu> {
 	}
 	
 	public void batchSave(List<SysMenu> list) {
-		Assert.notEmpty(list,MessageUtil.getMessage("sys.response.msg.listIsEmpty","批量数据为空"));
+		Assert.notEmpty(list, "listIsEmpty");
 		for (SysMenu sysMenu : list) {
 			this.update(sysMenu);
 		}
@@ -87,7 +86,7 @@ public class SysMenuService extends CrudService<SysMenuDao, SysMenu> {
 	}
 	
 	public List<SysMenu> findShowMenuByUserId(Long userId){
-		Assert.notNull(userId,MessageUtil.getMessage("sys.response.msg.userIdIsEmpty","用户id 为空"));
+		Assert.notNull(userId, "userIdIsEmpty");
 		return this.d.findByUserId(userId);
 	}
 	
@@ -113,8 +112,7 @@ public class SysMenuService extends CrudService<SysMenuDao, SysMenu> {
 	}
 	
 	public int changeShowFlag(String menuId, String isShow) {
-		List<Long> childIds = new ArrayList<Long>();
-		childIds = this.d.findChildIdById(menuId);
+		List<Long> childIds = this.d.findChildIdById(menuId);
 		SysMenu menu = new SysMenu();
 		menu.setIsShow(isShow);
 		menu.setIds(childIds);

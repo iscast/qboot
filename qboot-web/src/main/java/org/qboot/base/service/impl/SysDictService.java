@@ -27,7 +27,7 @@ public class SysDictService extends CrudService<SysDictDao, SysDict> {
 
 	public int setStatus(SysDict t) {
 		SysDict sysDict = this.findById(t.getId());
-		Assert.notNull(sysDict,"字典不存在");
+		Assert.notNull(sysDict,"dictExists");
 		sysDict.setStatus(t.getStatus());
 		sysDict.setUpdateBy(t.getUpdateBy());
 		sysDict.setUpdateDate(t.getUpdateDate());
@@ -35,7 +35,7 @@ public class SysDictService extends CrudService<SysDictDao, SysDict> {
 	}
 
 	public List<SysDict> findTypes(String type) {
-        Assert.notNull(type, MessageUtil.getMessage("sys.response.msg.typeIsEmpty","type 不能为空"));
+        Assert.notNull(type, "typeIsEmpty");
         String key = SysConstants.CACHE_PREFIX_DICT_TYPE + type;
         List<SysDict> sdlist = redisTools.get(key);
         if(CollectionUtils.isEmpty(sdlist)) {

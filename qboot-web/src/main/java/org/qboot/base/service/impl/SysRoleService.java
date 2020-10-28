@@ -86,18 +86,18 @@ public class SysRoleService extends CrudService<SysRoleDao, SysRole> {
 	}
 
 	public List<SysRole> findByUserId(Long userId) {
-		Assert.notNull(userId, MessageUtil.getMessage("sys.response.msg.userIdIsEmpty","userId 为空"));
+		Assert.notNull(userId, "userIdIsEmpty");
 		return  this.d.findByUserId(userId);
 	}
 	
 	public List<String> findDeptIdsByRoleId(String roleId){
-		Assert.hasLength(roleId, MessageUtil.getMessage("sys.response.msg.roleIdIsEmpty","roleId 为空"));
+		Assert.hasLength(roleId, "roleIdIsEmpty");
 		List<String> depts = this.d.selectDeptIdsByRoleId(roleId);
 		return depts;
 	}
 	public int removeUsersByRoleId(String roleId, List<Long> userIds) {
-		Assert.hasLength(roleId, MessageUtil.getMessage("sys.response.msg.roleIdIsEmpty","roleId 为空"));
-		Assert.notEmpty(userIds, MessageUtil.getMessage("sys.response.msg.removedUserNotExist","移除用户为空"));
+		Assert.hasLength(roleId, "roleIdIsEmpty");
+		Assert.notEmpty(userIds, "removedUserNotExist");
 		userIds.forEach((userId) -> {
 			this.d.deleteUserRoleByRoleIdAndUserId(roleId, userId);
 		});
@@ -105,8 +105,8 @@ public class SysRoleService extends CrudService<SysRoleDao, SysRole> {
 	}
 	
 	public int addUsersByRoleId(String roleId, List<Long> userIds) {
-		Assert.hasLength(roleId, MessageUtil.getMessage("sys.response.msg.roleIdIsEmpty","roleId 为空"));
-		Assert.notEmpty(userIds,MessageUtil.getMessage("sys.response.msg.removedUserNotExist","移除用户为空"));
+		Assert.hasLength(roleId, "roleIdIsEmpty");
+		Assert.notEmpty(userIds,"removedUserNotExist");
 		userIds.forEach((userId) -> {
 			this.d.deleteUserRoleByRoleIdAndUserId(roleId, userId);
 			this.d.insertUserRole(roleId, userId);
@@ -115,14 +115,14 @@ public class SysRoleService extends CrudService<SysRoleDao, SysRole> {
 	}
 
 	public List<String> selectMenuIdsByRoleId(Serializable roleId) {
-		Assert.notNull(roleId,MessageUtil.getMessage("sys.response.msg.idIsEmpty","ID为空"));
+		Assert.notNull(roleId, "idIsEmpty");
 		return this.d.selectMenuIdsByRoleId(roleId);
 	}
 
 	@Transactional(readOnly = true)
 	public SysRole findByName(String name) {
-		Assert.notNull(name, MessageUtil.getMessage("sys.response.msg.roleNameIsEmpty","角色为空"));
-		Assert.hasLength(name.toString(), MessageUtil.getMessage("sys.response.msg.roleNameIsEmpty","角色为空"));
+		Assert.notNull(name, "roleNameIsEmpty");
+		Assert.hasLength(name, "roleNameIsEmpty");
 		return d.findByName(name);
 	}
 

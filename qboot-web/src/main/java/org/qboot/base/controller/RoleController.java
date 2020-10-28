@@ -75,7 +75,7 @@ public class RoleController extends BaseController {
 			}
 			return ResponeModel.ok(sysRole);
 		}else {
-			return ResponeModel.error("sys.response.msg.failToFindRole");
+			return ResponeModel.error("failToFindRole");
 		}
 	}
 	
@@ -95,7 +95,7 @@ public class RoleController extends BaseController {
 	public ResponeModel save(@Validated SysRole sysRole, BindingResult bindingResult) {
 		SysRole role = sysRoleService.findByName(sysRole.getName());
 		if(role != null) {
-			return ResponeModel.error("sys.response.msg.roleDuplicate");
+			return ResponeModel.error("roleDuplicate");
 		}
 		
 		sysRole.setCreateBy(SecurityUtils.getLoginName());
@@ -117,7 +117,7 @@ public class RoleController extends BaseController {
 	public ResponeModel update(@Validated SysRole sysRole, BindingResult bindingResult) {
 		SysRole role = sysRoleService.findByName(sysRole.getName());
 		if(role != null && !String.valueOf(role.getId()).equals(String.valueOf(sysRole.getId()))) {
-			return ResponeModel.error("sys.response.msg.roleDuplicate");
+			return ResponeModel.error("roleDuplicate");
 		}
 		sysRole.setUpdateBy(SecurityUtils.getLoginName());
 		sysRole.setUpdateDate(new Date());
@@ -132,7 +132,7 @@ public class RoleController extends BaseController {
 	@PreAuthorize("hasAuthority('sys:role:update')")
 	@PostMapping("/removeUser")
 	public ResponeModel removeUser(@RequestParam List<Long> userIds,String roleId) {
-		Assert.notEmpty(userIds,"sys.response.msg.removedUserNotExist");
+		Assert.notEmpty(userIds,"removedUserNotExist");
 		int cnt = sysRoleService.removeUsersByRoleId(roleId, userIds);
 		if(cnt > 0) {
 			return ResponeModel.ok();
@@ -144,7 +144,7 @@ public class RoleController extends BaseController {
 	@PreAuthorize("hasAuthority('sys:role:update')")
 	@PostMapping("/addUser")
 	public ResponeModel addUser(@RequestParam List<Long> userIds,String roleId) {
-		Assert.notEmpty(userIds,"sys.response.msg.removedUserNotExist");
+		Assert.notEmpty(userIds,"removedUserNotExist");
 		int cnt = sysRoleService.addUsersByRoleId(roleId, userIds);
 		if(cnt > 0) {
 			return ResponeModel.ok();

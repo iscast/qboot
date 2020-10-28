@@ -55,20 +55,21 @@ public class LoginResultHandler implements AuthenticationSuccessHandler,Authenti
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException exception) throws IOException, ServletException {
 		String loginName = this.obtainUsername(request);
-		ResponeModel result = ResponeModel.error(exception.getMessage());
+		logger.warn("userName:[{}] login fail msg:[{}]", loginName, exception.getMessage());
+		ResponeModel result = ResponeModel.error();
 		if (exception instanceof UsernameNotFoundException) {
 			loginSecurityService.incrementLoginFailTimes(loginName);
-			result.setMsg("账户不存在");
-			logger.error("账户不存在");
+			result.setMsg("user or pwd error");
+			logger.error("user or pwd error");
 			loginLog(SysConstants.SYS_USER_LOGIN_STATUS_PASSWORD_WRONG, loginName, request);
 		} else if (exception instanceof BadCredentialsException) {
 			loginSecurityService.incrementLoginFailTimes(loginName);
-			result.setMsg("账户密码错误,连续错误5次将锁定24小时");
-			logger.error("账户密码错误");
+			result.setMsg("pwd error, fail 5 times will lock your account");
+			logger.error("pwd error");
 			loginLog(SysConstants.SYS_USER_LOGIN_STATUS_PASSWORD_WRONG, loginName, request);
 		} else if (exception instanceof LockedException) {
-			result.setMsg("账户已被锁定");
-			logger.error("账户已被锁定");
+			result.setMsg("user is lock");
+			logger.error("user is lock");
 			loginLog(SysConstants.SYS_USER_LOGIN_STATUS_LOCK_24, loginName, request);
 		} else if (exception instanceof DisabledException) {
 			result.setMsg(exception.getMessage());
@@ -101,7 +102,10 @@ public class LoginResultHandler implements AuthenticationSuccessHandler,Authenti
 	
 	private String obtainUsername(HttpServletRequest request) {
         String loginName = request.getParameter("username");
-        return RSAsecurity.getInstance().decrypt(String.valueOf(request.getSession().getAttribute("privateKey")), loginName.trim());
+        if(StringUtils.isNotBlank(loginName)) {
+            loginName = loginName.trim();
+        }
+        return RSAsecurity.getInstance().decrypt(String.valueOf(request.getSession().getAttribute("privateKey")), loginName);
 	}
 
 	@Override

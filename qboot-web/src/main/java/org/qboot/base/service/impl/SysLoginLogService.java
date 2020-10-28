@@ -29,7 +29,7 @@ public class SysLoginLogService extends CrudService<SysLoginLogDao, SysLoginLog>
 	private SysUserService sysUserService;
 
 	public void loginLogByLoginName(String status,String loginName,String ip,String userAgent,String browser,String deviceName, String area, int firstLogin) {
-        Assert.hasLength(status, MessageUtil.getMessage("sys.response.msg.loginStatusIsEmpty","登录状态为空"));
+        Assert.hasLength(status, "loginStatusIsEmpty");
 
         SysLoginLog loginLog = initPojo(status, ip, userAgent, browser, deviceName, area, firstLogin);
 
@@ -63,7 +63,7 @@ public class SysLoginLogService extends CrudService<SysLoginLogDao, SysLoginLog>
     }
 
 	public SysLoginLog findLastLoginInfo(Long userId) {
-        Assert.notNull(userId, MessageUtil.getMessage("sys.response.msg.userIdIsEmpty","用户id 为空"));
+        Assert.notNull(userId, "userIdIsEmpty");
 		SysLoginLog loginLog = new SysLoginLog();
 		loginLog.setPage(1);
 		loginLog.setLimit(2);

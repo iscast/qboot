@@ -47,6 +47,8 @@ public class UserController extends BaseController {
 	@Autowired
 	private LoginSecurityService loginSecurityService;
 
+    final String initPwdStr = "initPwdSuccess, your password is %s";
+
 	@PreAuthorize("hasAuthority('sys:user:qry')")
 	@GetMapping("/qryPage")
 	public ResponeModel qryPage(SysUser user, BindingResult bindingResult) {
@@ -61,7 +63,7 @@ public class UserController extends BaseController {
 	@RequestMapping("/get")
 	public ResponeModel getUser(@RequestParam Long id, HttpServletRequest request) {
 		SysUser sysUser = sysUserService.findById(id);
-		Assert.notNull(sysUser,"sys.response.msg.userNotExists");
+		Assert.notNull(sysUser,"userNotExists");
 		//用户所拥有的角色
 		List<SysRole> roleList = sysRoleService.findByUserId(sysUser.getId());
 		List<String> roleIds = Lists.newArrayList();
@@ -82,7 +84,7 @@ public class UserController extends BaseController {
 	public ResponeModel save(@Validated SysUser sysUser, BindingResult bindingResult) {
 		boolean user = sysUserService.checkLoginName(null, sysUser.getLoginName());
 		if(user) {
-			return ResponeModel.error("sys.response.msg.userDuplicate");
+			return ResponeModel.error("userDuplicate");
 		}
 		sysUser.setStatus(SysConstants.SYS_ENABLE);
 		sysUser.setCreateBy(SecurityUtils.getLoginName());
@@ -100,7 +102,7 @@ public class UserController extends BaseController {
 		sysUser.setCreateDate(new Date());
 		int cnt = sysUserService.save(sysUser);
 		if(cnt > 0) {
-			return ResponeModel.ok("sys.response.msg.initPwd",new Object[]{password+""});
+			return ResponeModel.ok(String.format(initPwdStr, password));
 		}
 		return ResponeModel.error();
 		
@@ -112,19 +114,19 @@ public class UserController extends BaseController {
 	public ResponeModel update(@Validated SysUser sysUser, BindingResult bindingResult, HttpServletRequest request) {
 		boolean user = sysUserService.checkLoginName(sysUser.getId(), sysUser.getLoginName());
 		if(user) {
-			return ResponeModel.error("sys.response.msg.loginNameDuplicate");
+			return ResponeModel.error("loginNameDuplicate");
 		}
 		
 		Object updateId = request.getSession().getAttribute("user_update_id_"+request.getRequestedSessionId());
 		if(updateId == null) {
-			return ResponeModel.error("sys.response.msg.failToUpdate");
+			return ResponeModel.error("failToUpdate");
 		}
 		if(!String.valueOf(sysUser.getId()).equals(String.valueOf(updateId))) {
-			return ResponeModel.error("sys.response.msg.dataUpdatedAlready");
+			return ResponeModel.error("dataUpdatedAlready");
 		}
 		
 		if (SecurityUtils.isSuperAdmin(sysUser.getLoginName()) && SysConstants.SYS_DISABLE.equals(sysUser.getStatus())) {
-			return ResponeModel.error("sys.response.msg.superAdminCannotBeInvalid");
+			return ResponeModel.error("superAdminCannotBeInvalid");
 		}
 		//密码为空则不更新
 		if(StringUtils.isNotBlank(sysUser.getRoleId())) {
@@ -145,11 +147,11 @@ public class UserController extends BaseController {
 	public ResponeModel updateSelect(@Validated SysUser sysUser, BindingResult bindingResult) {
 		boolean user = sysUserService.checkLoginName(sysUser.getId(), sysUser.getLoginName());
 		if(user) {
-			return ResponeModel.error("sys.response.msg.userDuplicate");
+			return ResponeModel.error("userDuplicate");
 		}
 		
 		if (SecurityUtils.isSuperAdmin(sysUser.getLoginName()) && SysConstants.SYS_DISABLE.equals(sysUser.getStatus())) {
-			return ResponeModel.error("sys.response.msg.superAdminCannotBeInvalid");
+			return ResponeModel.error("superAdminCannotBeInvalid");
 		}
 		if(StringUtils.isNotBlank(sysUser.getRoleId())) {
 			sysUser.setRoleIds(Arrays.asList(sysUser.getRoleId().split(",")));
@@ -169,12 +171,12 @@ public class UserController extends BaseController {
 	@PostMapping("/delete")
 	public ResponeModel delete(@RequestParam Long id) {
 		SysUser user = sysUserService.findById(id);
-		Assert.notNull(user,"sys.response.msg.userNotExists");
+		Assert.notNull(user,"userNotExists");
 		if (SecurityUtils.isSuperAdmin(user.getLoginName())) {
-			return ResponeModel.error("sys.response.msg.superAdminCannotBeDeleted");
+			return ResponeModel.error("superAdminCannotBeDeleted");
 		}
 		if (SecurityUtils.getUserId() == id) {
-			return ResponeModel.error("sys.response.msg.cannotDeleteYourself");
+			return ResponeModel.error("cannotDeleteYourself");
 		}
 		int cnt = sysUserService.deleteById(id);
 		if(cnt > 0) {
@@ -188,12 +190,12 @@ public class UserController extends BaseController {
 	@PostMapping("/setStatus")
 	public ResponeModel setStatus(@RequestParam Long id, @RequestParam String status) {
 		SysUser user = sysUserService.findById(id);
-		Assert.notNull(user,"sys.response.msg.userNotExists");
+		Assert.notNull(user,"userNotExists");
 		if (SecurityUtils.isSuperAdmin(user.getLoginName())) {
-			return ResponeModel.error("sys.response.msg.superAdminCannotBeModified");
+			return ResponeModel.error("superAdminCannotBeModified");
 		}
 		if (SecurityUtils.getUserId() == id) {
-			return ResponeModel.error("sys.response.msg.cannotUpdateYourOwnStatus");
+			return ResponeModel.error("cannotUpdateYourOwnStatus");
 		}
 		SysUser sysUser = new SysUser();
 		sysUser.setId(id);
@@ -211,12 +213,12 @@ public class UserController extends BaseController {
 	@PostMapping("/initPwd")
 	public ResponeModel initPwd(@RequestParam Long id, HttpServletRequest request) {
 		SysUser user = sysUserService.findById(id);
-		Assert.notNull(user,"sys.response.msg.userNotExists");
+		Assert.notNull(user,"userNotExists");
 		if (SecurityUtils.isSuperAdmin(user.getLoginName())) {
-			return ResponeModel.error("sys.response.msg.superAdminCannotBeModified");
+			return ResponeModel.error("superAdminCannotBeModified");
 		}
 		if (SecurityUtils.getUserId() ==  id) {
-			return ResponeModel.error("sys.response.msg.initPwdDenied");
+			return ResponeModel.error("initPwdDenied");
 		}
 		SysUser sysUser = new SysUser();
 		sysUser.setId(id);
@@ -225,10 +227,10 @@ public class UserController extends BaseController {
 	    	password+= 100000;
 	    }
 		sysUser.setPassword(String.valueOf(password));
-		
+
 		int cnt = this.sysUserService.initPwd(sysUser, 1, IpUtils.getIpAddr(request));
 		if(cnt > 0) {
-			return ResponeModel.ok("sys.response.msg.initPwdSuccess",new Object[]{password+""});
+			return ResponeModel.ok(String.format(initPwdStr, password));
 		}
 		return ResponeModel.error();
 	}
@@ -237,9 +239,9 @@ public class UserController extends BaseController {
 	@PostMapping("/resetPwd")
 	public ResponeModel resetPwd(@RequestParam String oldPsw, @RequestParam String newPsw, HttpServletRequest request) {
 		SysUser user = sysUserService.findById(SecurityUtils.getUserId());
-		Assert.notNull(user,"sys.response.msg.userNotExists");
+		Assert.notNull(user,"userNotExists");
 		if (SecurityUtils.isSuperAdmin(user.getLoginName())) {
-			return ResponeModel.error("sys.response.msg.superAdminNotAllowChangePwd");
+			return ResponeModel.error("superAdminNotAllowChangePwd");
 		}
 		boolean validate = sysUserService.validatePwd(oldPsw, SecurityUtils.getUserId());
 		if(validate) {
@@ -249,10 +251,10 @@ public class UserController extends BaseController {
 			int cnt = this.sysUserService.initPwd(sysUser, SysConstants.SYS_USER_PWD_STATUS_CHANGED, IpUtils.getIpAddr(request));
 			if(cnt > 0) {
 				loginSecurityService.clearUserSessions(sysUser.getLoginName());
-				return ResponeModel.ok("sys.response.msg.changePwdSuccess");
+				return ResponeModel.ok("changePwdSuccess");
 			}
 		}
-		return ResponeModel.error("sys.response.msg.originalPwdIncorrect");
+		return ResponeModel.error("originalPwdIncorrect");
 	}
 	
 	/**
@@ -266,9 +268,9 @@ public class UserController extends BaseController {
 	@PostMapping("/unlock")
 	public ResponeModel setStatus(@RequestParam Long id) {
 		SysUser user = sysUserService.findById(id);
-		Assert.notNull(user, "sys.response.msg.userUnlockNotExists");
+		Assert.notNull(user, "userUnlockNotExists");
 		if (SecurityUtils.isSuperAdmin(user.getLoginName())) {
-			return ResponeModel.error("sys.response.msg.superAdminNotAllowChangePwd");
+			return ResponeModel.error("superAdminNotAllowChangePwd");
 		}
 		loginSecurityService.unLock(user.getLoginName());
 		return ResponeModel.ok();
@@ -278,7 +280,7 @@ public class UserController extends BaseController {
 	public ResponeModel getPublicKey(HttpServletRequest request) {
 		Tuple2<String, String> keyPair = RSAsecurity.getInstance().generateKeyPair();
 		request.getSession().setAttribute("privateKey", keyPair.getT2());
-		return ResponeModel.ok("sys.response.msg.GetPublicKeySuccess",keyPair.getT1());
+		return ResponeModel.ok("GetPublicKeySuccess",keyPair.getT1());
 	}
 	
 }

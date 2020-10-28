@@ -1,14 +1,12 @@
 package org.qboot.web.dto;
 
+import com.github.pagehelper.PageInfo;
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.qboot.common.utils.i18n.MessageUtil;
-import org.apache.commons.lang3.StringUtils;
-
-import com.github.pagehelper.PageInfo;
 
 /**
  * 通用返回参数模型
@@ -73,10 +71,10 @@ public class ResponeModel implements Serializable{
 	}
 
 	public void setMsg(String msg) {
-		this.msg = MessageUtil.getMessage(msg,msg);
+		this.msg = msg;
 	}
 	public void setMsg(String msg,Object[] args) {
-		this.msg = MessageUtil.getMessage(msg,args);
+		this.msg = msg;
 	}
 
 	public String getRequestId() {
@@ -120,11 +118,6 @@ public class ResponeModel implements Serializable{
 		return responeModel;
 	}
 
-	public static ResponeModel ok(String msg,Object[] args) {
-		ResponeModel responeModel = new ResponeModel();
-		responeModel.setMsg(msg,args);
-		return responeModel;
-	}
 
 	public static ResponeModel ok(String msg,Object data) {
 		ResponeModel responeModel = new ResponeModel();
