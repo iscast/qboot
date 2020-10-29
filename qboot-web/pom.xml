@@ -197,8 +197,10 @@
                 <version>3.2.0</version>
                 <configuration>
                     <excludes>
-                        <exclude>application.properties</exclude>
-                        <exclude>redisson.yaml</exclude>
+                        <exclude>application.yaml</exclude>
+                        <exclude>application-dev.yaml</exclude>
+                        <exclude>application-prod.yaml</exclude>
+                        <exclude>application-test.yaml</exclude>
                         <exclude>rebel.xml</exclude>
                     </excludes>
                 </configuration>
