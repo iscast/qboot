@@ -8,7 +8,7 @@ import org.qboot.base.service.impl.SysUserService;
 import org.qboot.common.annotation.AccLog;
 import org.qboot.common.controller.BaseController;
 import org.qboot.common.utils.TreeHelper;
-import org.qboot.web.dto.ResponeModel;
+import org.qboot.common.entity.ResponeModel;
 import org.qboot.web.security.QUser;
 import org.qboot.web.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;

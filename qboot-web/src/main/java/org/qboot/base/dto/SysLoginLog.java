@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
-import org.qboot.common.constant.SysConstants;
+import org.qboot.common.constants.SysConstants;
 import org.qboot.common.entity.BaseEntity;
 
 /**

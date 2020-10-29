@@ -7,11 +7,11 @@ import org.qboot.base.dto.SysRole;
 import org.qboot.base.service.impl.SysMenuService;
 import org.qboot.base.service.impl.SysRoleService;
 import org.qboot.common.annotation.AccLog;
-import org.qboot.common.constant.SysConstants;
+import org.qboot.common.constants.SysConstants;
 import org.qboot.common.controller.BaseController;
 import org.qboot.common.entity.AuthTreeEntity;
 import org.qboot.common.utils.TreeHelper;
-import org.qboot.web.dto.ResponeModel;
+import org.qboot.common.entity.ResponeModel;
 import org.qboot.web.security.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -98,7 +98,7 @@ public class MenuController extends BaseController {
 			if(StringUtils.isNotBlank(roleId)) {
 				roleAuths = sysMenuService.findByRoleId(roleId);
 			}
-			List<AuthTreeEntity> treeList = treeHelper.authTreeList(list, roleAuths);
+			List<AuthTreeEntity> treeList = authTreeList(list, roleAuths);
 			Map<String, Object> retMap = new HashMap<String, Object>();
 			retMap.put("trees", treeList);
 			return ResponeModel.ok(retMap);
@@ -224,5 +224,39 @@ public class MenuController extends BaseController {
 		}
 		return ResponeModel.error();
 	}
-	
+
+    private List<AuthTreeEntity> authTreeList(List<SysMenu> list, List<SysMenu> roleAuths) {
+        Map<String, String> authMap = getRoleAuthMap(roleAuths);
+        List<AuthTreeEntity> result = this.nextAuthTreeList(list, TreeHelper.DEFAULT_PARENTID, authMap);
+        return result;
+    }
+
+    private List<AuthTreeEntity> nextAuthTreeList(List<SysMenu> list, String parentId, Map<String, String> authMap){
+        List<AuthTreeEntity> result = new ArrayList<>();
+        for (SysMenu t : list) {//
+            if (parentId.equals(t.getParentId())) {
+                // 从跟节点开始
+                AuthTreeEntity ate = new AuthTreeEntity();
+                ate.setName(t.getName());
+                ate.setValue(t.getId());
+                ate.setChecked(authMap.get(t.getId())==null?false:true);
+                if(!t.getType().equals("999")) {
+                    ate.setList(this.nextAuthTreeList(list, t.getId(), authMap));
+                }
+                result.add(ate);
+            }
+        }
+        return result;
+    }
+
+    private Map<String, String> getRoleAuthMap(List<SysMenu> roleAuths){
+        Map<String, String> authMap = new HashMap<String, String>();
+        if(!CollectionUtils.isEmpty(roleAuths)) {
+            for(SysMenu menu : roleAuths) {
+                authMap.put(menu.getId(), menu.getId());
+            }
+        }
+        return authMap;
+    }
+
 }

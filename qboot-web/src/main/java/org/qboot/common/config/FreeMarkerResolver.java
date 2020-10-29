@@ -1,4 +1,4 @@
-package org.qboot.common.utils;
+package org.qboot.common.config;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -11,7 +11,7 @@ import org.springframework.core.io.ClassPathResource;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 
-public class FreeMarkerUtils {
+public class FreeMarkerResolver {
 
 	public static final String DEFAULT_DIRECTORY = "template";
 	private static Configuration cfg = buildConfiguration(DEFAULT_DIRECTORY);

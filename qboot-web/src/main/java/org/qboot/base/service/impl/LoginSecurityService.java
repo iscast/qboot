@@ -1,5 +1,6 @@
 package org.qboot.base.service.impl;
 
+import org.qboot.common.constants.CacheConstants;
 import org.qboot.common.service.BaseService;
 import org.qboot.common.utils.RedisTools;
 import org.redisson.api.RSet;
@@ -12,21 +13,14 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
- * <p>
- * Title: LoginSecurityService
- * </p>
- * <p>
- * Description: 安全登录
- * </p>
+ * <p>Title: LoginSecurityService</p>
+ * <p>Description: 安全登录</p>
  * @author history
  * @date 2018-08-08
  */
 @Service
 public class LoginSecurityService extends BaseService {
 
-	private String LOCK_PREFIX = "LOGIN_CNT_";
-
-	private String USER_NAME_SESSION_ID_PREFIX = "USERNAME_SESSION_ID:";
 
 	@Autowired
 	private RedisTools redisTools;
@@ -35,15 +29,15 @@ public class LoginSecurityService extends BaseService {
 
 	public void unLock(String loginName) {
 		Assert.hasLength(loginName, "login Name IsEmpty");
-		redisTools.del(LOCK_PREFIX + loginName);
+		redisTools.del(CacheConstants.CACHE_PREFIX_LOGIN_FAILCOUNT + loginName);
 	}
 
 	public Long getLoginFailCount(String loginName) {
 		try {
-			Long cnt = redisTools.get(LOCK_PREFIX + loginName);
+			Long cnt = redisTools.get(CacheConstants.CACHE_PREFIX_LOGIN_FAILCOUNT + loginName);
 			return null == cnt ? 0 : cnt;
 		} finally {
-			redisTools.expire(LOCK_PREFIX + loginName, 24 * 60 * 60);
+			redisTools.expire(CacheConstants.CACHE_PREFIX_LOGIN_FAILCOUNT + loginName, 24 * 60 * 60);
 		}
 	}
 
@@ -53,15 +47,15 @@ public class LoginSecurityService extends BaseService {
 
 	public Long incrementLoginFailTimes(String loginName) {
 		try {
-			Long increment = redisTools.incr(LOCK_PREFIX + loginName, 1L);
+			Long increment = redisTools.incr(CacheConstants.CACHE_PREFIX_LOGIN_FAILCOUNT + loginName, 1L);
 			return increment;
 		} finally {
-			redisTools.expire(LOCK_PREFIX + loginName, 24 * 60 * 60);
+			redisTools.expire(CacheConstants.CACHE_PREFIX_LOGIN_FAILCOUNT + loginName, 24 * 60 * 60);
 		}
 	}
 
 	public void clearLoginFailTimes(String loginName) {
-		redisTools.del(LOCK_PREFIX + loginName);
+		redisTools.del(CacheConstants.CACHE_PREFIX_LOGIN_FAILCOUNT + loginName);
 	}
 
 	/**
@@ -69,21 +63,21 @@ public class LoginSecurityService extends BaseService {
 	 * @param loginName
 	 */
 	public void clearUserSessions(String loginName) {
-		logger.info("[强制退出] loginName={}", loginName);
-		Set<Object> sessionIdSet = redissonClient.getSet(USER_NAME_SESSION_ID_PREFIX + loginName);
+		logger.info("force logout user loginName:{}", loginName);
+		Set<Object> sessionIdSet = redissonClient.getSet(CacheConstants.CACHE_PREFIX_LOGIN_USERNAME_SESSION + loginName);
 		if (sessionIdSet != null) {
 			sessionIdSet.forEach((sessionId) -> redisTools.del("redisson_spring_session:" + sessionId));
 		}
-		redisTools.del(USER_NAME_SESSION_ID_PREFIX + loginName);
+		redisTools.del(CacheConstants.CACHE_PREFIX_LOGIN_USERNAME_SESSION + loginName);
 	}
 
 	/**
-	 * 设置用户名与session对应的缓存集合
+     * add username and sessionId cache set
 	 * @param loginName
 	 * @param sessionId
 	 */
 	public void setUserSessionId(String loginName, String sessionId) {
-		RSet<String> set = redissonClient.getSet(USER_NAME_SESSION_ID_PREFIX + loginName);
+		RSet<String> set = redissonClient.getSet(CacheConstants.CACHE_PREFIX_LOGIN_USERNAME_SESSION + loginName);
 		set.add(sessionId);
 		set.expire(24 * 60 * 60, TimeUnit.SECONDS);
 	}

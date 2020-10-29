@@ -3,7 +3,7 @@ package org.qboot.base.dto;
 import java.util.Date;
 
 import org.qboot.common.entity.BaseEntity;
-import org.qboot.common.constant.CacheConstants;
+import org.qboot.common.constants.CacheConstants;
 
 /**[sys_task]数据库实体模型
 *@author history
@@ -207,7 +207,7 @@ public class SysTask extends BaseEntity<Long> {
 	 * @return
 	 */
 	public String toCacheKeyString() {
-		StringBuilder taskInfoCacheKey = new StringBuilder(CacheConstants.TASK_INFO);
+		StringBuilder taskInfoCacheKey = new StringBuilder(CacheConstants.CACHE_PREFIX_SYS_TASK_INFO);
 		taskInfoCacheKey.append(this.getId()) ;
 		return taskInfoCacheKey.toString();
 	}
@@ -231,7 +231,7 @@ public class SysTask extends BaseEntity<Long> {
 	 * @return
 	 */
 	public String toRunNowCacheNoticeString() {
-		StringBuilder taskInfoCacheKey = new StringBuilder(CacheConstants.TASK_INFO);
+		StringBuilder taskInfoCacheKey = new StringBuilder(CacheConstants.CACHE_PREFIX_SYS_TASK_INFO);
 		taskInfoCacheKey.append("run_now_notify_").append(this.getId()) ;
 		return taskInfoCacheKey.toString();
 	}

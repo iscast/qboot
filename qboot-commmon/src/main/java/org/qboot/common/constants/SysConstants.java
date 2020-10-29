@@ -1,8 +1,8 @@
-package org.qboot.common.constant;
+package org.qboot.common.constants;
 
 /**
  * <p>Title: SysConstants</p>
- * <p>Description: 常量类</p>
+ * <p>Description: qboot system constants</p>
  * @author history
  * @date 2018-09-08
  */
@@ -25,16 +25,19 @@ public class SysConstants {
     public static final String SYS_DISABLE = "0";
 
 
-    /** system redis cache prefix begin */
+    /**
+     * default sucess response code
+     */
+    public final static String GLOBAL_DEFAULT_SUCCESS = "0";
+    /**
+     * default error response code
+     * 默认逻辑错误响应吗,ResponeCodeException  默认错误也是这个，前端会对这个进行统一错误提示。
+     */
+    public final static String GLOBAL_DEFAULT_ERROR = "-1";
 
-    public static final String CACHE_PREFIX_DICT_TYPE = "qboot:sys:dict:type:";
+    public final static String GLOBAL_DEFAULT_SUCCESS_MSG = "GLOBAL_DEFAULT_SUCCESS_MSG";
 
-    public static final String CACHE_PREFIX_PARAMTYPE_KEY = "qboot:sys:paramtype:key:";
-
-    public static final String CACHE_PREFIX_OPTLOG_URL = "qboot:sys:optlog:url:";
-
-    /** system redis cache prefix end */
-
+    public final static String GLOBAL_DEFAULT_ERROR_MSG = "GLOBAL_DEFAULT_ERROR_MSG";
 
 	/**
 	 * super Administrator id

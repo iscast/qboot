@@ -9,10 +9,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.qboot.base.service.impl.LoginSecurityService;
 import org.qboot.base.service.impl.SysLoginLogService;
-import org.qboot.common.constant.SysConstants;
+import org.qboot.common.constants.SysConstants;
 import org.qboot.common.utils.IpUtils;
 import org.qboot.common.utils.RSAsecurity;
-import org.qboot.web.dto.ResponeModel;
+import org.qboot.common.entity.ResponeModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +52,7 @@ public class LoginResultHandler implements AuthenticationSuccessHandler,Authenti
 	@Autowired
 	private SysLoginLogService sysLoginLogService;
 	@Override
+
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException exception) throws IOException, ServletException {
 		String loginName = this.obtainUsername(request);
@@ -60,20 +61,20 @@ public class LoginResultHandler implements AuthenticationSuccessHandler,Authenti
 		if (exception instanceof UsernameNotFoundException) {
 			loginSecurityService.incrementLoginFailTimes(loginName);
 			result.setMsg("user or pwd error");
-			logger.error("user or pwd error");
+			logger.warn("user:{} or pwd error", loginName);
 			loginLog(SysConstants.SYS_USER_LOGIN_STATUS_PASSWORD_WRONG, loginName, request);
 		} else if (exception instanceof BadCredentialsException) {
 			loginSecurityService.incrementLoginFailTimes(loginName);
 			result.setMsg("pwd error, fail 5 times will lock your account");
-			logger.error("pwd error");
+			logger.warn("user:{} pwd error", loginName);
 			loginLog(SysConstants.SYS_USER_LOGIN_STATUS_PASSWORD_WRONG, loginName, request);
 		} else if (exception instanceof LockedException) {
 			result.setMsg("user is lock");
-			logger.error("user is lock");
+			logger.warn("user:{} is lock", loginName);
 			loginLog(SysConstants.SYS_USER_LOGIN_STATUS_LOCK_24, loginName, request);
 		} else if (exception instanceof DisabledException) {
 			result.setMsg(exception.getMessage());
-			logger.error(exception.getMessage());
+			logger.warn("user:{} login fail {}" , loginName, exception.getMessage());
 			loginLog(SysConstants.SYS_USER_LOGIN_STATUS_STAUTS_STOP, loginName, request);
 		} 
 		this.print(response, JSON.toJSONString(result));
@@ -116,13 +117,11 @@ public class LoginResultHandler implements AuthenticationSuccessHandler,Authenti
 		AnonymousAuthenticationToken anonymous = new AnonymousAuthenticationToken("anonymous", "anonymous", list);
 		SecurityContextHolder.getContext().setAuthentication(anonymous);
 
-		String userName = this.obtainUsername(request);
+		String userName = request.getParameter("username");
 		if(StringUtils.isNotBlank(userName)) {
 			loginSecurityService.clearUserSessions(userName);
 		}
-		ResponeModel ok = ResponeModel.ok();
-		ok.setData(userName);
-		this.print(response, JSON.toJSONString(ok));
+		this.print(response, JSON.toJSONString(ResponeModel.ok("logout sucess")));
 	}
 
 	/**

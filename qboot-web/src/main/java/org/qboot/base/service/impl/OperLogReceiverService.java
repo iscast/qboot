@@ -63,7 +63,7 @@ public class OperLogReceiverService extends CrudService<SysOperateLogDao, SysOpe
 			fixedPool =  new ThreadPoolExecutor(concurrentNum, concurrentNum, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>(queueCapacity) , new RejectedExecutionHandler() {
 				@Override
 				public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
-					logger.error("Exceeded the queue of batch insert capacity...");
+					logger.info("Exceeded the queue of batch insert capacity...");
 				}
 			});
 		} catch (Exception e) {

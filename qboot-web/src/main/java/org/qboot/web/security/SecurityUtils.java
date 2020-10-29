@@ -1,6 +1,6 @@
 package org.qboot.web.security;
 
-import org.qboot.common.constant.SysConstants;
+import org.qboot.common.constants.SysConstants;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 

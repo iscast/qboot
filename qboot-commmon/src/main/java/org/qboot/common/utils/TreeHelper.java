@@ -1,16 +1,11 @@
 package org.qboot.common.utils;
 
 import org.apache.commons.lang3.StringUtils;
-import org.qboot.base.dto.SysMenu;
-import org.qboot.common.constant.SysConstants;
-import org.qboot.common.entity.AuthTreeEntity;
+import org.qboot.common.constants.SysConstants;
 import org.qboot.common.entity.TreeEntity;
-import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * tree grid 的组件需要后端排序 如部门、菜单列表
@@ -70,39 +65,5 @@ public class TreeHelper<T extends TreeEntity<String>> {
 			}
 		}
 	}
-	
 
-	public List<AuthTreeEntity> authTreeList(List<SysMenu> list, List<SysMenu> roleAuths) {
-		Map<String, String> authMap = getRoleAuthMap(roleAuths);
-		List<AuthTreeEntity> result = this.nextAuthTreeList(list, DEFAULT_PARENTID, authMap);
-		return result;
-	}
-	
-	private List<AuthTreeEntity> nextAuthTreeList(List<SysMenu> list, String parentId, Map<String, String> authMap){
-		List<AuthTreeEntity> result = new ArrayList<>();
-		for (SysMenu t : list) {//
-			if (parentId.equals(t.getParentId())) {
-				// 从跟节点开始
-				AuthTreeEntity ate = new AuthTreeEntity();
-				ate.setName(t.getName());
-				ate.setValue(t.getId());
-				ate.setChecked(authMap.get(t.getId())==null?false:true);
-				if(!t.getType().equals("999")) {
-					ate.setList(this.nextAuthTreeList(list, t.getId(), authMap));
-				}
-				result.add(ate);
-			}
-		}
-		return result;
-	}
-	
-	private Map<String, String> getRoleAuthMap(List<SysMenu> roleAuths){
-		Map<String, String> authMap = new HashMap<String, String>();
-		if(!CollectionUtils.isEmpty(roleAuths)) {
-			for(SysMenu menu : roleAuths) {
-				authMap.put(menu.getId(), menu.getId());
-			}
-		}
-		return authMap;
-	}
 }

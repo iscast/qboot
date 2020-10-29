@@ -7,7 +7,7 @@ import org.qboot.base.dto.SysUser;
 import org.qboot.base.service.impl.SysMenuService;
 import org.qboot.base.service.impl.SysRoleService;
 import org.qboot.base.service.impl.SysUserService;
-import org.qboot.common.constant.SysConstants;
+import org.qboot.common.constants.SysConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

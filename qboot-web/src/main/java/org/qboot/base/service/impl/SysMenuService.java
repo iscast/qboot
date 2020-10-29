@@ -1,14 +1,12 @@
 package org.qboot.base.service.impl;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
-import org.qboot.common.utils.i18n.MessageUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.qboot.base.dao.SysMenuDao;
 import org.qboot.base.dto.SysMenu;
-import org.qboot.common.constant.SysConstants;
+import org.qboot.common.constants.SysConstants;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;

@@ -10,7 +10,7 @@ import java.util.Map;
  * 
  * @author history
  */
-public class GenTypeMapping {
+public class GenTypeMappingUtils {
 
 	private static Map<String, String> dbMybatisTypeMapping = new HashMap<String, String>();
 	private static Map<String, String> dbJavaTypeMapping = new HashMap<String, String>();

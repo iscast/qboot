@@ -3,8 +3,7 @@ package org.qboot.web.security;
 import java.util.Collection;
 import java.util.List;
 
-import org.qboot.base.dto.SysUser;
-import org.qboot.common.constant.SysConstants;
+import org.qboot.common.constants.SysConstants;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 

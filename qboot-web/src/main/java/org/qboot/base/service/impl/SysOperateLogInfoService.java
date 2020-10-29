@@ -2,7 +2,8 @@ package org.qboot.base.service.impl;
 
 import org.qboot.base.dao.SysOperateLogInfoDao;
 import org.qboot.base.dto.SysOperateLogInfoDto;
-import org.qboot.common.constant.SysConstants;
+import org.qboot.common.constants.CacheConstants;
+import org.qboot.common.constants.SysConstants;
 import org.qboot.common.service.CrudService;
 import org.qboot.common.utils.RedisTools;
 import org.slf4j.Logger;
@@ -54,7 +55,7 @@ public class SysOperateLogInfoService extends CrudService<SysOperateLogInfoDao, 
 
 	@Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
 	public Long findLogIdByUri(String reqUri) {
-        String key = SysConstants.CACHE_PREFIX_OPTLOG_URL + reqUri;
+        String key = CacheConstants.CACHE_PREFIX_SYS_OPTLOG_URL + reqUri;
 		SysOperateLogInfoDto sol = redisTools.get(key);
 		if(sol != null) {
 			return sol.getLogId();

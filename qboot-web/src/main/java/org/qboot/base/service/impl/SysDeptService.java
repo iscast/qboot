@@ -6,7 +6,7 @@ import java.util.List;
 import org.qboot.common.service.CrudService;
 import org.qboot.base.dao.SysDeptDao;
 import org.qboot.base.dto.SysDept;
-import org.qboot.common.constant.SysConstants;
+import org.qboot.common.constants.SysConstants;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 

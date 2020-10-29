@@ -10,12 +10,12 @@ import org.qboot.base.dto.DbTableColumn;
 import org.qboot.base.dto.GenColumnInfo;
 import org.qboot.base.dto.SysGen;
 import org.qboot.base.vo.SysProjectGenVo;
-import org.qboot.common.constant.SysConstants;
+import org.qboot.common.constants.SysConstants;
 import org.qboot.common.exception.ServiceException;
 import org.qboot.common.service.BaseService;
-import org.qboot.common.utils.FreeMarkerUtils;
-import org.qboot.common.utils.GenEnum;
-import org.qboot.common.utils.GenTypeMapping;
+import org.qboot.common.config.FreeMarkerResolver;
+import org.qboot.common.enums.GenEnum;
+import org.qboot.common.utils.GenTypeMappingUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -117,8 +117,8 @@ public class GeneratorService extends BaseService {
 			genColumnInfo.setExtra(column.getExtra());
 			genColumnInfo.setDataType(column.getDataType());
 			genColumnInfo.setMaxLength(column.getMaxlength());
-			genColumnInfo.setJavaType(GenTypeMapping.getDbJavaMapping(column.getDataType()));
-			genColumnInfo.setJdbcType(GenTypeMapping.getDbMybatisMapping(column.getDataType()));
+			genColumnInfo.setJavaType(GenTypeMappingUtils.getDbJavaMapping(column.getDataType()));
+			genColumnInfo.setJdbcType(GenTypeMappingUtils.getDbMybatisMapping(column.getDataType()));
 			genColumnInfo.setJavaFieldName(columnToJava(column.getName()));
 			genColumnInfo.setNullable(column.getNullable());
 			//自增默认不插入
@@ -198,7 +198,7 @@ public class GeneratorService extends BaseService {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		ZipOutputStream zos = new ZipOutputStream(bos);
 		for (String ftl : ftls) {
-			String content = FreeMarkerUtils.renderTemplate(ftl, sysGen);
+			String content = FreeMarkerResolver.renderTemplate(ftl, sysGen);
 			logger.info("ftl {}:\r\n{}",ftl,content);
 			zos.putNextEntry(new ZipEntry(this.getZipEntryName(ftl,sysGen)));
 			IOUtils.write(content, zos);
@@ -259,7 +259,7 @@ public class GeneratorService extends BaseService {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		ZipOutputStream zos = new ZipOutputStream(bos);
 		for (String ftl : projectFtls) {
-			String content = FreeMarkerUtils.renderTemplate(ftl, sysProjectGenVo);
+			String content = FreeMarkerResolver.renderTemplate(ftl, sysProjectGenVo);
 			logger.info("ftl {}:\r\n{}",ftl,content);
 			zos.putNextEntry(new ZipEntry(this.getZipEntryName(ftl, sysProjectGenVo)));
 			IOUtils.write(content, zos);

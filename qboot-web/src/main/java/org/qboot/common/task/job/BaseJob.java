@@ -2,7 +2,7 @@ package org.qboot.common.task.job;
 
 import java.util.Map;
 
-import org.qboot.common.constant.SysConstants;
+import org.qboot.common.constants.SysConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

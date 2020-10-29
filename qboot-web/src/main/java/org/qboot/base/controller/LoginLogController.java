@@ -4,7 +4,7 @@ import com.github.pagehelper.PageInfo;
 import org.qboot.base.dto.SysLoginLog;
 import org.qboot.base.service.impl.SysLoginLogService;
 import org.qboot.common.controller.BaseController;
-import org.qboot.web.dto.ResponeModel;
+import org.qboot.common.entity.ResponeModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;

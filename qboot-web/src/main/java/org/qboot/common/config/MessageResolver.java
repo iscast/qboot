@@ -1,4 +1,4 @@
-package org.qboot.common.utils.i18n;
+package org.qboot.common.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,8 +20,8 @@ import java.util.Set;
  * @author history
  * @date 2019-04-03 15:05
  */
-public class MessageUtil {
-    private static Logger logger = LoggerFactory.getLogger(MessageUtil.class) ;
+public class MessageResolver {
+    private static Logger logger = LoggerFactory.getLogger(MessageResolver.class) ;
     protected static MessageSourceAccessor accessor;
     protected static MessageSource messageSource;
     public static Set<String> set = new HashSet<String>();
@@ -73,7 +73,7 @@ public class MessageUtil {
         }
         initMessageSourceAccessor();
     }
-    private MessageUtil(){ }
+    private MessageResolver(){ }
 
     /**
      *  获取国际化语言信息

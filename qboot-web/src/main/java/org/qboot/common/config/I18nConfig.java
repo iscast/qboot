@@ -1,7 +1,6 @@
 package org.qboot.common.config;
 
 
-import org.qboot.common.utils.ConfigurableSessionLocaleResolver;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;

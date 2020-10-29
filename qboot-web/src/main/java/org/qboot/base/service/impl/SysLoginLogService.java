@@ -4,9 +4,8 @@ import com.github.pagehelper.PageInfo;
 import org.qboot.base.dao.SysLoginLogDao;
 import org.qboot.base.dto.SysLoginLog;
 import org.qboot.base.dto.SysUser;
-import org.qboot.common.constant.SysConstants;
+import org.qboot.common.constants.SysConstants;
 import org.qboot.common.service.CrudService;
-import org.qboot.common.utils.i18n.MessageUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +41,7 @@ public class SysLoginLogService extends CrudService<SysLoginLogDao, SysLoginLog>
             return ;
 		}
 
-        logger.info("保存登录记录：{}", loginLog.toString());
+        logger.info("saving user login log：{}", loginLog.toString());
         loginLog.setUserId(user.getId());
         this.save(loginLog);
 	}

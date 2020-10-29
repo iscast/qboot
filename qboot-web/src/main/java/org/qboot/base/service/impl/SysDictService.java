@@ -2,10 +2,9 @@ package org.qboot.base.service.impl;
 
 import org.qboot.base.dao.SysDictDao;
 import org.qboot.base.dto.SysDict;
-import org.qboot.common.constant.SysConstants;
+import org.qboot.common.constants.CacheConstants;
 import org.qboot.common.service.CrudService;
 import org.qboot.common.utils.RedisTools;
-import org.qboot.common.utils.i18n.MessageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -36,7 +35,7 @@ public class SysDictService extends CrudService<SysDictDao, SysDict> {
 
 	public List<SysDict> findTypes(String type) {
         Assert.notNull(type, "typeIsEmpty");
-        String key = SysConstants.CACHE_PREFIX_DICT_TYPE + type;
+        String key = CacheConstants.CACHE_PREFIX_SYS_DICT_TYPE + type;
         List<SysDict> sdlist = redisTools.get(key);
         if(CollectionUtils.isEmpty(sdlist)) {
             sdlist = this.d.findTypes(type);

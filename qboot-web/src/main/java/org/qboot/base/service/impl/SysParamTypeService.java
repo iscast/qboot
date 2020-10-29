@@ -2,10 +2,9 @@ package org.qboot.base.service.impl;
 
 import org.qboot.base.dao.SysParamTypeDao;
 import org.qboot.base.dto.SysParamType;
-import org.qboot.common.constant.SysConstants;
+import org.qboot.common.constants.CacheConstants;
 import org.qboot.common.service.CrudService;
 import org.qboot.common.utils.RedisTools;
-import org.qboot.common.utils.i18n.MessageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -39,7 +38,7 @@ public class SysParamTypeService extends CrudService<SysParamTypeDao, SysParamTy
 	
 	public List<SysParamType> findParamTypes(String paramKey) {
 		Assert.hasLength("paramKey", "paramKeyIsEmpty");
-        String key = SysConstants.CACHE_PREFIX_PARAMTYPE_KEY + paramKey;
+        String key = CacheConstants.CACHE_PREFIX_SYS_PARAMTYPE_KEY + paramKey;
 		List<SysParamType> list = redisTools.get(key);
 		if(!CollectionUtils.isEmpty(list)){
 			return list;

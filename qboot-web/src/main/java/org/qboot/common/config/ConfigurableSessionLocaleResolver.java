@@ -1,4 +1,4 @@
-package org.qboot.common.utils;
+package org.qboot.common.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,4 +1,4 @@
-package org.qboot.common.utils;
+package org.qboot.common.enums;
 
 /**
  * 代码生成枚举

@@ -7,7 +7,7 @@ import org.qboot.base.service.impl.SysParamTypeService;
 import org.qboot.base.service.impl.SysUserService;
 import org.qboot.common.annotation.AccLog;
 import org.qboot.common.controller.BaseController;
-import org.qboot.web.dto.ResponeModel;
+import org.qboot.common.entity.ResponeModel;
 import org.qboot.web.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;

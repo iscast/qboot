@@ -89,6 +89,16 @@
             <onMismatch>DENY</onMismatch>
         </filter>
     </appender>
+
+<!--    <appender name="accLog">-->
+<!--        <RollingFile  fileName="${LOG_HOME}/msLog.access" filePattern="${LOG_HOME}/msLog.%d{yyyy-MM-dd}.access.%i">-->
+<!--            <PatternLayout pattern="${version}|%d|${mod_name}|%X{client_ip}|%X{server_ip}|%X{host}|%X{result}|%X{usedtime}|%X{msg_no}|%X{follow_no}|%X{req_url}|%X{err_code}|%X{err_msg}|%X{req_body}|%m|%X{server_name}|%X{server_version}|||%n"/>-->
+<!--            <Policies>-->
+<!--                <TimeBasedTriggeringPolicy />-->
+<!--                <SizeBasedTriggeringPolicy size="100 MB" />-->
+<!--            </Policies>-->
+<!--        </RollingFile>-->
+<!--    </appender>-->
     
     <logger name="org.apache" level="INFO" />    
     <logger name="org.springframework.data.mybatis" level="DEBUG"/>
@@ -101,6 +111,7 @@
     <logger name="jdbc.sqltiming" level="ERROR"/>
     <logger name="jdbc.sqlonly" level="INFO"/>
     <logger name="org.redisson" level="INFO"/>
+    <logger name="org.quartz" level="ERROR"/>
 
     <springProfile name="prod">
         <root level="INFO">

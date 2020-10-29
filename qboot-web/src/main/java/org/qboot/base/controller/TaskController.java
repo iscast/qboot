@@ -7,7 +7,7 @@ import org.qboot.base.service.impl.SysTaskService;
 import org.qboot.common.annotation.AccLog;
 import org.qboot.common.controller.BaseController;
 import org.qboot.common.exception.ServiceException;
-import org.qboot.web.dto.ResponeModel;
+import org.qboot.common.entity.ResponeModel;
 import org.qboot.web.security.SecurityUtils;
 import org.quartz.CronExpression;
 import org.springframework.beans.factory.annotation.Autowired;

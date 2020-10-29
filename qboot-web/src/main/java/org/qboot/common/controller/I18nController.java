@@ -2,7 +2,7 @@ package org.qboot.common.controller;
 
 import org.qboot.base.dto.SysParamType;
 import org.qboot.base.service.impl.SysParamTypeService;
-import org.qboot.web.dto.ResponeModel;
+import org.qboot.common.entity.ResponeModel;
 import org.qboot.web.security.QUser;
 import org.qboot.web.security.SecurityUtils;
 import org.apache.commons.lang.StringUtils;
@@ -22,7 +22,6 @@ import java.util.Locale;
 /**
  * <p>Title: I18nController</p>
  * <p>Description: 国际化控制器</p>
- *
  * @author history
  * @date 2019-04-03 15:58
  */

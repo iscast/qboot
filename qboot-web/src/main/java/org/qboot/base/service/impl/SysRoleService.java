@@ -6,7 +6,6 @@ import org.qboot.base.dto.SysRole;
 import org.qboot.base.dto.SysRoleDept;
 import org.qboot.base.dto.SysRoleMenu;
 import org.qboot.common.service.CrudService;
-import org.qboot.common.utils.i18n.MessageUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;

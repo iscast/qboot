@@ -1,11 +1,11 @@
 package org.qboot.common.controller;
 
 import org.apache.commons.text.StringEscapeUtils;
-import org.qboot.common.constant.SysConstants;
+import org.qboot.common.constants.SysConstants;
 import org.qboot.common.exception.QExceptionCode;
 import org.qboot.common.exception.ResponeException;
 import org.qboot.common.utils.DateUtils;
-import org.qboot.web.dto.ResponeModel;
+import org.qboot.common.entity.ResponeModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

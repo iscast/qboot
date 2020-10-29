@@ -7,7 +7,7 @@ import org.qboot.base.dto.DbTableColumn;
 import org.qboot.base.dto.GenColumnInfo;
 import org.qboot.base.dto.SysGen;
 import org.qboot.base.vo.SysProjectGenVo;
-import org.qboot.common.utils.GenTypeMapping;
+import org.qboot.common.utils.GenTypeMappingUtils;
 import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,7 +56,7 @@ public class SysGenService extends CrudService<SysGenDao, SysGen> {
 		Assert.hasLength(tableName, "表名为空");
 		String dbPkType = this.d.findPkType(tableName);
 		Assert.hasLength(dbPkType,tableName + " 需要主键，名为id");
-		return GenTypeMapping.getDbJavaMapping(dbPkType);
+		return GenTypeMappingUtils.getDbJavaMapping(dbPkType);
 	}
 	
 	/**
