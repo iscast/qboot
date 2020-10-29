@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="org.qboot.base.dao.SysOperateLogDao">
+<mapper namespace="org.qboot.sys.dao.SysOperateLogDao">
 
-	<resultMap id="SysOperateLogDtoResult" type="org.qboot.base.dto.SysOperateLogDto">
+	<resultMap id="SysOperateLogDtoResult" type="org.qboot.sys.dto.SysOperateLogDto">
 		<result column="id" jdbcType="BIGINT" property="id" />
 		<result column="log_id" jdbcType="BIGINT" property="logId" />
 		<result column="uri_name" jdbcType="VARCHAR" property="uriName" />
@@ -21,7 +21,7 @@
 		sl.log_id, ifnull(si.URI_NAME, sl.request_uri) as uri_name, sl.request_uri, sl.request_ip, sl.request_userid, sl.request_date, sl.response_time
 	</sql>
 
-	<insert id="insert" parameterType="org.qboot.base.dto.SysOperateLogDto">
+	<insert id="insert" parameterType="org.qboot.sys.dto.SysOperateLogDto">
 		INSERT INTO sys_operate_log 
 		(log_id, request_uri, request_ip, request_userid, request_date, response_time, request_params, response_params)
 		VALUES
@@ -41,7 +41,7 @@
 		</foreach >
 	</insert>
     
-    <select id="findList" parameterType="org.qboot.base.dto.SysOperateLogDto" resultMap="SysOperateLogDtoResult">
+    <select id="findList" parameterType="org.qboot.sys.dto.SysOperateLogDto" resultMap="SysOperateLogDtoResult">
         SELECT
         <include refid="common_columns" />
         FROM sys_operate_log as sl left join sys_operate_log_info as si on sl.log_id=si.log_id
@@ -51,7 +51,7 @@
         order by request_date desc
     </select>
     
-    <select id="queryPageDetail" parameterType="org.qboot.base.dto.SysOperateLogDto" resultMap="SysOperateLogDtoResult">
+    <select id="queryPageDetail" parameterType="org.qboot.sys.dto.SysOperateLogDto" resultMap="SysOperateLogDtoResult">
     	SELECT user_id, request_date, response_params FROM sys_operate_log
     	<where>
     		<if test="logId != null and logId > 0">

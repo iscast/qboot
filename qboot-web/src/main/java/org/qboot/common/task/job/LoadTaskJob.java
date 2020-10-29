@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-import org.qboot.base.service.impl.SysTaskService;
+import org.qboot.sys.service.impl.SysTaskService;
 
 
 /**

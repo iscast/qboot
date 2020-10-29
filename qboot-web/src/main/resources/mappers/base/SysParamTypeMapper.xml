@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="org.qboot.base.dao.SysParamTypeDao" >
-  <resultMap id="BaseResultMap" type="org.qboot.base.dto.SysParamType" >
+<mapper namespace="org.qboot.sys.dao.SysParamTypeDao" >
+  <resultMap id="BaseResultMap" type="org.qboot.sys.dto.SysParamType" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="param_type_class" property="paramTypeClass" jdbcType="VARCHAR" />
     <result column="param_type_id" property="paramTypeId" jdbcType="INTEGER" />
@@ -15,7 +15,7 @@
     <result column="physics_flag" property="physicsFlag" jdbcType="INTEGER" />
   </resultMap>
 
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="org.qboot.base.dto.SysParamType">
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="org.qboot.sys.dto.SysParamType">
     <result column="i18n_field" jdbcType="LONGVARCHAR" property="i18nField" />
   </resultMap>
 
@@ -35,7 +35,7 @@
     where id = #{id} 
   </select>
   
-  <select id="findList" resultMap="BaseResultMap" parameterType="org.qboot.base.dto.SysParamType" >
+  <select id="findList" resultMap="BaseResultMap" parameterType="org.qboot.sys.dto.SysParamType" >
     select 
     <include refid="Base_Column_List" />
     ,
@@ -61,7 +61,7 @@
 		</if>
   </select>
   
-  <update id="changeById" parameterType="org.qboot.base.dto.SysParamType" >
+  <update id="changeById" parameterType="org.qboot.sys.dto.SysParamType" >
     update sys_param_type
     <set >
       <if test="physicsFlag != null" >
@@ -71,7 +71,7 @@
     where id = #{id} 
   </update>
   
-  <insert id="insert" parameterType="org.qboot.base.dto.SysParamType" >
+  <insert id="insert" parameterType="org.qboot.sys.dto.SysParamType" >
     insert into sys_param_type (param_type_id, param_type_class, param_type_code, param_type_name, physics_flag, create_by, create_date, update_by, update_date, remarks, i18n_field)
     values (#{paramTypeId,jdbcType=INTEGER}, #{paramTypeClass,jdbcType=VARCHAR}, #{paramTypeCode,jdbcType=VARCHAR}, #{paramTypeName,jdbcType=VARCHAR}
     	, #{physicsFlag,jdbcType=INTEGER}, #{createBy,jdbcType=VARCHAR}
@@ -80,7 +80,7 @@
       )
   </insert>
   
-  <update id="update" parameterType="org.qboot.base.dto.SysParamType" >
+  <update id="update" parameterType="org.qboot.sys.dto.SysParamType" >
     update sys_param_type
     <set >
       <if test="paramTypeId != null" >

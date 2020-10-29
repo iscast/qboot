@@ -2,26 +2,26 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="org.qboot.base.dao.SysTaskLogDao">
+<mapper namespace="org.qboot.sys.dao.SysTaskLogDao">
 
-	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="org.qboot.base.dto.SysTaskLog">
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="org.qboot.sys.dto.SysTaskLog">
 		insert into sys_task_log
 			(task_id,begin_time,end_time,cost_time,exec_ip,exec_status,exec_result,create_date,update_date,create_by,update_by) 
 		values 
 			(#{taskId},#{beginTime},#{endTime},#{costTime},#{execIp},#{execStatus},#{execResult},#{createDate},#{updateDate},#{createBy},#{updateBy})
 	</insert>
 
-	<select id="findAll" resultType="org.qboot.base.dto.SysTaskLog">
+	<select id="findAll" resultType="org.qboot.sys.dto.SysTaskLog">
 		SELECT * FROM sys_task_log
 	</select>
 
-	<select id="findList" parameterType="org.qboot.base.dto.SysTaskLog" resultType="org.qboot.base.dto.SysTaskLog">
+	<select id="findList" parameterType="org.qboot.sys.dto.SysTaskLog" resultType="org.qboot.sys.dto.SysTaskLog">
 		select t.* from sys_task_log t  
 		where t.task_id = #{taskId} 
 		order by t.begin_time desc 
 	</select>
 
-	<update id="updateById" parameterType="org.qboot.base.dto.SysTaskLog">
+	<update id="updateById" parameterType="org.qboot.sys.dto.SysTaskLog">
 		update sys_task_log
 		<set>
 			<if test="endTime != null">
@@ -52,7 +52,7 @@
 			)
 	</delete>
 
-	<select id="findById" parameterType="java.lang.Long" resultType="org.qboot.base.dto.SysTaskLog">
+	<select id="findById" parameterType="java.lang.Long" resultType="org.qboot.sys.dto.SysTaskLog">
 		select * from sys_task_log where id = #{id}
 	</select>
 	

@@ -3,7 +3,7 @@ package org.qboot.web.security;
 import java.io.Serializable;
 import java.util.List;
 
-import org.qboot.base.dto.SysRole;
+import org.qboot.sys.dto.SysRole;
 
 /**
  * <p>Title: LoginUser</p>

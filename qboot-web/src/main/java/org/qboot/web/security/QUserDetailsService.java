@@ -1,12 +1,12 @@
 package org.qboot.web.security;
 
 import org.apache.commons.lang3.StringUtils;
-import org.qboot.base.dto.SysMenu;
-import org.qboot.base.dto.SysRole;
-import org.qboot.base.dto.SysUser;
-import org.qboot.base.service.impl.SysMenuService;
-import org.qboot.base.service.impl.SysRoleService;
-import org.qboot.base.service.impl.SysUserService;
+import org.qboot.sys.dto.SysMenu;
+import org.qboot.sys.dto.SysRole;
+import org.qboot.sys.dto.SysUser;
+import org.qboot.sys.service.impl.SysMenuService;
+import org.qboot.sys.service.impl.SysRoleService;
+import org.qboot.sys.service.impl.SysUserService;
 import org.qboot.common.constants.SysConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;

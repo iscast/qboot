@@ -1,7 +1,7 @@
 package org.qboot.common.controller;
 
-import org.qboot.base.dto.SysParamType;
-import org.qboot.base.service.impl.SysParamTypeService;
+import org.qboot.sys.dto.SysParamType;
+import org.qboot.sys.service.impl.SysParamTypeService;
 import org.qboot.common.entity.ResponeModel;
 import org.qboot.web.security.QUser;
 import org.qboot.web.security.SecurityUtils;

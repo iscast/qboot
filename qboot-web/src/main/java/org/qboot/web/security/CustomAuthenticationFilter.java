@@ -3,8 +3,8 @@ package org.qboot.web.security;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.qboot.base.dto.SysUser;
-import org.qboot.base.service.impl.SysUserService;
+import org.qboot.sys.dto.SysUser;
+import org.qboot.sys.service.impl.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.DisabledException;

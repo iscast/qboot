@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="org.qboot.base.dao.SysOperateLogInfoDao">
+<mapper namespace="org.qboot.sys.dao.SysOperateLogInfoDao">
 
-	<resultMap id="SysOperateLogInfoDtoResult" type="org.qboot.base.dto.SysOperateLogInfoDto">
+	<resultMap id="SysOperateLogInfoDtoResult" type="org.qboot.sys.dto.SysOperateLogInfoDto">
 		<result column="LOG_ID" jdbcType="BIGINT" property="logId" />
 		<result column="REQ_URI" jdbcType="VARCHAR" property="reqUri" />
 		<result column="URI_NAME" jdbcType="VARCHAR" property="uriName" />
@@ -21,7 +21,7 @@
 	    LOG_ID, REQ_URI, URI_NAME, URI_TYPE, PHYSICS_FLAG, CREATE_DATE, UPDATE_DATE, UPDATE_BY, CREATE_BY, REMARKS
 	</sql>
 
-	<insert id="insert" parameterType="org.qboot.base.dto.SysOperateLogInfoDto" keyProperty="LOG_ID" useGeneratedKeys="true">
+	<insert id="insert" parameterType="org.qboot.sys.dto.SysOperateLogInfoDto" keyProperty="LOG_ID" useGeneratedKeys="true">
 		INSERT INTO sys_operate_log_info 
 		(REQ_URI, URI_NAME, URI_TYPE, PHYSICS_FLAG, CREATE_DATE, UPDATE_DATE, UPDATE_BY, CREATE_BY, REMARKS)
 		VALUES
@@ -30,7 +30,7 @@
 		,#{updateBy, jdbcType=INTEGER},#{createBy, jdbcType=VARCHAR},#{remarks, jdbcType=VARCHAR})
 	</insert>
 	
-    <select id="findList" parameterType="org.qboot.base.dto.SysOperateLogInfoDto" resultMap="SysOperateLogInfoDtoResult">
+    <select id="findList" parameterType="org.qboot.sys.dto.SysOperateLogInfoDto" resultMap="SysOperateLogInfoDtoResult">
         SELECT 
         <include refid="Base_Column_List" />
         from sys_operate_log_info
@@ -46,7 +46,7 @@
 	    where LOG_ID = #{logId}
 	</select>
 	
-    <select id="findByUri" resultMap="SysOperateLogInfoDtoResult" parameterType="org.qboot.base.dto.SysOperateLogInfoDto" >
+    <select id="findByUri" resultMap="SysOperateLogInfoDtoResult" parameterType="org.qboot.sys.dto.SysOperateLogInfoDto" >
 	    select 
 	    <include refid="Base_Column_List" />
 	    from sys_operate_log_info
@@ -70,7 +70,7 @@
     delete from sys_operate_log_info where LOG_ID = #{logId}
   </delete>
   
-    <insert id="update" parameterType="org.qboot.base.dto.SysOperateLogInfoDto">
+    <insert id="update" parameterType="org.qboot.sys.dto.SysOperateLogInfoDto">
 		update sys_operate_log_info 
 		<set >
 	      <if test="reqUri != null" >

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="org.qboot.base.dao.SysLoginLogDao" >
-  <resultMap id="BaseResultMap" type="org.qboot.base.dto.SysLoginLog" >
+<mapper namespace="org.qboot.sys.dao.SysLoginLogDao" >
+  <resultMap id="BaseResultMap" type="org.qboot.sys.dto.SysLoginLog" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="user_id" property="userId" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="VARCHAR" />
@@ -38,7 +38,7 @@
     where l.id = #{id}
   </select>
   
-  <select id="findList" resultMap="BaseResultMap" parameterType="org.qboot.base.dto.SysLoginLog" >
+  <select id="findList" resultMap="BaseResultMap" parameterType="org.qboot.sys.dto.SysLoginLog" >
     select 
     <include refid="Base_Column_List" />
     from <include refid="Join_Table" />
@@ -79,7 +79,7 @@
     delete l from sys_login_log l  where l.id = #{id}
   </delete>
   
-  <insert id="insert" parameterType="org.qboot.base.dto.SysLoginLog" >
+  <insert id="insert" parameterType="org.qboot.sys.dto.SysLoginLog" >
     insert into sys_login_log (user_id,status,login_time,ip,area,user_agent,device_name,browser_name,create_by,create_date,update_by,update_date,remarks, first_login)
     values (#{userId},#{status},#{loginTime},#{ip},#{area},#{userAgent},#{deviceName},#{browserName},#{createBy},#{createDate},#{updateBy},#{updateDate},#{remarks},#{firstLogin})
   </insert>
