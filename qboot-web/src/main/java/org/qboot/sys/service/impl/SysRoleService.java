@@ -2,9 +2,9 @@ package org.qboot.sys.service.impl;
 
 import org.apache.commons.lang3.StringUtils;
 import org.qboot.sys.dao.SysRoleDao;
-import org.qboot.sys.dto.SysRole;
-import org.qboot.sys.dto.SysRoleDept;
-import org.qboot.sys.dto.SysRoleMenu;
+import org.qboot.sys.dto.SysRoleDto;
+import org.qboot.sys.dto.SysRoleDeptDto;
+import org.qboot.sys.dto.SysRoleMenuDto;
 import org.qboot.common.service.CrudService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,13 +22,13 @@ import java.util.List;
  * @date 2018-08-08
  */
 @Service
-public class SysRoleService extends CrudService<SysRoleDao, SysRole> {
+public class SysRoleService extends CrudService<SysRoleDao, SysRoleDto> {
 
 	@Override
-	public int save(SysRole t) {
+	public int save(SysRoleDto t) {
 		int cnt = super.save(t);
 		if(cnt > 0) {
-			SysRole role = d.findByName(t.getName());
+			SysRoleDto role = d.findByName(t.getName());
 			if(role != null) {
 				t.setId(role.getId());
 			}
@@ -50,7 +50,7 @@ public class SysRoleService extends CrudService<SysRoleDao, SysRole> {
 		return this.d.delete((java.lang.String)id);
 	}
 	@Override
-	public int update(SysRole t) {
+	public int update(SysRoleDto t) {
 		this.d.deleteRoleMenuByRoleId(t.getId());
 		if(StringUtils.isNotBlank(t.getAuthMenuIds())) {
 			t.setMenuIds(Arrays.asList(t.getAuthMenuIds().split(",")));
@@ -64,9 +64,9 @@ public class SysRoleService extends CrudService<SysRoleDao, SysRole> {
 
 	private int saveRoleMenus(String roleId, List<String> menuIds) {
 		if (null != menuIds && !menuIds.isEmpty()) {
-			List<SysRoleMenu> roleMenus = new ArrayList<>();
+			List<SysRoleMenuDto> roleMenus = new ArrayList<>();
 			for (String menuId : menuIds) {
-				roleMenus.add(new SysRoleMenu(roleId, menuId));
+				roleMenus.add(new SysRoleMenuDto(roleId, menuId));
 			}
 			return this.d.insertRoleMenu(roleMenus);
 		}
@@ -75,16 +75,16 @@ public class SysRoleService extends CrudService<SysRoleDao, SysRole> {
 	
 	private int saveRoleDepts(String roleId, List<String> deptIds) {
 		if (null != deptIds && !deptIds.isEmpty()) {
-			List<SysRoleDept> roleDepts =  new ArrayList<>();
+			List<SysRoleDeptDto> roleDepts =  new ArrayList<>();
 			for (String deptId : deptIds) {
-				roleDepts.add(new SysRoleDept(roleId, deptId));
+				roleDepts.add(new SysRoleDeptDto(roleId, deptId));
 			}
 			return this.d.insertRoleDept(roleDepts);
 		}
 		return 0;
 	}
 
-	public List<SysRole> findByUserId(Long userId) {
+	public List<SysRoleDto> findByUserId(Long userId) {
 		Assert.notNull(userId, "userIdIsEmpty");
 		return  this.d.findByUserId(userId);
 	}
@@ -119,7 +119,7 @@ public class SysRoleService extends CrudService<SysRoleDao, SysRole> {
 	}
 
 	@Transactional(readOnly = true)
-	public SysRole findByName(String name) {
+	public SysRoleDto findByName(String name) {
 		Assert.notNull(name, "roleNameIsEmpty");
 		Assert.hasLength(name, "roleNameIsEmpty");
 		return d.findByName(name);

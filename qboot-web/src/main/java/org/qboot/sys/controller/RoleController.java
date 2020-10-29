@@ -1,13 +1,13 @@
 package org.qboot.sys.controller;
 
 import com.github.pagehelper.PageInfo;
-import org.qboot.sys.dto.SysRole;
+import org.qboot.sys.dto.SysRoleDto;
 import org.qboot.sys.service.impl.SysRoleService;
 import org.qboot.common.annotation.AccLog;
 import org.qboot.common.controller.BaseController;
 import org.qboot.common.entity.ResponeModel;
-import org.qboot.web.security.QUser;
-import org.qboot.web.security.SecurityUtils;
+import org.qboot.common.security.CustomUser;
+import org.qboot.common.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.Assert;
@@ -37,22 +37,22 @@ public class RoleController extends BaseController {
 	
 	@PreAuthorize("hasAuthority('sys:role:qry')")
 	@PostMapping("/qryPage")
-	public ResponeModel qryPage(@Validated SysRole sysRole, BindingResult bindingResult) {
+	public ResponeModel qryPage(@Validated SysRoleDto sysRole, BindingResult bindingResult) {
 		if(!SecurityUtils.isSuperAdmin()) {
 			sysRole.setCreateBy(SecurityUtils.getLoginName());
 		}
-		PageInfo<SysRole> page = sysRoleService.findByPage(sysRole);
+		PageInfo<SysRoleDto> page = sysRoleService.findByPage(sysRole);
 		return ResponeModel.ok(page);
 	}
 	
 	@PostMapping("/qryAllWithScope")
 	public ResponeModel qryAllWithScope() {
-		QUser user = SecurityUtils.getUser();
+		CustomUser user = SecurityUtils.getUser();
 		if (SecurityUtils.isSuperAdmin(user.getLoginName())) {
 			return this.qryAll();
 		}
 		//如果是非超级管理员返回自己拥有的角色
-		List<SysRole> list = sysRoleService.findByUserId(user.getUserId());
+		List<SysRoleDto> list = sysRoleService.findByUserId(user.getUserId());
 		return ResponeModel.ok(list);
 	}
 	/**
@@ -67,7 +67,7 @@ public class RoleController extends BaseController {
 	@PreAuthorize("hasAuthority('sys:role:qry')")
 	@GetMapping("/get")
 	public ResponeModel get(@RequestParam Serializable id) {
-		SysRole sysRole = sysRoleService.findById(id);
+		SysRoleDto sysRole = sysRoleService.findById(id);
 		if(sysRole != null) {
 			List<String> menuIds = sysRoleService.selectMenuIdsByRoleId(id);
 			if(!CollectionUtils.isEmpty(menuIds)) {
@@ -92,8 +92,8 @@ public class RoleController extends BaseController {
     @AccLog
 	@PreAuthorize("hasAuthority('sys:role:save')")
 	@PostMapping("/save")
-	public ResponeModel save(@Validated SysRole sysRole, BindingResult bindingResult) {
-		SysRole role = sysRoleService.findByName(sysRole.getName());
+	public ResponeModel save(@Validated SysRoleDto sysRole, BindingResult bindingResult) {
+		SysRoleDto role = sysRoleService.findByName(sysRole.getName());
 		if(role != null) {
 			return ResponeModel.error("roleDuplicate");
 		}
@@ -102,7 +102,7 @@ public class RoleController extends BaseController {
 		sysRole.setCreateDate(new Date());
 		int cnt = sysRoleService.save(sysRole);
 		if(cnt > 0) {
-			SysRole newRole = sysRoleService.findByName(sysRole.getName());
+			SysRoleDto newRole = sysRoleService.findByName(sysRole.getName());
 			List<Long> list = new ArrayList();
 			list.add(SecurityUtils.getUserId());
 			sysRoleService.addUsersByRoleId(newRole.getId(), list);
@@ -114,8 +114,8 @@ public class RoleController extends BaseController {
     @AccLog
 	@PreAuthorize("hasAuthority('sys:role:update')")
 	@PostMapping("/update")
-	public ResponeModel update(@Validated SysRole sysRole, BindingResult bindingResult) {
-		SysRole role = sysRoleService.findByName(sysRole.getName());
+	public ResponeModel update(@Validated SysRoleDto sysRole, BindingResult bindingResult) {
+		SysRoleDto role = sysRoleService.findByName(sysRole.getName());
 		if(role != null && !String.valueOf(role.getId()).equals(String.valueOf(sysRole.getId()))) {
 			return ResponeModel.error("roleDuplicate");
 		}

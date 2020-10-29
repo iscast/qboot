@@ -2,8 +2,8 @@ package org.qboot.sys.service.impl;
 
 import com.github.pagehelper.PageInfo;
 import org.qboot.sys.dao.SysLoginLogDao;
-import org.qboot.sys.dto.SysLoginLog;
-import org.qboot.sys.dto.SysUser;
+import org.qboot.sys.dto.SysLoginLogDto;
+import org.qboot.sys.dto.SysUserDto;
 import org.qboot.common.constants.SysConstants;
 import org.qboot.common.service.CrudService;
 import org.slf4j.Logger;
@@ -20,7 +20,7 @@ import java.util.List;
  * @author history
  */
 @Service
-public class SysLoginLogService extends CrudService<SysLoginLogDao, SysLoginLog>{
+public class SysLoginLogService extends CrudService<SysLoginLogDao, SysLoginLogDto>{
 
 	protected Logger logger = LoggerFactory.getLogger(SysLoginLogService.class);
 	
@@ -30,12 +30,12 @@ public class SysLoginLogService extends CrudService<SysLoginLogDao, SysLoginLog>
 	public void loginLogByLoginName(String status,String loginName,String ip,String userAgent,String browser,String deviceName, String area, int firstLogin) {
         Assert.hasLength(status, "loginStatusIsEmpty");
 
-        SysLoginLog loginLog = initPojo(status, ip, userAgent, browser, deviceName, area, firstLogin);
+        SysLoginLogDto loginLog = initPojo(status, ip, userAgent, browser, deviceName, area, firstLogin);
 
         loginLog.setCreateBy(loginName);
         loginLog.setUpdateBy(loginName);
 
-		SysUser user = sysUserService.findByLoginName(loginName);
+		SysUserDto user = sysUserService.findByLoginName(loginName);
 		if (null == user) {
             logger.warn("user is not exist, login info {}", loginLog.toString());
             return ;
@@ -48,9 +48,9 @@ public class SysLoginLogService extends CrudService<SysLoginLogDao, SysLoginLog>
 
     public void loginLogByLoginId(String status,Long userId,String ip,String userAgent,String browser,String deviceName, String area) {
 
-        SysLoginLog loginLog = initPojo(status, ip, userAgent, browser, deviceName, area, SysConstants.SYS_USER_PWD_STATUS_NORMAL);
+        SysLoginLogDto loginLog = initPojo(status, ip, userAgent, browser, deviceName, area, SysConstants.SYS_USER_PWD_STATUS_NORMAL);
         loginLog.setUserId(userId);
-        SysUser user = sysUserService.findById(userId);
+        SysUserDto user = sysUserService.findById(userId);
         if (null == user) {
             logger.warn("userId:[{}] is not exist, login info {}", userId, loginLog.toString());
             return ;
@@ -61,17 +61,17 @@ public class SysLoginLogService extends CrudService<SysLoginLogDao, SysLoginLog>
         this.save(loginLog);
     }
 
-	public SysLoginLog findLastLoginInfo(Long userId) {
+	public SysLoginLogDto findLastLoginInfo(Long userId) {
         Assert.notNull(userId, "userIdIsEmpty");
-		SysLoginLog loginLog = new SysLoginLog();
+		SysLoginLogDto loginLog = new SysLoginLogDto();
 		loginLog.setPage(1);
 		loginLog.setLimit(2);
 		loginLog.setUserId(userId);
 		loginLog.setStatus(SysConstants.SYS_USER_LOGIN_STATUS_SUCCESS);
 		loginLog.setSortField("l.login_time");
 		loginLog.setDirection(SysConstants.DESC);
-		PageInfo<SysLoginLog> findByPage = this.findByPage(loginLog);
-		List<SysLoginLog> list = findByPage.getList();
+		PageInfo<SysLoginLogDto> findByPage = this.findByPage(loginLog);
+		List<SysLoginLogDto> list = findByPage.getList();
 		if (!list.isEmpty()) {
 			return list.get(list.size()-1);
 		}
@@ -80,8 +80,8 @@ public class SysLoginLogService extends CrudService<SysLoginLogDao, SysLoginLog>
 
 
 
-    private SysLoginLog initPojo(String status, String ip, String userAgent, String browser, String deviceName, String area, int firstLogin) {
-        SysLoginLog loginLog = new SysLoginLog();
+    private SysLoginLogDto initPojo(String status, String ip, String userAgent, String browser, String deviceName, String area, int firstLogin) {
+        SysLoginLogDto loginLog = new SysLoginLogDto();
         loginLog.setFirstLogin(firstLogin);
         loginLog.setStatus(status);
         loginLog.setBrowserName(browser);

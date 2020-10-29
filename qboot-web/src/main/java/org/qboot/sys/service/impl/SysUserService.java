@@ -2,8 +2,8 @@ package org.qboot.sys.service.impl;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.qboot.sys.dao.SysUserDao;
-import org.qboot.sys.dto.SysUser;
-import org.qboot.sys.dto.SysUserRole;
+import org.qboot.sys.dto.SysUserDto;
+import org.qboot.sys.dto.SysUserRoleDto;
 import org.qboot.common.constants.SysConstants;
 import org.qboot.common.service.CrudService;
 import org.qboot.common.utils.CodecUtils;
@@ -21,20 +21,20 @@ import java.util.List;
  * @date 2018-08-08
  */
 @Service
-public class SysUserService extends CrudService<SysUserDao, SysUser> {
+public class SysUserService extends CrudService<SysUserDao, SysUserDto> {
 
     @Autowired
     private SysLoginLogService sysLoginLogService;
 
-	public SysUser findByLoginName(String loginName) {
+	public SysUserDto findByLoginName(String loginName) {
 		Assert.hasLength(loginName, "loginNameIsEmpty");
-		List<SysUser> list = this.d.findByLoginName(loginName);
+		List<SysUserDto> list = this.d.findByLoginName(loginName);
 		return list.isEmpty() ? null : list.get(0);
 	}
 	
 	public boolean checkLoginName(Long userId, String loginName) {
 		Assert.hasLength(loginName, "loginNameIsEmpty");
-		List<SysUser> list = this.d.findByLoginName(loginName);
+		List<SysUserDto> list = this.d.findByLoginName(loginName);
 		
 		if(userId != null && list.isEmpty()) {
 			return false;
@@ -49,7 +49,7 @@ public class SysUserService extends CrudService<SysUserDao, SysUser> {
 	}
 
 	@Override
-	public int save(SysUser t) {
+	public int save(SysUserDto t) {
 		String salt = RandomStringUtils.randomAlphanumeric(20);
 		t.setSalt(salt);
 		//处理密码
@@ -68,14 +68,14 @@ public class SysUserService extends CrudService<SysUserDao, SysUser> {
 	}
 	
 	@Override
-	public int update(SysUser t) {
-		SysUser sysUser = this.findById(t.getId());
+	public int update(SysUserDto t) {
+		SysUserDto sysUser = this.findById(t.getId());
 		Assert.notNull(sysUser, "userNotExists");
 		return super.update(t);
 	}
 	
-	public int updateUserRoleSelective(SysUser t) {
-		SysUser sysUser = this.findById(t.getId());
+	public int updateUserRoleSelective(SysUserDto t) {
+		SysUserDto sysUser = this.findById(t.getId());
 		Assert.notNull(sysUser, "userNotExists");
 		int cnt = super.update(t);
 		if(cnt > 0) {
@@ -86,8 +86,8 @@ public class SysUserService extends CrudService<SysUserDao, SysUser> {
 		return cnt;
 	}
 	
-	public int updateSelect(SysUser t) {
-		SysUser sysUser = this.findById(t.getId());
+	public int updateSelect(SysUserDto t) {
+		SysUserDto sysUser = this.findById(t.getId());
 		Assert.notNull(sysUser, "userNotExists");
 
 		t.setVersion(sysUser.getVersion());
@@ -111,9 +111,9 @@ public class SysUserService extends CrudService<SysUserDao, SysUser> {
 		if (null == roleIds || roleIds.isEmpty()) {
 			return 0;
 		}
-		List<SysUserRole> userRoleList =  new ArrayList<>();
+		List<SysUserRoleDto> userRoleList =  new ArrayList<>();
 		for (String roleId : roleIds) {
-			userRoleList.add(new SysUserRole(String.valueOf(userId), roleId));
+			userRoleList.add(new SysUserRoleDto(String.valueOf(userId), roleId));
 		}
 		return this.d.insertUserRole(userRoleList);
 	}
@@ -127,13 +127,13 @@ public class SysUserService extends CrudService<SysUserDao, SysUser> {
 	public boolean validatePwd(String password, Long userId) {
 		Assert.hasLength(password, "pwdIsEmpty");
 		Assert.notNull(userId, "userIdIsEmpty");
-		SysUser user = this.findById(userId);
+		SysUserDto user = this.findById(userId);
 		Assert.notNull(user, "userNotExists");
 		return user.getPassword().equals(CodecUtils.sha256(password + user.getSalt()));
 	}
 	
-	public int initPwd(SysUser t, int initFlag, String ip) {
-		SysUser sysUser = this.findById(t.getId());
+	public int initPwd(SysUserDto t, int initFlag, String ip) {
+		SysUserDto sysUser = this.findById(t.getId());
 		Assert.notNull(sysUser, "userNotExists");
 		sysUser.setPassword(encryptPwd(t.getPassword(), sysUser.getSalt()));
 		if(initFlag == SysConstants.SYS_USER_PWD_STATUS_CHANGED) {
@@ -147,15 +147,15 @@ public class SysUserService extends CrudService<SysUserDao, SysUser> {
 		return cnt;
 	}
 	
-	public int setStatus(SysUser t) {
-		SysUser sysUser = this.findById(t.getId());
+	public int setStatus(SysUserDto t) {
+		SysUserDto sysUser = this.findById(t.getId());
 		Assert.notNull(sysUser, "userNotExists");
 		sysUser.setStatus(t.getStatus());;
 		return d.setStatus(sysUser);
 	}
 	
 	public boolean selectFirstLoginUser(Long userId){
-		SysUser sysUser = this.findById(userId);
+		SysUserDto sysUser = this.findById(userId);
     	if(sysUser.getFldN1() == null || sysUser.getFldN1() != 1) {
     		return true;
     	}

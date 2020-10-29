@@ -3,8 +3,8 @@ package org.qboot.sys.controller;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
-import org.qboot.sys.dto.SysRole;
-import org.qboot.sys.dto.SysUser;
+import org.qboot.sys.dto.SysRoleDto;
+import org.qboot.sys.dto.SysUserDto;
 import org.qboot.sys.service.impl.LoginSecurityService;
 import org.qboot.sys.service.impl.SysRoleService;
 import org.qboot.sys.service.impl.SysUserService;
@@ -14,7 +14,7 @@ import org.qboot.common.controller.BaseController;
 import org.qboot.common.utils.IpUtils;
 import org.qboot.common.utils.RSAsecurity;
 import org.qboot.common.entity.ResponeModel;
-import org.qboot.web.security.SecurityUtils;
+import org.qboot.common.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.Assert;
@@ -50,24 +50,24 @@ public class UserController extends BaseController {
 
 	@PreAuthorize("hasAuthority('sys:user:qry')")
 	@GetMapping("/qryPage")
-	public ResponeModel qryPage(SysUser user, BindingResult bindingResult) {
+	public ResponeModel qryPage(SysUserDto user, BindingResult bindingResult) {
 		if(!SecurityUtils.isSuperAdmin()) {
 			user.setCreateBy(SecurityUtils.getLoginName());
 		}
-		PageInfo<SysUser> page = sysUserService.findByPage(user);
+		PageInfo<SysUserDto> page = sysUserService.findByPage(user);
 		return ResponeModel.ok(page);
 	}
 	
 	@PreAuthorize("hasAuthority('sys:user:qry')")
 	@RequestMapping("/get")
 	public ResponeModel getUser(@RequestParam Long id, HttpServletRequest request) {
-		SysUser sysUser = sysUserService.findById(id);
+		SysUserDto sysUser = sysUserService.findById(id);
 		Assert.notNull(sysUser,"userNotExists");
 		//用户所拥有的角色
-		List<SysRole> roleList = sysRoleService.findByUserId(sysUser.getId());
+		List<SysRoleDto> roleList = sysRoleService.findByUserId(sysUser.getId());
 		List<String> roleIds = Lists.newArrayList();
 		StringBuffer roleSB = new StringBuffer();
-		for (SysRole sysRole:roleList) {
+		for (SysRoleDto sysRole:roleList) {
 			roleIds.add(sysRole.getId());
 			roleSB.append(sysRole.getId()).append(",");
 		}
@@ -80,7 +80,7 @@ public class UserController extends BaseController {
     @AccLog
 	@PreAuthorize("hasAuthority('sys:user:save')")
 	@PostMapping("/save")
-	public ResponeModel save(@Validated SysUser sysUser, BindingResult bindingResult) {
+	public ResponeModel save(@Validated SysUserDto sysUser, BindingResult bindingResult) {
 		boolean user = sysUserService.checkLoginName(null, sysUser.getLoginName());
 		if(user) {
 			return ResponeModel.error("userDuplicate");
@@ -110,7 +110,7 @@ public class UserController extends BaseController {
     @AccLog
 	@PreAuthorize("hasAuthority('sys:user:update')")
 	@PostMapping("/update")
-	public ResponeModel update(@Validated SysUser sysUser, BindingResult bindingResult, HttpServletRequest request) {
+	public ResponeModel update(@Validated SysUserDto sysUser, BindingResult bindingResult, HttpServletRequest request) {
 		boolean user = sysUserService.checkLoginName(sysUser.getId(), sysUser.getLoginName());
 		if(user) {
 			return ResponeModel.error("loginNameDuplicate");
@@ -143,7 +143,7 @@ public class UserController extends BaseController {
     @AccLog
 	@PreAuthorize("hasAuthority('sys:user:update')")
 	@PostMapping("/updateSelect")
-	public ResponeModel updateSelect(@Validated SysUser sysUser, BindingResult bindingResult) {
+	public ResponeModel updateSelect(@Validated SysUserDto sysUser, BindingResult bindingResult) {
 		boolean user = sysUserService.checkLoginName(sysUser.getId(), sysUser.getLoginName());
 		if(user) {
 			return ResponeModel.error("userDuplicate");
@@ -169,7 +169,7 @@ public class UserController extends BaseController {
 	@PreAuthorize("hasAuthority('sys:user:delete')")
 	@PostMapping("/delete")
 	public ResponeModel delete(@RequestParam Long id) {
-		SysUser user = sysUserService.findById(id);
+		SysUserDto user = sysUserService.findById(id);
 		Assert.notNull(user,"userNotExists");
 		if (SecurityUtils.isSuperAdmin(user.getLoginName())) {
 			return ResponeModel.error("superAdminCannotBeDeleted");
@@ -188,7 +188,7 @@ public class UserController extends BaseController {
 	@PreAuthorize("hasAuthority('sys:user:update')")
 	@PostMapping("/setStatus")
 	public ResponeModel setStatus(@RequestParam Long id, @RequestParam String status) {
-		SysUser user = sysUserService.findById(id);
+		SysUserDto user = sysUserService.findById(id);
 		Assert.notNull(user,"userNotExists");
 		if (SecurityUtils.isSuperAdmin(user.getLoginName())) {
 			return ResponeModel.error("superAdminCannotBeModified");
@@ -196,7 +196,7 @@ public class UserController extends BaseController {
 		if (SecurityUtils.getUserId() == id) {
 			return ResponeModel.error("cannotUpdateYourOwnStatus");
 		}
-		SysUser sysUser = new SysUser();
+		SysUserDto sysUser = new SysUserDto();
 		sysUser.setId(id);
 		sysUser.setStatus(status);
 		int cnt = this.sysUserService.setStatus(sysUser);
@@ -211,7 +211,7 @@ public class UserController extends BaseController {
 	@PreAuthorize("hasAuthority('sys:user:update')")
 	@PostMapping("/initPwd")
 	public ResponeModel initPwd(@RequestParam Long id, HttpServletRequest request) {
-		SysUser user = sysUserService.findById(id);
+		SysUserDto user = sysUserService.findById(id);
 		Assert.notNull(user,"userNotExists");
 		if (SecurityUtils.isSuperAdmin(user.getLoginName())) {
 			return ResponeModel.error("superAdminCannotBeModified");
@@ -219,7 +219,7 @@ public class UserController extends BaseController {
 		if (SecurityUtils.getUserId() ==  id) {
 			return ResponeModel.error("initPwdDenied");
 		}
-		SysUser sysUser = new SysUser();
+		SysUserDto sysUser = new SysUserDto();
 		sysUser.setId(id);
 		int password = new Random().nextInt(999999);
 	    if (password < 100000){
@@ -237,14 +237,14 @@ public class UserController extends BaseController {
     @AccLog
 	@PostMapping("/resetPwd")
 	public ResponeModel resetPwd(@RequestParam String oldPsw, @RequestParam String newPsw, HttpServletRequest request) {
-		SysUser user = sysUserService.findById(SecurityUtils.getUserId());
+		SysUserDto user = sysUserService.findById(SecurityUtils.getUserId());
 		Assert.notNull(user,"userNotExists");
 		if (SecurityUtils.isSuperAdmin(user.getLoginName())) {
 			return ResponeModel.error("superAdminNotAllowChangePwd");
 		}
 		boolean validate = sysUserService.validatePwd(oldPsw, SecurityUtils.getUserId());
 		if(validate) {
-			SysUser sysUser = new SysUser();
+			SysUserDto sysUser = new SysUserDto();
 			sysUser.setId(SecurityUtils.getUserId());
 			sysUser.setPassword(newPsw);
 			int cnt = this.sysUserService.initPwd(sysUser, SysConstants.SYS_USER_PWD_STATUS_CHANGED, IpUtils.getIpAddr(request));
@@ -266,7 +266,7 @@ public class UserController extends BaseController {
 	@PreAuthorize("hasAuthority('sys:user:update')")
 	@PostMapping("/unlock")
 	public ResponeModel setStatus(@RequestParam Long id) {
-		SysUser user = sysUserService.findById(id);
+		SysUserDto user = sysUserService.findById(id);
 		Assert.notNull(user, "userUnlockNotExists");
 		if (SecurityUtils.isSuperAdmin(user.getLoginName())) {
 			return ResponeModel.error("superAdminNotAllowChangePwd");

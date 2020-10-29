@@ -1,6 +1,6 @@
 package org.qboot.sys.dao;
 
-import org.qboot.sys.dto.SysMenu;
+import org.qboot.sys.dto.SysMenuDto;
 import org.qboot.common.dao.CrudDao;
 
 import java.io.Serializable;
@@ -13,17 +13,17 @@ import java.util.List;
  * @author history
  * @date 2018-08-08
  */
-public interface SysMenuDao extends CrudDao<SysMenu> {
+public interface SysMenuDao extends CrudDao<SysMenuDto> {
 
-	List<SysMenu> findByRoleId(String roleId);
-	List<SysMenu> findByUserId(Long userId);
-	List<SysMenu> findByPermission(String permission);
+	List<SysMenuDto> findByRoleId(String roleId);
+	List<SysMenuDto> findByUserId(Long userId);
+	List<SysMenuDto> findByPermission(String permission);
 	int deleteRoleMenuByMenuId(Serializable menuId);
-	int updateSelecter(SysMenu sysMenu);
+	int updateSelecter(SysMenuDto sysMenu);
 	
-	List<SysMenu> findParentMenuList(SysMenu sysMenu);
+	List<SysMenuDto> findParentMenuList(SysMenuDto sysMenu);
 	
 	List<Long> findChildIdById(String menuId);
 
-	int changeShowFlag(SysMenu sysMenu);
+	int changeShowFlag(SysMenuDto sysMenu);
 }

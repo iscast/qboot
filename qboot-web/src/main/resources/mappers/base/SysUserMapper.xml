@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.qboot.sys.dao.SysUserDao" >
-  <resultMap id="BaseResultMap" type="org.qboot.sys.dto.SysUser" >
+  <resultMap id="BaseResultMap" type="org.qboot.sys.dto.SysUserDto" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="dept_id" property="deptId" jdbcType="VARCHAR" />
     <result column="login_name" property="loginName" jdbcType="VARCHAR" />
@@ -52,7 +52,7 @@
     where u.login_name = #{loginName}
   </select>
   
-  <select id="findList" resultMap="BaseResultMap" parameterType="org.qboot.sys.dto.SysUser" >
+  <select id="findList" resultMap="BaseResultMap" parameterType="org.qboot.sys.dto.SysUserDto" >
     select 
     <include refid="Base_Column_List" />
     from <include refid="Join_Table" />
@@ -123,7 +123,7 @@
 		</foreach>
   </insert>
 	
-  <insert id="insert" parameterType="org.qboot.sys.dto.SysUser" useGeneratedKeys="true" keyProperty="id">
+  <insert id="insert" parameterType="org.qboot.sys.dto.SysUserDto" useGeneratedKeys="true" keyProperty="id">
     insert into sys_user (dept_id, login_name, password, salt, name, mobile, photo, email, user_type, status, create_by, create_date, update_by, 
     update_date, remarks, fld_n1, fld_n2, fld_s1, fld_s2)
     values (
@@ -137,7 +137,7 @@
      )
   </insert>
   
-  <insert id="insertBak" parameterType="org.qboot.sys.dto.SysUser" >
+  <insert id="insertBak" parameterType="org.qboot.sys.dto.SysUserDto" >
     insert into sys_user_bak (dept_id, login_name, password, salt, name, mobile, photo, email, 
       user_type, status, create_by, create_date, update_by, update_date, remarks)
     values (#{deptId,jdbcType=VARCHAR}, #{loginName,jdbcType=VARCHAR}, 
@@ -151,7 +151,7 @@
       </selectKey>
   </insert>
   
-  <update id="update" parameterType="org.qboot.sys.dto.SysUser" >
+  <update id="update" parameterType="org.qboot.sys.dto.SysUserDto" >
     update sys_user u
     <set >
       <if test="deptId != null" >
@@ -212,7 +212,7 @@
     where id = #{id} 
   </update>
 
-  <update id="updateSelect" parameterType="org.qboot.sys.dto.SysUser" >
+  <update id="updateSelect" parameterType="org.qboot.sys.dto.SysUserDto" >
     update sys_user
     set
       update_by = #{updateBy},
@@ -242,11 +242,11 @@
     where id = #{id} and version = #{version}
   </update>
   
-  <update id="initPwd" parameterType="org.qboot.sys.dto.SysUser" >
+  <update id="initPwd" parameterType="org.qboot.sys.dto.SysUserDto" >
     update sys_user set password = #{password}, fld_n1 = #{fldN1} where id = #{id} 
   </update>
   
-  <update id="setStatus" parameterType="org.qboot.sys.dto.SysUser" >
+  <update id="setStatus" parameterType="org.qboot.sys.dto.SysUserDto" >
     update sys_user set status = #{status} where id = #{id} 
   </update>
 </mapper>

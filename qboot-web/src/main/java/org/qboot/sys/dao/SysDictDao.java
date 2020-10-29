@@ -1,6 +1,6 @@
 package org.qboot.sys.dao;
 
-import org.qboot.sys.dto.SysDict;
+import org.qboot.sys.dto.SysDictDto;
 import org.qboot.common.dao.CrudDao;
 
 import java.util.List;
@@ -12,9 +12,9 @@ import java.util.List;
  * @author history
  * @date 2018-08-08
  */
-public interface SysDictDao extends CrudDao<SysDict>{
+public interface SysDictDao extends CrudDao<SysDictDto>{
 	
-    List<SysDict> findTypes(String type);
+    List<SysDictDto> findTypes(String type);
 
-	int setStatus(SysDict sysDict);
+	int setStatus(SysDictDto sysDict);
 }

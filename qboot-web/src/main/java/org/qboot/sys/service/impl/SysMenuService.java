@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.qboot.sys.dao.SysMenuDao;
-import org.qboot.sys.dto.SysMenu;
+import org.qboot.sys.dto.SysMenuDto;
 import org.qboot.common.constants.SysConstants;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -21,17 +21,17 @@ import org.qboot.common.service.CrudService;
  * @date 2018-08-08
  */
 @Service
-public class SysMenuService extends CrudService<SysMenuDao, SysMenu> {
+public class SysMenuService extends CrudService<SysMenuDao, SysMenuDto> {
 
-	public List<SysMenu> findByParentIds(String parentIds){
+	public List<SysMenuDto> findByParentIds(String parentIds){
 		Assert.hasLength(parentIds, "parentIdIsEmpty");
-		SysMenu sysMenu = new SysMenu();
+		SysMenuDto sysMenu = new SysMenuDto();
 		sysMenu.setParentIds(parentIds);
 		return this.findList(sysMenu);
 	}
 	
-	public List<SysMenu> findMenuByParentId(String parentId){
-		SysMenu sysMenu = new SysMenu();
+	public List<SysMenuDto> findMenuByParentId(String parentId){
+		SysMenuDto sysMenu = new SysMenuDto();
 		if(StringUtils.isNotBlank(parentId)) {
 			sysMenu.setParentId(parentId);
 		}else {
@@ -40,17 +40,17 @@ public class SysMenuService extends CrudService<SysMenuDao, SysMenu> {
 		return this.findList(sysMenu);
 	}
 	
-	public List<SysMenu> findParentMenuList(SysMenu menu){
+	public List<SysMenuDto> findParentMenuList(SysMenuDto menu){
 		return this.d.findParentMenuList(menu);
 	}
 	
 	@Override
 	public int deleteById(Serializable id) {
 		//删除下级菜单
-		SysMenu sysMenu = this.findById(id);
+		SysMenuDto sysMenu = this.findById(id);
 		Assert.notNull(sysMenu, "menuIsEmpty");
-		List<SysMenu> list = this.findByParentIds(sysMenu.getParentIds() + sysMenu.getId());
-		for (SysMenu smenu : list) {
+		List<SysMenuDto> list = this.findByParentIds(sysMenu.getParentIds() + sysMenu.getId());
+		for (SysMenuDto smenu : list) {
 			this.d.deleteRoleMenuByMenuId(smenu.getId());
 			super.deleteById(smenu.getId());
 		}
@@ -58,38 +58,38 @@ public class SysMenuService extends CrudService<SysMenuDao, SysMenu> {
 		return super.deleteById(id);
 	}
 	
-	public void batchSave(List<SysMenu> list) {
+	public void batchSave(List<SysMenuDto> list) {
 		Assert.notEmpty(list, "listIsEmpty");
-		for (SysMenu sysMenu : list) {
+		for (SysMenuDto sysMenu : list) {
 			this.update(sysMenu);
 		}
 	}
 	
-	public List<SysMenu> findByRoleId(String roleId){
+	public List<SysMenuDto> findByRoleId(String roleId){
 		if (StringUtils.isEmpty(roleId)) {
 			return this.findList(null);
 		}
 		return this.d.findByRoleId(roleId);
 	}
 	
-	public SysMenu findByPermission(String permission){
+	public SysMenuDto findByPermission(String permission){
 		if (StringUtils.isEmpty(permission)) {
 			return null;
 		}
-		List<SysMenu> list = this.d.findByPermission(permission);
+		List<SysMenuDto> list = this.d.findByPermission(permission);
 		if(!CollectionUtils.isEmpty(list)) {
 			return list.get(0);
 		}
 		return null;
 	}
 	
-	public List<SysMenu> findShowMenuByUserId(Long userId){
+	public List<SysMenuDto> findShowMenuByUserId(Long userId){
 		Assert.notNull(userId, "userIdIsEmpty");
 		return this.d.findByUserId(userId);
 	}
 	
-	public List<SysMenu> findShowMenuAll(){
-		SysMenu menu = new SysMenu();
+	public List<SysMenuDto> findShowMenuAll(){
+		SysMenuDto menu = new SysMenuDto();
 		menu.setIsShow(SysConstants.YES);
 		menu.setSortField("sort,parent_ids");
 		menu.setDirection(SysConstants.ASC);
@@ -101,17 +101,17 @@ public class SysMenuService extends CrudService<SysMenuDao, SysMenu> {
 	 * @param userId
 	 * @return
 	 */
-	public List<SysMenu> qryAuth(Long userId){
+	public List<SysMenuDto> qryAuth(Long userId){
 		return this.d.findByUserId(userId);
 	}
 	
-	public int updateSelecter(SysMenu menu){
+	public int updateSelecter(SysMenuDto menu){
 		return this.d.updateSelecter(menu);
 	}
 	
 	public int changeShowFlag(String menuId, String isShow) {
 		List<Long> childIds = this.d.findChildIdById(menuId);
-		SysMenu menu = new SysMenu();
+		SysMenuDto menu = new SysMenuDto();
 		menu.setIsShow(isShow);
 		menu.setIds(childIds);
 		return this.d.changeShowFlag(menu);

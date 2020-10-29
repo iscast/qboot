@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.qboot.sys.dao.SysDictDao" >
-  <resultMap id="BaseResultMap" type="org.qboot.sys.dto.SysDict" >
+  <resultMap id="BaseResultMap" type="org.qboot.sys.dto.SysDictDto" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="type" property="type" jdbcType="VARCHAR" />
     <result column="code" property="code" jdbcType="VARCHAR" />
@@ -26,7 +26,7 @@
     where id = #{id} and status = 1
   </select>
   
-  <select id="findList" resultMap="BaseResultMap" parameterType="org.qboot.sys.dto.SysDict" >
+  <select id="findList" resultMap="BaseResultMap" parameterType="org.qboot.sys.dto.SysDictDto" >
     select 
     <include refid="Base_Column_List" />
     from sys_dict
@@ -61,7 +61,7 @@
     delete from sys_dict where id = #{id}
   </delete>
   
-  <insert id="insert" parameterType="org.qboot.sys.dto.SysDict" >
+  <insert id="insert" parameterType="org.qboot.sys.dto.SysDictDto" >
     insert into sys_dict (type, code, name, sort, status, create_by, create_date, update_by, update_date, remarks)
     values (#{type,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
       #{name,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER}, #{status,jdbcType=CHAR}, #{createBy,jdbcType=VARCHAR}, 
@@ -69,7 +69,7 @@
       #{remarks,jdbcType=VARCHAR})
   </insert>
   
-  <update id="update" parameterType="org.qboot.sys.dto.SysDict" >
+  <update id="update" parameterType="org.qboot.sys.dto.SysDictDto" >
     update sys_dict
     <set >
       <if test="type != null" >
@@ -100,7 +100,7 @@
     where id = #{id,jdbcType=VARCHAR}
   </update>
   
-  <update id="updateByPrimaryKey" parameterType="org.qboot.sys.dto.SysDict" >
+  <update id="updateByPrimaryKey" parameterType="org.qboot.sys.dto.SysDictDto" >
     update sys_dict
     set type = #{type,jdbcType=VARCHAR},
       code = #{code,jdbcType=VARCHAR},
@@ -113,7 +113,7 @@
     where id = #{id,jdbcType=VARCHAR} 
   </update>
   
-  <update id="setStatus" parameterType="org.qboot.sys.dto.SysDict" >
+  <update id="setStatus" parameterType="org.qboot.sys.dto.SysDictDto" >
     update sys_dict set update_by = #{updateBy}, update_date = #{updateDate}, status = #{status} where id = #{id} 
   </update>
 </mapper>

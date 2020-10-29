@@ -4,7 +4,7 @@ import org.qboot.sys.dao.SysAreaDao;
 import org.springframework.stereotype.Service;
 
 import org.qboot.common.service.CrudService;
-import org.qboot.sys.dto.SysArea;
+import org.qboot.sys.dto.SysAreaDto;
 
 /**
  * 区域表Service
@@ -12,6 +12,6 @@ import org.qboot.sys.dto.SysArea;
  * @author history
  */
 @Service
-public class SysAreaService extends CrudService<SysAreaDao, SysArea>{
+public class SysAreaService extends CrudService<SysAreaDao, SysAreaDto>{
 
 }

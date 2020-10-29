@@ -1,7 +1,7 @@
 package org.qboot.sys.controller;
 
 import com.github.pagehelper.PageInfo;
-import org.qboot.sys.dto.SysTaskLog;
+import org.qboot.sys.dto.SysTaskLogDto;
 import org.qboot.sys.service.impl.SysTaskLogService;
 import org.qboot.common.controller.BaseController;
 import org.qboot.common.entity.ResponeModel;
@@ -25,14 +25,14 @@ public class TaskLogController extends BaseController {
 	
 	@PreAuthorize("hasAuthority('sys:task:qry')")
 	@GetMapping("/qryPage")
-	public ResponeModel qryPage(SysTaskLog sysTaskLog) {
-		PageInfo<SysTaskLog> page = sysTaskLogService.findByPage(sysTaskLog);
+	public ResponeModel qryPage(SysTaskLogDto sysTaskLog) {
+		PageInfo<SysTaskLogDto> page = sysTaskLogService.findByPage(sysTaskLog);
 		return ResponeModel.ok(page);
 	}
 
 	@PreAuthorize("hasAuthority('sys:task:deleteLog')")
 	@PostMapping("/deleteLog")
-	public ResponeModel deleteLog(SysTaskLog sysTaskLog) {
+	public ResponeModel deleteLog(SysTaskLogDto sysTaskLog) {
 		sysTaskLogService.deleteByTaskId(sysTaskLog.getTaskId());
 		return ResponeModel.ok();
 	}

@@ -5,10 +5,10 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.WordUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.qboot.sys.dto.DbTable;
-import org.qboot.sys.dto.DbTableColumn;
-import org.qboot.sys.dto.GenColumnInfo;
-import org.qboot.sys.dto.SysGen;
+import org.qboot.sys.dto.DbTableDto;
+import org.qboot.sys.dto.DbTableColumnDto;
+import org.qboot.sys.dto.GenColumnInfoDto;
+import org.qboot.sys.dto.SysGenDto;
 import org.qboot.sys.vo.SysProjectGenVO;
 import org.qboot.common.constants.SysConstants;
 import org.qboot.common.exception.ServiceException;
@@ -74,10 +74,10 @@ public class GeneratorService extends BaseService {
 	 * @param columns
 	 * @return
 	 */
-	public SysGen getDefaultGenInfo(DbTable table, List<DbTableColumn> columns) {
+	public SysGenDto getDefaultGenInfo(DbTableDto table, List<DbTableColumnDto> columns) {
 		Assert.notEmpty(columns, "DB 字段不存在");
 		Assert.notNull(table, "表不存在");
-		SysGen sysGen = new SysGen();
+		SysGenDto sysGen = new SysGenDto();
 		String tableName = table.getName();
 		sysGen.setTableName(table.getName());
 		sysGen.setMenuName(table.getComment());
@@ -104,12 +104,12 @@ public class GeneratorService extends BaseService {
 	 * @param columns
 	 * @return
 	 */
-	public List<GenColumnInfo> getGenColumnInfos(List<DbTableColumn> columns) {
+	public List<GenColumnInfoDto> getGenColumnInfos(List<DbTableColumnDto> columns) {
 		Assert.notEmpty(columns, "DB 字段不存在");
-		List<GenColumnInfo> genColumnInfos = Lists.newArrayList();
+		List<GenColumnInfoDto> genColumnInfos = Lists.newArrayList();
 		// 处理列
-		for (DbTableColumn column : columns) {
-			GenColumnInfo genColumnInfo = new GenColumnInfo();
+		for (DbTableColumnDto column : columns) {
+			GenColumnInfoDto genColumnInfo = new GenColumnInfoDto();
 			genColumnInfo.setDbColumnName(column.getName());
 			genColumnInfo.setColumnComment(column.getComment());
 			genColumnInfo.setColumnType(column.getColumnType());
@@ -156,11 +156,11 @@ public class GeneratorService extends BaseService {
 		return genColumnInfos;
 	}
 
-	public byte[] codeGen(SysGen sysGen) {
+	public byte[] codeGen(SysGenDto sysGen) {
 		Assert.notNull(sysGen, "生成方案为空");
 		Assert.notNull(sysGen.getColumnInfos(), "生成方案为空");
-		List<GenColumnInfo> columnInfos = sysGen.getColumnInfos();
-		for (GenColumnInfo column : columnInfos) {
+		List<GenColumnInfoDto> columnInfos = sysGen.getColumnInfos();
+		for (GenColumnInfoDto column : columnInfos) {
 			String javaType = column.getJavaType();
 			if (!ArrayUtils.contains(defaultFields, column.getDbColumnName())) {
 				if ("BigDecimal".equals(javaType)) {
@@ -194,7 +194,7 @@ public class GeneratorService extends BaseService {
 		}
 	}
 
-	private byte[] zipCode(SysGen sysGen) throws IOException {
+	private byte[] zipCode(SysGenDto sysGen) throws IOException {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		ZipOutputStream zos = new ZipOutputStream(bos);
 		for (String ftl : ftls) {
@@ -210,7 +210,7 @@ public class GeneratorService extends BaseService {
 		return byteArray;
 	}
 	
-	private String getZipEntryName(String ftl,SysGen sysGen) {
+	private String getZipEntryName(String ftl, SysGenDto sysGen) {
 		String name = null;
 		String moduleName = sysGen.getModuleName();
 		if(StringUtils.isNotBlank(moduleName)) {

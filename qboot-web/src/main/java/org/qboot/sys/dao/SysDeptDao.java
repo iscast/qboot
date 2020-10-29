@@ -3,7 +3,7 @@ package org.qboot.sys.dao;
 import java.io.Serializable;
 
 import org.qboot.common.dao.CrudDao;
-import org.qboot.sys.dto.SysDept;
+import org.qboot.sys.dto.SysDeptDto;
 
 /**
  * <p>Title: SysDeptDao</p>
@@ -11,6 +11,6 @@ import org.qboot.sys.dto.SysDept;
  * @author history
  * @date 2018-08-08
  */
-public interface SysDeptDao extends CrudDao<SysDept> {
+public interface SysDeptDao extends CrudDao<SysDeptDto> {
 	int deleteRoleDeptByDeptId(Serializable deptId);
 }

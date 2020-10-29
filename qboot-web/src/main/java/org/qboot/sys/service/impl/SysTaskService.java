@@ -3,10 +3,10 @@ package org.qboot.sys.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 import org.qboot.sys.dao.SysTaskDao;
-import org.qboot.sys.dto.SysTask;
+import org.qboot.sys.dto.SysTaskDto;
 import org.qboot.common.constants.CacheConstants;
 import org.qboot.common.constants.SysConstants;
-import org.qboot.common.exception.QExceptionCode;
+import org.qboot.common.exception.CommonExceptionCode;
 import org.qboot.common.exception.ServiceException;
 import org.qboot.common.service.CrudService;
 import org.qboot.common.task.job.AllowConcurrentExecutionJob;
@@ -27,7 +27,7 @@ import java.util.Map;
  * @author history
  */
 @Service
-public class SysTaskService extends CrudService<SysTaskDao, SysTask> {
+public class SysTaskService extends CrudService<SysTaskDao, SysTaskDto> {
 
 	@Resource
 	private Scheduler scheduler;
@@ -37,27 +37,27 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTask> {
 	SysTaskLogService sysTaskLogService;
 
 	@Override
-	public PageInfo<SysTask> findByPage(SysTask sysTask) {
+	public PageInfo<SysTaskDto> findByPage(SysTaskDto sysTask) {
 		if(sysTask.getStatus()==-1){
 			sysTask.setStatus(null);
 		}
-		PageInfo<SysTask> result = super.findByPage(sysTask) ;
+		PageInfo<SysTaskDto> result = super.findByPage(sysTask) ;
 		Map<Long, String> runningTask = this.getRunningTask() ;
-		Page<SysTask>  iniList = new Page<SysTask>();
-		Page<SysTask>  runningList = new Page<SysTask>();
+		Page<SysTaskDto>  iniList = new Page<SysTaskDto>();
+		Page<SysTaskDto>  runningList = new Page<SysTaskDto>();
 		result.getList().forEach(i -> {
 			if(runningTask.containsKey(i.getId())){
-				i.setRunStatus(SysTask.RUN_STATUS_RUNNING);
+				i.setRunStatus(SysTaskDto.RUN_STATUS_RUNNING);
 				runningList.add(i) ;
 			}else{
-				i.setRunStatus(SysTask.RUN_STATUS_INI);
+				i.setRunStatus(SysTaskDto.RUN_STATUS_INI);
 				iniList.add(i) ;
 			}
 		});
 		//内存状态条件查询
-		if(sysTask.getRunStatus()==SysTask.RUN_STATUS_INI){
+		if(sysTask.getRunStatus()== SysTaskDto.RUN_STATUS_INI){
 			result.setList(iniList);
-		}else if(sysTask.getRunStatus()==SysTask.RUN_STATUS_RUNNING){
+		}else if(sysTask.getRunStatus()== SysTaskDto.RUN_STATUS_RUNNING){
 			result.setList(runningList);
 		}
 		return result;
@@ -67,7 +67,7 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTask> {
 	 * 查询所有任务
 	 * @return
 	 */
-	public List<SysTask> findAll(){
+	public List<SysTaskDto> findAll(){
 		return this.d.findAll() ;
 	}
 	
@@ -76,7 +76,7 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTask> {
 	 * @param taskName
 	 * @return
 	 */
-	public SysTask findByName( String taskName){
+	public SysTaskDto findByName(String taskName){
 		return this.d.findByName(taskName) ;
 	}
 	
@@ -86,15 +86,15 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTask> {
 	 * @return
 	 */
 	@Transactional
-	public int updateStatus(SysTask task){
+	public int updateStatus(SysTaskDto task){
 		int result = this.d.updateStatus(task) ;
-		SysTask newTask = this.findById(task.getId());
+		SysTaskDto newTask = this.findById(task.getId());
 		// 移除系统任务
 		try {
 			deleteScheduleJob(newTask);
 		} catch (SchedulerException e) {
 			logger.error("移除任务异常：{}", e.getMessage());
-			throw new ServiceException(QExceptionCode.TASK_INIT_ERROR);
+			throw new ServiceException(CommonExceptionCode.TASK_INIT_ERROR);
 		}
 		if(newTask.isEnabled()){
 			// 加入系统任务
@@ -102,7 +102,7 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTask> {
 				createScheduleJob(newTask);
 			} catch (SchedulerException e) {
 				logger.error("新增任务异常：{}",e);
-				throw new ServiceException(QExceptionCode.TASK_INIT_ERROR);
+				throw new ServiceException(CommonExceptionCode.TASK_INIT_ERROR);
 			}
 		}
 		redisTools.set(newTask.toCacheKeyString(), newTask);
@@ -112,7 +112,7 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTask> {
 
 	@Override
 	@Transactional
-	public int save(SysTask task) {
+	public int save(SysTaskDto task) {
 		//先持久化任务
 		int result = super.save(task) ;
 		//加入系统任务
@@ -121,7 +121,7 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTask> {
 				createScheduleJob(task);
 			} catch (SchedulerException e) {
 				logger.error("新增任务异常：{}",e.getMessage());
-				throw new ServiceException(QExceptionCode.TASK_INIT_ERROR);
+				throw new ServiceException(CommonExceptionCode.TASK_INIT_ERROR);
 			}
 		}
 		redisTools.set(task.toCacheKeyString(), task);
@@ -131,9 +131,9 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTask> {
 
 	@Override
 	@Transactional
-	public int updateById(SysTask task) {
+	public int updateById(SysTaskDto task) {
 		int result = super.updateById(task) ;
-		SysTask newTask = d.findById(task.getId()) ;
+		SysTaskDto newTask = d.findById(task.getId()) ;
 		// 重置任务
 		try {
 			deleteScheduleJob(newTask);
@@ -143,7 +143,7 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTask> {
 			}
 		} catch (SchedulerException e) {
 			logger.error("重置任务异常：{}", e.getMessage());
-			throw new ServiceException(QExceptionCode.TASK_INIT_ERROR);
+			throw new ServiceException(CommonExceptionCode.TASK_INIT_ERROR);
 		}
 		redisTools.set(newTask.toCacheKeyString(), newTask);
 		logger.info("修改任务信息成功：{}.",task.toString());
@@ -154,9 +154,9 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTask> {
 	 * 立即触发一次执行
 	 */
 	public void runOnce(Long taskId) throws ServiceException {
-		SysTask task = this.findById(taskId);
+		SysTaskDto task = this.findById(taskId);
 		if (task == null) {
-			throw new ServiceException(QExceptionCode.TASK_EXECUTE_NULL);
+			throw new ServiceException(CommonExceptionCode.TASK_EXECUTE_NULL);
 		}
 		if(isRunning(taskId)){
 			throw new ServiceException("当前任务正在执行中!!!");
@@ -169,8 +169,8 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTask> {
 				runOnce(task);
 				logger.info("触发任务成功：{}.",task.toString());
 			} catch (SchedulerException e) {
-				logger.error("执行任务异常：{}-{}.", QExceptionCode.TASK_EXECUTE_ERROR,task.toString(),e);
-				throw new ServiceException(QExceptionCode.TASK_EXECUTE_ERROR);
+				logger.error("执行任务异常：{}-{}.", CommonExceptionCode.TASK_EXECUTE_ERROR,task.toString(),e);
+				throw new ServiceException(CommonExceptionCode.TASK_EXECUTE_ERROR);
 			}
 		}else{ 
 			// 未启用的任务
@@ -182,7 +182,7 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTask> {
 				}
 			} catch (SchedulerException e) {
 				logger.error(e.toString());
-				throw new ServiceException(QExceptionCode.TASK_EXECUTE_ERROR);
+				throw new ServiceException(CommonExceptionCode.TASK_EXECUTE_ERROR);
 			}
 		}
 	}
@@ -192,15 +192,15 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTask> {
 	 * @throws SchedulerException 
 	 */
 	public void initTask() throws ServiceException {
-		List<SysTask> tasks =  this.findAll();
+		List<SysTaskDto> tasks =  this.findAll();
 		tasks.forEach(task -> {
 			if (task.isEnabled()) {
 				try {
 					createScheduleJob(task);
 					logger.info("添加任务调度成功：{}.",task.toString());
 				} catch (SchedulerException e) {
-					logger.error("添加任务调度失败：{}-{}.", QExceptionCode.TASK_INIT_ERROR,task.toString(),e);
-					throw new ServiceException(QExceptionCode.TASK_INIT_ERROR);
+					logger.error("添加任务调度失败：{}-{}.", CommonExceptionCode.TASK_INIT_ERROR,task.toString(),e);
+					throw new ServiceException(CommonExceptionCode.TASK_INIT_ERROR);
 				}
 			}else{
 				logger.info("任务未启用，不参与调度：{}.",task.toString());
@@ -243,9 +243,9 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTask> {
 	 * @return
 	 * @throws SchedulerException
 	 */
-	public SysTask getJobObject(Long taskId) throws SchedulerException {
+	public SysTaskDto getJobObject(Long taskId) throws SchedulerException {
 		JobDetail jobDetail = scheduler.getJobDetail(getJobKey(taskId));
-		return (SysTask)jobDetail.getJobDataMap().get(CacheConstants.JOB_DATA_MAP_KEY);
+		return (SysTaskDto)jobDetail.getJobDataMap().get(CacheConstants.JOB_DATA_MAP_KEY);
 	}
 	
 	/**
@@ -254,7 +254,7 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTask> {
 	 * @param task
 	 * @throws SchedulerException
 	 */
-	public void createScheduleJob(SysTask task) throws SchedulerException {
+	public void createScheduleJob(SysTaskDto task) throws SchedulerException {
 		// 设置是否允许并发执行
 		Class<? extends Job> clazz = DisallowConcurrentExecutionJob.class;
 		if(task.isConcurrentExecutionAllow()){
@@ -279,7 +279,7 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTask> {
 	 * @param task
 	 * @throws SchedulerException
 	 */
-	public void createSimpleJob(SysTask task) throws SchedulerException {
+	public void createSimpleJob(SysTaskDto task) throws SchedulerException {
 		// 设置是否允许并发执行
 		Class<? extends Job> clazz = DisallowConcurrentExecutionJob.class;
 		JobDetail detail = JobBuilder.newJob(clazz)
@@ -302,7 +302,7 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTask> {
 	 * @param task
 	 * @throws SchedulerException
 	 */
-	public void updateScheduleJob(SysTask task) throws SchedulerException {
+	public void updateScheduleJob(SysTaskDto task) throws SchedulerException {
 		TriggerKey triggerKey = getTriggerKey(task.getId());
 		CronTrigger trigger = (CronTrigger) scheduler.getTrigger(triggerKey);
 		
@@ -318,7 +318,7 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTask> {
 	 * @param task
 	 * @throws SchedulerException
 	 */
-	public void deleteScheduleJob(SysTask task) throws SchedulerException {
+	public void deleteScheduleJob(SysTaskDto task) throws SchedulerException {
 		scheduler.deleteJob(getJobKey(task.getId()));
 	}
 	
@@ -328,7 +328,7 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTask> {
 	 * @param task
 	 * @throws SchedulerException
 	 */
-	public void pauseScheduleJob(SysTask task) throws SchedulerException {
+	public void pauseScheduleJob(SysTaskDto task) throws SchedulerException {
 		scheduler.pauseJob(getJobKey(task.getId()));
 	}
 	
@@ -338,7 +338,7 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTask> {
 	 * @param task
 	 * @throws SchedulerException
 	 */
-	public void resumeScheduleJob(SysTask task) throws SchedulerException {
+	public void resumeScheduleJob(SysTaskDto task) throws SchedulerException {
 		scheduler.resumeJob(getJobKey(task.getId()));
 	}
 	
@@ -348,7 +348,7 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTask> {
 	 * @param task
 	 * @throws SchedulerException
 	 */
-	public void runOnce(SysTask task) throws SchedulerException {
+	public void runOnce(SysTaskDto task) throws SchedulerException {
 		JobKey jobKey = getJobKey(task.getId());
 		scheduler.triggerJob(jobKey);
 	}
@@ -364,7 +364,7 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTask> {
 		try {
 			executingJobs = scheduler.getCurrentlyExecutingJobs();
 		} catch (SchedulerException e) {
-			throw new ServiceException(QExceptionCode.TASK_GET_RUNNING_ERROR);
+			throw new ServiceException(CommonExceptionCode.TASK_GET_RUNNING_ERROR);
 		}    
 		Map<Long,String> runningTaskList = new HashMap<Long,String>();    
 		for (JobExecutionContext executingJob : executingJobs) {    
@@ -384,7 +384,7 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTask> {
 		try {
 			executingJobs = scheduler.getCurrentlyExecutingJobs();
 		} catch (SchedulerException e) {
-			throw new ServiceException(QExceptionCode.TASK_GET_RUNNING_ERROR);
+			throw new ServiceException(CommonExceptionCode.TASK_GET_RUNNING_ERROR);
 		}    
 		for (JobExecutionContext executingJob : executingJobs) {
 			if(executingJob.getJobDetail().getKey().getName().equalsIgnoreCase(taskId.toString())){
@@ -402,7 +402,7 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTask> {
 		sysTaskLogService.deleteByTaskId(taskId) ;
 	}
 
-	public Long countByTaskName(SysTask sysTask) {
+	public Long countByTaskName(SysTaskDto sysTask) {
 		return this.d.countByTaskName(sysTask);
 	}
 	/**
@@ -413,9 +413,9 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTask> {
 	 */
 	public void reloadTask() {
 		logger.debug("==============start============守护线程扫描定时任务更新=========start=================");
-		List<SysTask> tasks = this.findAll() ;
-		SysTask quartzTask ; 
-		for (SysTask dbTask : tasks) {
+		List<SysTaskDto> tasks = this.findAll() ;
+		SysTaskDto quartzTask ;
+		for (SysTaskDto dbTask : tasks) {
 			try {
 				//更新redis中的任务信息缓存
 				redisTools.set(dbTask.toCacheKeyString(), dbTask);
@@ -455,11 +455,11 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTask> {
 	 * 更新上一次成功执行结果
 	 * @param systask
 	 */
-	public int updateResult(SysTask systask) {
+	public int updateResult(SysTaskDto systask) {
 		systask.setUpdateDate(new Date());
 		int result = d.updateResult(systask) ;
 		//更新缓存
-		SysTask newTask = this.findById(systask.getId()) ;
+		SysTaskDto newTask = this.findById(systask.getId()) ;
 		redisTools.set(newTask.toCacheKeyString(), newTask);
 		return  result;
 	}

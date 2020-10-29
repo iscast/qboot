@@ -2,13 +2,13 @@ package org.qboot.sys.controller;
 
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
-import org.qboot.sys.dto.SysParamType;
+import org.qboot.sys.dto.SysParamTypeDto;
 import org.qboot.sys.service.impl.SysParamTypeService;
 import org.qboot.sys.service.impl.SysUserService;
 import org.qboot.common.annotation.AccLog;
 import org.qboot.common.controller.BaseController;
 import org.qboot.common.entity.ResponeModel;
-import org.qboot.web.security.SecurityUtils;
+import org.qboot.common.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.Assert;
@@ -41,35 +41,35 @@ public class ParamTypeController extends BaseController {
 
 	@PreAuthorize("hasAuthority('sys:param:qry')")
 	@PostMapping("/qryPage")
-	public ResponeModel qryPage(SysParamType sysParam) {
+	public ResponeModel qryPage(SysParamTypeDto sysParam) {
 		if(StringUtils.isBlank(sysParam.getParamTypeClass())) {
 			return ResponeModel.ok();
 		}
-		PageInfo<SysParamType> page = sysParamService.findByPage(sysParam);
+		PageInfo<SysParamTypeDto> page = sysParamService.findByPage(sysParam);
 		return ResponeModel.ok(page);
 	}
 
 	@PreAuthorize("hasAuthority('sys:param:qry')")
 	@PostMapping("/qryList")
-	public ResponeModel qryList(SysParamType sysParam) {
+	public ResponeModel qryList(SysParamTypeDto sysParam) {
 		if(StringUtils.isBlank(sysParam.getParamTypeClass())) {
 			return ResponeModel.ok();
 		}
-		List<SysParamType> list = sysParamService.findList(sysParam);
+		List<SysParamTypeDto> list = sysParamService.findList(sysParam);
 		return ResponeModel.ok(list);
 	}
 	
 	@PreAuthorize("hasAuthority('sys:param:qry')")
 	@RequestMapping("/get")
 	public ResponeModel get(@RequestParam Serializable id) {
-		SysParamType sysParam = sysParamService.findById(id);
+		SysParamTypeDto sysParam = sysParamService.findById(id);
 		return ResponeModel.ok(sysParam);
 	}
 
     @AccLog
 	@PreAuthorize("hasAuthority('sys:param:save')")
 	@PostMapping("/save")
-	public ResponeModel save(@Validated SysParamType sysParam, BindingResult bindingResult, HttpServletRequest request) {
+	public ResponeModel save(@Validated SysParamTypeDto sysParam, BindingResult bindingResult, HttpServletRequest request) {
 		sysParam.setCreateBy(SecurityUtils.getLoginName());
 		sysParam.setPhysicsFlag(1);
 		if (StringUtils.isNotBlank(sysParam.getParamTypeName())) {
@@ -89,7 +89,7 @@ public class ParamTypeController extends BaseController {
     @AccLog
 	@PreAuthorize("hasAuthority('sys:param:update')")
 	@PostMapping("/update")
-	public ResponeModel update(@Validated SysParamType sysParam, BindingResult bindingResult, HttpServletRequest request) {
+	public ResponeModel update(@Validated SysParamTypeDto sysParam, BindingResult bindingResult, HttpServletRequest request) {
 		sysParam.setUpdateBy(SecurityUtils.getLoginName());
 		if (StringUtils.isNotBlank(sysParam.getParamTypeName())) {
 			sysParam.setParamTypeName(request.getParameter("paramTypeName"));
@@ -110,7 +110,7 @@ public class ParamTypeController extends BaseController {
 	@PostMapping("/delete")
 	public ResponeModel delete(@RequestParam Serializable id, @RequestParam Integer phyFlag) {
 		Assert.notNull( id, "sys.response.msg.idIsEmpty");
-		SysParamType sysParam = new SysParamType();
+		SysParamTypeDto sysParam = new SysParamTypeDto();
 		sysParam.setId(String.valueOf(id));
 		sysParam.setPhysicsFlag(phyFlag);
 		int cnt = sysParamService.changeById(sysParam);
@@ -122,7 +122,7 @@ public class ParamTypeController extends BaseController {
 
 	@RequestMapping("/getParamType")
 	public ResponeModel getParamType(@RequestParam String paramType) {
-		List<SysParamType> types = sysParamService.findParamTypes(paramType);
+		List<SysParamTypeDto> types = sysParamService.findParamTypes(paramType);
 		return ResponeModel.ok(types);
 	}
 }

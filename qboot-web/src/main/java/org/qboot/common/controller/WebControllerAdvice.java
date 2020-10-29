@@ -2,7 +2,7 @@ package org.qboot.common.controller;
 
 import org.apache.commons.text.StringEscapeUtils;
 import org.qboot.common.constants.SysConstants;
-import org.qboot.common.exception.QExceptionCode;
+import org.qboot.common.exception.CommonExceptionCode;
 import org.qboot.common.exception.ResponeException;
 import org.qboot.common.utils.DateUtils;
 import org.qboot.common.entity.ResponeModel;
@@ -75,7 +75,7 @@ public class WebControllerAdvice {
 	@ExceptionHandler(BindException.class)
 	public ResponeModel bindException(BindException e, HttpServletRequest request) {
         logRequest(request, e);
-		ResponeModel responeModel = ResponeModel.error(QExceptionCode.PARAM_BIND_ERROR, "param bind error");
+		ResponeModel responeModel = ResponeModel.error(CommonExceptionCode.PARAM_BIND_ERROR, "param bind error");
 		return responeModel;
 	}
 	
@@ -83,7 +83,7 @@ public class WebControllerAdvice {
 	@ExceptionHandler(Exception.class)
 	public ResponeModel exception(Exception e, HttpServletRequest request) {
         logRequest(request, e);
-		ResponeModel responeModel = ResponeModel.error(QExceptionCode.UNKNOWN, "error");
+		ResponeModel responeModel = ResponeModel.error(CommonExceptionCode.UNKNOWN, "error");
 		return responeModel;
 	}
 

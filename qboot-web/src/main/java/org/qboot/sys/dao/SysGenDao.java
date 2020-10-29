@@ -1,16 +1,16 @@
 package org.qboot.sys.dao;
 
-import org.qboot.sys.dto.DbTable;
-import org.qboot.sys.dto.DbTableColumn;
-import org.qboot.sys.dto.SysGen;
+import org.qboot.sys.dto.DbTableDto;
+import org.qboot.sys.dto.DbTableColumnDto;
+import org.qboot.sys.dto.SysGenDto;
 import org.qboot.common.dao.CrudDao;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
-public interface SysGenDao extends CrudDao<SysGen>{
+public interface SysGenDao extends CrudDao<SysGenDto>{
     
-	List<DbTable> findTable(@Param("tableName") String tableName);
-	List<DbTableColumn> findColumnByTableName(@Param("tableName") String tableName);
+	List<DbTableDto> findTable(@Param("tableName") String tableName);
+	List<DbTableColumnDto> findColumnByTableName(@Param("tableName") String tableName);
 	String findPkType(@Param("tableName") String tableName);
 }

@@ -2,7 +2,7 @@ package org.qboot.sys.dao;
 
 import org.apache.ibatis.annotations.Param;
 
-import org.qboot.sys.dto.SysTaskLog;
+import org.qboot.sys.dto.SysTaskLogDto;
 import org.qboot.common.dao.CrudDao;
 
 /**
@@ -10,7 +10,7 @@ import org.qboot.common.dao.CrudDao;
  * @author history
  *
  */
-public interface SysTaskLogDao extends CrudDao<SysTaskLog> {
+public interface SysTaskLogDao extends CrudDao<SysTaskLogDto> {
 	
 	/**
 	 * 删除某任务的所有日志

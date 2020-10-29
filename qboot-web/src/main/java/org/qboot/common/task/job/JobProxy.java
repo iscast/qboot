@@ -4,13 +4,13 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
-import org.qboot.sys.dto.SysTask;
-import org.qboot.sys.dto.SysTaskLog;
+import org.qboot.sys.dto.SysTaskDto;
+import org.qboot.sys.dto.SysTaskLogDto;
 import org.qboot.sys.service.impl.SysTaskLogService;
 import org.qboot.sys.service.impl.SysTaskService;
 import org.qboot.common.constants.CacheConstants;
 import org.qboot.common.constants.SysConstants;
-import org.qboot.common.exception.QExceptionCode;
+import org.qboot.common.exception.CommonExceptionCode;
 import org.qboot.common.exception.ServiceException;
 import org.qboot.common.utils.RedisTools;
 import org.qboot.common.utils.SpringContextHolder;
@@ -51,10 +51,10 @@ public class JobProxy{
 	
 	@SuppressWarnings("unchecked")
 	public void execute(JobExecutionContext jobCtx) throws JobExecutionException {
-		SysTask sysTask =  (SysTask)jobCtx.getMergedJobDataMap().get(CacheConstants.JOB_DATA_MAP_KEY);
+		SysTaskDto sysTask =  (SysTaskDto)jobCtx.getMergedJobDataMap().get(CacheConstants.JOB_DATA_MAP_KEY);
 		if (sysTask == null) {
-			logger.warn("{},run_time:{}", QExceptionCode.TASK_EXECUTE_NULL,dateFormat.format(new Date(jobCtx.getJobRunTime())));
-			throw new ServiceException(QExceptionCode.TASK_EXECUTE_NULL);
+			logger.warn("{},run_time:{}", CommonExceptionCode.TASK_EXECUTE_NULL,dateFormat.format(new Date(jobCtx.getJobRunTime())));
+			throw new ServiceException(CommonExceptionCode.TASK_EXECUTE_NULL);
 		}
 		// 记录任务执行开始日志
 		Long logId = null ;
@@ -99,14 +99,14 @@ public class JobProxy{
 			
 			if (job == null) {
 				logger.error("{}, taskName:{},runTime:{}",
-						QExceptionCode.TASK_EXECUTE_NULL,sysTask.getTaskName(),
+						CommonExceptionCode.TASK_EXECUTE_NULL,sysTask.getTaskName(),
 						dateFormat.format(new Date(jobCtx.getJobRunTime()).toString()));
 				
-				updateTasktLog(logId, QExceptionCode.TASK_EXEC_STATUS_FAILED,
-						String.format("%s, task_name:%s,run_time:%s", QExceptionCode.TASK_EXECUTE_NULL,
+				updateTasktLog(logId, CommonExceptionCode.TASK_EXEC_STATUS_FAILED,
+						String.format("%s, task_name:%s,run_time:%s", CommonExceptionCode.TASK_EXECUTE_NULL,
 								sysTask.getTaskName(),dateFormat.format(new Date(jobCtx.getJobRunTime()).toString())),sysTask);
 				
-				throw new ServiceException(QExceptionCode.TASK_EXECUTE_NULL);
+				throw new ServiceException(CommonExceptionCode.TASK_EXECUTE_NULL);
 			}
 		
 			//放入TaskID
@@ -114,12 +114,12 @@ public class JobProxy{
 			params.put(SysConstants.TASK_MAP_PARAMS_KEY_LAST_RUNTIME, sysTask.getLastRunTime()) ;
 			params.put(SysConstants.TASK_MAP_PARAMS_KEY_LAST_RESULT, sysTask.getLastResult()) ;
 			String execResult = job.execute(params);
-			updateTasktLog(logId, QExceptionCode.TASK_EXEC_STATUS_SUCCESS,execResult,sysTask);
+			updateTasktLog(logId, CommonExceptionCode.TASK_EXEC_STATUS_SUCCESS,execResult,sysTask);
 			logger.info("任务执行结束：{}", sysTask.toString());
 			
 		} catch (Exception e) {
 			logger.error("执行定时任务异常:{}", sysTask.toString(), e);
-			updateTasktLog(logId, QExceptionCode.TASK_EXEC_STATUS_FAILED, QExceptionCode.TASK_EXECUTE_ERROR,sysTask);
+			updateTasktLog(logId, CommonExceptionCode.TASK_EXEC_STATUS_FAILED, CommonExceptionCode.TASK_EXECUTE_ERROR,sysTask);
 		} 
 	}
 
@@ -130,7 +130,7 @@ public class JobProxy{
 	 * @return 日志ID
 	 */
 	public Long insertTaskLog(Date beginTime,Long taskId) {
-		SysTaskLog taskLog = new SysTaskLog();
+		SysTaskLogDto taskLog = new SysTaskLogDto();
 		taskLog.setTaskId(taskId);
 		taskLog.setBeginTime(beginTime);
 		taskLog.setExecIp(this.getHostAddress());
@@ -146,8 +146,8 @@ public class JobProxy{
 	 * @param execStatus
 	 * @param execResult
 	 */
-	public void updateTasktLog(Long logId,int execStatus,String execResult,SysTask systask) {
-		SysTaskLog taskLog = sysTaskLogService.findById(logId);
+	public void updateTasktLog(Long logId, int execStatus, String execResult, SysTaskDto systask) {
+		SysTaskLogDto taskLog = sysTaskLogService.findById(logId);
 		if (taskLog == null) {
 			logger.error(String.format("任务日志id为%s的记录无法获取，任务结果更新失败", logId));
 			return;
@@ -161,7 +161,7 @@ public class JobProxy{
 		taskLog.setUpdateDate(new Date());
 		sysTaskLogService.updateById(taskLog);
 		//记录上一次执行成功的时间
-		if(QExceptionCode.TASK_EXEC_STATUS_SUCCESS==execStatus){
+		if(CommonExceptionCode.TASK_EXEC_STATUS_SUCCESS==execStatus){
 			systask.setLastResult(execResult);
 			systask.setLastRunTime(taskLog.getBeginTime());
 			sysTaskService.updateResult(systask) ;

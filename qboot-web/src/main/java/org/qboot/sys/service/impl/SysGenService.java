@@ -2,10 +2,10 @@ package org.qboot.sys.service.impl;
 
 import org.qboot.common.service.CrudService;
 import org.qboot.sys.dao.SysGenDao;
-import org.qboot.sys.dto.DbTable;
-import org.qboot.sys.dto.DbTableColumn;
-import org.qboot.sys.dto.GenColumnInfo;
-import org.qboot.sys.dto.SysGen;
+import org.qboot.sys.dto.DbTableDto;
+import org.qboot.sys.dto.DbTableColumnDto;
+import org.qboot.sys.dto.GenColumnInfoDto;
+import org.qboot.sys.dto.SysGenDto;
 import org.qboot.sys.vo.SysProjectGenVO;
 import org.qboot.common.utils.GenTypeMappingUtils;
 import com.alibaba.fastjson.JSON;
@@ -24,30 +24,30 @@ import java.util.List;
  *
  */
 @Service
-public class SysGenService extends CrudService<SysGenDao, SysGen> {
+public class SysGenService extends CrudService<SysGenDao, SysGenDto> {
 	
 	@Autowired
 	private GeneratorService generatorService;
 	
 	@Override
-	public SysGen findById(Serializable id) {
-		 SysGen sysGen = super.findById(id);
+	public SysGenDto findById(Serializable id) {
+		 SysGenDto sysGen = super.findById(id);
 		 Assert.notNull(sysGen,"生成方案不存在");
-		 sysGen.setColumnInfos(JSON.parseArray(sysGen.getColumns(), GenColumnInfo.class));
+		 sysGen.setColumnInfos(JSON.parseArray(sysGen.getColumns(), GenColumnInfoDto.class));
 		 return sysGen;
 	}
 	
-	public List<DbTable> findTables() {
+	public List<DbTableDto> findTables() {
 		return this.d.findTable("");
 	}
 
-	public DbTable findTableByName(String tableName) {
+	public DbTableDto findTableByName(String tableName) {
 		Assert.hasLength(tableName, "表名为空");
-		List<DbTable> list = this.d.findTable(tableName);
+		List<DbTableDto> list = this.d.findTable(tableName);
 		return list.isEmpty() ? null : list.get(0);
 	}
 	
-	public List<DbTableColumn> findColumnByTableName(String tableName) {
+	public List<DbTableColumnDto> findColumnByTableName(String tableName) {
 		Assert.hasLength(tableName, "表名为空");
 		return this.d.findColumnByTableName(tableName);
 	}
@@ -64,11 +64,11 @@ public class SysGenService extends CrudService<SysGenDao, SysGen> {
 	 * @param tableName
 	 * @return
 	 */
-	public SysGen getDefaultGenInfoByTableName(String tableName) {
-		DbTable table = this.findTableByName(tableName);
+	public SysGenDto getDefaultGenInfoByTableName(String tableName) {
+		DbTableDto table = this.findTableByName(tableName);
 		Assert.notNull(table,tableName + " 不存在");
-		List<DbTableColumn> columns = this.findColumnByTableName(tableName);
-		SysGen sysGen = generatorService.getDefaultGenInfo(table, columns);
+		List<DbTableColumnDto> columns = this.findColumnByTableName(tableName);
+		SysGenDto sysGen = generatorService.getDefaultGenInfo(table, columns);
 		sysGen.setPkType(this.findPkType(tableName));
 		return sysGen;
 	}
@@ -78,16 +78,16 @@ public class SysGenService extends CrudService<SysGenDao, SysGen> {
 	 * @param tableName
 	 * @return
 	 */
-	public List<GenColumnInfo> getDefaultGenInfosByTableName(String tableName) {
-		DbTable table = this.findTableByName(tableName);
+	public List<GenColumnInfoDto> getDefaultGenInfosByTableName(String tableName) {
+		DbTableDto table = this.findTableByName(tableName);
 		Assert.notNull(table,tableName + " 不存在");
-		List<DbTableColumn> columns = this.findColumnByTableName(tableName);
+		List<DbTableColumnDto> columns = this.findColumnByTableName(tableName);
 		return generatorService.getGenColumnInfos(columns);
 	}
 	
 	public byte[] codeGen(String id) {
 		Assert.hasLength(id, "方案Id 为空");
-		SysGen sysGen = this.findById(id);
+		SysGenDto sysGen = this.findById(id);
 		Assert.notNull(sysGen,"方案为空");
 		return this.generatorService.codeGen(sysGen);
 	}

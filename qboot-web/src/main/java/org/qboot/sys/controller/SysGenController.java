@@ -3,8 +3,8 @@ package org.qboot.sys.controller;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.io.IOUtils;
-import org.qboot.sys.dto.GenColumnInfo;
-import org.qboot.sys.dto.SysGen;
+import org.qboot.sys.dto.GenColumnInfoDto;
+import org.qboot.sys.dto.SysGenDto;
 import org.qboot.sys.service.impl.SysGenService;
 import org.qboot.sys.vo.SysProjectGenVO;
 import org.qboot.common.annotation.AccLog;
@@ -35,23 +35,23 @@ public class SysGenController extends BaseController {
 
 	@PreAuthorize("hasAuthority('sys:gen:qry')")
 	@PostMapping("/qryPage")
-	public ResponeModel qryPage(SysGen sysGen) {
-		PageInfo<SysGen> page = sysGenService.findByPage(sysGen);
+	public ResponeModel qryPage(SysGenDto sysGen) {
+		PageInfo<SysGenDto> page = sysGenService.findByPage(sysGen);
 		return ResponeModel.ok(page);
 	}
 
 	@PreAuthorize("hasAuthority('sys:gen:qry')")
 	@RequestMapping("/get")
 	public ResponeModel get(@RequestParam Serializable id) {
-		SysGen sysGen = sysGenService.findById(id);
+		SysGenDto sysGen = sysGenService.findById(id);
 		return ResponeModel.ok(sysGen);
 	}
 
     @AccLog
 	@PreAuthorize("hasAuthority('sys:gen:save')")
 	@PostMapping("/save")
-	public ResponeModel save(@Validated @RequestBody SysGen sysGen, BindingResult bindingResult) {
-		List<GenColumnInfo> columnInfos = sysGenService.getDefaultGenInfosByTableName(sysGen.getTableName());
+	public ResponeModel save(@Validated @RequestBody SysGenDto sysGen, BindingResult bindingResult) {
+		List<GenColumnInfoDto> columnInfos = sysGenService.getDefaultGenInfosByTableName(sysGen.getTableName());
 		Collections.sort(columnInfos);
 		sysGen.setColumns(JSON.toJSONString(columnInfos));
 		sysGen.setId(IdGen.uuid());
@@ -67,8 +67,8 @@ public class SysGenController extends BaseController {
     @AccLog
 	@PreAuthorize("hasAuthority('sys:gen:update')")
 	@PostMapping("/update")
-	public ResponeModel update(@Validated @RequestBody SysGen sysGen, BindingResult bindingResult) {
-		List<GenColumnInfo> columnInfos = sysGen.getColumnInfos();
+	public ResponeModel update(@Validated @RequestBody SysGenDto sysGen, BindingResult bindingResult) {
+		List<GenColumnInfoDto> columnInfos = sysGen.getColumnInfos();
 		Collections.sort(columnInfos);
 		sysGen.setColumns(JSON.toJSONString(columnInfos));
 		int cnt = sysGenService.updateById(sysGen);

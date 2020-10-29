@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import org.qboot.sys.dto.SysTask;
+import org.qboot.sys.dto.SysTaskDto;
 import org.qboot.common.dao.CrudDao;
 
 /**
@@ -12,41 +12,41 @@ import org.qboot.common.dao.CrudDao;
  * @author history
  *
  */
-public interface SysTaskDao extends CrudDao<SysTask> {
+public interface SysTaskDao extends CrudDao<SysTaskDto> {
 	
 	/**
 	 * 查询所有任务
 	 * @return
 	 */
-	List<SysTask> findAll() ;
+	List<SysTaskDto> findAll() ;
 	
 	/**
 	 * 根据任务名称查询任务
 	 * @param taskName
 	 * @return
 	 */
-	SysTask findByName(@Param("taskName") String taskName);
+	SysTaskDto findByName(@Param("taskName") String taskName);
 	
 	/**
 	 * 更新启用状态
 	 * @param sysTask
 	 * @return
 	 */
-	int updateStatus(SysTask sysTask);
+	int updateStatus(SysTaskDto sysTask);
 	
 	/**
 	 * 统计同名任务
 	 * @param sysTask
 	 * @return
 	 */
-	Long countByTaskName(SysTask sysTask);
+	Long countByTaskName(SysTaskDto sysTask);
 	
 	/**
 	 * 更新最后一次执行成功结果
 	 * @param systask
 	 * @return
 	 */
-	int updateResult(SysTask systask);
+	int updateResult(SysTaskDto systask);
 	
 	
 	

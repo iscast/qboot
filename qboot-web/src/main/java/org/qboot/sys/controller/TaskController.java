@@ -2,13 +2,13 @@ package org.qboot.sys.controller;
 
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
-import org.qboot.sys.dto.SysTask;
+import org.qboot.sys.dto.SysTaskDto;
 import org.qboot.sys.service.impl.SysTaskService;
 import org.qboot.common.annotation.AccLog;
 import org.qboot.common.controller.BaseController;
 import org.qboot.common.exception.ServiceException;
 import org.qboot.common.entity.ResponeModel;
-import org.qboot.web.security.SecurityUtils;
+import org.qboot.common.security.SecurityUtils;
 import org.quartz.CronExpression;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,22 +32,22 @@ public class TaskController extends BaseController {
 	
 	@PreAuthorize("hasAuthority('sys:task:qry')")
 	@GetMapping("/qryPage")
-	public ResponeModel qryPage(SysTask sysTask) {
-		PageInfo<SysTask> page = sysTaskService.findByPage(sysTask);
+	public ResponeModel qryPage(SysTaskDto sysTask) {
+		PageInfo<SysTaskDto> page = sysTaskService.findByPage(sysTask);
 		return ResponeModel.ok(page);
 	}
 	
 	@PreAuthorize("hasAuthority('sys:task:qry')")
 	@RequestMapping("/get")
-	public ResponeModel get(SysTask sysTask) {
-		SysTask result = sysTaskService.findById(sysTask.getId()) ;
+	public ResponeModel get(SysTaskDto sysTask) {
+		SysTaskDto result = sysTaskService.findById(sysTask.getId()) ;
 		return ResponeModel.ok(result);
 	}
 
     @AccLog
 	@PreAuthorize("hasAuthority('sys:task:save')")
 	@PostMapping("/save")
-	public ResponeModel save(SysTask sysTask) {
+	public ResponeModel save(SysTaskDto sysTask) {
 		sysTask.setUpdateDate(new Date());
 		sysTask.setCreateDate(new Date());
 		sysTask.setCreateBy(SecurityUtils.getLoginName());
@@ -60,7 +60,7 @@ public class TaskController extends BaseController {
     @AccLog
 	@PreAuthorize("hasAuthority('sys:task:edit')")
 	@PostMapping("/updateSelect")
-	public ResponeModel updateSelect(SysTask sysTask) {
+	public ResponeModel updateSelect(SysTaskDto sysTask) {
 		this.checkParams(sysTask);
 		sysTaskService.updateById(sysTask) ;
 		return ResponeModel.ok();
@@ -69,21 +69,21 @@ public class TaskController extends BaseController {
     @AccLog
 	@PreAuthorize("hasAuthority('sys:task:edit')")
 	@PostMapping("/updateStatus")
-	public ResponeModel updateStatus(SysTask sysTask) {
+	public ResponeModel updateStatus(SysTaskDto sysTask) {
 		sysTaskService.updateStatus(sysTask) ;
 		return ResponeModel.ok();
 	}
 	
 	@PreAuthorize("hasAuthority('sys:task:execute')")
 	@PostMapping("/execute")
-	public ResponeModel execute(SysTask sysTask) {
+	public ResponeModel execute(SysTaskDto sysTask) {
 		sysTaskService.runOnce(sysTask.getId());
 		return ResponeModel.ok();
 	}
 	
 	@PreAuthorize("hasAuthority('sys:task:delete')")
 	@PostMapping("/delete")
-	public ResponeModel delete(SysTask sysTask) {
+	public ResponeModel delete(SysTaskDto sysTask) {
 		sysTaskService.deleteTask(sysTask.getId()) ;
 		return ResponeModel.ok();
 	}
@@ -91,7 +91,7 @@ public class TaskController extends BaseController {
 	 * 检测业务参数的合法性
 	 * @return
 	 */
-	private void checkParams(SysTask sysTask){
+	private void checkParams(SysTaskDto sysTask){
 		//xss影响正常业务反向处理
 		if(StringUtils.isNotEmpty(sysTask.getParams())
 				&&StringUtils.contains(sysTask.getParams(), "&quot;")){

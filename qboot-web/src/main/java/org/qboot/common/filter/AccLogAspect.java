@@ -9,8 +9,8 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.qboot.sys.dto.SysOperateLogDto;
 import org.qboot.sys.service.impl.OperLogReceiverService;
 import org.qboot.sys.service.impl.SysOperateLogInfoService;
-import org.qboot.web.security.QUser;
-import org.qboot.web.security.SecurityUtils;
+import org.qboot.common.security.CustomUser;
+import org.qboot.common.security.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,7 +109,7 @@ public class AccLogAspect {
             optLog.setRequestIP(remoteAddr);
             optLog.setRequestParams(paramSB.toString());
 
-            QUser user = SecurityUtils.getUser();
+            CustomUser user = SecurityUtils.getUser();
             if(user != null) {
             	String loginName = user.getLoginName();
                 optLog.setRequestUserId(loginName);

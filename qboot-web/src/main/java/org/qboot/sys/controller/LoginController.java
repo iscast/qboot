@@ -1,7 +1,7 @@
 package org.qboot.sys.controller;
 
-import org.qboot.sys.dto.SysMenu;
-import org.qboot.sys.dto.SysUser;
+import org.qboot.sys.dto.SysMenuDto;
+import org.qboot.sys.dto.SysUserDto;
 import org.qboot.sys.service.impl.SysLoginLogService;
 import org.qboot.sys.service.impl.SysMenuService;
 import org.qboot.sys.service.impl.SysUserService;
@@ -9,8 +9,8 @@ import org.qboot.common.annotation.AccLog;
 import org.qboot.common.controller.BaseController;
 import org.qboot.common.utils.TreeHelper;
 import org.qboot.common.entity.ResponeModel;
-import org.qboot.web.security.QUser;
-import org.qboot.web.security.SecurityUtils;
+import org.qboot.common.security.CustomUser;
+import org.qboot.common.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -37,25 +37,25 @@ public class LoginController extends BaseController {
 	@Autowired
 	private SysLoginLogService sysLoginLogService;
 	
-	private TreeHelper<SysMenu> treeHelper = new TreeHelper<SysMenu>();
+	private TreeHelper<SysMenuDto> treeHelper = new TreeHelper<SysMenuDto>();
 	
 	@PostMapping("/getUserMenus")
 	public ResponeModel getUserMenus() {
-		QUser user = SecurityUtils.getUser();
-		List<SysMenu> menus = null;
+		CustomUser user = SecurityUtils.getUser();
+		List<SysMenuDto> menus = null;
 		// 系统管理员，拥有最高权限
 		if (SecurityUtils.isSuperAdmin()) {
 			menus = sysMenuService.findShowMenuAll();
 		} else {
 			menus = sysMenuService.findShowMenuByUserId(user.getUserId());
 		}
-		List<SysMenu> treeMenus = treeHelper.treeGridList(menus);
+		List<SysMenuDto> treeMenus = treeHelper.treeGridList(menus);
 		return ResponeModel.ok(treeMenus);
 	}
 
 	@GetMapping("/getUserInfo")
 	public ResponeModel getUserInfo() {
-		QUser sysUser = SecurityUtils.getUser();
+		CustomUser sysUser = SecurityUtils.getUser();
 		if(sysUser != null) {
 			return ResponeModel.ok(sysUser);
 		}else {
@@ -64,9 +64,9 @@ public class LoginController extends BaseController {
 	}
 
 	@PostMapping("/updateInfo")
-	public ResponeModel updateInfo(SysUser user) {
+	public ResponeModel updateInfo(SysUserDto user) {
 		Assert.hasLength(user.getName(), "userNameIsEmpty");
-		SysUser sysUser = new SysUser();
+		SysUserDto sysUser = new SysUserDto();
 		sysUser.setPhoto(user.getPhoto());
 		sysUser.setName(user.getName());
 		sysUser.setEmail(user.getEmail());
@@ -94,7 +94,7 @@ public class LoginController extends BaseController {
 		if (!sysUserService.validatePwd(oldPassword, userId)) {
 			return ResponeModel.error("originalPasswordIncorrect");
 		}
-		SysUser sysUser = new SysUser();
+		SysUserDto sysUser = new SysUserDto();
 		sysUser.setId(userId);
 		sysUser.setPassword(password);
 		int cnt = sysUserService.update(sysUser);
@@ -107,7 +107,7 @@ public class LoginController extends BaseController {
 		if (StringUtils.isEmpty(lang)) {
 			return ResponeModel.error("langIncorrect");
 		}
-		SysUser sysUser = new SysUser();
+		SysUserDto sysUser = new SysUserDto();
 		sysUser.setId(userId);
 		sysUser.setLang(lang);
 		int cnt = sysUserService.update(sysUser);

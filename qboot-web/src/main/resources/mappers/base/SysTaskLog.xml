@@ -4,24 +4,24 @@
 
 <mapper namespace="org.qboot.sys.dao.SysTaskLogDao">
 
-	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="org.qboot.sys.dto.SysTaskLog">
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="org.qboot.sys.dto.SysTaskLogDto">
 		insert into sys_task_log
 			(task_id,begin_time,end_time,cost_time,exec_ip,exec_status,exec_result,create_date,update_date,create_by,update_by) 
 		values 
 			(#{taskId},#{beginTime},#{endTime},#{costTime},#{execIp},#{execStatus},#{execResult},#{createDate},#{updateDate},#{createBy},#{updateBy})
 	</insert>
 
-	<select id="findAll" resultType="org.qboot.sys.dto.SysTaskLog">
+	<select id="findAll" resultType="org.qboot.sys.dto.SysTaskLogDto">
 		SELECT * FROM sys_task_log
 	</select>
 
-	<select id="findList" parameterType="org.qboot.sys.dto.SysTaskLog" resultType="org.qboot.sys.dto.SysTaskLog">
+	<select id="findList" parameterType="org.qboot.sys.dto.SysTaskLogDto" resultType="org.qboot.sys.dto.SysTaskLogDto">
 		select t.* from sys_task_log t  
 		where t.task_id = #{taskId} 
 		order by t.begin_time desc 
 	</select>
 
-	<update id="updateById" parameterType="org.qboot.sys.dto.SysTaskLog">
+	<update id="updateById" parameterType="org.qboot.sys.dto.SysTaskLogDto">
 		update sys_task_log
 		<set>
 			<if test="endTime != null">
@@ -52,7 +52,7 @@
 			)
 	</delete>
 
-	<select id="findById" parameterType="java.lang.Long" resultType="org.qboot.sys.dto.SysTaskLog">
+	<select id="findById" parameterType="java.lang.Long" resultType="org.qboot.sys.dto.SysTaskLogDto">
 		select * from sys_task_log where id = #{id}
 	</select>
 	

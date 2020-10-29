@@ -1,10 +1,10 @@
 package org.qboot.common.controller;
 
-import org.qboot.sys.dto.SysParamType;
+import org.qboot.sys.dto.SysParamTypeDto;
 import org.qboot.sys.service.impl.SysParamTypeService;
 import org.qboot.common.entity.ResponeModel;
-import org.qboot.web.security.QUser;
-import org.qboot.web.security.SecurityUtils;
+import org.qboot.common.security.CustomUser;
+import org.qboot.common.security.SecurityUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -34,7 +34,7 @@ public class I18nController extends BaseController {
 
     @GetMapping("/getLocale")
     public ResponeModel getLocale(HttpSession session, String lang){
-        QUser user = SecurityUtils.getUser();
+        CustomUser user = SecurityUtils.getUser();
         if(StringUtils.isBlank(lang)&&(user!=null&&StringUtils.isNotBlank(user.getLang()))){
             String[] i18nStr = user.getLang().split("_");
             if(i18nStr.length==2){
@@ -48,7 +48,7 @@ public class I18nController extends BaseController {
 
     @GetMapping("/getType")
     public ResponeModel getType(@RequestParam("paramKey") String paramKey){
-        List<SysParamType> paramTypes = sysParamTypeService.findParamTypes(paramKey);
+        List<SysParamTypeDto> paramTypes = sysParamTypeService.findParamTypes(paramKey);
         return ResponeModel.ok(paramTypes);
     }
 }

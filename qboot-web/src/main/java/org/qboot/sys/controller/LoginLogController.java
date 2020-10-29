@@ -1,7 +1,7 @@
 package org.qboot.sys.controller;
 
 import com.github.pagehelper.PageInfo;
-import org.qboot.sys.dto.SysLoginLog;
+import org.qboot.sys.dto.SysLoginLogDto;
 import org.qboot.sys.service.impl.SysLoginLogService;
 import org.qboot.common.controller.BaseController;
 import org.qboot.common.entity.ResponeModel;
@@ -30,15 +30,15 @@ public class LoginLogController extends BaseController {
 
 	@PreAuthorize("hasAuthority('sys:loginlog:qry')")
 	@PostMapping("/qryPage")
-	public ResponeModel qryPage(SysLoginLog sysLoginLog, BindingResult bindingResult) {
-		PageInfo<SysLoginLog> page = sysLoginLogService.findByPage(sysLoginLog);
+	public ResponeModel qryPage(SysLoginLogDto sysLoginLog, BindingResult bindingResult) {
+		PageInfo<SysLoginLogDto> page = sysLoginLogService.findByPage(sysLoginLog);
 		return ResponeModel.ok(page);
 	}
 	
 	@PreAuthorize("hasAuthority('sys:loginlog:qry')")
 	@RequestMapping("/get")
 	public ResponeModel get(@RequestParam Serializable id) {
-		SysLoginLog sysLoginLog = sysLoginLogService.findById(id);
+		SysLoginLogDto sysLoginLog = sysLoginLogService.findById(id);
 		//富文本处理
 		return ResponeModel.ok(sysLoginLog);
 	}

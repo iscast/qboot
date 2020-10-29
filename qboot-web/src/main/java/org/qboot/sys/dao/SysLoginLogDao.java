@@ -1,6 +1,6 @@
 package org.qboot.sys.dao;
 
-import org.qboot.sys.dto.SysLoginLog;
+import org.qboot.sys.dto.SysLoginLogDto;
 import org.qboot.common.dao.CrudDao;
 
 /**
@@ -10,6 +10,6 @@ import org.qboot.common.dao.CrudDao;
  * @author history
  * @date 2018-08-08
  */
-public interface SysLoginLogDao extends CrudDao<SysLoginLog> {
+public interface SysLoginLogDao extends CrudDao<SysLoginLogDto> {
 
 }

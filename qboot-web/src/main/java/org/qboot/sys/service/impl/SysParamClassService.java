@@ -3,7 +3,7 @@ package org.qboot.sys.service.impl;
 import java.util.List;
 
 import org.qboot.sys.dao.SysParamClassDao;
-import org.qboot.sys.dto.SysParamClass;
+import org.qboot.sys.dto.SysParamClassDto;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -16,9 +16,9 @@ import org.qboot.common.service.CrudService;
  * @date 2018-08-08
  */
 @Service
-public class SysParamClassService extends CrudService<SysParamClassDao, SysParamClass>{
+public class SysParamClassService extends CrudService<SysParamClassDao, SysParamClassDto>{
 
-	public int changeById(SysParamClass sysParamClass) {
+	public int changeById(SysParamClassDto sysParamClass) {
 		return d.changeById(sysParamClass);
 	}
 	
@@ -27,10 +27,10 @@ public class SysParamClassService extends CrudService<SysParamClassDao, SysParam
 	 * @param sysParamClass
 	 * @return
 	 */
-	public boolean classIsUsed(SysParamClass sysParamClass) {
-		List<SysParamClass> list = d.classIsUsed(sysParamClass);
+	public boolean classIsUsed(SysParamClassDto sysParamClass) {
+		List<SysParamClassDto> list = d.classIsUsed(sysParamClass);
 		if(!CollectionUtils.isEmpty(list)) {
-			SysParamClass spc = list.get(0);
+			SysParamClassDto spc = list.get(0);
 			if(sysParamClass.getId() != null && spc.getId() != sysParamClass.getId()) {
 				return true;
 			}

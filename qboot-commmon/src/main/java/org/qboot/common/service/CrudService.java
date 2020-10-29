@@ -34,16 +34,16 @@ public class CrudService<D extends CrudDao<T>, T extends BaseEntity<? extends Se
     }
 
     public int update(T t) {
-        Assert.notNull(t, "更新对象为空");
+        Assert.notNull(t, "pojo for update is empty");
         t.setUpdateDate(new Date());
         int cnt = this.d.update(t);
         return cnt;
     }
 
     public int updateById(T t) {
-        Assert.notNull(t, "更新对象为空");
-        Assert.notNull(t.getId(), "更新对象id为空");
-        Assert.hasLength(t.getId().toString(), "更新对象id为空");
+        Assert.notNull(t, "pojo for update is empty");
+        Assert.notNull(t.getId(), "pojo'id for update is null");
+        Assert.hasLength(t.getId().toString(), "pojo'id for update is empty");
         t.setUpdateDate(new Date());
         int cnt = this.d.updateById(t);
         return cnt;
@@ -51,13 +51,13 @@ public class CrudService<D extends CrudDao<T>, T extends BaseEntity<? extends Se
 
     @Transactional(readOnly = true)
     public T findById(Serializable id) {
-        Assert.notNull(id, "id为空");
-        Assert.hasLength(id.toString(), "id为空");
+        Assert.notNull(id, "id for query is null");
+        Assert.hasLength(id.toString(), "id for query is empty");
         return this.d.findById(id);
     }
 
     public int delete(T t) {
-        Assert.notNull(t, "删除对象为空");
+        Assert.notNull(t, "pojo for delete is empty");
         if (null != t) {
             t.setUpdateDate(new Date());
             return this.d.delete(t);
@@ -67,7 +67,7 @@ public class CrudService<D extends CrudDao<T>, T extends BaseEntity<? extends Se
     }
 
     public int deleteById(Serializable id) {
-        Assert.notNull(id, "id为空");
+        Assert.notNull(id, "id for delete is null");
         int cnt = this.d.deleteById(id);
         return cnt;
     }

@@ -5,9 +5,9 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import org.qboot.sys.dto.SysRole;
-import org.qboot.sys.dto.SysRoleDept;
-import org.qboot.sys.dto.SysRoleMenu;
+import org.qboot.sys.dto.SysRoleDto;
+import org.qboot.sys.dto.SysRoleDeptDto;
+import org.qboot.sys.dto.SysRoleMenuDto;
 import org.qboot.common.dao.CrudDao;
 
 /**
@@ -17,21 +17,21 @@ import org.qboot.common.dao.CrudDao;
  * @author history
  * @date 2018-08-08
  */
-public interface SysRoleDao extends CrudDao<SysRole>{
+public interface SysRoleDao extends CrudDao<SysRoleDto>{
     public int deleteRoleMenuByRoleId(Serializable roleId);
     public int deleteUserRoleByRoleId(Serializable roleId);
     public int deleteUserRoleByRoleIdAndUserId(@Param("roleId") String roleId,@Param("userId") Long userId);
     public int insertUserRole(@Param("roleId") String roleId,@Param("userId") Long userId);
-    public int insertRoleMenu(List<SysRoleMenu> roleMenus);
-    public List<SysRole> findByUserId(Long userId);
+    public int insertRoleMenu(List<SysRoleMenuDto> roleMenus);
+    public List<SysRoleDto> findByUserId(Long userId);
     public int deleteRoleDeptByRoleId(Serializable roleId);
-    public int insertRoleDept(List<SysRoleDept> list);
+    public int insertRoleDept(List<SysRoleDeptDto> list);
     
     public List<String> selectMenuIdsByRoleId(Serializable roleId);
     public List<String> selectDeptIdsByRoleId(String roleId);
     
     public int delete(@Param("roleId") java.lang.String roleId);
 
-	public SysRole findByName(String name);
+	public SysRoleDto findByName(String name);
 
 }

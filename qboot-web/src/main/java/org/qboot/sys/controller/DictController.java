@@ -1,13 +1,13 @@
 package org.qboot.sys.controller;
 
 import com.github.pagehelper.PageInfo;
-import org.qboot.sys.dto.SysDict;
+import org.qboot.sys.dto.SysDictDto;
 import org.qboot.sys.service.impl.SysDictService;
 import org.qboot.common.annotation.AccLog;
 import org.qboot.common.constants.SysConstants;
 import org.qboot.common.controller.BaseController;
 import org.qboot.common.entity.ResponeModel;
-import org.qboot.web.security.SecurityUtils;
+import org.qboot.common.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
@@ -36,22 +36,22 @@ public class DictController extends BaseController {
 
 	@PreAuthorize("hasAuthority('sys:dict:qry')")
 	@PostMapping("/qryPage")
-	public ResponeModel qryPage(SysDict sysDict, BindingResult bindingResult) {
-		PageInfo<SysDict> page = sysDictService.findByPage(sysDict);
+	public ResponeModel qryPage(SysDictDto sysDict, BindingResult bindingResult) {
+		PageInfo<SysDictDto> page = sysDictService.findByPage(sysDict);
 		return ResponeModel.ok(page);
 	}
 
 	@PreAuthorize("hasAuthority('sys:dict:qry')")
 	@RequestMapping("/get")
 	public ResponeModel get(@RequestParam Serializable id) {
-		SysDict sysDict = sysDictService.findById(id);
+		SysDictDto sysDict = sysDictService.findById(id);
 		return ResponeModel.ok(sysDict);
 	}
 
     @AccLog
 	@PreAuthorize("hasAuthority('sys:dict:save')")
 	@PostMapping("/save")
-	public ResponeModel save(@Validated SysDict sysDict, BindingResult bindingResult) {
+	public ResponeModel save(@Validated SysDictDto sysDict, BindingResult bindingResult) {
 
 		if(null == sysDict.getSort()) {
             sysDict.setSort(0);
@@ -68,7 +68,7 @@ public class DictController extends BaseController {
     @AccLog
 	@PreAuthorize("hasAuthority('sys:dict:update')")
 	@PostMapping("/update")
-	public ResponeModel update(@Validated SysDict sysDict,BindingResult bindingResult) {
+	public ResponeModel update(@Validated SysDictDto sysDict, BindingResult bindingResult) {
 		sysDict.setUpdateBy(SecurityUtils.getLoginName());
 		int cnt = sysDictService.update(sysDict);
 		if(cnt > 0) {
@@ -81,7 +81,7 @@ public class DictController extends BaseController {
 	@PreAuthorize("hasAuthority('sys:dict:update')")
 	@PostMapping("/setStatus")
 	public ResponeModel setStatus(@RequestParam String id, @RequestParam String status) {
-		SysDict sysDict = new SysDict();
+		SysDictDto sysDict = new SysDictDto();
 		sysDict.setId(id);
 		sysDict.setStatus(status);
 		sysDict.setUpdateBy(SecurityUtils.getLoginName());
@@ -97,7 +97,7 @@ public class DictController extends BaseController {
 	@PreAuthorize("hasAuthority('sys:dict:delete')")
 	@PostMapping("/delete")
 	public ResponeModel delete(@RequestParam String id) {
-		SysDict sysDict = new SysDict();
+		SysDictDto sysDict = new SysDictDto();
 		sysDict.setId(id);
 		sysDict.setStatus(SysConstants.SYS_DISABLE);
 		sysDict.setUpdateBy(SecurityUtils.getLoginName());
@@ -111,7 +111,7 @@ public class DictController extends BaseController {
 
 	@RequestMapping("/getDictType")
 	public ResponeModel getDictType(@RequestParam String dictType) {
-		List<SysDict> dicts = sysDictService.findTypes(dictType);
+		List<SysDictDto> dicts = sysDictService.findTypes(dictType);
 		return ResponeModel.ok(dicts);
 	}
 	

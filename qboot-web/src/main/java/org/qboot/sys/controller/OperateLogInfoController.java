@@ -6,7 +6,7 @@ import org.qboot.sys.service.impl.SysOperateLogInfoService;
 import org.qboot.common.annotation.AccLog;
 import org.qboot.common.controller.BaseController;
 import org.qboot.common.entity.ResponeModel;
-import org.qboot.web.security.SecurityUtils;
+import org.qboot.common.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.qboot.sys.dao.SysAreaDao" >
-  <resultMap id="BaseResultMap" type="org.qboot.sys.dto.SysArea" >
+  <resultMap id="BaseResultMap" type="org.qboot.sys.dto.SysAreaDto" >
     <id column="id" property="id" jdbcType="VARCHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="parent_id" property="parentId" jdbcType="VARCHAR" />
@@ -24,7 +24,7 @@
     from sys_area
     where id = #{id}
   </select>
-  <select id="findList" resultMap="BaseResultMap" parameterType="org.qboot.sys.dto.SysArea" >
+  <select id="findList" resultMap="BaseResultMap" parameterType="org.qboot.sys.dto.SysAreaDto" >
     select 
     <include refid="Base_Column_List" />
     from sys_area
@@ -55,11 +55,11 @@
     delete from sys_area
     where id = #{id}
   </delete>
-  <insert id="insert" parameterType="org.qboot.sys.dto.SysArea" >
+  <insert id="insert" parameterType="org.qboot.sys.dto.SysAreaDto" >
     insert into sys_area (id,name,parent_id,sort,type,status,create_by,create_date,update_by,update_date,remarks)
     values (#{id},#{name},#{parentId},#{sort},#{type},#{status},#{createBy},#{createDate},#{updateBy},#{updateDate},#{remarks})
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="org.qboot.sys.dto.SysArea" >
+  <update id="updateByPrimaryKeySelective" parameterType="org.qboot.sys.dto.SysAreaDto" >
     update sys_area
     <set>
       <if test="name != null" >
@@ -89,7 +89,7 @@
     </set>
     where id = #{id}
   </update>
-  <update id="updateByPrimaryKey" parameterType="org.qboot.sys.dto.SysArea" >
+  <update id="updateByPrimaryKey" parameterType="org.qboot.sys.dto.SysAreaDto" >
     update sys_area
     set 
         name = #{name}

@@ -1,6 +1,6 @@
 package org.qboot.sys.dao;
 
-import org.qboot.sys.dto.SysArea;
+import org.qboot.sys.dto.SysAreaDto;
 import org.qboot.common.dao.CrudDao;
 
 /**
@@ -10,6 +10,6 @@ import org.qboot.common.dao.CrudDao;
  * @author history
  * @date 2018-08-08
  */
-public interface SysAreaDao extends CrudDao<SysArea> {
+public interface SysAreaDao extends CrudDao<SysAreaDto> {
 
 }

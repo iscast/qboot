@@ -2,7 +2,7 @@ package org.qboot.sys.dao;
 
 import java.util.List;
 
-import org.qboot.sys.dto.SysParamClass;
+import org.qboot.sys.dto.SysParamClassDto;
 import org.qboot.common.dao.CrudDao;
 
 /**
@@ -12,9 +12,9 @@ import org.qboot.common.dao.CrudDao;
  * @author history
  * @date 2018-08-08
  */
-public interface SysParamClassDao extends CrudDao<SysParamClass> {
+public interface SysParamClassDao extends CrudDao<SysParamClassDto> {
 
-	public int changeById(SysParamClass sysParamClass);
+	public int changeById(SysParamClassDto sysParamClass);
 	
-	public List<SysParamClass> classIsUsed(SysParamClass sysParamClass);
+	public List<SysParamClassDto> classIsUsed(SysParamClassDto sysParamClass);
 }

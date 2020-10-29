@@ -2,8 +2,8 @@ package org.qboot.sys.controller;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.qboot.sys.dto.SysMenu;
-import org.qboot.sys.dto.SysRole;
+import org.qboot.sys.dto.SysMenuDto;
+import org.qboot.sys.dto.SysRoleDto;
 import org.qboot.sys.service.impl.SysMenuService;
 import org.qboot.sys.service.impl.SysRoleService;
 import org.qboot.common.annotation.AccLog;
@@ -12,7 +12,7 @@ import org.qboot.common.controller.BaseController;
 import org.qboot.common.entity.AuthTreeEntity;
 import org.qboot.common.utils.TreeHelper;
 import org.qboot.common.entity.ResponeModel;
-import org.qboot.web.security.SecurityUtils;
+import org.qboot.common.security.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,16 +44,16 @@ public class MenuController extends BaseController {
 	@Autowired
 	private SysRoleService sysRoleService;
 	
-	private TreeHelper<SysMenu> treeHelper = new TreeHelper<SysMenu>();
+	private TreeHelper<SysMenuDto> treeHelper = new TreeHelper<SysMenuDto>();
 
 	@GetMapping("/qryAuth")
 	public ResponeModel qryAuth() {
 		if(SecurityUtils.getUserId() == null) {
 			return ResponeModel.error("-1", "sys.response.msg.failToLoadAuth");
 		}
-		List<SysMenu> list = new ArrayList<SysMenu>();
+		List<SysMenuDto> list = new ArrayList<SysMenuDto>();
 		if(SecurityUtils.isSuperAdmin()) {
-			SysMenu sysMenu = new SysMenu();
+			SysMenuDto sysMenu = new SysMenuDto();
 			sysMenu.setSortField("sort,parent_ids");
 			sysMenu.setDirection(SysConstants.ASC);
 			list = sysMenuService.findList(sysMenu);
@@ -68,13 +68,13 @@ public class MenuController extends BaseController {
 	public ResponeModel qryAllMenus(@RequestParam(required=false) String roleId) {
 		try {
 			
-			List<SysMenu> list = new ArrayList<SysMenu>();
+			List<SysMenuDto> list = new ArrayList<SysMenuDto>();
 			if(!SecurityUtils.isSuperAdmin()) {
-				List<SysRole> roles = sysRoleService.findByUserId(SecurityUtils.getUserId());
+				List<SysRoleDto> roles = sysRoleService.findByUserId(SecurityUtils.getUserId());
 				Set<String> menuIdList = new HashSet<String>();
 				if(!CollectionUtils.isEmpty(roles)) {
-					for(SysRole role : roles) {
-						List<SysMenu> sysMenus = sysMenuService.findByRoleId(role.getId());
+					for(SysRoleDto role : roles) {
+						List<SysMenuDto> sysMenus = sysMenuService.findByRoleId(role.getId());
 						if(CollectionUtils.isEmpty(sysMenus)) {
 							continue;
 						}
@@ -88,13 +88,13 @@ public class MenuController extends BaseController {
 					}
 				}
 			}else {
-				SysMenu sysMenu = new SysMenu();
+				SysMenuDto sysMenu = new SysMenuDto();
 				sysMenu.setSortField("sort,parent_ids");
 				sysMenu.setDirection(SysConstants.ASC);
 				list = sysMenuService.findList(sysMenu);
 			}
 			
-			List<SysMenu> roleAuths = new ArrayList<SysMenu>();
+			List<SysMenuDto> roleAuths = new ArrayList<SysMenuDto>();
 			if(StringUtils.isNotBlank(roleId)) {
 				roleAuths = sysMenuService.findByRoleId(roleId);
 			}
@@ -110,36 +110,36 @@ public class MenuController extends BaseController {
 	
 	@GetMapping("/qryMenus")
 	public ResponeModel qryParentMenus(@RequestParam(required=false) String parentId) {
-		List<SysMenu> list = sysMenuService.findMenuByParentId(parentId);
+		List<SysMenuDto> list = sysMenuService.findMenuByParentId(parentId);
 		return ResponeModel.ok(list);
 	}
 	
 	@GetMapping("/qryParentMenus")
-	public ResponeModel qryParentMenus(@Validated SysMenu sysMenu, BindingResult bindingResult) {
+	public ResponeModel qryParentMenus(@Validated SysMenuDto sysMenu, BindingResult bindingResult) {
 		sysMenu.setIsShow(sysMenu.getIsShow());
 		sysMenu.setSortField("id,sort");
 		sysMenu.setDirection(SysConstants.DESC);
-		List<SysMenu> list = sysMenuService.findParentMenuList(sysMenu);
+		List<SysMenuDto> list = sysMenuService.findParentMenuList(sysMenu);
 		return ResponeModel.ok(list);
 	}
 	
 	@PreAuthorize("hasAuthority('sys:menu:qry')")
 	@RequestMapping("/get")
 	public ResponeModel get(@RequestParam Serializable id) {
-		SysMenu sysMenu = sysMenuService.findById(id);
+		SysMenuDto sysMenu = sysMenuService.findById(id);
 		return ResponeModel.ok(sysMenu);
 	}
 
     @AccLog
 	@PreAuthorize("hasAuthority('sys:menu:save')")
 	@PostMapping("/save")
-	public ResponeModel save(@Validated SysMenu sysMenu, BindingResult bindingResult) {
-		SysMenu menu = sysMenuService.findByPermission(sysMenu.getPermission());
+	public ResponeModel save(@Validated SysMenuDto sysMenu, BindingResult bindingResult) {
+		SysMenuDto menu = sysMenuService.findByPermission(sysMenu.getPermission());
 		if(menu != null) {
 			return ResponeModel.error("authDuplicate");
 		}
 		
-		SysMenu parent = null;
+		SysMenuDto parent = null;
 		if (sysMenu.getParentId() != null && !sysMenu.getParentId().equals("0") && !sysMenu.getParentId().equals("")) {
 			parent = sysMenuService.findById(sysMenu.getParentId());
 		} 
@@ -158,13 +158,13 @@ public class MenuController extends BaseController {
     @AccLog
 	@PreAuthorize("hasAuthority('sys:menu:update')")
 	@PostMapping("/update")
-	public ResponeModel update(@Validated SysMenu sysMenu, BindingResult bindingResult) {
-		SysMenu menu = sysMenuService.findByPermission(sysMenu.getPermission());
+	public ResponeModel update(@Validated SysMenuDto sysMenu, BindingResult bindingResult) {
+		SysMenuDto menu = sysMenuService.findByPermission(sysMenu.getPermission());
 		if(menu != null && !String.valueOf(menu.getId()).equals(sysMenu.getId())) {
 			return ResponeModel.error("authDuplicate");
 		}
 		
-		SysMenu parent = null;
+		SysMenuDto parent = null;
 		if (sysMenu.getParentId() != null && !sysMenu.getParentId().equals("0") && !sysMenu.getParentId().equals("")) {
 			parent = sysMenuService.findById(sysMenu.getParentId());
 		} 
@@ -194,7 +194,7 @@ public class MenuController extends BaseController {
     @AccLog
 	@PreAuthorize("hasAuthority('sys:menu:save')")
 	@PostMapping("/batchSave")
-	public ResponeModel batchSave(@RequestBody List<SysMenu> list ) {
+	public ResponeModel batchSave(@RequestBody List<SysMenuDto> list ) {
 		sysMenuService.batchSave(list);
 		return ResponeModel.ok();
 	}
@@ -208,7 +208,7 @@ public class MenuController extends BaseController {
 	@GetMapping("/changeShowFlag")
 	public ResponeModel changeShowFlag(@RequestParam(required=false) String id, @RequestParam(required=false) String isShow) {
 		try {
-			SysMenu sysMenu = sysMenuService.findById(id);
+			SysMenuDto sysMenu = sysMenuService.findById(id);
 			if(sysMenu != null) {
 				if(sysMenu.getPermission().equals("sys:menu") || sysMenu.getPermission().equals("sys:menu:save")  || sysMenu.getPermission().equals("sys:menu:update") 
 						|| sysMenu.getPermission().equals("sys:menu:delete") || sysMenu.getPermission().equals("sys:menu:qry")) {
@@ -225,15 +225,15 @@ public class MenuController extends BaseController {
 		return ResponeModel.error();
 	}
 
-    private List<AuthTreeEntity> authTreeList(List<SysMenu> list, List<SysMenu> roleAuths) {
+    private List<AuthTreeEntity> authTreeList(List<SysMenuDto> list, List<SysMenuDto> roleAuths) {
         Map<String, String> authMap = getRoleAuthMap(roleAuths);
         List<AuthTreeEntity> result = this.nextAuthTreeList(list, TreeHelper.DEFAULT_PARENTID, authMap);
         return result;
     }
 
-    private List<AuthTreeEntity> nextAuthTreeList(List<SysMenu> list, String parentId, Map<String, String> authMap){
+    private List<AuthTreeEntity> nextAuthTreeList(List<SysMenuDto> list, String parentId, Map<String, String> authMap){
         List<AuthTreeEntity> result = new ArrayList<>();
-        for (SysMenu t : list) {//
+        for (SysMenuDto t : list) {//
             if (parentId.equals(t.getParentId())) {
                 // 从跟节点开始
                 AuthTreeEntity ate = new AuthTreeEntity();
@@ -249,10 +249,10 @@ public class MenuController extends BaseController {
         return result;
     }
 
-    private Map<String, String> getRoleAuthMap(List<SysMenu> roleAuths){
+    private Map<String, String> getRoleAuthMap(List<SysMenuDto> roleAuths){
         Map<String, String> authMap = new HashMap<String, String>();
         if(!CollectionUtils.isEmpty(roleAuths)) {
-            for(SysMenu menu : roleAuths) {
+            for(SysMenuDto menu : roleAuths) {
                 authMap.put(menu.getId(), menu.getId());
             }
         }

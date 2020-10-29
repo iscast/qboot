@@ -1,15 +1,15 @@
 package org.qboot.sys.controller;
 
 import org.apache.commons.lang3.StringUtils;
-import org.qboot.sys.dto.SysDept;
+import org.qboot.sys.dto.SysDeptDto;
 import org.qboot.sys.service.impl.SysDeptService;
 import org.qboot.common.annotation.AccLog;
 import org.qboot.common.constants.SysConstants;
 import org.qboot.common.controller.BaseController;
 import org.qboot.common.utils.TreeHelper;
 import org.qboot.common.entity.ResponeModel;
-import org.qboot.web.security.QUser;
-import org.qboot.web.security.SecurityUtils;
+import org.qboot.common.security.CustomUser;
+import org.qboot.common.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -34,7 +34,7 @@ public class DeptController extends BaseController {
 
 	@Autowired
 	private SysDeptService sysDeptService;
-	private TreeHelper<SysDept> treeHelper = new TreeHelper<SysDept>();
+	private TreeHelper<SysDeptDto> treeHelper = new TreeHelper<SysDeptDto>();
 
 	/**
 	 * 用户管理那里的部门查询,只能看到自己及以下部门
@@ -42,26 +42,26 @@ public class DeptController extends BaseController {
 	 * @return
 	 */
 	@PostMapping("/qryAllWithScope")
-	public ResponeModel qryAllWithScope(SysDept sysDept) {
-		QUser user = SecurityUtils.getUser();
+	public ResponeModel qryAllWithScope(SysDeptDto sysDept) {
+		CustomUser user = SecurityUtils.getUser();
 		String deptId = user.getDeptId();
 		if (SecurityUtils.isSuperAdmin(user.getLoginName())) {
 			return this.qryAll(sysDept);
 		}
 		//如果是非超级管理员返回自己部门及以下
-		SysDept currentDept = sysDeptService.findById(deptId);
+		SysDeptDto currentDept = sysDeptService.findById(deptId);
 		Assert.notNull(currentDept, "当前所属部门为空");
-		List<SysDept> list = sysDeptService.findByParentIds(currentDept.getParentIds() + deptId);
+		List<SysDeptDto> list = sysDeptService.findByParentIds(currentDept.getParentIds() + deptId);
 		list.add(currentDept);
 		return ResponeModel.ok(list);
 	}
 
 	@PreAuthorize("hasAuthority('sys:dept:qry')")
 	@GetMapping("/qryAll")
-	public ResponeModel qryAll(SysDept sysDept) {
+	public ResponeModel qryAll(SysDeptDto sysDept) {
 		sysDept.setSortField("sort,parent_ids");
 		sysDept.setDirection(SysConstants.ASC);
-		List<SysDept> list = sysDeptService.findList(sysDept);
+		List<SysDeptDto> list = sysDeptService.findList(sysDept);
 		//数据机构调整
 		return ResponeModel.ok(treeHelper.treeGridList(list));
 	}
@@ -69,7 +69,7 @@ public class DeptController extends BaseController {
 	@PreAuthorize("hasAuthority('sys:dept:qry')")
 	@GetMapping("/qryDepts")
 	public ResponeModel qryParentMenus(@RequestParam(required=false) String parentId) {
-		List<SysDept> list = sysDeptService.findByParentIds(parentId);
+		List<SysDeptDto> list = sysDeptService.findByParentIds(parentId);
 		return ResponeModel.ok(list);
 	}
 	
@@ -77,7 +77,7 @@ public class DeptController extends BaseController {
 	@PreAuthorize("hasAuthority('sys:dept:qry')")
 	@RequestMapping("/get")
 	public ResponeModel get(@RequestParam Serializable id) {
-		SysDept sysDept = sysDeptService.findById(id);
+		SysDeptDto sysDept = sysDeptService.findById(id);
 		if(sysDept != null) {
 			return ResponeModel.ok(sysDept);
 		}
@@ -87,8 +87,8 @@ public class DeptController extends BaseController {
     @AccLog
 	@PreAuthorize("hasAuthority('sys:dept:save')")
 	@PostMapping("/save")
-	public ResponeModel save(@Validated SysDept sysDept, BindingResult bindingResult) {
-		SysDept parent = null;
+	public ResponeModel save(@Validated SysDeptDto sysDept, BindingResult bindingResult) {
+		SysDeptDto parent = null;
 		if (StringUtils.isNotEmpty(sysDept.getParentId())) {
 			parent = sysDeptService.findById(sysDept.getParentId());
 		} 
@@ -103,8 +103,8 @@ public class DeptController extends BaseController {
     @AccLog
 	@PreAuthorize("hasAuthority('sys:dept:update')")
 	@PostMapping("/update")
-	public ResponeModel update(@Validated SysDept sysDept, BindingResult bindingResult) {
-		SysDept parent = null;
+	public ResponeModel update(@Validated SysDeptDto sysDept, BindingResult bindingResult) {
+		SysDeptDto parent = null;
 		if (StringUtils.isNotEmpty(sysDept.getParentId())) {
 			parent = sysDeptService.findById(sysDept.getParentId());
 		} 

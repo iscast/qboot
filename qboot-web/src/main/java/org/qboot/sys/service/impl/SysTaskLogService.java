@@ -1,7 +1,7 @@
 package org.qboot.sys.service.impl;
 
 import org.qboot.sys.dao.SysTaskLogDao;
-import org.qboot.sys.dto.SysTaskLog;
+import org.qboot.sys.dto.SysTaskLogDto;
 import org.springframework.stereotype.Service;
 
 import org.qboot.common.service.CrudService;
@@ -11,7 +11,7 @@ import org.qboot.common.service.CrudService;
  * @author history
  */
 @Service
-public class SysTaskLogService extends CrudService<SysTaskLogDao, SysTaskLog> {
+public class SysTaskLogService extends CrudService<SysTaskLogDao, SysTaskLogDto> {
 	
 	/**
 	 * 根据taskId删除日志

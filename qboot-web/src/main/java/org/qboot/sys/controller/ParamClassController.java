@@ -1,12 +1,12 @@
 package org.qboot.sys.controller;
 
 import com.github.pagehelper.PageInfo;
-import org.qboot.sys.dto.SysParamClass;
+import org.qboot.sys.dto.SysParamClassDto;
 import org.qboot.sys.service.impl.SysParamClassService;
 import org.qboot.common.annotation.AccLog;
 import org.qboot.common.controller.BaseController;
 import org.qboot.common.entity.ResponeModel;
-import org.qboot.web.security.SecurityUtils;
+import org.qboot.common.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.Assert;
@@ -34,22 +34,22 @@ public class ParamClassController extends BaseController {
 
 	@PreAuthorize("hasAuthority('sys:param:qry')")
 	@PostMapping("/qryPage")
-	public ResponeModel qryPage(SysParamClass sysParam) {
-		PageInfo<SysParamClass> page = sysParamService.findByPage(sysParam);
+	public ResponeModel qryPage(SysParamClassDto sysParam) {
+		PageInfo<SysParamClassDto> page = sysParamService.findByPage(sysParam);
 		return ResponeModel.ok(page);
 	}
 	
 	@PreAuthorize("hasAuthority('sys:param:qry')")
 	@RequestMapping("/get")
 	public ResponeModel get(@RequestParam Serializable id) {
-		SysParamClass sysParam = sysParamService.findById(id);
+		SysParamClassDto sysParam = sysParamService.findById(id);
 		return ResponeModel.ok(sysParam);
 	}
 
     @AccLog
 	@PreAuthorize("hasAuthority('sys:param:save')")
 	@PostMapping("/save")
-	public ResponeModel save(@Validated SysParamClass sysParam, BindingResult bindingResult) {
+	public ResponeModel save(@Validated SysParamClassDto sysParam, BindingResult bindingResult) {
 		sysParam.setCreateBy(SecurityUtils.getLoginName());
 		sysParam.setVisible(1); // 默认可用
 		sysParam.setPhysicsFlag(1);
@@ -63,7 +63,7 @@ public class ParamClassController extends BaseController {
     @AccLog
 	@PreAuthorize("hasAuthority('sys:param:update')")
 	@PostMapping("/update")
-	public ResponeModel update(@Validated SysParamClass sysParam, BindingResult bindingResult) {
+	public ResponeModel update(@Validated SysParamClassDto sysParam, BindingResult bindingResult) {
 		sysParam.setUpdateBy(SecurityUtils.getLoginName());
 		int cnt = sysParamService.update(sysParam);
 		if(cnt > 0) {
@@ -77,7 +77,7 @@ public class ParamClassController extends BaseController {
 	@PostMapping("/delete")
 	public ResponeModel delete(@RequestParam Serializable id, @RequestParam Integer phyFlag) {
 		Assert.notNull( id, "id为空");
-		SysParamClass sysParam = new SysParamClass();
+		SysParamClassDto sysParam = new SysParamClassDto();
 		sysParam.setId(String.valueOf(id));
 		sysParam.setPhysicsFlag(phyFlag);
 		int cnt = sysParamService.changeById(sysParam);
@@ -92,7 +92,7 @@ public class ParamClassController extends BaseController {
 	@PostMapping("/visible")
 	public ResponeModel visible(@RequestParam Serializable id, @RequestParam Integer visible) {
 		Assert.notNull( id, "id为空");
-		SysParamClass sysParam = new SysParamClass();
+		SysParamClassDto sysParam = new SysParamClassDto();
 		sysParam.setId(String.valueOf(id));
 		sysParam.setVisible(visible);
 		int cnt = sysParamService.changeById(sysParam);

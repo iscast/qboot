@@ -2,6 +2,9 @@ package org.qboot.common.dao;
 
 import org.qboot.common.entity.BaseEntity;
 
+import java.io.Serializable;
+import java.util.List;
+
 /**
  * crud persistence
  * @Author: iscast
@@ -16,9 +19,9 @@ public interface CrudDao <T extends BaseEntity<?>> extends BaseDao {
 
     int delete(T t);
 
-    int deleteById(java.io.Serializable id);
+    int deleteById(Serializable id);
 
-    T findById(java.io.Serializable id);
+    T findById(Serializable id);
 
-    java.util.List<T> findList(T t);
+    List<T> findList(T t);
 }

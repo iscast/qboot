@@ -1,13 +1,13 @@
 package org.qboot.common.utils;
 
 import org.junit.Test;
-import org.qboot.RapidDevelopmentPlatformApplicationTests;
+import org.qboot.QApplicationTests;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class RedisToolTest extends RapidDevelopmentPlatformApplicationTests{
+public class RedisToolTest extends QApplicationTests {
 	
 	@Autowired
     RedisTools redisTools;

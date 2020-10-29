@@ -1,7 +1,7 @@
 package org.qboot.sys.service.impl;
 
 import org.qboot.sys.dao.SysDictDao;
-import org.qboot.sys.dto.SysDict;
+import org.qboot.sys.dto.SysDictDto;
 import org.qboot.common.constants.CacheConstants;
 import org.qboot.common.service.CrudService;
 import org.qboot.common.utils.RedisTools;
@@ -19,13 +19,13 @@ import java.util.List;
  * @date 2018-08-08
  */
 @Service
-public class SysDictService extends CrudService<SysDictDao, SysDict> {
+public class SysDictService extends CrudService<SysDictDao, SysDictDto> {
 
 	@Autowired
 	private RedisTools redisTools;
 
-	public int setStatus(SysDict t) {
-		SysDict sysDict = this.findById(t.getId());
+	public int setStatus(SysDictDto t) {
+		SysDictDto sysDict = this.findById(t.getId());
 		Assert.notNull(sysDict,"dictExists");
 		sysDict.setStatus(t.getStatus());
 		sysDict.setUpdateBy(t.getUpdateBy());
@@ -33,10 +33,10 @@ public class SysDictService extends CrudService<SysDictDao, SysDict> {
 		return d.setStatus(sysDict);
 	}
 
-	public List<SysDict> findTypes(String type) {
+	public List<SysDictDto> findTypes(String type) {
         Assert.notNull(type, "typeIsEmpty");
         String key = CacheConstants.CACHE_PREFIX_SYS_DICT_TYPE + type;
-        List<SysDict> sdlist = redisTools.get(key);
+        List<SysDictDto> sdlist = redisTools.get(key);
         if(CollectionUtils.isEmpty(sdlist)) {
             sdlist = this.d.findTypes(type);
             if(!CollectionUtils.isEmpty(sdlist)) {
