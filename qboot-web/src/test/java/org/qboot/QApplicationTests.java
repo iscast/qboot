@@ -14,12 +14,11 @@ import org.springframework.web.context.WebApplicationContext;
 
 
 /**	
- * <p>Title: RapidDevelopmentPlatformApplicationTests</p>
+ * <p>Title: QApplicationTests</p>
  * <p>Description: 程序测试入口</p>
  * @author history
  * @date 2018-10-22
  */
-
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @WebAppConfiguration
