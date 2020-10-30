@@ -19,6 +19,7 @@ public class SysConstants {
 	public static final String SEPARATOR = ",";
 
 	public static final String SUCESS = "sucess";
+	public static final String ERROR = "error";
 	public static final String FAIL = "fail";
 
     public static final String SYS_ENABLE = "1";
@@ -35,9 +36,9 @@ public class SysConstants {
      */
     public final static String GLOBAL_DEFAULT_ERROR = "-1";
 
-    public final static String GLOBAL_DEFAULT_SUCCESS_MSG = "GLOBAL_DEFAULT_SUCCESS_MSG";
+    public final static String GLOBAL_DEFAULT_SUCCESS_MSG = SUCESS;
 
-    public final static String GLOBAL_DEFAULT_ERROR_MSG = "GLOBAL_DEFAULT_ERROR_MSG";
+    public final static String GLOBAL_DEFAULT_ERROR_MSG = ERROR;
 
 	/**
 	 * super Administrator id
