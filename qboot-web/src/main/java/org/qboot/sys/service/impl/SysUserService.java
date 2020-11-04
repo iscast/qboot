@@ -59,7 +59,6 @@ public class SysUserService extends CrudService<SysUserDao, SysUserDto> {
 		if(cnt > 0) {
 			// 插入角色
 			this.saveUserRole(t.getRoleIds(), t.getId());
-			
 			return Integer.parseInt(String.valueOf(t.getId()));
 		}else {
 			return 0;
@@ -72,18 +71,6 @@ public class SysUserService extends CrudService<SysUserDao, SysUserDto> {
 		SysUserDto sysUser = this.findById(t.getId());
 		Assert.notNull(sysUser, "userNotExists");
 		return super.update(t);
-	}
-	
-	public int updateUserRoleSelective(SysUserDto t) {
-		SysUserDto sysUser = this.findById(t.getId());
-		Assert.notNull(sysUser, "userNotExists");
-		int cnt = super.update(t);
-		if(cnt > 0) {
-			// 删除user关联的所有role
-			this.d.deleteUserRoleByUserId(t.getId());
-			this.saveUserRole(t.getRoleIds(), t.getId());
-		}
-		return cnt;
 	}
 	
 	public int updateSelect(SysUserDto t) {

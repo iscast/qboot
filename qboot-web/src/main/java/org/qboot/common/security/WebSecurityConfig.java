@@ -2,6 +2,7 @@ package org.qboot.common.security;
 
 import com.alibaba.fastjson.JSON;
 import org.qboot.common.config.SysSecurityConfig;
+import org.qboot.common.exception.errorcode.SystemErrTable;
 import org.qboot.common.utils.SpringContextHolder;
 import org.qboot.common.entity.ResponeModel;
 import org.slf4j.Logger;
@@ -68,7 +69,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				"/module/encrypt/jsencrypt.js",
 				"/assets/**",
 				"/module/i18n/*",
-				"/sys/user/getPublicKey",
+				"/user/getPublicKey",
 				"/module/_config.js").permitAll()
 		.antMatchers((adminPath + "/**")).authenticated()
 		// 允许跨域
@@ -87,14 +88,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			public void commence(HttpServletRequest request, HttpServletResponse response,
 					AuthenticationException authException) throws IOException, ServletException {
 				String requestURI = request.getRequestURI();
-				logger.info("request uri address :{} current user no login!", requestURI);
+				logger.warn("request url :[{}] fail, no login!", requestURI);
 
 				if("/".equals(requestURI)) {
 					response.sendRedirect("/login.html");
 				} else {
-					ResponeModel expired = ResponeModel.error(String.valueOf(SecurityStatus.NO_LOGIN.getValue()));
 					response.setContentType("application/json;charset=UTF-8");
-					response.getWriter().print(JSON.toJSONString(expired));
+					response.getWriter().print(JSON.toJSONString(ResponeModel.error(SystemErrTable.AUTH_FAIL)));
 				}
 			}
 		}).accessDeniedHandler(new WebAccessDeniedHandler());
@@ -110,8 +110,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	/**
 	 * 自定义登录过滤器 customAuthenticationFilter
-	 * @return
-	 * @throws Exception
 	 */
 	@Bean
 	public WebAuthenticationFilter customAuthenticationFilter() throws Exception {

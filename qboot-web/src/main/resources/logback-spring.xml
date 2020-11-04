@@ -122,6 +122,15 @@
         </root>
     </springProfile>
 
+    <springProfile name="test">
+        <root level="INFO">
+            <appender-ref ref="FILEINFO"/>
+            <appender-ref ref="FILEERROR"/>
+            <appender-ref ref="FILEWARN"/>
+            <appender-ref ref="STDOUT"/>
+        </root>
+    </springProfile>
+
     <springProfile name="dev">
         <root level="DEBUG">
             <appender-ref ref="FILEERROR"/>

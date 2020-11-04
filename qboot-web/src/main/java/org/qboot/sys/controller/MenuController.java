@@ -49,7 +49,7 @@ public class MenuController extends BaseController {
 	@GetMapping("/qryAuth")
 	public ResponeModel qryAuth() {
 		if(SecurityUtils.getUserId() == null) {
-			return ResponeModel.error("-1", "sys.response.msg.failToLoadAuth");
+			return ResponeModel.error("sys.response.msg.failToLoadAuth");
 		}
 		List<SysMenuDto> list = new ArrayList<SysMenuDto>();
 		if(SecurityUtils.isSuperAdmin()) {

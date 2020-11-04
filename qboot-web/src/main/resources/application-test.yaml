@@ -28,7 +28,7 @@ spring:
       username: root
       validation-query: select 1
   redisson:
-    address: redis://127.0.0.1:6379
+    address: redis://172.0.0.1:6379
     password: 666666
     codec: org.redisson.codec.FstCodec
     connectTimeout: 10000

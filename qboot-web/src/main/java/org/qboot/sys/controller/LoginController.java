@@ -1,21 +1,24 @@
 package org.qboot.sys.controller;
 
+import org.qboot.common.annotation.AccLog;
+import org.qboot.common.controller.BaseController;
+import org.qboot.common.entity.ResponeModel;
+import org.qboot.common.security.CustomUser;
+import org.qboot.common.security.SecurityUtils;
+import org.qboot.common.utils.RSAsecurity;
+import org.qboot.common.utils.TreeHelper;
 import org.qboot.sys.dto.SysMenuDto;
 import org.qboot.sys.dto.SysUserDto;
 import org.qboot.sys.service.impl.SysLoginLogService;
 import org.qboot.sys.service.impl.SysMenuService;
 import org.qboot.sys.service.impl.SysUserService;
-import org.qboot.common.annotation.AccLog;
-import org.qboot.common.controller.BaseController;
-import org.qboot.common.utils.TreeHelper;
-import org.qboot.common.entity.ResponeModel;
-import org.qboot.common.security.CustomUser;
-import org.qboot.common.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import reactor.util.function.Tuple2;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -113,5 +116,12 @@ public class LoginController extends BaseController {
 		int cnt = sysUserService.update(sysUser);
 		return ResponeModel.ok(cnt);
 	}
+
+    @GetMapping("/getPublicKey")
+    public ResponeModel getPublicKey(HttpServletRequest request) {
+        Tuple2<String, String> keyPair = RSAsecurity.getInstance().generateKeyPair();
+        request.getSession().setAttribute("privateKey", keyPair.getT2());
+        return ResponeModel.ok("GetPublicKeySuccess",keyPair.getT1());
+    }
 
 }

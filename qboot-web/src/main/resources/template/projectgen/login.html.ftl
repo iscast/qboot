@@ -71,7 +71,7 @@
             var publicKey;
             //获取公钥
             $.ajax({
-                url: _config.base_server + "/sys/security/getPublicKey",
+                url: _config.base_server + "/user/getPublicKey",
                 async: false,
                 type: 'get',
                 success: function (data) {

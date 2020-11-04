@@ -11,19 +11,19 @@ public class CommonExceptionCode {
 	/**
 	 * 参数非法
 	 */
-	public final static String PARAM_INVALID = "601";
+	public final static int PARAM_INVALID = 601;
 	/**
 	 * 参数绑定错误
 	 */
-	public final static String PARAM_BIND_ERROR = "602";
+	public final static int PARAM_BIND_ERROR = 602;
 	/**
 	 * 非法请求
 	 */
-	public final static String ILLEGAL = "603";
+	public final static int ILLEGAL = 603;
 	/**
 	 * 未知错误
 	 */
-	public final static String UNKNOWN = "699";
+	public final static int UNKNOWN = 699;
 	
 	/** 任务ID已经存在*/
 	public static final String TASK_ID_ISEXIST = "task.id.isexist";
