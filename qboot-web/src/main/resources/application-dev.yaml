@@ -1,7 +1,7 @@
 admin:
   path: ''
 server:
-  port: 9000
+  port: 8800
 spring:
   application:
     name: qboot

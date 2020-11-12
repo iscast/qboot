@@ -10,7 +10,7 @@ import org.qboot.common.controller.BaseController;
 import org.qboot.common.entity.ResponeModel;
 import org.qboot.common.security.SecurityUtils;
 import org.qboot.common.utils.IpUtils;
-import org.qboot.common.utils.RSAsecurity;
+import org.qboot.common.utils.MyAssertTools;
 import org.qboot.sys.dto.SysRoleDto;
 import org.qboot.sys.dto.SysUserDto;
 import org.qboot.sys.exception.errorcode.UserErrTable;
@@ -23,7 +23,6 @@ import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import reactor.util.function.Tuple2;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
@@ -119,14 +118,14 @@ public class UserController extends BaseController {
 
 		Object updateId = request.getSession().getAttribute("user_update_id_"+request.getRequestedSessionId());
 		if(updateId == null) {
-			return ResponeModel.error("failToUpdate");
+			return ResponeModel.error(SYS_USER_FAIL_UPDATE);
 		}
 		if(!String.valueOf(sysUser.getId()).equals(String.valueOf(updateId))) {
-			return ResponeModel.error("dataUpdatedAlready");
+			return ResponeModel.error(SYS_USER_UPDATE_OVER_RIGHT);
 		}
 		
 		if (SecurityUtils.isSuperAdmin(sysUser.getLoginName()) && SysConstants.SYS_DISABLE.equals(sysUser.getStatus())) {
-			return ResponeModel.error("superAdminCannotBeInvalid");
+			return ResponeModel.error(SYS_USER_UPDATE_NO_ADMIN);
 		}
 		if(StringUtils.isNotBlank(sysUser.getRoleId())) {
 			sysUser.setRoleIds(Arrays.asList(sysUser.getRoleId().split(",")));
@@ -146,13 +145,14 @@ public class UserController extends BaseController {
 	@PostMapping("/delete")
 	public ResponeModel delete(@RequestParam Long id) {
 		SysUserDto user = sysUserService.findById(id);
-		Assert.notNull(user,"userNotExists");
+        MyAssertTools.notNull(user, SYS_USER_NOTEXISTS);
 
 		if (SecurityUtils.isSuperAdmin(user.getLoginName())) {
-			return ResponeModel.error("superAdminCannotBeDeleted");
+			return ResponeModel.error(SYS_USER_DEL_NO_ADMIN);
 		}
+
 		if (SecurityUtils.getUserId() == id) {
-			return ResponeModel.error("cannotDeleteYourself");
+			return ResponeModel.error(SYS_USER_DEL_NO_SELF);
 		}
 		int cnt = sysUserService.deleteById(id);
 		if(cnt > 0) {
@@ -166,12 +166,12 @@ public class UserController extends BaseController {
 	@PostMapping("/setStatus")
 	public ResponeModel setStatus(@RequestParam Long id, @RequestParam String status) {
 		SysUserDto user = sysUserService.findById(id);
-		Assert.notNull(user,"userNotExists");
+		MyAssertTools.notNull(user, SYS_USER_NOTEXISTS);
 		if (SecurityUtils.isSuperAdmin(user.getLoginName())) {
-			return ResponeModel.error("superAdminCannotBeModified");
+			return ResponeModel.error(SYS_USER_UPDATE_NO_ADMIN);
 		}
 		if (SecurityUtils.getUserId() == id) {
-			return ResponeModel.error("cannotUpdateYourOwnStatus");
+			return ResponeModel.error(SYS_USER_UPDATE_NO_SELF);
 		}
 		SysUserDto sysUser = new SysUserDto();
 		sysUser.setId(id);
@@ -189,12 +189,12 @@ public class UserController extends BaseController {
 	@PostMapping("/initPwd")
 	public ResponeModel initPwd(@RequestParam Long id, HttpServletRequest request) {
 		SysUserDto user = sysUserService.findById(id);
-		Assert.notNull(user,"userNotExists");
+        MyAssertTools.notNull(user, SYS_USER_NOTEXISTS);
 		if (SecurityUtils.isSuperAdmin(user.getLoginName())) {
-			return ResponeModel.error("superAdminCannotBeModified");
+			return ResponeModel.error(SYS_USER_UPDATE_NO_ADMIN);
 		}
 		if (SecurityUtils.getUserId() == id) {
-			return ResponeModel.error("initPwdDenied");
+			return ResponeModel.error(SYS_USER_INIT_PWD_DENIED);
 		}
 		SysUserDto sysUser = new SysUserDto();
 		sysUser.setId(id);
@@ -212,9 +212,9 @@ public class UserController extends BaseController {
 	@PostMapping("/resetPwd")
 	public ResponeModel resetPwd(@RequestParam String oldPsw, @RequestParam String newPsw, HttpServletRequest request) {
 		SysUserDto user = sysUserService.findById(SecurityUtils.getUserId());
-		Assert.notNull(user,"userNotExists");
+        MyAssertTools.notNull(user, SYS_USER_NOTEXISTS);
 		if (SecurityUtils.isSuperAdmin(user.getLoginName())) {
-			return ResponeModel.error("superAdminNotAllowChangePwd");
+			return ResponeModel.error(SYS_USER_UPDATE_NO_ADMIN);
 		}
 		boolean validate = sysUserService.validatePwd(oldPsw, SecurityUtils.getUserId());
 		if(validate) {
@@ -227,7 +227,7 @@ public class UserController extends BaseController {
 				return ResponeModel.ok("changePwdSuccess");
 			}
 		}
-		return ResponeModel.error("originalPwdIncorrect");
+		return ResponeModel.error(SYS_USER_ORIGINAL_PWD_INCORRECT);
 	}
 	
 	/**
@@ -241,9 +241,9 @@ public class UserController extends BaseController {
 	@PostMapping("/unlock")
 	public ResponeModel setStatus(@RequestParam Long id) {
 		SysUserDto user = sysUserService.findById(id);
-		Assert.notNull(user, "userUnlockNotExists");
+        MyAssertTools.notNull(user, SYS_USER_NOTEXISTS);
 		if (SecurityUtils.isSuperAdmin(user.getLoginName())) {
-			return ResponeModel.error("superAdminNotAllowChangePwd");
+			return ResponeModel.error(SYS_USER_PWD_CHANGE_NO_ADMIN);
 		}
 		loginSecurityService.unLock(user.getLoginName());
 		return ResponeModel.ok();

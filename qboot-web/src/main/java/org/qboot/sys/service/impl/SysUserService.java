@@ -1,6 +1,7 @@
 package org.qboot.sys.service.impl;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.qboot.common.utils.MyAssertTools;
 import org.qboot.sys.dao.SysUserDao;
 import org.qboot.sys.dto.SysUserDto;
 import org.qboot.sys.dto.SysUserRoleDto;
@@ -13,6 +14,8 @@ import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.qboot.sys.exception.errorcode.UserErrTable.*;
 
 /**
  * <p>Title: SysUserService</p>
@@ -27,13 +30,13 @@ public class SysUserService extends CrudService<SysUserDao, SysUserDto> {
     private SysLoginLogService sysLoginLogService;
 
 	public SysUserDto findByLoginName(String loginName) {
-		Assert.hasLength(loginName, "loginNameIsEmpty");
+        MyAssertTools.hasLength(loginName, SYS_USER_LOGINNAME_EMPTY);
 		List<SysUserDto> list = this.d.findByLoginName(loginName);
 		return list.isEmpty() ? null : list.get(0);
 	}
 	
 	public boolean checkLoginName(Long userId, String loginName) {
-		Assert.hasLength(loginName, "loginNameIsEmpty");
+        MyAssertTools.hasLength(loginName, SYS_USER_LOGINNAME_EMPTY);
 		List<SysUserDto> list = this.d.findByLoginName(loginName);
 		
 		if(userId != null && list.isEmpty()) {
@@ -69,13 +72,13 @@ public class SysUserService extends CrudService<SysUserDao, SysUserDto> {
 	@Override
 	public int update(SysUserDto t) {
 		SysUserDto sysUser = this.findById(t.getId());
-		Assert.notNull(sysUser, "userNotExists");
+        MyAssertTools.notNull(sysUser, SYS_USER_NOTEXISTS);
 		return super.update(t);
 	}
 	
 	public int updateSelect(SysUserDto t) {
 		SysUserDto sysUser = this.findById(t.getId());
-		Assert.notNull(sysUser, "userNotExists");
+        MyAssertTools.notNull(sysUser, SYS_USER_NOTEXISTS);
 
 		t.setVersion(sysUser.getVersion());
 		int cnt = this.d.updateSelect(t);
@@ -106,22 +109,22 @@ public class SysUserService extends CrudService<SysUserDao, SysUserDto> {
 	}
 	
 	public String encryptPwd(String password,String salt) {
-		Assert.hasLength(password, "pwdIsEmpty");
-		Assert.hasLength(salt,"saltIsEmpty");
+	    MyAssertTools.hasLength(password, SYS_USER_PWD_EMPTY);
+	    MyAssertTools.hasLength(salt, SYS_USER_SALT_EMPTY);
 		return CodecUtils.sha256(password + salt);
 	}
 	
 	public boolean validatePwd(String password, Long userId) {
-		Assert.hasLength(password, "pwdIsEmpty");
-		Assert.notNull(userId, "userIdIsEmpty");
+        MyAssertTools.hasLength(password, SYS_USER_PWD_EMPTY);
+        MyAssertTools.notNull(userId, SYS_USER_UERID_EMPTY);
 		SysUserDto user = this.findById(userId);
-		Assert.notNull(user, "userNotExists");
+        MyAssertTools.notNull(user, SYS_USER_NOTEXISTS);
 		return user.getPassword().equals(CodecUtils.sha256(password + user.getSalt()));
 	}
 	
 	public int initPwd(SysUserDto t, int initFlag, String ip) {
 		SysUserDto sysUser = this.findById(t.getId());
-		Assert.notNull(sysUser, "userNotExists");
+        MyAssertTools.notNull(sysUser, SYS_USER_NOTEXISTS);
 		sysUser.setPassword(encryptPwd(t.getPassword(), sysUser.getSalt()));
 		if(initFlag == SysConstants.SYS_USER_PWD_STATUS_CHANGED) {
 			sysUser.setFldN1(1);
@@ -136,8 +139,8 @@ public class SysUserService extends CrudService<SysUserDao, SysUserDto> {
 	
 	public int setStatus(SysUserDto t) {
 		SysUserDto sysUser = this.findById(t.getId());
-		Assert.notNull(sysUser, "userNotExists");
-		sysUser.setStatus(t.getStatus());;
+        MyAssertTools.notNull(sysUser, SYS_USER_NOTEXISTS);
+		sysUser.setStatus(t.getStatus());
 		return d.setStatus(sysUser);
 	}
 	
