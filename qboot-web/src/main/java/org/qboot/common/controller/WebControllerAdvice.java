@@ -3,8 +3,8 @@ package org.qboot.common.controller;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.qboot.common.entity.ResponeModel;
-import org.qboot.common.exception.CommonExceptionCode;
 import org.qboot.common.exception.ErrorCodeException;
+import org.qboot.common.exception.errorcode.SystemErrTable;
 import org.qboot.common.utils.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import java.beans.PropertyEditorSupport;
 import java.util.Date;
+
+import static org.qboot.common.exception.errorcode.SystemErrTable.SYS_PARAM_BIND_ERROR;
+import static org.qboot.common.exception.errorcode.SystemErrTable.SYS_PARAM_ILLEGAL;
 
 /**
  * <p>Title: QControllerAdvice</p>
@@ -66,44 +69,40 @@ public class WebControllerAdvice {
 	@ExceptionHandler(ErrorCodeException.class)
 	public ResponeModel responeException(ErrorCodeException e, HttpServletRequest request) {
         logRequest(request, e);
-		ResponeModel responeModel = ResponeModel.error("response error");
-		return responeModel;
+		return ResponeModel.error(e);
 	}
 
 	@ResponseBody
 	@ExceptionHandler(BindException.class)
 	public ResponeModel bindException(BindException e, HttpServletRequest request) {
         logRequest(request, e);
-		ResponeModel responeModel = ResponeModel.error(CommonExceptionCode.PARAM_BIND_ERROR, "param bind error");
-		return responeModel;
+		return ResponeModel.error(SYS_PARAM_BIND_ERROR);
 	}
 
     @ResponseBody
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponeModel IllegalArgumentException(IllegalArgumentException e, HttpServletRequest request) {
         logRequest(request, e);
-        ResponeModel responeModel = ResponeModel.error(CommonExceptionCode.PARAM_BIND_ERROR, "param bind error");
-        return responeModel;
+        return ResponeModel.error(SYS_PARAM_ILLEGAL);
     }
 	
 	@ResponseBody
 	@ExceptionHandler(Exception.class)
 	public ResponeModel exception(Exception e, HttpServletRequest request) {
         logRequest(request, e);
-		ResponeModel responeModel = ResponeModel.error(CommonExceptionCode.UNKNOWN, "error");
-		return responeModel;
+		return ResponeModel.error(SystemErrTable.ERR);
 	}
 
 	private void logRequest(HttpServletRequest request, Exception e) {
 	    if(null == request) {
-	        logger.error("log error ", e);
+	        logger.error("error msg: ", e);
 	        return;
         }
 
         String remoteIp = request.getRemoteAddr();
         String method = request.getMethod();
         String eMsg = e.getMessage();
-        logger.error("log error client ip:[{}] request method:[{}] , errorMsg:[{}], stackTrace:{}", remoteIp, method, eMsg, ExceptionUtils.getStackTrace(e));
+        logger.error("error msg: client ip:[{}] request method:[{}] , errorMsg:[{}], stackTrace:{}", remoteIp, method, eMsg, ExceptionUtils.getStackTrace(e));
     }
 
 }

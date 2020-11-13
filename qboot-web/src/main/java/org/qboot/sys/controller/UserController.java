@@ -19,7 +19,7 @@ import org.qboot.sys.service.impl.SysRoleService;
 import org.qboot.sys.service.impl.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -57,6 +57,7 @@ public class UserController extends BaseController {
 			user.setCreateBy(SecurityUtils.getLoginName());
 		}
 		PageInfo<SysUserDto> page = sysUserService.findByPage(user);
+		MyAssertTools.notNull(page, SYS_USER_QUERY_FAIL);
 		return ResponeModel.ok(page);
 	}
 	
@@ -135,7 +136,7 @@ public class UserController extends BaseController {
 		int cnt = sysUserService.updateSelect(sysUser);
 		if(cnt > 0) {
 			loginSecurityService.clearUserSessions(sysUser.getLoginName());
-			return ResponeModel.ok();
+			return ok();
 		}
 		return ResponeModel.error(SYS_USER_UPDATE_FAIL);
 	}
@@ -156,9 +157,9 @@ public class UserController extends BaseController {
 		}
 		int cnt = sysUserService.deleteById(id);
 		if(cnt > 0) {
-			return ResponeModel.ok();
+			return ok();
 		}
-		return ResponeModel.error();
+		return ResponeModel.error(SYS_USER_DELETE_FAIL);
 	}
 
     @AccLog
@@ -179,9 +180,9 @@ public class UserController extends BaseController {
 		int cnt = this.sysUserService.setStatus(sysUser);
 		if(cnt > 0) {
 			loginSecurityService.clearUserSessions(sysUser.getLoginName());
-			return ResponeModel.ok();
+			return ok();
 		}
-		return ResponeModel.error();
+		return ResponeModel.error(SYS_USER_STATUS_UPDATE_FAIL);
 	}
 
     @AccLog
@@ -205,7 +206,7 @@ public class UserController extends BaseController {
 		if(cnt > 0) {
 			return ResponeModel.ok(String.format(initPwdStr, password));
 		}
-		return ResponeModel.error();
+		return ResponeModel.error(SYS_USER_PWD_UPDATE_FAIL);
 	}
 
     @AccLog
@@ -226,6 +227,7 @@ public class UserController extends BaseController {
 				loginSecurityService.clearUserSessions(sysUser.getLoginName());
 				return ResponeModel.ok("changePwdSuccess");
 			}
+            return ResponeModel.error(SYS_USER_PWD_UPDATE_FAIL);
 		}
 		return ResponeModel.error(SYS_USER_ORIGINAL_PWD_INCORRECT);
 	}
@@ -246,7 +248,7 @@ public class UserController extends BaseController {
 			return ResponeModel.error(SYS_USER_PWD_CHANGE_NO_ADMIN);
 		}
 		loginSecurityService.unLock(user.getLoginName());
-		return ResponeModel.ok();
+		return ok();
 	}
 	
 }

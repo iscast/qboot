@@ -1,19 +1,22 @@
 package org.qboot.sys.service.impl;
 
 import com.github.pagehelper.PageInfo;
+import org.qboot.common.constants.SysConstants;
+import org.qboot.common.service.CrudService;
+import org.qboot.common.utils.MyAssertTools;
 import org.qboot.sys.dao.SysLoginLogDao;
 import org.qboot.sys.dto.SysLoginLogDto;
 import org.qboot.sys.dto.SysUserDto;
-import org.qboot.common.constants.SysConstants;
-import org.qboot.common.service.CrudService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 
 import java.util.Date;
 import java.util.List;
+
+import static org.qboot.sys.exception.errorcode.UserErrTable.SYS_USER_LOGIN_STATUS_EMPTY;
+import static org.qboot.sys.exception.errorcode.UserErrTable.SYS_USER_UERID_EMPTY;
 
 /**
  * 登录日志Service
@@ -28,7 +31,7 @@ public class SysLoginLogService extends CrudService<SysLoginLogDao, SysLoginLogD
 	private SysUserService sysUserService;
 
 	public void loginLogByLoginName(String status,String loginName,String ip,String userAgent,String browser,String deviceName, String area, int firstLogin) {
-        Assert.hasLength(status, "loginStatusIsEmpty");
+	    MyAssertTools.hasLength(status, SYS_USER_LOGIN_STATUS_EMPTY);
 
         SysLoginLogDto loginLog = initPojo(status, ip, userAgent, browser, deviceName, area, firstLogin);
 
@@ -62,7 +65,7 @@ public class SysLoginLogService extends CrudService<SysLoginLogDao, SysLoginLogD
     }
 
 	public SysLoginLogDto findLastLoginInfo(Long userId) {
-        Assert.notNull(userId, "userIdIsEmpty");
+        MyAssertTools.notNull(userId, SYS_USER_UERID_EMPTY);
 		SysLoginLogDto loginLog = new SysLoginLogDto();
 		loginLog.setPage(1);
 		loginLog.setLimit(2);

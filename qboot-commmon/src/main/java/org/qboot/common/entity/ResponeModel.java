@@ -6,6 +6,7 @@ import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import org.qboot.common.constants.SysConstants;
 import org.qboot.common.error.ErrorCode;
+import org.qboot.common.error.IError;
 
 import java.io.Serializable;
 import java.text.MessageFormat;
@@ -55,6 +56,7 @@ public class ResponeModel implements Serializable{
 
 	public static ResponeModel ok(Object data) {
 		ResponeModel responeModel = new ResponeModel();
+        responeModel.setCode(SysConstants.GLOBAL_DEFAULT_SUCCESS);
 		responeModel.setMsg(SysConstants.GLOBAL_DEFAULT_SUCCESS_MSG);
 		responeModel.setData(data);
 		return responeModel;
@@ -62,6 +64,7 @@ public class ResponeModel implements Serializable{
 	
 	public static ResponeModel ok(String msg) {
 		ResponeModel responeModel = new ResponeModel();
+        responeModel.setCode(SysConstants.GLOBAL_DEFAULT_SUCCESS);
 		responeModel.setMsg(msg);
 		return responeModel;
 	}
@@ -69,6 +72,7 @@ public class ResponeModel implements Serializable{
 
 	public static ResponeModel ok(String msg,Object data) {
 		ResponeModel responeModel = new ResponeModel();
+        responeModel.setCode(SysConstants.GLOBAL_DEFAULT_SUCCESS);
 		responeModel.setMsg(msg);
 		responeModel.setData(data);
 		return responeModel;
@@ -76,6 +80,7 @@ public class ResponeModel implements Serializable{
 	
 	public static ResponeModel ok(PageInfo<?> page) {
 		ResponeModel responeModel = new ResponeModel();
+        responeModel.setCode(SysConstants.GLOBAL_DEFAULT_SUCCESS);
 		responeModel.setMsg(SysConstants.GLOBAL_DEFAULT_SUCCESS_MSG);
 		if(page != null) {
 			responeModel.setCount(page.getTotal());
@@ -113,7 +118,7 @@ public class ResponeModel implements Serializable{
 		return responeModel;
 	}
 
-    public static ResponeModel error(ErrorCode err) {
+    public static ResponeModel error(IError err) {
         ResponeModel responeModel = new ResponeModel();
         responeModel.setCode(err.getErrorCode());
         responeModel.setMsg(err.getErrorInfo());

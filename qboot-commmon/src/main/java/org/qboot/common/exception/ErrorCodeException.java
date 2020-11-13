@@ -1,5 +1,6 @@
 package org.qboot.common.exception;
 
+import org.qboot.common.error.ErrorCode;
 import org.qboot.common.error.IError;
 
 /**
@@ -38,5 +39,9 @@ public class ErrorCodeException extends RuntimeException implements IError {
     @Override
     public String getErrorInfo() {
         return getMessage();
+    }
+
+    public IError getError() {
+        return new ErrorCode(errorCode, getErrorInfo());
     }
 }

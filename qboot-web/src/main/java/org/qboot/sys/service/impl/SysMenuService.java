@@ -4,14 +4,16 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.qboot.common.utils.MyAssertTools;
 import org.qboot.sys.dao.SysMenuDao;
 import org.qboot.sys.dto.SysMenuDto;
 import org.qboot.common.constants.SysConstants;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 import org.qboot.common.service.CrudService;
+
+import static org.qboot.sys.exception.errorcode.SysModuleErrTable.*;
 
 
 /**
@@ -24,7 +26,7 @@ import org.qboot.common.service.CrudService;
 public class SysMenuService extends CrudService<SysMenuDao, SysMenuDto> {
 
 	public List<SysMenuDto> findByParentIds(String parentIds){
-		Assert.hasLength(parentIds, "parentIdIsEmpty");
+        MyAssertTools.hasLength(parentIds, SYS_MENU_PARENTID_NULL);
 		SysMenuDto sysMenu = new SysMenuDto();
 		sysMenu.setParentIds(parentIds);
 		return this.findList(sysMenu);
@@ -48,7 +50,7 @@ public class SysMenuService extends CrudService<SysMenuDao, SysMenuDto> {
 	public int deleteById(Serializable id) {
 		//删除下级菜单
 		SysMenuDto sysMenu = this.findById(id);
-		Assert.notNull(sysMenu, "menuIsEmpty");
+		MyAssertTools.notNull(sysMenu, SYS_MENU_NO_EXIST);
 		List<SysMenuDto> list = this.findByParentIds(sysMenu.getParentIds() + sysMenu.getId());
 		for (SysMenuDto smenu : list) {
 			this.d.deleteRoleMenuByMenuId(smenu.getId());
@@ -59,7 +61,7 @@ public class SysMenuService extends CrudService<SysMenuDao, SysMenuDto> {
 	}
 	
 	public void batchSave(List<SysMenuDto> list) {
-		Assert.notEmpty(list, "listIsEmpty");
+	    MyAssertTools.notEmpty(list, SYS_MENU_LIST_EMPTY);
 		for (SysMenuDto sysMenu : list) {
 			this.update(sysMenu);
 		}
@@ -73,9 +75,7 @@ public class SysMenuService extends CrudService<SysMenuDao, SysMenuDto> {
 	}
 	
 	public SysMenuDto findByPermission(String permission){
-		if (StringUtils.isEmpty(permission)) {
-			return null;
-		}
+	    MyAssertTools.hasLength(permission, SYS_MENU_PERMISSION_NULL);
 		List<SysMenuDto> list = this.d.findByPermission(permission);
 		if(!CollectionUtils.isEmpty(list)) {
 			return list.get(0);
@@ -84,7 +84,7 @@ public class SysMenuService extends CrudService<SysMenuDao, SysMenuDto> {
 	}
 	
 	public List<SysMenuDto> findShowMenuByUserId(Long userId){
-		Assert.notNull(userId, "userIdIsEmpty");
+	    MyAssertTools.notNull(userId, SYS_MENU_USER_ID_NULL);
 		return this.d.findByUserId(userId);
 	}
 	

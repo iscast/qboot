@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Date;
 
 /**
+ * TODO 1，改造抛出异常； 2，测试运行任务
  * 任务控制器
  * @author history
  */
@@ -28,7 +29,7 @@ import java.util.Date;
 public class TaskController extends BaseController {
 	
 	@Autowired
-	SysTaskService sysTaskService ;
+	SysTaskService sysTaskService;
 	
 	@PreAuthorize("hasAuthority('sys:task:qry')")
 	@GetMapping("/qryPage")
@@ -54,7 +55,7 @@ public class TaskController extends BaseController {
 		sysTask.setUpdateBy(SecurityUtils.getLoginName());
 		this.checkParams(sysTask);
 		sysTaskService.save(sysTask) ;
-		return ResponeModel.ok();
+		return ok();
 	}
 
     @AccLog

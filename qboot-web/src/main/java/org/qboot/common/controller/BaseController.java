@@ -1,5 +1,7 @@
 package org.qboot.common.controller;
 
+import org.qboot.common.entity.ResponeModel;
+import org.qboot.common.exception.errorcode.SystemErrTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,8 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.util.StringUtils;
 
 import java.util.Locale;
+
+import static org.qboot.common.constants.SysConstants.*;
 
 /**
  * <p>Title: BaseController</p>
@@ -24,9 +28,6 @@ public class BaseController {
 	@Autowired
 	protected MessageSource messageSource;
 
-	private final String SUCCESS = "GLOBAL_DEFAULT_SUCCESS_MSG";
-
-	private final String ERROR = "GLOBAL_DEFAULT_ERROR_MSG";
 	/**
 	 * 获取国际化配置
 	 * @param key
@@ -47,7 +48,7 @@ public class BaseController {
 		return msg ;
 	}
 
-	protected String ok(){ return getMsgSource(SUCCESS); }
+	protected ResponeModel ok(){ return ResponeModel.ok(SystemErrTable.SUCESS); }
 
-	protected String error(){ return getMsgSource(ERROR); }
+	protected ResponeModel err(){ return ResponeModel.error(SystemErrTable.ERR); }
 }

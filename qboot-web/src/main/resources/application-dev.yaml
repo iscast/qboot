@@ -19,7 +19,7 @@ spring:
       max-wait: 60000
       min-evictable-idle-time-millis: 300000
       min-idle: 3
-      password: test7788
+      password: '[test1234]'
       test-on-borrow: true
       test-on-return: false
       test-while-idle: true

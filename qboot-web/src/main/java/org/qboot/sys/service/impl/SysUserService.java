@@ -1,16 +1,15 @@
 package org.qboot.sys.service.impl;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.qboot.common.constants.SysConstants;
+import org.qboot.common.service.CrudService;
+import org.qboot.common.utils.CodecUtils;
 import org.qboot.common.utils.MyAssertTools;
 import org.qboot.sys.dao.SysUserDao;
 import org.qboot.sys.dto.SysUserDto;
 import org.qboot.sys.dto.SysUserRoleDto;
-import org.qboot.common.constants.SysConstants;
-import org.qboot.common.service.CrudService;
-import org.qboot.common.utils.CodecUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
