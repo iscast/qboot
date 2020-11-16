@@ -13,13 +13,12 @@ import org.qboot.common.utils.IpUtils;
 import org.qboot.common.utils.MyAssertTools;
 import org.qboot.sys.dto.SysRoleDto;
 import org.qboot.sys.dto.SysUserDto;
-import org.qboot.sys.exception.errorcode.UserErrTable;
+import org.qboot.sys.exception.errorcode.SysUserErrTable;
 import org.qboot.sys.service.impl.LoginSecurityService;
 import org.qboot.sys.service.impl.SysRoleService;
 import org.qboot.sys.service.impl.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.util.CollectionUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +28,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import static org.qboot.sys.exception.errorcode.UserErrTable.*;
+import static org.qboot.sys.exception.errorcode.SysUserErrTable.*;
 
 /**
  * <p>Title: UserController</p>
@@ -63,10 +62,10 @@ public class UserController extends BaseController {
 	
 	@PreAuthorize("hasAuthority('sys:user:qry')")
 	@RequestMapping("/get")
-	public ResponeModel getUser(@RequestParam Long id, HttpServletRequest request) {
+	public ResponeModel get(@RequestParam Long id, HttpServletRequest request) {
 		SysUserDto sysUser = sysUserService.findById(id);
 		if(null == sysUser) {
-            return ResponeModel.error(UserErrTable.SYS_USER_NOTEXISTS);
+            return ResponeModel.error(SysUserErrTable.SYS_USER_NOTEXISTS);
         }
 
 		//用户所拥有的角色
@@ -89,7 +88,7 @@ public class UserController extends BaseController {
 	public ResponeModel save(@Validated SysUserDto sysUser, BindingResult bindingResult) {
 		boolean user = sysUserService.checkLoginName(null, sysUser.getLoginName());
 		if(user) {
-			return ResponeModel.error(UserErrTable.SYS_USER_DUPLICATE);
+			return ResponeModel.error(SysUserErrTable.SYS_USER_DUPLICATE);
 		}
 		sysUser.setStatus(SysConstants.SYS_ENABLE);
 		sysUser.setCreateBy(SecurityUtils.getLoginName());
@@ -241,7 +240,7 @@ public class UserController extends BaseController {
     @AccLog
 	@PreAuthorize("hasAuthority('sys:user:update')")
 	@PostMapping("/unlock")
-	public ResponeModel setStatus(@RequestParam Long id) {
+	public ResponeModel unlock(@RequestParam Long id) {
 		SysUserDto user = sysUserService.findById(id);
         MyAssertTools.notNull(user, SYS_USER_NOTEXISTS);
 		if (SecurityUtils.isSuperAdmin(user.getLoginName())) {

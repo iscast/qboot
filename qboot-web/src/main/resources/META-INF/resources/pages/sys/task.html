@@ -68,7 +68,7 @@
                 {align: 'center', field: 'status', sort: false, templet: function(d){
                 	var auth = JSON.parse(sessionStorage.getItem("auth"));
                 	var page = location.hash.substring(2);
-                	if(auth[page] && auth[page]['sys:task:edit']){
+                	if(auth[page] && auth[page]['sys:task:update']){
                 		var swiftBtn = '<input type="checkbox" lay-filter="task-tpl-state" value="'+d.id+'" lay-skin="switch" lay-text="启用|禁用"';
                 		if(d.status == 1){
                 			swiftBtn+=' checked="checked" />';
@@ -105,7 +105,7 @@
                 	var auth = JSON.parse(sessionStorage.getItem("auth"));
                 	var page = location.hash.substring(2);
                 	var btn = '' ;
-                	if(auth[page] && auth[page]['sys:task:edit']){
+                	if(auth[page] && auth[page]['sys:task:update']){
                 		btn = btn+'<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>' ;
             	    }
                 	if(auth[page] && auth[page]['sys:task:execute']){

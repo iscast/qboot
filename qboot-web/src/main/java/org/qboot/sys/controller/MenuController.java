@@ -103,7 +103,12 @@ public class MenuController extends BaseController {
 			if(StringUtils.isNotBlank(roleId)) {
 				roleAuths = sysMenuService.findByRoleId(roleId);
 			}
+
 			List<AuthTreeEntity> treeList = authTreeList(list, roleAuths);
+			if(CollectionUtils.isEmpty(treeList)) {
+                return ResponeModel.error(SYS_MENU_LOAD_FAIL);
+            }
+
 			Map<String, Object> retMap = new HashMap<String, Object>();
 			retMap.put("trees", treeList);
 			return ResponeModel.ok(retMap);
@@ -166,9 +171,8 @@ public class MenuController extends BaseController {
 
 		if(sysMenuService.save(sysMenu) > 0) {
 			return ok();
-		}else {
-			return ResponeModel.error(SYS_MENU_SAVE_FAIL);
 		}
+        return ResponeModel.error(SYS_MENU_SAVE_FAIL);
 	}
 
     @AccLog
@@ -190,9 +194,8 @@ public class MenuController extends BaseController {
 		int cnt = sysMenuService.updateSelecter(sysMenu);
 		if(cnt > 0) {
 			return ok();
-		}else {
-			return ResponeModel.error(SYS_MENU_UPDATE_FAIL);
 		}
+        return ResponeModel.error(SYS_MENU_UPDATE_FAIL);
 	}
 
     @AccLog
@@ -201,9 +204,8 @@ public class MenuController extends BaseController {
 	public ResponeModel delete(@RequestParam Serializable id) {
 		if(sysMenuService.deleteById(id) > 0) {
 			return ok();
-		}else {
-			return ResponeModel.error(SYS_MENU_DELETE_FAIL);
 		}
+		return ResponeModel.error(SYS_MENU_DELETE_FAIL);
 	}
 
     @AccLog

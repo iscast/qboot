@@ -76,13 +76,14 @@
     		
             admin.req(url, data.field, function (data) {
                 layer.closeAll('loading');
-                if (data.code == 0) {
-                    layer.msg(data.msg, {icon: 1});
-                    table.reload('role-table');
-                    layer.closeAll('page');
-                } else {
-                    layer.msg(data.msg, {icon: 2});
+                if (data.code != 0) {
+                    layer.msg(msgs['layer.error.code'] + data.code + msgs['layer.error.msg'] + data.msg, {icon: 2});
+                    return
                 }
+
+                layer.msg(data.msg, {icon: 1});
+                table.reload('role-table');
+                layer.closeAll('page');
             }, 'post');
             return false;
         });
@@ -93,16 +94,17 @@
     		dataType: 'json',
     		method: 'get',
     		success: function(data){
-    			if(0 == data.code){
-    				// 渲染时传入渲染目标ID，树形结构数据（具体结构看样例，checked表示默认选中），以及input表单的名字
-        			authtree.render('#roleAuthIds', data.data.trees, {
-        				inputname: 'authids[]', 
-        				layfilter: 'lay-check-auth', 
-        				autowidth: true,
-        			});
-    			}else{
-    				layer.msg(msgs['权限加载失败'], {icon: 2});
-    			}
+    			if(0 != data.code){
+                    layer.msg(msgs['layer.error.code'] + data.code + msgs['layer.error.msg'] + data.msg, {icon: 2});
+                    return;
+                }
+
+                // 渲染时传入渲染目标ID，树形结构数据（具体结构看样例，checked表示默认选中），以及input表单的名字
+                authtree.render('#roleAuthIds', data.data.trees, {
+                    inputname: 'authids[]',
+                    layfilter: 'lay-check-auth',
+                    autowidth: true
+                });
     		}
     	});
 

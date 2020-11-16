@@ -1,15 +1,15 @@
 package org.qboot.common.config;
 
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import org.qboot.common.constants.SysConstants;
+import org.qboot.sys.exception.SysGenException;
+import org.springframework.core.io.ClassPathResource;
+
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
-
-import org.qboot.common.exception.ServiceException;
-import org.springframework.core.io.ClassPathResource;
-
-import freemarker.template.Configuration;
-import freemarker.template.Template;
 
 public class FreeMarkerResolver {
 
@@ -25,7 +25,7 @@ public class FreeMarkerResolver {
 			cfg.setDirectoryForTemplateLoading(cps.getFile());
 			return cfg;
 		} catch (IOException e) {
-			throw new ServiceException(e);
+            throw new SysGenException(SysConstants.GLOBAL_DEFAULT_ERROR, e);
 		}
 	}
 
@@ -43,7 +43,7 @@ public class FreeMarkerResolver {
 			Template template = cfg.getTemplate(name);
 			template.process(data, out);
 		} catch (Exception e) {
-			throw new ServiceException(e);
+            throw new SysGenException(SysConstants.GLOBAL_DEFAULT_ERROR, e);
 		}
 	}
 	/**
@@ -65,7 +65,7 @@ public class FreeMarkerResolver {
 			out.close();
 			return result;
 		} catch (Exception e) {
-			throw new ServiceException(e);
+            throw new SysGenException(SysConstants.GLOBAL_DEFAULT_ERROR, e);
 		}
 	}
 	/**
@@ -78,7 +78,7 @@ public class FreeMarkerResolver {
 			Template template = cfg.getTemplate(name);
 			return template.toString();
 		} catch (Exception e) {
-			throw new ServiceException(e);
+            throw new SysGenException(SysConstants.GLOBAL_DEFAULT_ERROR, e);
 		}
 	}
 	
@@ -98,9 +98,8 @@ public class FreeMarkerResolver {
 			result = sw.toString();
 			sw.close();
 		} catch (Exception e) {
-			throw new ServiceException(e);
+            throw new SysGenException(SysConstants.GLOBAL_DEFAULT_ERROR, e);
 		}
-
 		return result;
 	}
 }

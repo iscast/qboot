@@ -7,7 +7,7 @@ import org.qboot.common.error.ErrorCode;
  * @Author: iscast
  * @Date: 2020/11/4 10:13
  */
-public class UserErrTable {
+public class SysUserErrTable {
 
     public static final ErrorCode SYS_USER_NOTEXISTS = new ErrorCode(30100, "sys.user.not.exists");
     public static final ErrorCode SYS_USER_DUPLICATE = new ErrorCode(30101, "sys.user.duplicate");

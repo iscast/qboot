@@ -18,7 +18,7 @@ import java.util.Map;
  * @author history
  */
 @Data
-public class ResponeModel implements Serializable{
+public final class ResponeModel implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	

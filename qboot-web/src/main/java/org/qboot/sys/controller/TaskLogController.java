@@ -30,7 +30,7 @@ public class TaskLogController extends BaseController {
 		return ResponeModel.ok(page);
 	}
 
-	@PreAuthorize("hasAuthority('sys:task:deleteLog')")
+	@PreAuthorize("hasAuthority('sys:task:delete')")
 	@PostMapping("/deleteLog")
 	public ResponeModel deleteLog(SysTaskLogDto sysTaskLog) {
 		sysTaskLogService.deleteByTaskId(sysTaskLog.getTaskId());

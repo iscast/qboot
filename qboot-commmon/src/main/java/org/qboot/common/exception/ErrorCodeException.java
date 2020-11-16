@@ -12,21 +12,23 @@ public class ErrorCodeException extends RuntimeException implements IError {
     private static final long serialVersionUID = 1L;
     protected int errorCode;
 
-    public ErrorCodeException(int errorCode, String errorInfo) {
+    private ErrorCodeException() {}
+
+    protected ErrorCodeException(int errorCode, String errorInfo) {
         super(errorInfo);
         this.errorCode = errorCode;
     }
 
-    public ErrorCodeException(IError errorObj) {
+    protected ErrorCodeException(IError errorObj) {
         this(errorObj.getErrorCode(),errorObj.getErrorInfo());
     }
 
-    public ErrorCodeException(int errorCode, String errorInfo, Throwable e) {
+    protected ErrorCodeException(int errorCode, String errorInfo, Throwable e) {
         super(errorInfo,e);
         this.errorCode = errorCode;
     }
 
-    public ErrorCodeException(int errorCode, Throwable e) {
+    protected ErrorCodeException(int errorCode, Throwable e) {
         super(e);
         this.errorCode = errorCode;
     }

@@ -91,7 +91,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				logger.warn("request url :[{}] fail, no login!", requestURI);
 
 				if("/".equals(requestURI)) {
-					response.sendRedirect("/login.html");
+					response.sendRedirect("login.html");
 				} else {
 					response.setContentType("application/json;charset=UTF-8");
 					response.getWriter().print(JSON.toJSONString(ResponeModel.error(SystemErrTable.AUTH_FAIL)));

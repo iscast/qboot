@@ -3,7 +3,7 @@ package org.qboot.sys.exception.errorcode;
 import org.qboot.common.error.ErrorCode;
 
 /**
- * 系统模块错误 通用
+ * 系统模块错误编码
  * @Author: iscast
  * @Date: 2020/11/4 10:13
  */
@@ -18,6 +18,8 @@ public class SysModuleErrTable {
     public static final ErrorCode SYS_MENU_LIST_EMPTY = new ErrorCode(30205, "sys.menu.list.empty");
     public static final ErrorCode SYS_MENU_PERMISSION_NULL = new ErrorCode(30206, "sys.menu.permission.null");
     public static final ErrorCode SYS_MENU_USER_ID_NULL = new ErrorCode(30207, "sys.menu.user.id.null");
+    /** 权限加载失败 */
+    public static final ErrorCode SYS_MENU_LOAD_FAIL = new ErrorCode(30207, "sys.menu.load.fail");
 
     public static final ErrorCode SYS_MENU_SAVE_FAIL = new ErrorCode(30240, "sys.menu.save.fail");
     public static final ErrorCode SYS_MENU_UPDATE_FAIL = new ErrorCode(30241, "sys.menu.update.fail");
@@ -32,6 +34,7 @@ public class SysModuleErrTable {
     public static final ErrorCode SYS_ROLE_USER_IDS_NULL = new ErrorCode(30306, "sys.role.user.ids.null");
     public static final ErrorCode SYS_ROLE_ID_NULL = new ErrorCode(30307, "sys.role.id.null");
     public static final ErrorCode SYS_ROLE_NAME_NULL = new ErrorCode(30308, "sys.role.name.null");
+    public static final ErrorCode SYS_ROLE_QUERY_NULL = new ErrorCode(30309, "sys.role.query.null");
 
     public static final ErrorCode SYS_ROLE_SAVE_FAIL = new ErrorCode(30340, "sys.role.save.fail");
     public static final ErrorCode SYS_ROLE_UPDATE_FAIL = new ErrorCode(30341, "sys.role.update.fail");
@@ -65,6 +68,47 @@ public class SysModuleErrTable {
     public static final ErrorCode SYS_DICT_QUERY_FAIL = new ErrorCode(30543, "sys.dict.query.fail");
 
     // task 309xx
+    /** 任务重复 */
+    public static final ErrorCode SYS_TASK_DUPLICATE = new ErrorCode(30900, "sys.task.duplicate");
+    /** 任务表达式错误 */
+    public static final ErrorCode SYS_TASK_EXPRESSION_ERROR = new ErrorCode(30901, "sys.task.expression.error");
+    /** 启动任务异常 */
+    public static final ErrorCode SYS_TASK_INIT_ERROR = new ErrorCode(30902, "sys.task.init.error");
+    /** 没有可执行的任务 */
+    public static final ErrorCode SYS_TASK_EXECUTE_NULL = new ErrorCode(30903, "sys.task.execute.null");
+    /** 执行任务异常 */
+    public static final ErrorCode SYS_TASK_EXECUTE_ERROR = new ErrorCode(30904, "sys.task.execute.error");
+    /** 获取运行中的任务异常 */
+    public static final ErrorCode SYS_TASK_GET_RUNNING_ERROR = new ErrorCode(30905, "sys.task.get.running.error");
+    /** 当前任务正在执行中!!! */
+    public static final ErrorCode SYS_TASK_IS_EXECUTING = new ErrorCode(30906, "sys.task.is.executing");
+
+//    /** 任务正在执行中 */
+//    public static final String TASK_EXECUTING = "task.executing";
+//
+//    /** 任务没有可运行的实例 */
+//    public static final String TASK_RUNNER_NULL = "task.runner.null";
+//
+//    /**获取任务执行锁失败*/
+//    public static final String TASK_EXECUTE_LOCK_FAILED = "task.get.lock.fail";
+//    /** 任务ID已经存在*/
+//    public static final String TASK_ID_ISEXIST = "task.id.isexist";
+//
+//    /** 任务名称已经存在*/
+//    public static final String TASK_NAME_ISEXIST = "task.name.isexist";
+//
+//    /** 任务时间表达式异常*/
+//    public static final String TASK_CRON_EXP_ERROR = "task.cron.exp.error";
+//    /** 添加定时任务调度异常 */
+//    public static final String TASK_CREATE_JOB_ERROR = "task.create.job.error";
+//    /** 停止定时任务调度异常 */
+//    public static final String TASK_DELETE_JOB_ERROR = "task.delete.job.error";
+//    /** 当前任务运行状态已为初始状态 */
+//    public static final String TASK_IS_EXEC_INIT = "task.is.exec.init";
+//
+//    /** 任务运行状态修改异常 */
+//    public static final String TASK_RUNSTATUS_CHANGEERROR = "task.runstatus.changeerror";
+
 
     public static final ErrorCode SYS_TASK_SAVE_FAIL = new ErrorCode(30940, "sys.task.save.fail");
     public static final ErrorCode SYS_TASK_UPDATE_FAIL = new ErrorCode(30941, "sys.task.update.fail");

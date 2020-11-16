@@ -20,7 +20,7 @@ import reactor.util.function.Tuple2;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-import static org.qboot.sys.exception.errorcode.UserErrTable.*;
+import static org.qboot.sys.exception.errorcode.SysUserErrTable.*;
 
 /**
  * <p>Title: LoginController</p>
@@ -74,7 +74,11 @@ public class LoginController extends BaseController {
 		sysUser.setMobile(user.getMobile());
 		sysUser.setId(SecurityUtils.getUserId());
 		int cnt = sysUserService.update(sysUser);
-		return ResponeModel.ok(cnt);
+        if(cnt > 0) {
+            return ok();
+        }
+        return ResponeModel.error();
+
 	}
 
     @GetMapping("/checkFirstLogin")

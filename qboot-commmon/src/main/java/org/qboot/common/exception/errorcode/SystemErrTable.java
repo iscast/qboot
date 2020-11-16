@@ -5,12 +5,11 @@ import org.qboot.common.error.ErrorCode;
 import static org.qboot.common.constants.SysConstants.*;
 
 /**
- * 系统错误码
- * 系统已定义常用错误码，其他场景自定义4xxxxx
+ * 系统错误码 定义常用错误码
  * 1            成功
  * 2xxxx        接口错误
  * 3xxxx        系统模块错误
- * 4xxxx        应用模块错误
+ * 4xxxx        应用模块错误 应用场景自定义错误码都为4xxxxx
  * 6xxxx        系统错误相关(权限/参数错误/实体校验)
  * 7xxxx        数据库相关
  * 8xxxx        缓存相关
@@ -20,10 +19,8 @@ import static org.qboot.common.constants.SysConstants.*;
  */
 public class SystemErrTable {
 
-
     public static final ErrorCode SUCESS = new ErrorCode(GLOBAL_DEFAULT_SUCCESS, GLOBAL_DEFAULT_SUCCESS_MSG);
     public static final ErrorCode ERR = new ErrorCode(GLOBAL_DEFAULT_ERROR, GLOBAL_DEFAULT_ERROR_MSG);
-
 
     public static final ErrorCode AUTH_FAIL = new ErrorCode(60000, "auth.no.login");
     public static final ErrorCode AUTH_NO_RIGHTS = new ErrorCode(60001, "auth.no.right");

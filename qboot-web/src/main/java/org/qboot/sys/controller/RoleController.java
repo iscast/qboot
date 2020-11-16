@@ -52,8 +52,12 @@ public class RoleController extends BaseController {
 		if (SecurityUtils.isSuperAdmin(user.getLoginName())) {
 			return this.qryAll();
 		}
+
 		//如果是非超级管理员返回自己拥有的角色
 		List<SysRoleDto> list = sysRoleService.findByUserId(user.getUserId());
+		if(CollectionUtils.isEmpty(list)) {
+            return ResponeModel.error(SYS_ROLE_QUERY_NULL);
+        }
 		return ResponeModel.ok(list);
 	}
 	/**
@@ -62,7 +66,12 @@ public class RoleController extends BaseController {
 	 */
 	@PostMapping("/qryAll")
 	public ResponeModel qryAll() {
-		return ResponeModel.ok(this.sysRoleService.findList(null));
+        List<SysRoleDto> list = this.sysRoleService.findList(null);
+        if(CollectionUtils.isEmpty(list)) {
+            return ResponeModel.error(SYS_ROLE_QUERY_NULL);
+        }
+
+        return ResponeModel.ok(list);
 	}
 	
 	@PreAuthorize("hasAuthority('sys:role:qry')")
@@ -107,7 +116,7 @@ public class RoleController extends BaseController {
 			List<Long> list = new ArrayList();
 			list.add(SecurityUtils.getUserId());
 			sysRoleService.addUsersByRoleId(newRole.getId(), list);
-			return ResponeModel.ok();
+			return ok();
 		}
 		return ResponeModel.error(SYS_ROLE_SAVE_FAIL);
 	}
@@ -124,7 +133,7 @@ public class RoleController extends BaseController {
 		sysRole.setUpdateDate(new Date());
 		int cnt = sysRoleService.update(sysRole);
 		if(cnt > 0) {
-			return ResponeModel.ok();
+			return ok();
 		}
 		return ResponeModel.error(SYS_ROLE_UPDATE_FAIL);
 	}
@@ -136,7 +145,7 @@ public class RoleController extends BaseController {
         MyAssertTools.notEmpty(userIds, SYS_ROLE_REMOVED_USER_NOT_EXIST);
 		int cnt = sysRoleService.removeUsersByRoleId(roleId, userIds);
 		if(cnt > 0) {
-			return ResponeModel.ok();
+			return ok();
 		}
 		return ResponeModel.error(SYS_ROLE_DELETE_FAIL);
 	}
@@ -148,7 +157,7 @@ public class RoleController extends BaseController {
 	    MyAssertTools.notEmpty(userIds, SYS_ROLE_ADD_USER_NOT_EXIST);
 		int cnt = sysRoleService.addUsersByRoleId(roleId, userIds);
 		if(cnt > 0) {
-			return ResponeModel.ok();
+			return ok();
 		}
 		return ResponeModel.error(SYS_ROLE_UPDATE_FAIL);
 	}
@@ -159,7 +168,7 @@ public class RoleController extends BaseController {
 	public ResponeModel delete(@RequestParam Serializable id) {
         MyAssertTools.notNull(id, SYS_ROLE_ID_NULL);
 		if(sysRoleService.deleteById(id) > 0) {
-			return ResponeModel.ok();
+			return ok();
 		}
 		return ResponeModel.error(SYS_ROLE_DELETE_FAIL);
 	}

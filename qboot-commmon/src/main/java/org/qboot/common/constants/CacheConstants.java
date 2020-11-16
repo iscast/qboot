@@ -25,6 +25,8 @@ public class CacheConstants {
 
     /** system redis cache prefix begin */
 
+    public final static String CACHE_LOCK_KEY = "qboot:lock:";
+
     public static final String CACHE_PREFIX_SYS_DICT_TYPE = "qboot:sys:dict:";
 
     public static final String CACHE_PREFIX_SYS_PARAMTYPE_KEY = "qboot:sys:paramtype:";

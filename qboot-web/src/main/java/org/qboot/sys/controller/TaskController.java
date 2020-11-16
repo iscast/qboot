@@ -2,13 +2,14 @@ package org.qboot.sys.controller;
 
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
-import org.qboot.sys.dto.SysTaskDto;
-import org.qboot.sys.service.impl.SysTaskService;
 import org.qboot.common.annotation.AccLog;
 import org.qboot.common.controller.BaseController;
-import org.qboot.common.exception.ServiceException;
 import org.qboot.common.entity.ResponeModel;
 import org.qboot.common.security.SecurityUtils;
+import org.qboot.sys.dto.SysTaskDto;
+import org.qboot.sys.exception.SysTaskException;
+import org.qboot.sys.exception.errorcode.SysModuleErrTable;
+import org.qboot.sys.service.impl.SysTaskService;
 import org.quartz.CronExpression;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
+
+import static org.qboot.sys.exception.errorcode.SysModuleErrTable.*;
 
 /**
  * TODO 1，改造抛出异常； 2，测试运行任务
@@ -41,7 +44,10 @@ public class TaskController extends BaseController {
 	@PreAuthorize("hasAuthority('sys:task:qry')")
 	@RequestMapping("/get")
 	public ResponeModel get(SysTaskDto sysTask) {
-		SysTaskDto result = sysTaskService.findById(sysTask.getId()) ;
+		SysTaskDto result = sysTaskService.findById(sysTask.getId());
+        if(null == result) {
+            return ResponeModel.error(SYS_TASK_QUERY_FAIL);
+        }
 		return ResponeModel.ok(result);
 	}
 
@@ -54,40 +60,53 @@ public class TaskController extends BaseController {
 		sysTask.setCreateBy(SecurityUtils.getLoginName());
 		sysTask.setUpdateBy(SecurityUtils.getLoginName());
 		this.checkParams(sysTask);
-		sysTaskService.save(sysTask) ;
-		return ok();
-	}
+        int cnt = sysTaskService.save(sysTask);
+        if(cnt > 0) {
+            return ok();
+        }
+        return ResponeModel.error(SYS_TASK_SAVE_FAIL);
+    }
 
     @AccLog
-	@PreAuthorize("hasAuthority('sys:task:edit')")
+	@PreAuthorize("hasAuthority('sys:task:update')")
 	@PostMapping("/updateSelect")
 	public ResponeModel updateSelect(SysTaskDto sysTask) {
 		this.checkParams(sysTask);
-		sysTaskService.updateById(sysTask) ;
-		return ResponeModel.ok();
-	}
+        int cnt = sysTaskService.updateById(sysTask);
+        if(cnt > 0) {
+            return ok();
+        }
+        return ResponeModel.error(SYS_TASK_UPDATE_FAIL);
+    }
 
     @AccLog
-	@PreAuthorize("hasAuthority('sys:task:edit')")
+	@PreAuthorize("hasAuthority('sys:task:update')")
 	@PostMapping("/updateStatus")
 	public ResponeModel updateStatus(SysTaskDto sysTask) {
-		sysTaskService.updateStatus(sysTask) ;
-		return ResponeModel.ok();
+        int cnt = sysTaskService.updateStatus(sysTask);
+        if(cnt > 0) {
+            return ok();
+        }
+        return ResponeModel.error(SYS_TASK_UPDATE_FAIL);
 	}
 	
 	@PreAuthorize("hasAuthority('sys:task:execute')")
 	@PostMapping("/execute")
 	public ResponeModel execute(SysTaskDto sysTask) {
 		sysTaskService.runOnce(sysTask.getId());
-		return ResponeModel.ok();
+		return ok();
 	}
 	
 	@PreAuthorize("hasAuthority('sys:task:delete')")
 	@PostMapping("/delete")
 	public ResponeModel delete(SysTaskDto sysTask) {
-		sysTaskService.deleteTask(sysTask.getId()) ;
-		return ResponeModel.ok();
-	}
+        int cnt = sysTaskService.deleteTask(sysTask.getId());
+        if(cnt > 0) {
+            return ok();
+        }
+        return ResponeModel.error(SYS_TASK_DELETE_FAIL);
+    }
+
 	/**
 	 * 检测业务参数的合法性
 	 * @return
@@ -101,13 +120,11 @@ public class TaskController extends BaseController {
 		//检测任务名是否已存在
 		Long count = sysTaskService.countByTaskName(sysTask);
 		if(count>=1){
-			throw new ServiceException("任务名已存在!!!") ;
+            throw new SysTaskException(SysModuleErrTable.SYS_TASK_DUPLICATE);
 		}
         // 字符串是否与正则表达式相匹配
         if(!CronExpression.isValidExpression(sysTask.getCronExp())){
-        	throw new ServiceException("时间表达式异常!!!") ;
+            throw new SysTaskException(SysModuleErrTable.SYS_TASK_EXPRESSION_ERROR);
         }
-        
 	}
-	
 }

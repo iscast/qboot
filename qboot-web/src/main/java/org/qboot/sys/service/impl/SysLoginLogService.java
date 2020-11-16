@@ -15,8 +15,8 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 
-import static org.qboot.sys.exception.errorcode.UserErrTable.SYS_USER_LOGIN_STATUS_EMPTY;
-import static org.qboot.sys.exception.errorcode.UserErrTable.SYS_USER_UERID_EMPTY;
+import static org.qboot.sys.exception.errorcode.SysUserErrTable.SYS_USER_LOGIN_STATUS_EMPTY;
+import static org.qboot.sys.exception.errorcode.SysUserErrTable.SYS_USER_UERID_EMPTY;
 
 /**
  * 登录日志Service

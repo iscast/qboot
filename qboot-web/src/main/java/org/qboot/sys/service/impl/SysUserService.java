@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.qboot.sys.exception.errorcode.UserErrTable.*;
+import static org.qboot.sys.exception.errorcode.SysUserErrTable.*;
 
 /**
  * <p>Title: SysUserService</p>

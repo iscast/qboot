@@ -86,4 +86,11 @@ public class SysConstants {
 
     public static final char GAP_VERTICAL = '|';
 
+
+    /**任务执行失败*/
+    public static final int TASK_EXEC_STATUS_FAILED = 2;
+
+    /**任务执行成功*/
+    public static final int TASK_EXEC_STATUS_SUCCESS = 1;
+
 }

@@ -47,6 +47,11 @@ public class IpUtils {
         return ips[0];
     }
 
+    /**
+     * 获取本机IP地址
+     * @author: iscast
+     * @date: 2020/11/16 13:53
+     */
     public static String getLocalIp() {
         String localip = null;
         String netip = null;

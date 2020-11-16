@@ -2,16 +2,15 @@ package org.qboot.sys.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
-import org.qboot.sys.dao.SysTaskDao;
-import org.qboot.sys.dto.SysTaskDto;
 import org.qboot.common.constants.CacheConstants;
 import org.qboot.common.constants.SysConstants;
-import org.qboot.common.exception.CommonExceptionCode;
-import org.qboot.common.exception.ServiceException;
 import org.qboot.common.service.CrudService;
 import org.qboot.common.task.job.AllowConcurrentExecutionJob;
 import org.qboot.common.task.job.DisallowConcurrentExecutionJob;
 import org.qboot.common.utils.RedisTools;
+import org.qboot.sys.dao.SysTaskDao;
+import org.qboot.sys.dto.SysTaskDto;
+import org.qboot.sys.exception.SysTaskException;
 import org.quartz.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +20,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static org.qboot.sys.exception.errorcode.SysModuleErrTable.*;
 
 /**
  * task service
@@ -94,7 +95,7 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTaskDto> {
 			deleteScheduleJob(newTask);
 		} catch (SchedulerException e) {
 			logger.error("移除任务异常：{}", e.getMessage());
-			throw new ServiceException(CommonExceptionCode.TASK_INIT_ERROR);
+            throw new SysTaskException(SYS_TASK_INIT_ERROR);
 		}
 		if(newTask.isEnabled()){
 			// 加入系统任务
@@ -102,7 +103,7 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTaskDto> {
 				createScheduleJob(newTask);
 			} catch (SchedulerException e) {
 				logger.error("新增任务异常：{}",e);
-				throw new ServiceException(CommonExceptionCode.TASK_INIT_ERROR);
+                throw new SysTaskException(SYS_TASK_INIT_ERROR);
 			}
 		}
 		redisTools.set(newTask.toCacheKeyString(), newTask);
@@ -121,7 +122,7 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTaskDto> {
 				createScheduleJob(task);
 			} catch (SchedulerException e) {
 				logger.error("新增任务异常：{}",e.getMessage());
-				throw new ServiceException(CommonExceptionCode.TASK_INIT_ERROR);
+                throw new SysTaskException(SYS_TASK_INIT_ERROR);
 			}
 		}
 		redisTools.set(task.toCacheKeyString(), task);
@@ -143,7 +144,7 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTaskDto> {
 			}
 		} catch (SchedulerException e) {
 			logger.error("重置任务异常：{}", e.getMessage());
-			throw new ServiceException(CommonExceptionCode.TASK_INIT_ERROR);
+            throw new SysTaskException(SYS_TASK_INIT_ERROR);
 		}
 		redisTools.set(newTask.toCacheKeyString(), newTask);
 		logger.info("修改任务信息成功：{}.",task.toString());
@@ -153,13 +154,13 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTaskDto> {
 	/**
 	 * 立即触发一次执行
 	 */
-	public void runOnce(Long taskId) throws ServiceException {
+	public void runOnce(Long taskId) {
 		SysTaskDto task = this.findById(taskId);
 		if (task == null) {
-			throw new ServiceException(CommonExceptionCode.TASK_EXECUTE_NULL);
+            throw new SysTaskException(SYS_TASK_EXECUTE_NULL);
 		}
 		if(isRunning(taskId)){
-			throw new ServiceException("当前任务正在执行中!!!");
+            throw new SysTaskException(SYS_TASK_IS_EXECUTING);
 		}
 		redisTools.set(task.toRunNowCacheNoticeString(), task.getId());
 		if(task.isEnabled()){ 
@@ -169,8 +170,8 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTaskDto> {
 				runOnce(task);
 				logger.info("触发任务成功：{}.",task.toString());
 			} catch (SchedulerException e) {
-				logger.error("执行任务异常：{}-{}.", CommonExceptionCode.TASK_EXECUTE_ERROR,task.toString(),e);
-				throw new ServiceException(CommonExceptionCode.TASK_EXECUTE_ERROR);
+				logger.error("执行任务异常：execute error {}.", task.toString(), e);
+                throw new SysTaskException(SYS_TASK_EXECUTE_ERROR);
 			}
 		}else{ 
 			// 未启用的任务
@@ -182,7 +183,7 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTaskDto> {
 				}
 			} catch (SchedulerException e) {
 				logger.error(e.toString());
-				throw new ServiceException(CommonExceptionCode.TASK_EXECUTE_ERROR);
+                throw new SysTaskException(SYS_TASK_EXECUTE_ERROR);
 			}
 		}
 	}
@@ -191,7 +192,7 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTaskDto> {
 	 * 初始化任务，将任务添加到schedule
 	 * @throws SchedulerException 
 	 */
-	public void initTask() throws ServiceException {
+	public void initTask() {
 		List<SysTaskDto> tasks =  this.findAll();
 		tasks.forEach(task -> {
 			if (task.isEnabled()) {
@@ -199,14 +200,15 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTaskDto> {
 					createScheduleJob(task);
 					logger.info("添加任务调度成功：{}.",task.toString());
 				} catch (SchedulerException e) {
-					logger.error("添加任务调度失败：{}-{}.", CommonExceptionCode.TASK_INIT_ERROR,task.toString(),e);
-					throw new ServiceException(CommonExceptionCode.TASK_INIT_ERROR);
-				}
+					logger.error("添加任务调度失败：task init error : {}.", task.toString(), e);
+                    throw new SysTaskException(SYS_TASK_INIT_ERROR);
+                }
 			}else{
 				logger.info("任务未启用，不参与调度：{}.",task.toString());
 			}
 		});
 	}
+
 	/**
 	 * 获取JobKey
 	 * @param taskId
@@ -216,6 +218,7 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTaskDto> {
 	public JobKey getJobKey(Long taskId) {
 		return JobKey.jobKey(taskId.toString(), SysConstants.TASK_DEFAULT_GROUP);
 	}
+
 	/**
 	 * 获取triggerKey
 	 * @param taskId
@@ -364,8 +367,8 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTaskDto> {
 		try {
 			executingJobs = scheduler.getCurrentlyExecutingJobs();
 		} catch (SchedulerException e) {
-			throw new ServiceException(CommonExceptionCode.TASK_GET_RUNNING_ERROR);
-		}    
+            throw new SysTaskException(SYS_TASK_GET_RUNNING_ERROR);
+		}
 		Map<Long,String> runningTaskList = new HashMap<Long,String>();    
 		for (JobExecutionContext executingJob : executingJobs) {    
 			JobKey jobKey = executingJob.getJobDetail().getKey();    
@@ -384,8 +387,8 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTaskDto> {
 		try {
 			executingJobs = scheduler.getCurrentlyExecutingJobs();
 		} catch (SchedulerException e) {
-			throw new ServiceException(CommonExceptionCode.TASK_GET_RUNNING_ERROR);
-		}    
+            throw new SysTaskException(SYS_TASK_GET_RUNNING_ERROR);
+		}
 		for (JobExecutionContext executingJob : executingJobs) {
 			if(executingJob.getJobDetail().getKey().getName().equalsIgnoreCase(taskId.toString())){
 				return true;
@@ -397,9 +400,12 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTaskDto> {
 	 * 删除任务时清理所有任务日志
 	 * @param id
 	 */
-	public void deleteTask(Long taskId) {
-		this.deleteById(taskId) ;
-		sysTaskLogService.deleteByTaskId(taskId) ;
+	public int deleteTask(Long taskId) {
+        int cnt = this.deleteById(taskId);
+        if(cnt > 0) {
+            sysTaskLogService.deleteByTaskId(taskId);
+        }
+        return  cnt;
 	}
 
 	public Long countByTaskName(SysTaskDto sysTask) {
