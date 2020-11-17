@@ -4,7 +4,7 @@
     "sys:role": "role manage",
     "sys:menu": "menu manage",
     "sys:dept": "dept manage",
-    "sys:dict": "dict setting",
+    "sys:dict": "System Dict",
     "sys:param": "param setting",
     "sys:task": "task setting",
     "sys:gen": "code generate",

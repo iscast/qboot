@@ -85,13 +85,14 @@
 
             admin.req(url, data.field, function (data) {
                 layer.closeAll('loading');
-                if (data.code == 0) {
-                    layer.msg(data.msg, {icon: 1});
-                    table.reload('dict-table');
-                    layer.closeAll('page');
-                } else {
-                    layer.msg(data.msg, {icon: 2});
+                if (data.code != 0) {
+                    layer.msg(msgs['layer.error.code'] + data.code + msgs['layer.error.msg'] + data.msg, {icon: 2});
+                    return
                 }
+
+                layer.msg(data.msg, {icon: 1});
+                table.reload('dict-table');
+                layer.closeAll('page');
             }, 'post');
             return false;
         });

@@ -4,7 +4,7 @@
     "sys:role": "角色管理",
     "sys:menu": "菜单管理",
     "sys:dept": "部门管理",
-    "sys:dict": "系统参数",
+    "sys:dict": "系统字典",
     "sys:param": "系统类型",
     "sys:task": "任务管理",
     "sys:gen": "代码生成",

@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 任务日志控制器
+ * 任务日志
  * @author history
  */
 @RestController
 @RequestMapping("${admin.path}/sys/tasklog")
-public class TaskLogController extends BaseController {
+public class SysTaskLogController extends BaseController {
 	
 	@Autowired
 	SysTaskLogService sysTaskLogService ;

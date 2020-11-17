@@ -3,7 +3,8 @@ package org.qboot.sys.exception.errorcode;
 import org.qboot.common.error.ErrorCode;
 
 /**
- * 系统用户错误列表
+ * 系统模块用户错误编码
+ * 301XX
  * @Author: iscast
  * @Date: 2020/11/4 10:13
  */

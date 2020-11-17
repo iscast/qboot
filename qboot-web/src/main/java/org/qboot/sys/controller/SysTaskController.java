@@ -23,13 +23,12 @@ import java.util.Date;
 import static org.qboot.sys.exception.errorcode.SysModuleErrTable.*;
 
 /**
- * TODO 1，改造抛出异常； 2，测试运行任务
  * 任务控制器
  * @author history
  */
 @RestController
 @RequestMapping("${admin.path}/sys/task")
-public class TaskController extends BaseController {
+public class SysTaskController extends BaseController {
 	
 	@Autowired
 	SysTaskService sysTaskService;

@@ -24,14 +24,14 @@ import java.util.List;
 import static org.qboot.sys.exception.errorcode.SysModuleErrTable.*;
 
 /**
- * <p>Title: RoleController</p>
+ * <p>Title: SysRoleController</p>
  * <p>Description: sysRole</p>
  * @author history
  * @date 2018-08-08
  */
 @RestController
 @RequestMapping("${admin.path}/sys/role")
-public class RoleController extends BaseController {
+public class SysRoleController extends BaseController {
 
 	@Autowired
 	private SysRoleService sysRoleService;

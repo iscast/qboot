@@ -26,14 +26,14 @@ import java.util.List;
 import static org.qboot.sys.exception.errorcode.SysModuleErrTable.*;
 
 /**
- * <p>Title: DictController</p>
- * <p>Description: 系统字典参数</p>
+ * <p>Title: SysDictController</p>
+ * <p>Description: 系统字典</p>
  * @author history
  * @date 2018-08-08
  */
 @RestController
 @RequestMapping("${admin.path}/sys/dict")
-public class DictController extends BaseController {
+public class SysDictController extends BaseController {
 
 	@Autowired
 	private SysDictService sysDictService;
@@ -53,6 +53,9 @@ public class DictController extends BaseController {
 	public ResponeModel get(@RequestParam Serializable id) {
         MyAssertTools.notNull(id, SYS_DICT_ID_NULL);
 		SysDictDto sysDict = sysDictService.findById(id);
+		if(null == sysDict) {
+            return ResponeModel.error(SYS_DICT_NO_EXIST);
+        }
 		return ResponeModel.ok(sysDict);
 	}
 
@@ -76,8 +79,7 @@ public class DictController extends BaseController {
 	@PostMapping("/update")
 	public ResponeModel update(@Validated SysDictDto sysDict, BindingResult bindingResult) {
 		sysDict.setUpdateBy(SecurityUtils.getLoginName());
-		int cnt = sysDictService.update(sysDict);
-		if(cnt > 0) {
+		if(sysDictService.update(sysDict) > 0) {
 			return ok();
 		}
 		return ResponeModel.error(SYS_DICT_UPDATE_FAIL);
@@ -93,9 +95,8 @@ public class DictController extends BaseController {
 		sysDict.setStatus(status);
 		sysDict.setUpdateBy(SecurityUtils.getLoginName());
 		sysDict.setUpdateDate(new Date());
-		int cnt = sysDictService.setStatus(sysDict);
-		if(cnt > 0) {
-			return ResponeModel.ok();
+		if(sysDictService.setStatus(sysDict) > 0) {
+			return ok();
 		}
 		return ResponeModel.error(SYS_DICT_UPDATE_FAIL);
 	}
@@ -110,8 +111,7 @@ public class DictController extends BaseController {
 		sysDict.setStatus(SysConstants.SYS_DISABLE);
 		sysDict.setUpdateBy(SecurityUtils.getLoginName());
 		sysDict.setUpdateDate(new Date());
-		int cnt = sysDictService.setStatus(sysDict);
-		if(cnt > 0) {
+		if(sysDictService.setStatus(sysDict) > 0) {
 			return ResponeModel.ok();
 		}
 		return ResponeModel.error(SYS_DICT_DELETE_FAIL);

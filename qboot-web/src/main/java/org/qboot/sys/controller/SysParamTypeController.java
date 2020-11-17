@@ -26,14 +26,14 @@ import java.util.List;
 import static org.qboot.sys.exception.errorcode.SysModuleErrTable.*;
 
 /**
- * <p>Title: ParamTypeController</p>
- * <p>Description: 系统类型</p>
+ * <p>Title: SysParamTypeController</p>
+ * <p>Description: 系统类型参数</p>
  * @author history
  * @date 2018-08-08
  */
 @RestController
 @RequestMapping("${admin.path}/sys/paramtype")
-public class ParamTypeController extends BaseController {
+public class SysParamTypeController extends BaseController {
 
 	@Autowired
 	private SysParamTypeService sysParamService;

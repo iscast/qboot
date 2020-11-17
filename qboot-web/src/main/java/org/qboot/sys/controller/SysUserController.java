@@ -31,14 +31,14 @@ import java.util.List;
 import static org.qboot.sys.exception.errorcode.SysUserErrTable.*;
 
 /**
- * <p>Title: UserController</p>
+ * <p>Title: SysUserController</p>
  * <p>Description: 系统用户</p>
  * @author history
  * @date 2018-08-08
  */
 @RestController
 @RequestMapping("${admin.path}/sys/user")
-public class UserController extends BaseController {
+public class SysUserController extends BaseController {
 
 	@Autowired
 	private SysUserService sysUserService;

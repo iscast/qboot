@@ -29,14 +29,14 @@ import java.util.stream.Collectors;
 import static org.qboot.sys.exception.errorcode.SysModuleErrTable.*;
 
 /**
- * <p>Title: MenuController</p>
+ * <p>Title: SysMenuController</p>
  * <p>Description: 系统菜单权限</p>
  * @author history
  * @date 2018-08-08
  */
 @RestController
 @RequestMapping("${admin.path}/sys/menu")
-public class MenuController extends BaseController {
+public class SysMenuController extends BaseController {
 	
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 

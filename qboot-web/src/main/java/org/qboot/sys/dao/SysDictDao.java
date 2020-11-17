@@ -7,8 +7,7 @@ import java.util.List;
 
 /**
  * <p>Title: SysDictDao</p>
- * <p>Description: 字段参数</p>
- * 
+ * <p>Description: 系统字典</p>
  * @author history
  * @date 2018-08-08
  */

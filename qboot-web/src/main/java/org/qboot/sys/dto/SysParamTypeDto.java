@@ -6,7 +6,7 @@ import org.qboot.common.entity.BaseEntity;
 
 /**
  * <p>Title: SysParamType</p>
- * <p>Description: 系统参数类型实体</p>
+ * <p>Description: 系统类型参数</p>
  * 
  * @author history
  * @date 2018-08-08

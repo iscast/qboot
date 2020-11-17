@@ -22,14 +22,14 @@ import java.io.Serializable;
 import static org.qboot.sys.exception.errorcode.SysModuleErrTable.*;
 
 /**
- * <p>Title: ParamClassController</p>
+ * <p>Title: SysParamClassController</p>
  * <p>Description: 系统类型</p>
  * @author history
  * @date 2018-08-08
  */
 @RestController
 @RequestMapping("${admin.path}/sys/paramclass")
-public class ParamClassController extends BaseController {
+public class SysParamClassController extends BaseController {
 
 	@Autowired
 	private SysParamClassService sysParamClassService;

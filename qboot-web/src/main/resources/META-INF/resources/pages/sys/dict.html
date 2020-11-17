@@ -124,11 +124,12 @@
                 layer.closeAll('loading');
                 if (data.code == 0) {
                     layer.msg(data.msg, {icon: 1});
-                } else {
-                    layer.msg(data.msg, {icon: 2});
-                    $(obj.elem).prop('checked', !obj.elem.checked);
-                    form.render('checkbox');
+                    return
                 }
+
+                layer.msg(msgs['layer.error.code'] + data.code + msgs['layer.error.msg'] + data.msg, {icon: 2});
+                $(obj.elem).prop('checked', !obj.elem.checked);
+                form.render('checkbox');
             }, 'post');
         });
         
@@ -149,18 +150,19 @@
                     id: data.id
                 }, function (data) {
                     layer.closeAll('loading');
-                    if (data.code == 0) {
-                        admin.putTempData('t_dict', data.data);
-                        admin.popupCenter({
-                            title: title,
-                            path: 'pages/sys/dict_form.html',
-                            finish: function () {
-                                table.reload('dict-table', {});
-                            }
-                        });
-                    } else {
-                        layer.msg(data.msg, {icon: 2});
+                    if (data.code != 0) {
+                        layer.msg(msgs['layer.error.code'] + data.code + msgs['layer.error.msg'] + data.msg, {icon: 2});
+                        return
                     }
+
+                    admin.putTempData('t_dict', data.data);
+                    admin.popupCenter({
+                        title: title,
+                        path: 'pages/sys/dict_form.html',
+                        finish: function () {
+                            table.reload('dict-table', {});
+                        }
+                    });
                 }, 'get');
             }else{
             	admin.putTempData('t_dict', {});
@@ -185,12 +187,13 @@
                 layer.load(2);
                 admin.req('/sys/dict/delete?id=' + obj.data.id, {}, function (data) {
                     layer.closeAll('loading');
-                    if (data.code == 0) {
-                        layer.msg(data.msg, {icon: 1});
-                        obj.del();
-                    } else {
-                        layer.msg(data.msg, {icon: 2});
+                    if (data.code != 0) {
+                        layer.msg(msgs['layer.error.code'] + data.code + msgs['layer.error.msg'] + data.msg, {icon: 2});
+                        return
                     }
+
+                    layer.msg(data.msg, {icon: 1});
+                    obj.del();
                 }, 'POST');
             });
         };

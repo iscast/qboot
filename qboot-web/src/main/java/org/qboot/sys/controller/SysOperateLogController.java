@@ -1,8 +1,8 @@
 package org.qboot.sys.controller;
 
 import com.github.pagehelper.PageInfo;
-import org.qboot.sys.dto.SysLoginLogDto;
-import org.qboot.sys.service.impl.SysLoginLogService;
+import org.qboot.sys.dto.SysOperateLogDto;
+import org.qboot.sys.service.impl.SysOperateLogService;
 import org.qboot.common.controller.BaseController;
 import org.qboot.common.entity.ResponeModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,37 +16,30 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.Serializable;
 
 /**
- * <p>Title: LoginLogController</p>
- * <p>Description: 系统登陆日志</p>
+ * <p>Title: SysOperateLogController</p>
+ * <p>Description: 日志管理</p>
  * @author history
  * @date 2018-08-08
  */
 @RestController
-@RequestMapping("${admin.path}/sys/loginlog")
-public class LoginLogController extends BaseController {
+@RequestMapping("${admin.path}/sys/operatelog")
+public class SysOperateLogController extends BaseController {
 
 	@Autowired
-	private SysLoginLogService sysLoginLogService;
+	private SysOperateLogService sysOperateLogService;
 
-	@PreAuthorize("hasAuthority('sys:loginlog:qry')")
+	@PreAuthorize("hasAuthority('sys:operatelog:qry')")
 	@PostMapping("/qryPage")
-	public ResponeModel qryPage(SysLoginLogDto sysLoginLog, BindingResult bindingResult) {
-		PageInfo<SysLoginLogDto> page = sysLoginLogService.findByPage(sysLoginLog);
+	public ResponeModel qryPage(SysOperateLogDto sysLog, BindingResult bindingResult) {
+		PageInfo<SysOperateLogDto> page = sysOperateLogService.findByPage(sysLog);
 		return ResponeModel.ok(page);
 	}
 	
-	@PreAuthorize("hasAuthority('sys:loginlog:qry')")
+	@PreAuthorize("hasAuthority('sys:operatelog:qry')")
 	@RequestMapping("/get")
 	public ResponeModel get(@RequestParam Serializable id) {
-		SysLoginLogDto sysLoginLog = sysLoginLogService.findById(id);
+		SysOperateLogDto sysLog = sysOperateLogService.findById(id);
 		//富文本处理
-		return ResponeModel.ok(sysLoginLog);
+		return ResponeModel.ok(sysLog);
 	}
-
-	@PreAuthorize("hasAuthority('sys:loginlog:qry')")
-	@PostMapping("/qryOnlineUser")
-	public ResponeModel qryOnlineUser() {
-        return ResponeModel.error();
-	}
-	
 }

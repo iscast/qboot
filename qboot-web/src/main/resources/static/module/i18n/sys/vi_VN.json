@@ -4,7 +4,7 @@
     "sys:role": "Quản lý vai trò",
     "sys:menu": "Quản lý menu",
     "sys:dept": "Quản lý Bộ phận",
-    "sys:dict": "Tham số hệ thống",
+    "sys:dict": "Từ điển hệ thống",
     "sys:param": "Loại hệ thống",
     "sys:task": "Quản lý tác vụ",
     "sys:gen": "Tạo mã",
