@@ -24,6 +24,12 @@ public class SysParamTypeDto extends BaseEntity<String> {
 	@NotNull
 	private String paramTypeClass;
 
+    /**
+     * 分类名称
+     */
+    @NotNull
+    private String paramTypeName;
+
 	/**
 	 * 类型ID.不允许修改
 	 */
@@ -35,13 +41,6 @@ public class SysParamTypeDto extends BaseEntity<String> {
 	 */
 	@NotNull
 	private String paramTypeCode;
-
-
-	/**
-	 * 分类名称
-	 */
-	@NotNull
-	private String paramTypeName;
 
 	/**
 	 * 删除标识

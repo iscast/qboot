@@ -110,10 +110,10 @@
                     	if(auth[page] && auth[page]['sys:menu:update']){
                     		if(d.isShow == 0){
                     			swiftBtn ='&nbsp;<input type="checkbox" lay-filter="menu-tpl-state" value="'+d.id+'" lay-skin="switch" lay-text="'
-										+ msgs['sys.table.operation.valid']+'|'+ msgs['sys.table.operation.invalid'] +'"/>';
+										+ msgs['sys.form.operation.valid']+'|'+ msgs['sys.form.operation.invalid'] +'"/>';
                     		}else{
                     			swiftBtn ='&nbsp;<input type="checkbox" lay-filter="menu-tpl-state" value="'+d.id+'" lay-skin="switch" lay-text="'
-										+ msgs['sys.table.operation.valid']+'|'+ msgs['sys.table.operation.invalid'] +'" checked="checked"/>';
+										+ msgs['sys.form.operation.valid']+'|'+ msgs['sys.form.operation.invalid'] +'" checked="checked"/>';
                     		}
                 	    }
                     	
@@ -216,7 +216,7 @@
                     	var swiftBtn = '';
                     	if(auth[page] && auth[page]['sys:menu:update']){
                     		swiftBtn = '<input type="checkbox" lay-filter="menubtn-tpl-state" value="'+d.id+'" lay-skin="switch" lay-text="'
-							+ msgs['sys.table.operation.valid']+'|'+ msgs['sys.table.operation.invalid'] +'"';
+							+ msgs['sys.form.operation.valid']+'|'+ msgs['sys.form.operation.invalid'] +'"';
                     		if(d.isShow == 0){
                     			swiftBtn+='/>&nbsp;';
                     		}else{

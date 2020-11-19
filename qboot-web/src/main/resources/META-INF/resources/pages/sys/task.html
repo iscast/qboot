@@ -35,13 +35,15 @@
 	#taskLayTable tbody .layui-table-click{background-color: #ccffeb !important;}
 </style>
 <script>
-    layui.use(['form', 'table', 'util', '_config', 'admin'], function () {
+    layui.use(['form', 'table', 'util', '_config', 'admin','_i18n'], function () {
         var form = layui.form;
         var table = layui.table;
         var _config = layui._config;
         var layer = layui.layer;
         var util = layui.util;
         var admin = layui.admin;
+        var _i18n = layui._i18n;
+        var msgs = _i18n.getMsg('sys');
         
         var taskName = $('#taskName').val();
         var groupName = $('#groupName').val();
@@ -60,11 +62,11 @@
             page: true,
             even: false, 
             text: {
-                none: "无数据" 
+                none: "no data"
             },
             limits:_config.limits,
             cols: [[
-                {field: 'taskName', sort: true, title: "任务名称",width:200,fixed:'left'},
+                {field: 'taskName', sort: true, title: msgs['sys.task.table.name'],width:200,fixed:'left'},
                 {align: 'center', field: 'status', sort: false, templet: function(d){
                 	var auth = JSON.parse(sessionStorage.getItem("auth"));
                 	var page = location.hash.substring(2);
@@ -79,49 +81,48 @@
             	    }else{
             	    	return d.statusName;
             	    }
-                }, title: "任务状态",width:120},
+                }, title: msgs['sys.task.table.status'],width:120},
                 {field: 'runStatusName',templet: function(d){
                 	if(d.runStatus==1){
                 		return '<span style="color:red;">'+d.runStatusName+'</span>'
                 	}else{
                 		return '<span style="color:green;">'+d.runStatusName+'</span>'
                 	}
-                }, sort: false, title: "执行状态",width:100},
-                {field: 'cronExp', sort: true, title: "时间表达式",width:150},
-                {field: 'groupName', sort: true, title: "任务分组",width:150},
-                {field: 'taskTarget', sort: true, title: "Job实例",width:200},
+                }, sort: false, title: msgs['sys.task.table.runStatusName'],width:100},
+                {field: 'cronExp', sort: true, title: msgs['sys.task.table.cronExp'],width:150},
+                {field: 'groupName', sort: true, title: msgs['sys.task.table.groupName'],width:150},
+                {field: 'taskTarget', sort: true, title: msgs['sys.task.table.taskTarget'],width:200},
                 {field: 'execType', sort: true,templet: function (d) {
                 		if(d.execType==1){
                 			return "非阻塞" ;
                 		}else{
                 			return "阻塞";
                 		}
-                	}, title: "执行方式",width:150},
-                {field: 'params', sort: false, title: "参数",width:150},
-                {field: 'createDate',sort: true, templet: function (d) {return util.toDateString(d.createDate);}, title: "创建时间",width:160},
-                {field: 'updateDate',sort: true, templet: function (d) {return util.toDateString(d.updateDate);}, title: "更新时间",width:160},
-                {field: 'remarks', sort: false, title: "备注",width:200},
+                	}, title: msgs['sys.task.table.execType'],width:150},
+                {field: 'params', sort: false, title: msgs['sys.task.table.params'],width:150},
+                {field: 'createDate',sort: true, templet: function (d) {return util.toDateString(d.createDate);}, title: msgs['sys.task.table.createDate'],width:160},
+                {field: 'updateDate',sort: true, templet: function (d) {return util.toDateString(d.updateDate);}, title: msgs['sys.task.table.updateDate'],width:160},
+                {field: 'remarks', sort: false, title: msgs['sys.task.table.remarks'],width:200},
                 {align: 'center', templet: function(d){
                 	var auth = JSON.parse(sessionStorage.getItem("auth"));
                 	var page = location.hash.substring(2);
                 	var btn = '' ;
                 	if(auth[page] && auth[page]['sys:task:update']){
-                		btn = btn+'<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>' ;
+                		btn = btn + '<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>' ;
             	    }
                 	if(auth[page] && auth[page]['sys:task:execute']){
-            	    	btn = btn
-                		+'<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="execute">立即执行</a>'
-                		;
+            	    	btn = btn + '<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="execute">立即执行</a>';
             	    }
                 	if(btn == ''){
-                		return "无权限";
+                        return _i18n.getGlobalVal('layui.operation.tips.noPermission');
                 	}else{
                 		return btn;
                 	}
-                }, title: "操作",width:140,fixed:'right'}
+                }, title: msgs["sys.table.title.operation"], width:140,fixed:'right'}
             ]],
             done: function(res, curr, count){
-            	var data = res.data;
+                _i18n.initPage();
+            	// var data = res.data;
             }
         });
 
@@ -191,7 +192,7 @@
 	                page: true,
 	                even: true, //开启隔行背景
 	                text: {
-	                    none: "无数据"
+	                    none: "no data"
 	                },
 	                limits:_config.limits,
 	                cols: [[
@@ -219,24 +220,25 @@
         
         //显示表单弹窗
         var showEditModel = function (data) {
-            var title = data ? "编辑" : "新增";
+            var title = data ? msgs['sys.form.operation.edit'] : msgs['sys.form.operation.add'];
             if(data){
             	admin.req('/sys/task/get', {
                     id: data.id
                 }, function (data) {
                     layer.closeAll('loading');
-                    if (data.code == 0) {
-                        admin.putTempData('t_task', data.data);
-                        admin.popupCenter({
-                            title: title,
-                            path: 'pages/sys/task_form.html',
-                            finish: function () {
-                            	reloadTable();
-                            }
-                        });
-                    } else {
-                        layer.msg(data.msg, {icon: 2});
+                    if (data.code != 0) {
+                        layer.msg(msgs['layer.error.code'] + data.code + msgs['layer.error.msg'] + data.msg, {icon: 2});
+                        return
                     }
+
+                    admin.putTempData('t_task', data.data);
+                    admin.popupCenter({
+                        title: title,
+                        path: 'pages/sys/task_form.html',
+                        finish: function () {
+                            reloadTable();
+                        }
+                    });
                 }, 'post');
             }else{
                 admin.putTempData('t_task', {});
@@ -269,11 +271,12 @@
                 layer.closeAll('loading');
                 if (data.code == 0) {
                     layer.msg(data.msg, {icon: 1});
-                } else {
-                    layer.msg(data.msg, {icon: 2});
-                    $(obj.elem).prop('checked', !obj.elem.checked);
-                    form.render('checkbox');
+                    return
                 }
+
+                layer.msg(msgs['layer.error.code'] + data.code + msgs['layer.error.msg'] + data.msg, {icon: 2});
+                $(obj.elem).prop('checked', !obj.elem.checked);
+                form.render('checkbox');
             }, 'post');
         });
         

@@ -57,7 +57,7 @@
                 	if(auth[page] && auth[page]['sys:user:update']){
                 		var swiftBtn = '<input type="checkbox" lay-filter="user-tpl-state" value="'+d.id
                             +'" lay-skin="switch" lay-text="'
-                            + msgs['sys.table.operation.valid']+'|'+ msgs['sys.table.operation.invalid'] +'"';
+                            + msgs['sys.form.operation.valid']+'|'+ msgs['sys.form.operation.invalid'] +'"';
                 		if(d.status == 0){
                 			swiftBtn+='/>';
                 		}else{
@@ -65,9 +65,9 @@
                 		}
             	        return swiftBtn;
             	    }else{
-            	    	var status = msgs['sys.table.operation.valid'];
+            	    	var status = msgs['sys.form.operation.valid'];
             	    	if(d.status == 0){
-            	    		status = msgs['sys.table.operation.invalid'];
+            	    		status = msgs['sys.form.operation.invalid'];
                 		}
             	    	return status;
             	    }
@@ -82,7 +82,7 @@
                 			+ '<a class="layui-btn layui-btn-xs" lay-event="unlock">'+msgs['sys.form.operation.unlock']+'</a>';
             	    }
                     if(auth[page] && auth[page]['sys:user:delete']){
-                        delBtn = '<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" data-auth="sys:user:delete">'+msgs['sys.table.operation.delete']+'</a>';
+                        delBtn = '<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" data-auth="sys:user:delete">'+msgs['sys.form.operation.delete']+'</a>';
                     }
                 	if(btn == ''){
                 		return _i18n.getGlobalVal('layui.operation.tips.noPermission');

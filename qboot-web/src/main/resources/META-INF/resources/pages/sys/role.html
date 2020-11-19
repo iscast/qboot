@@ -58,7 +58,7 @@
             	    }
                 	
                 	if(auth[page] && auth[page]['sys:role:delete']){
-                		delBtn = '<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" data-auth="sys:role:delete">'+msgs['sys.table.operation.delete']+'</a>';
+                		delBtn = '<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" data-auth="sys:role:delete">'+msgs['sys.form.operation.delete']+'</a>';
             	    }
                 	if((upBtn+delBtn) == ''){
                 		return _i18n.getGlobalVal('layui.operation.tips.noPermission');

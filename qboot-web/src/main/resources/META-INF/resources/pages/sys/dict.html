@@ -72,7 +72,7 @@
             	    }
                 	
                 	if(auth[page] && auth[page]['sys:dict:delete']){
-                		delBtn = '<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" data-auth="sys:dict:delete">'+msgs['sys.table.operation.delete']+'</a>';
+                		delBtn = '<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" data-auth="sys:dict:delete">'+msgs['sys.form.operation.delete']+'</a>';
             	    }
                 	if((upBtn+delBtn) == ''){
                         return _i18n.getGlobalVal('layui.operation.tips.noPermission');
@@ -174,9 +174,7 @@
                     }
                 });
             }
-            
-            
-            
+
         };
 
         // 删除
