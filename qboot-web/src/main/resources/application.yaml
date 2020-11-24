@@ -21,4 +21,4 @@ spring:
     encoding: UTF-8
     param_name: lang
   profiles:
-    active: prod
+    active: dev

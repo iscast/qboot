@@ -77,7 +77,7 @@
 
         // 检查是否登录
         if (!_config.getToken() || _config.getToken() == '') {
-            location.replace('login.html');
+            location.replace(_config.getLoginPage());
             return;
         }
 

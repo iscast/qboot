@@ -1,5 +1,6 @@
 package org.qboot.sys.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import org.qboot.sys.dto.SysMenuDto;
 import org.qboot.sys.dto.SysUserDto;
 import org.qboot.sys.service.impl.SysLoginLogService;
@@ -12,6 +13,7 @@ import org.qboot.common.entity.ResponeModel;
 import org.qboot.common.security.CustomUser;
 import org.qboot.common.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +38,9 @@ public class LoginController extends BaseController {
 
 	@Autowired
 	private SysLoginLogService sysLoginLogService;
+
+    @Value("${admin.loginUrl:}")
+    private String adminLoginUrl;
 	
 	private TreeHelper<SysMenuDto> treeHelper = new TreeHelper<SysMenuDto>();
 	
@@ -113,5 +118,22 @@ public class LoginController extends BaseController {
 		int cnt = sysUserService.update(sysUser);
 		return ResponeModel.ok(cnt);
 	}
+
+    @GetMapping("/getLoginPage")
+    public ResponeModel getLoginPage(){
+        JSONObject data = new JSONObject();
+        data.put("loginPage", loginPage());
+        return ResponeModel.ok(data);
+    }
+
+    private String loginPage() {
+        // 判断是否自定义了登陆页面
+        String loginPage = "/login_pc.html";
+        if(org.apache.commons.lang3.StringUtils.isNotBlank(adminLoginUrl) && adminLoginUrl.contains("html")) {
+            int i = adminLoginUrl.lastIndexOf("/");
+            loginPage = adminLoginUrl.substring(i);
+        }
+        return loginPage;
+    }
 
 }

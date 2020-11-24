@@ -141,8 +141,9 @@ layui.define(['_config', 'admin', 'layer', 'laytpl', 'element', 'form','_i18n'],
                         
                         if(data == null || data.length == 0){
                             layer.msg('get user fail', {icon: 2});
+                            let loginPage = _config.getLoginPage();
                             _config.removeToken();
-                            location.replace('login.html');
+                            location.replace(loginPage);
                         }
                         
                         for( var i = 0; i < data.length; i ++ ) {
@@ -236,13 +237,13 @@ layui.define(['_config', 'admin', 'layer', 'laytpl', 'element', 'form','_i18n'],
             		error:function(err){
             			layer.msg('获取权限失败', {icon: 2});
                         _config.removeToken();
-                        location.replace('login.html');
+                        location.replace(_config.getLoginPage());
             		}
             	});
             }catch(err){
             	layer.msg('获取权限失败', {icon: 2});
                 _config.removeToken();
-                location.replace('login.html');
+                location.replace(_config.getLoginPage());
             }
         },
         // 从服务器获取登录用户的信息
@@ -256,7 +257,7 @@ layui.define(['_config', 'admin', 'layer', 'laytpl', 'element', 'form','_i18n'],
                 } else {
                     layer.msg('获取用户失败', {icon: 2});
                     _config.removeToken();
-                    location.replace('login.html');
+                    location.replace(_config.getLoginPage());
                 }
             }, 'GET');
         },
@@ -289,11 +290,11 @@ layui.define(['_config', 'admin', 'layer', 'laytpl', 'element', 'form','_i18n'],
                 		method: 'post',
                 		success: function(res) {
                 			_config.removeToken();
-                            location.replace('login.html');
+                            location.replace(_config.getLoginPage());
                         },
                 		error:function(err){
                             _config.removeToken();
-                            location.replace('login.html');
+                            location.replace(_config.getLoginPage());
                 		}
                 	});
                 });

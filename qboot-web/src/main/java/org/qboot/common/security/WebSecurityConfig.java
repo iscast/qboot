@@ -1,9 +1,10 @@
 package org.qboot.common.security;
 
 import com.alibaba.fastjson.JSON;
+import org.apache.commons.lang3.StringUtils;
 import org.qboot.common.config.SysSecurityConfig;
-import org.qboot.common.utils.SpringContextHolder;
 import org.qboot.common.entity.ResponeModel;
+import org.qboot.common.utils.SpringContextHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Value("${admin.path}")
 	private String adminPath;
+    @Value("${admin.loginUrl:}")
+    private String adminLoginUrl;
 	@Autowired
     private SysSecurityConfig sysSecurityConfig;
 	
@@ -63,17 +66,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 http.apply(securityConfigurer);
             }
         }
+
+        String loginPage = getLoginPage();
 		http.authorizeRequests()
 		.antMatchers("/public/**",
 				"/module/encrypt/jsencrypt.js",
 				"/assets/**",
 				"/module/i18n/*",
+                loginPage,
 				"/sys/user/getPublicKey",
+				"/sys/user/getLoginPage",
 				"/module/_config.js").permitAll()
 		.antMatchers((adminPath + "/**")).authenticated()
 		// 允许跨域
 		.antMatchers(HttpMethod.OPTIONS).permitAll() 
-		.and().formLogin().loginPage(adminPath + "/login.html").loginProcessingUrl(adminPath + "/login").permitAll()
+		.and().formLogin().loginProcessingUrl(adminPath + "/login").permitAll()
 		.and().logout().logoutUrl(adminPath + "/logout").logoutSuccessHandler(loginResultHandler())
 
 		.and().csrf().disable()
@@ -90,7 +97,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				logger.info("request uri address :{} current user no login!", requestURI);
 
 				if("/".equals(requestURI)) {
-					response.sendRedirect("/login.html");
+				    if(StringUtils.isNotBlank(adminLoginUrl)) {
+					    response.sendRedirect(adminLoginUrl);
+                    }else {
+					    response.sendRedirect("/login_pc.html");
+                    }
 				} else {
 					ResponeModel expired = ResponeModel.error(String.valueOf(SecurityStatus.NO_LOGIN.getValue()));
 					response.setContentType("application/json;charset=UTF-8");
@@ -99,6 +110,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			}
 		}).accessDeniedHandler(new WebAccessDeniedHandler());
 	}
+
+	private String getLoginPage() {
+        // 判断是否自定义了登陆页面
+        String loginPage = "/login_pc.html";
+        if(StringUtils.isNotBlank(adminLoginUrl) && adminLoginUrl.contains("html")) {
+            int i = adminLoginUrl.lastIndexOf("/");
+            loginPage = adminLoginUrl.substring(i);
+        }
+        return loginPage;
+    }
 	
 	/**
 	 * 配置user-detail服务

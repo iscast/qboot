@@ -1,5 +1,6 @@
 admin:
   path: ''
+#  loginUrl: http://127.0.0.1:9000/login_pc.html
 server:
   port: 9000
 spring:
@@ -19,22 +20,22 @@ spring:
       max-wait: 60000
       min-evictable-idle-time-millis: 300000
       min-idle: 3
-      password: 666666
+      password: '[test1234]'
       test-on-borrow: true
       test-on-return: false
       test-while-idle: true
       time-between-eviction-runs-millis: 60000
-      url: jdbc:mysql://127.0.0.1:3606/test?useUnicode=true&characterEncoding=utf-8
-      username: root
+      url: jdbc:mysql://120.24.110.97:3686/test?useUnicode=true&characterEncoding=utf-8
+      username: test_rw
       validation-query: select 1
   redisson:
-    address: redis://127.0.0.1:6379
-    password: 666666
+    address: redis://120.24.110.97:6686
+    password: '[qwer1234]'
     codec: org.redisson.codec.FstCodec
     connectTimeout: 10000
     connectionMinimumIdleSize: 12
     connectionPoolSize: 64
-    database: 1
+    database: 10
     dnsMonitoring: false
     dnsMonitoringInterval: 5000
     failedAttempts: 2

@@ -12,6 +12,8 @@
 <style type="text/css">
     #canvas{
         cursor:pointer;
+        margin-left: 50%; width: 50%; height: 34px; margin-top: -34px;
+        border-width:0px !important;
     }
 </style>
 <body>
@@ -21,8 +23,7 @@
         <!--<img src="assets/images/logo.png">management system-->
         <span>
             <select id="loginLang" class="layui-input" style="width:140px;">
-                <option value="">Switch Language</option>
-                <option value="en_US">English</option>
+                <option value="en_US" selected>English</option>
                 <option value="vi_VN">Tiếng Việt</option>
                 <option value="zh_CN">中文简体</option>
                 <option value="zh_HK">中文繁體</option>
@@ -43,6 +44,7 @@
                                class="layui-input i18n-input-hint">
                     </div>
                 </div>
+
                 <div class="layui-form-item">
                     <label class="layui-form-label"><i class="layui-icon layui-icon-password"></i></label>
                     <div class="layui-input-block">
@@ -50,12 +52,13 @@
                                class="layui-input i18n-input-hint">
                     </div>
                 </div>
+
                 <div class="layui-form-item">
                     <label class="layui-form-label"><i class="layui-icon layui-icon-senior"></i></label>
                     <div class="layui-input-block">
-                        <input id="verifyCode" name="verifyCode" type="text" lay-verify="required"
-                               i18n-key="login.form.hint.verifyCode" class="layui-input i18n-input-hint" placeholder="verify code">
-                        <canvas id="canvas" width="150px" height="50px"></canvas>
+                        <input id="verifyCode" name="verifyCode" type="text" lay-verify="required" class="layui-input i18n-input-hint"
+                               i18n-key="login.form.hint.verifyCode"  placeholder="verifyCode" style="width: 45%;">
+                        <canvas class="layui-input" id="canvas" width="150px" height="50px"></canvas>
                     </div>
                 </div>
 
@@ -89,33 +92,32 @@
         var msgs;
         var loginLang = $('#loginLang');
         loginLang.change(function () {
-            if($(this).val()){
-                sessionStorage.setItem("lang",$(this).val());
-                $.ajax({
-                    url: 'module/i18n/global_' + $(this).val() + '.json',
-                    type: "get",
-                    dataType: "json",
-                    async: false,
-                    success: function (obj) {
-                        msgs = obj;
-                    }
-                });
-                $(".layui-i18n").each(function (i,n) {
-                    var msgKey = $(this).attr("i18n-key");
-                    if(msgs&&msgKey) {
-                        $(this).text(msgs[msgKey]?msgs[msgKey]:msgKey);
-                    }
-                });
-            }
+            switchLangFuc();
         });
-        if(sessionStorage.getItem("lang")){
-            loginLang.val(sessionStorage.getItem("lang"));
-            loginLang.change();
-        }
+
+        var switchLangFuc = function () {
+            sessionStorage.setItem("lang",$('#loginLang').val());
+            $.ajax({
+                url: 'module/i18n/global_' + $('#loginLang').val() + '.json',
+                type: "get",
+                dataType: "json",
+                async: false,
+                success: function (obj) {
+                    msgs = obj;
+                }
+            });
+            $(".layui-i18n").each(function (i,n) {
+                var msgKey = $(this).attr("i18n-key");
+                if(msgs&&msgKey) {
+                    $(this).text(msgs[msgKey]?msgs[msgKey]:msgKey);
+                }
+            });
+        };
+
+        switchLangFuc();
 
         // $('.login-footer p').html('© 2019-'+new Date().getUTCFullYear()+' <a href="javascript:;" target="_blank">QBOOT提供支持</a>');
 
-        // 表单提交
         form.on('submit(login-submit)', function (obj) {
             var field = obj.field;
             var username = $('#username').val();
@@ -144,7 +146,6 @@
                     }
                 }
             });
-            //使用公钥加密用户名和密码
             var encrypt = new JSEncrypt();
             encrypt.setPublicKey(publicKey);
             username = encrypt.encrypt(username);
