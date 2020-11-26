@@ -1,8 +1,9 @@
 package org.qboot.common.security;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import org.qboot.common.filter.ILoginProcessFilter;
+import org.qboot.common.filter.LoginProcessFailException;
+import org.qboot.common.utils.RSAsecurity;
+import org.qboot.common.utils.SpringContextHolder;
 import org.qboot.sys.dto.SysUserDto;
 import org.qboot.sys.service.impl.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,8 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.util.Assert;
 
-import org.qboot.common.utils.RSAsecurity;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * <p>Title: LoginPasswordEncoder</p>
@@ -32,17 +34,49 @@ public class WebAuthenticationFilter extends AbstractAuthenticationProcessingFil
 
 	@Autowired
 	private SysUserService sysUserService;
+    private ILoginProcessFilter customFilter;
+
+    public WebAuthenticationFilter(String loginPath, SpringContextHolder springContextHolder) {
+        super(new AntPathRequestMatcher(loginPath, "POST"));
+
+        // 初始化项目的自定义登陆流程处理过滤器
+//        Set<Class<? extends ILoginProcessFilter>> classes = null;
+//        if (null != classes || classes.size() >= 0) {
+//            Iterator<Class<? extends ILoginProcessFilter>> iterator = classes.iterator();
+//
+//            if(iterator.hasNext()) {
+//                Class aClass = iterator.next();
+//                try {
+//                    ILoginProcessFilter customFilter = (ILoginProcessFilter) aClass.newInstance();
+//                    customFilterList.add(customFilter);
+//                } catch (Exception e) {
+//                    logger.error("init custom auth Filter error", e);
+//                }
+//            }
+//
+//            Collections.sort(customFilterList, new Comparator<ILoginProcessFilter>() {
+//                @Override
+//                public int compare(ILoginProcessFilter a, ILoginProcessFilter b) {
+//                    return Integer.compare(a.order(), b.order());
+//                }
+//            });
+//        }
+        customFilter = springContextHolder.getBeanByClass(ILoginProcessFilter.class);
+    }
 
 	public WebAuthenticationFilter(String loginPath) {
 		super(new AntPathRequestMatcher(loginPath, "POST"));
 	}
-	
+
 	 @Override
-	public Authentication attemptAuthentication(HttpServletRequest request,
-			HttpServletResponse response) throws AuthenticationException {
+	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 		if (postOnly && !request.getMethod().equals("POST")) {
 			throw new AuthenticationServiceException("Authentication method not supported: " + request.getMethod());
 		}
+
+         if(null != customFilter && !customFilter.doBusiness(request, response)) {
+             throw new LoginProcessFailException("process login auth fail");
+         }
 
 		String username = obtainUsername(request);
 		String password = obtainPassword(request);

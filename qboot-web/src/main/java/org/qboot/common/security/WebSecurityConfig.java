@@ -2,7 +2,6 @@ package org.qboot.common.security;
 
 import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang3.StringUtils;
-import org.qboot.common.config.SysSecurityConfig;
 import org.qboot.common.entity.ResponeModel;
 import org.qboot.common.utils.SpringContextHolder;
 import org.slf4j.Logger;
@@ -12,7 +11,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.SecurityConfigurer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,7 +20,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
-import org.springframework.util.CollectionUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -54,19 +51,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	private String adminPath;
     @Value("${admin.loginUrl:}")
     private String adminLoginUrl;
-	@Autowired
-    private SysSecurityConfig sysSecurityConfig;
-	
+    @Autowired
+    private SpringContextHolder springContextHolder;
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		//将自定义的登录配置放入链中
-        if(!CollectionUtils.isEmpty(sysSecurityConfig.getSecurityConfigurerNames())){
-            for (String confName : sysSecurityConfig.getSecurityConfigurerNames()) {
-                SecurityConfigurer securityConfigurer = SpringContextHolder.getBean(confName, SecurityConfigurer.class);
-                http.apply(securityConfigurer);
-            }
-        }
-
         String loginPage = getLoginPage();
 		http.authorizeRequests()
 		.antMatchers("/public/**",
@@ -136,7 +125,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	 */
 	@Bean
 	public WebAuthenticationFilter customAuthenticationFilter() throws Exception {
-		WebAuthenticationFilter customAuthenticationFilter = new WebAuthenticationFilter(adminPath + "/login");
+		WebAuthenticationFilter customAuthenticationFilter = new WebAuthenticationFilter(adminPath + "/login", springContextHolder);
 		customAuthenticationFilter.setAuthenticationManager(this.authenticationManager());
 		customAuthenticationFilter.setAuthenticationSuccessHandler(loginResultHandler());
 		customAuthenticationFilter.setAuthenticationFailureHandler(loginResultHandler());
