@@ -103,9 +103,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	private String getLoginPage() {
         // 判断是否自定义了登陆页面
         String loginPage = "/login_pc.html";
-        if(StringUtils.isNotBlank(adminLoginUrl) && adminLoginUrl.contains("html")) {
-            int i = adminLoginUrl.lastIndexOf("/");
-            loginPage = adminLoginUrl.substring(i);
+        if(StringUtils.isNotBlank(adminLoginUrl) && adminLoginUrl.contains("html") && adminLoginUrl.contains("/")) {
+            loginPage = adminLoginUrl.substring(adminLoginUrl.lastIndexOf("/"));
         }
         return loginPage;
     }
