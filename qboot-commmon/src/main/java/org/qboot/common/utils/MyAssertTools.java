@@ -1,7 +1,6 @@
 package org.qboot.common.utils;
 
 import org.qboot.common.error.ErrorCode;
-import org.qboot.common.exception.ErrorCodeException;
 import org.qboot.common.exception.SysAssertException;
 import org.springframework.lang.Nullable;
 import org.springframework.util.CollectionUtils;

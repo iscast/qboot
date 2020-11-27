@@ -2,10 +2,8 @@ package org.qboot.common.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.github.pagehelper.PageInfo;
-import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import org.qboot.common.constants.SysConstants;
-import org.qboot.common.error.ErrorCode;
 import org.qboot.common.error.IError;
 
 import java.io.Serializable;
@@ -17,7 +15,6 @@ import java.util.Map;
  * 通用返回参数模型
  * @author history
  */
-@Data
 public final class ResponeModel implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -125,7 +122,47 @@ public final class ResponeModel implements Serializable {
         return responeModel;
     }
 
-	/**
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
+    public String getRequestId() {
+        return requestId;
+    }
+
+    public void setRequestId(String requestId) {
+        this.requestId = requestId;
+    }
+
+    public Long getCount() {
+        return count;
+    }
+
+    public void setCount(Long count) {
+        this.count = count;
+    }
+
+    public Object getData() {
+        return data;
+    }
+
+    public void setData(Object data) {
+        this.data = data;
+    }
+
+    /**
 	 * 将data设置成为map
 	 * @param key
 	 * @param value
