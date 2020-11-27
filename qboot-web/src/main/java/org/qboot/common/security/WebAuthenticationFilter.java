@@ -1,5 +1,6 @@
 package org.qboot.common.security;
 
+import org.apache.commons.lang3.StringUtils;
 import org.qboot.common.filter.ILoginProcessFilter;
 import org.qboot.common.filter.LoginProcessFailException;
 import org.qboot.common.utils.RSAsecurity;
@@ -35,33 +36,15 @@ public class WebAuthenticationFilter extends AbstractAuthenticationProcessingFil
 	@Autowired
 	private SysUserService sysUserService;
     private ILoginProcessFilter customFilter;
+    private String customFilterName;
 
     public WebAuthenticationFilter(String loginPath, SpringContextHolder springContextHolder) {
         super(new AntPathRequestMatcher(loginPath, "POST"));
-
         // 初始化项目的自定义登陆流程处理过滤器
-//        Set<Class<? extends ILoginProcessFilter>> classes = null;
-//        if (null != classes || classes.size() >= 0) {
-//            Iterator<Class<? extends ILoginProcessFilter>> iterator = classes.iterator();
-//
-//            if(iterator.hasNext()) {
-//                Class aClass = iterator.next();
-//                try {
-//                    ILoginProcessFilter customFilter = (ILoginProcessFilter) aClass.newInstance();
-//                    customFilterList.add(customFilter);
-//                } catch (Exception e) {
-//                    logger.error("init custom auth Filter error", e);
-//                }
-//            }
-//
-//            Collections.sort(customFilterList, new Comparator<ILoginProcessFilter>() {
-//                @Override
-//                public int compare(ILoginProcessFilter a, ILoginProcessFilter b) {
-//                    return Integer.compare(a.order(), b.order());
-//                }
-//            });
-//        }
         customFilter = springContextHolder.getBeanByClass(ILoginProcessFilter.class);
+        if(null != customFilter) {
+            customFilterName = customFilter.getClass().getName();
+        }
     }
 
 	public WebAuthenticationFilter(String loginPath) {
@@ -74,36 +57,31 @@ public class WebAuthenticationFilter extends AbstractAuthenticationProcessingFil
 			throw new AuthenticationServiceException("Authentication method not supported: " + request.getMethod());
 		}
 
-         if(null != customFilter && !customFilter.doBusiness(request, response)) {
-             throw new LoginProcessFailException("process login auth fail");
-         }
-
 		String username = obtainUsername(request);
 		String password = obtainPassword(request);
 
-		if (username == null) {
-			username = "";
+		if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
+            throw new UsernameNotFoundException("username or password can't be null");
 		}
-
-		if (password == null) {
-			password = "";
-		}
-
 		username = RSAsecurity.getInstance().decrypt(String.valueOf(request.getSession().getAttribute("privateKey")), username.trim());
 		SysUserDto sysUser = sysUserService.findByLoginName(username);
 		if (sysUser == null) {
 			throw new UsernameNotFoundException(username + "account not exist");
 		}
+
 		if (sysUser.getStatus().equals("0")) {
 			throw new DisabledException(username + "账号已锁定，请联系管理员！");
 		}
+
+		// 处理自定义过滤器逻辑
+        if(null != customFilter && !customFilter.doBusiness(request, sysUser)) {
+            throw new LoginProcessFailException(String.format("customFilter:%s process login auth fail", customFilterName));
+        }
 		
 		//解密传输的密文密码
 		password = RSAsecurity.getInstance().decrypt(String.valueOf(request.getSession().getAttribute("privateKey")), password) + sysUser.getSalt();
 		UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(username, password);
-
 		setDetails(request, authRequest);
-
 		return this.getAuthenticationManager().authenticate(authRequest);
 	}
 

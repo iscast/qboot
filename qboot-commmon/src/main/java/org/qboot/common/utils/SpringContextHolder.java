@@ -2,6 +2,7 @@ package org.qboot.common.utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Lazy;
@@ -45,7 +46,13 @@ public class SpringContextHolder implements ApplicationContextAware {
 
     public static <T> T getBeanByClass(Class<T> clazz) {
         assertContextInjected();
-        return applicationContext.getBean(clazz);
+        T t = null;
+        try {
+            t = applicationContext.getBean(clazz);
+        } catch (NoSuchBeanDefinitionException e) {
+            logger.warn("springContext can't find {} no exist, err msg:{}  return null", clazz.getName(), e.getMessage());
+        }
+        return t;
     }
 
     public static void clear() {

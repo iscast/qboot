@@ -64,7 +64,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				"/module/i18n/*",
                 loginPage,
 				"/sys/user/getPublicKey",
-				"/sys/user/getLoginPage",
+				"/user/getLoginPage",
 				"/module/_config.js").permitAll()
 		.antMatchers((adminPath + "/**")).authenticated()
 		// 允许跨域

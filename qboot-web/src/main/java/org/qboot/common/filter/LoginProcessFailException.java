@@ -8,11 +8,6 @@ import org.springframework.security.core.AuthenticationException;
  * @Date: 2020/11/26 19:18
  */
 public class LoginProcessFailException extends AuthenticationException {
-
-    public LoginProcessFailException(String msg, Throwable t) {
-        super(msg, t);
-    }
-
     public LoginProcessFailException(String msg) {
         super(msg);
     }
