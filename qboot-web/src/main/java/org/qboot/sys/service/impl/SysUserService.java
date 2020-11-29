@@ -137,10 +137,8 @@ public class SysUserService extends CrudService<SysUserDao, SysUserDto> {
 	}
 	
 	public int setStatus(SysUserDto t) {
-		SysUserDto sysUser = this.findById(t.getId());
-        MyAssertTools.notNull(sysUser, SYS_USER_NOTEXISTS);
-		sysUser.setStatus(t.getStatus());
-		return d.setStatus(sysUser);
+        MyAssertTools.notNull(t, SYS_USER_NOTEXISTS);
+		return d.setStatus(t);
 	}
 	
 	public boolean selectFirstLoginUser(Long userId){

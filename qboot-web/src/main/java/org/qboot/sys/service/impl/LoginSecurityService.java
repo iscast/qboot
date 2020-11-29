@@ -1,8 +1,10 @@
 package org.qboot.sys.service.impl;
 
 import org.qboot.common.constants.CacheConstants;
+import org.qboot.common.constants.SysConstants;
 import org.qboot.common.service.BaseService;
 import org.qboot.common.utils.RedisTools;
+import org.qboot.sys.dto.SysUserDto;
 import org.redisson.api.RSet;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,37 +23,43 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class LoginSecurityService extends BaseService {
 
-
 	@Autowired
 	private RedisTools redisTools;
 	@Autowired(required = false)
 	private RedissonClient redissonClient;
+	@Autowired
+	private SysUserService sysUserService;
+
+	private static final Long LOGIN_FAIL_EXPIRE_TIME = 24 * 60 * 60L;
+	private static final Long LOGIN_FAIL_COUNT = 5L;
 
 	public void unLock(String loginName) {
 		Assert.hasLength(loginName, "login Name IsEmpty");
 		redisTools.del(CacheConstants.CACHE_PREFIX_LOGIN_FAILCOUNT + loginName);
+		SysUserDto unlockUser = new SysUserDto();
+		unlockUser.setLoginName(loginName);
+		unlockUser.setStatus(SysConstants.SYS_ENABLE);
+		sysUserService.setStatus(unlockUser);
 	}
 
 	public Long getLoginFailCount(String loginName) {
-		try {
-			Long cnt = redisTools.get(CacheConstants.CACHE_PREFIX_LOGIN_FAILCOUNT + loginName);
-			return null == cnt ? 0 : cnt;
-		} finally {
-			redisTools.expire(CacheConstants.CACHE_PREFIX_LOGIN_FAILCOUNT + loginName, 24 * 60 * 60);
-		}
+		Long cnt = redisTools.get(CacheConstants.CACHE_PREFIX_LOGIN_FAILCOUNT + loginName);
+		return null == cnt ? 0 : cnt;
 	}
 
 	public boolean isLocked(String loginName) {
-		return getLoginFailCount(loginName) >= 5;
+		return getLoginFailCount(loginName) >= LOGIN_FAIL_COUNT;
 	}
 
 	public Long incrementLoginFailTimes(String loginName) {
-		try {
-			Long increment = redisTools.incr(CacheConstants.CACHE_PREFIX_LOGIN_FAILCOUNT + loginName, 1L);
-			return increment;
-		} finally {
-			redisTools.expire(CacheConstants.CACHE_PREFIX_LOGIN_FAILCOUNT + loginName, 24 * 60 * 60);
+		Long increment = redisTools.incrWithTime(CacheConstants.CACHE_PREFIX_LOGIN_FAILCOUNT + loginName, 1L, LOGIN_FAIL_EXPIRE_TIME);
+		if(null != increment && increment >= LOGIN_FAIL_COUNT) {
+			SysUserDto lockUser = new SysUserDto();
+			lockUser.setLoginName(loginName);
+			lockUser.setStatus(SysConstants.SYS_DISABLE);
+			sysUserService.setStatus(lockUser);
 		}
+		return increment;
 	}
 
 	public void clearLoginFailTimes(String loginName) {

@@ -59,7 +59,6 @@ public class WebLoginResultHandler implements AuthenticationSuccessHandler,Authe
 		logger.warn("userName:[{}] login fail msg:[{}]", loginName, exception.getMessage());
 		ResponeModel result = ResponeModel.error();
 		if (exception instanceof UsernameNotFoundException) {
-			loginSecurityService.incrementLoginFailTimes(loginName);
 			result.setMsg("user or pwd error");
 			logger.warn("user:{} or pwd error", loginName);
 			loginLog(SysConstants.SYS_USER_LOGIN_STATUS_PASSWORD_WRONG, loginName, request);
@@ -70,7 +69,7 @@ public class WebLoginResultHandler implements AuthenticationSuccessHandler,Authe
 			loginLog(SysConstants.SYS_USER_LOGIN_STATUS_PASSWORD_WRONG, loginName, request);
 		} else if (exception instanceof LockedException) {
 			result.setMsg("user is lock");
-			logger.warn("user:{} is lock", loginName);
+			logger.warn("user is lock loginName:{}", loginName);
 			loginLog(SysConstants.SYS_USER_LOGIN_STATUS_LOCK_24, loginName, request);
 		} else if (exception instanceof DisabledException) {
 			result.setMsg(exception.getMessage());
