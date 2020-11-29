@@ -2,10 +2,8 @@ package org.qboot.common.security;
 
 import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang3.StringUtils;
-import org.qboot.common.config.SysSecurityConfig;
-import org.qboot.common.exception.errorcode.SystemErrTable;
-import org.qboot.common.utils.SpringContextHolder;
 import org.qboot.common.entity.ResponeModel;
+import org.qboot.common.exception.errorcode.SystemErrTable;
 import org.qboot.common.utils.SpringContextHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +21,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
-import org.springframework.util.CollectionUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
