@@ -1,9 +1,12 @@
 <div class="layui-card">
     <div class="layui-card-body">
         <div class="layui-form toolbar">
-		  	任务名称：<input id="taskName" name="taskName" class="layui-input search-input" type="text" />&emsp;
-		   	任务分组：<input id="groupName" name="groupName" class="layui-input search-input" type="text" />&emsp;
-			Job实例：<input id="taskTarget" name="taskTarget" class="layui-input search-input" type="text" />&emsp;
+			<span class="layui-i18n" i18n-key="sys.task.name"></span>
+			<input id="search_taskName" name="taskName" class="layui-input search-input i18n-input-hint" type="text" i18n-key="sys.task.name" type="text"/>&emsp;
+			<span class="layui-i18n" i18n-key="sys.task.group"></span>
+			<input id="search_groupName" name="groupName" class="layui-input search-input i18n-input-hint" type="text" i18n-key="sys.task.group" type="text"/>&emsp;
+			<span class="layui-i18n" i18n-key="sys.task.table.taskTarget"></span>
+			<input id="search_taskTarget" name="taskTarget" class="layui-input search-input i18n-input-hint" type="text" i18n-key="sys.task.table.taskTarget" type="text"/>&emsp;
 			<select name="status" lay-verify="">
 			  <option value="-1">请选择状态</option>
 			  <option value="1">启用</option>
@@ -14,9 +17,9 @@
 			  <option value="0">初始</option>
 			  <option value="1">执行中</option>
 			</select>&emsp; 
-			<button id="task-btn-search" class="layui-btn icon-btn task_auth" data-auth="sys:task:qry"><i class="layui-icon">&#xe615;</i>搜索</button><br><br>
-			<button id="task-btn-add" class="layui-btn icon-btn task_auth" data-auth="sys:task:save"><i class="layui-icon">&#xe654;</i>新增</button>
-        </div>
+			<button id="task-btn-search" class="layui-btn icon-btn  layui-btn-search task_auth" data-auth="sys:task:qry"></button><br><br>
+			<button id="task-btn-add" class="layui-btn icon-btn layui-icon layui-icon-add-circle-fine task_auth layui-i18n" i18n-key="sys.form.operation.add" data-auth="sys:task:save"></button>
+		</div>
         
 		  <div id="taskLayTable">
 		  	<div class="layui-row">
@@ -45,9 +48,9 @@
         var _i18n = layui._i18n;
         var msgs = _i18n.getMsg('sys');
         
-        var taskName = $('#taskName').val();
-        var groupName = $('#groupName').val();
-        var taskTarget = $('#taskTarget').val();
+        var taskName = $('#search_taskName').val();
+        var groupName = $('#search_groupName').val();
+        var taskTarget = $('#search_taskTarget').val();
 
         // 渲染表格
         table.render({
@@ -204,12 +207,12 @@
 							}else{
 								return "未知" ;
 							}
-						},sort: true, title: "执行结果",width:120},
-					{field: 'costTime', sort: true,templet: function (d) {return admin.accDiv(d.costTime,1000);}, title: "执行耗时(s)",width:120},
-					{field: 'execIp', sort: false, title: "执行节点IP",width:120},
-					{field: 'execResult', sort: false, title: "描述",width:200},
-					{field: 'beginTime', sort: true,templet: function (d) {return util.toDateString(d.beginTime);}, title: "开始时间",width:160},
-					{field: 'endTime', sort: true,templet: function (d) {return util.toDateString(d.endTime);}, title: "结束时间",width:160},
+						},sort: true, title: msgs['sys.task.table.execStatus'],width:120},
+					{field: 'costTime', sort: true,templet: function (d) {return admin.accDiv(d.costTime,1000);}, title: msgs['sys.task.table.costTime'],width:120},
+					{field: 'execIp', sort: false, title: msgs['sys.task.table.execIp'],width:120},
+					{field: 'execResult', sort: false, title: msgs['sys.task.table.execResult'],width:200},
+					{field: 'beginTime', sort: true,templet: function (d) {return util.toDateString(d.beginTime);}, title: msgs['sys.task.table.beginTime'],width:160},
+					{field: 'endTime', sort: true,templet: function (d) {return util.toDateString(d.endTime);}, title: msgs['sys.task.table.endTime'],width:160},
 	                ]],
 	                done: function(res, curr, count){
 	                	var data = res.data;
@@ -253,8 +256,8 @@
             
         };
 		var reloadTable = function (){
-			 table.reload('task-table', {where: {taskName: $('#taskName').val(), groupName: $('#groupName').val(),
-	            	taskTarget: $('#taskTarget').val(),status: $('select[name="status"]').val(),runStatus: $('select[name="runStatus"]').val()}, page:1});
+			 table.reload('task-table', {where: {taskName: $('#search_taskName').val(), groupName: $('#search_groupName').val(),
+	            	taskTarget: $('#search_taskTarget').val(),status: $('select[name="status"]').val(),runStatus: $('select[name="runStatus"]').val()}, page:1});
 		}
         // 搜索按钮点击事件
         $('#task-btn-search').click(function () {
