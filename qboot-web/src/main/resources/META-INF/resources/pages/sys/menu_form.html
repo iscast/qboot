@@ -136,7 +136,7 @@
         	var selectVal = $('#parentMenu').find('option:selected').val();
         	var menuType = $('#type').val();
         	if(menuType != 0 && (selectVal == null || selectVal == '')){
-        		layer.msg('请选择父级菜单', {icon: 2});
+        		layer.msg(msgs['sys.form.label.parentMenu'], {icon: 2});
         		return false;
         	}
         	$('#parentId').val(selectVal);
@@ -149,13 +149,14 @@
             }
             admin.req(postUrl, data.field, function (data) {
                 layer.closeAll('loading');
-                if (data.code == 0) {
-                    layer.msg(data.msg, {icon: 1});
-                    admin.refresh();
-                    layer.closeAll('page');
-                } else {
-                    layer.msg(data.msg, {icon: 2});
+                if (data.code != 0) {
+                    layer.msg(msgs['layer.error.code'] + data.code + msgs['layer.error.msg'] + data.msg, {icon: 2});
+                    return
                 }
+
+                layer.msg(data.msg, {icon: 1});
+                admin.refresh();
+                layer.closeAll('page');
             }, $('#menu-form').attr('method'));
             return false;
         });
@@ -185,23 +186,24 @@
         layer.load(2);
         admin.req('/sys/menu/qryParentMenus', {}, function (data) {
             layer.closeAll('loading');
-            if (0 == data.code) {
-                // 渲染多选下拉框
-                var parentMenus = "";
-                for (var i = 0; i < data.data.length; i++) {
-                    var menuName = _i18n.getGlobalVal(data.data[i].name)?_i18n.getGlobalVal(data.data[i].name):data.data[i].name;
-                    if(m_parentId != null && m_parentId == data.data[i].id){
-                    	parentMenus+='<option value="'+data.data[i].id+'" selected="selected" >'+menuName+'</option>';
-                    	$("#parentId").val(m_parentId);
-                    }else{
-                    	parentMenus+='<option value="'+data.data[i].id+'">'+menuName+'</option>';
-                    }
-                } 
-                $("#parentMenu").append(parentMenus);
-                form.render();
-            } else {
-                layer.msg('获取菜单列表失败', {icon: 2});
+            if (0 != data.code) {
+                layer.msg(msgs['layer.error.code'] + data.code + msgs['layer.error.msg'] + data.msg, {icon: 2});
+                return
             }
+
+            // 渲染多选下拉框
+            var parentMenus = "";
+            for (var i = 0; i < data.data.length; i++) {
+                var menuName = _i18n.getGlobalVal(data.data[i].name)?_i18n.getGlobalVal(data.data[i].name):data.data[i].name;
+                if(m_parentId != null && m_parentId == data.data[i].id){
+                    parentMenus+='<option value="'+data.data[i].id+'" selected="selected" >'+menuName+'</option>';
+                    $("#parentId").val(m_parentId);
+                }else{
+                    parentMenus+='<option value="'+data.data[i].id+'">'+menuName+'</option>';
+                }
+            }
+            $("#parentMenu").append(parentMenus);
+            form.render();
         }, 'GET');
 
         form.render();//表单重新渲染，要不然添加完显示不出来新的option

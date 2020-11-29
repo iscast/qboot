@@ -4,16 +4,16 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
-import org.qboot.sys.dto.SysTaskDto;
-import org.qboot.sys.dto.SysTaskLogDto;
-import org.qboot.sys.service.impl.SysTaskLogService;
-import org.qboot.sys.service.impl.SysTaskService;
 import org.qboot.common.constants.CacheConstants;
 import org.qboot.common.constants.SysConstants;
-import org.qboot.common.exception.CommonExceptionCode;
-import org.qboot.common.exception.ServiceException;
+import org.qboot.common.utils.IpUtils;
 import org.qboot.common.utils.RedisTools;
 import org.qboot.common.utils.SpringContextHolder;
+import org.qboot.sys.dto.SysTaskDto;
+import org.qboot.sys.dto.SysTaskLogDto;
+import org.qboot.sys.exception.SysTaskException;
+import org.qboot.sys.service.impl.SysTaskLogService;
+import org.qboot.sys.service.impl.SysTaskService;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.SchedulerException;
@@ -22,11 +22,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.qboot.sys.exception.errorcode.SysModuleErrTable.SYS_TASK_EXECUTE_NULL;
 
 /**
  * Job 代理类
@@ -53,8 +53,8 @@ public class JobProxy{
 	public void execute(JobExecutionContext jobCtx) throws JobExecutionException {
 		SysTaskDto sysTask =  (SysTaskDto)jobCtx.getMergedJobDataMap().get(CacheConstants.JOB_DATA_MAP_KEY);
 		if (sysTask == null) {
-			logger.warn("{},run_time:{}", CommonExceptionCode.TASK_EXECUTE_NULL,dateFormat.format(new Date(jobCtx.getJobRunTime())));
-			throw new ServiceException(CommonExceptionCode.TASK_EXECUTE_NULL);
+			logger.warn("{},run_time:{}", "task.execute.null", dateFormat.format(new Date(jobCtx.getJobRunTime())));
+            throw new SysTaskException(SYS_TASK_EXECUTE_NULL);
 		}
 		// 记录任务执行开始日志
 		Long logId = null ;
@@ -95,18 +95,16 @@ public class JobProxy{
 			}
 			
 			// 获取任务具体执行服务
-			BaseJob job = SpringContextHolder.getBean(sysTask.getTaskTarget(),BaseJob.class);
+			BaseJob job = SpringContextHolder.getBean(sysTask.getTaskTarget(), BaseJob.class);
 			
 			if (job == null) {
 				logger.error("{}, taskName:{},runTime:{}",
-						CommonExceptionCode.TASK_EXECUTE_NULL,sysTask.getTaskName(),
-						dateFormat.format(new Date(jobCtx.getJobRunTime()).toString()));
+                        "task.execute.null", sysTask.getTaskName(), dateFormat.format(new Date(jobCtx.getJobRunTime()).toString()));
 				
-				updateTasktLog(logId, CommonExceptionCode.TASK_EXEC_STATUS_FAILED,
-						String.format("%s, task_name:%s,run_time:%s", CommonExceptionCode.TASK_EXECUTE_NULL,
+				updateTasktLog(logId, SysConstants.TASK_EXEC_STATUS_FAILED,
+						String.format("%s, task_name:%s,run_time:%s", "task.execute.null",
 								sysTask.getTaskName(),dateFormat.format(new Date(jobCtx.getJobRunTime()).toString())),sysTask);
-				
-				throw new ServiceException(CommonExceptionCode.TASK_EXECUTE_NULL);
+                throw new SysTaskException(SYS_TASK_EXECUTE_NULL);
 			}
 		
 			//放入TaskID
@@ -114,12 +112,12 @@ public class JobProxy{
 			params.put(SysConstants.TASK_MAP_PARAMS_KEY_LAST_RUNTIME, sysTask.getLastRunTime()) ;
 			params.put(SysConstants.TASK_MAP_PARAMS_KEY_LAST_RESULT, sysTask.getLastResult()) ;
 			String execResult = job.execute(params);
-			updateTasktLog(logId, CommonExceptionCode.TASK_EXEC_STATUS_SUCCESS,execResult,sysTask);
+			updateTasktLog(logId, SysConstants.TASK_EXEC_STATUS_SUCCESS,execResult,sysTask);
 			logger.info("任务执行结束：{}", sysTask.toString());
 			
 		} catch (Exception e) {
 			logger.error("执行定时任务异常:{}", sysTask.toString(), e);
-			updateTasktLog(logId, CommonExceptionCode.TASK_EXEC_STATUS_FAILED, CommonExceptionCode.TASK_EXECUTE_ERROR,sysTask);
+			updateTasktLog(logId, SysConstants.TASK_EXEC_STATUS_FAILED, "task.execute.error", sysTask);
 		} 
 	}
 
@@ -133,7 +131,7 @@ public class JobProxy{
 		SysTaskLogDto taskLog = new SysTaskLogDto();
 		taskLog.setTaskId(taskId);
 		taskLog.setBeginTime(beginTime);
-		taskLog.setExecIp(this.getHostAddress());
+		taskLog.setExecIp(IpUtils.getLocalIp());
 		taskLog.setCreateDate(new Date());
 		taskLog.setUpdateDate(new Date());
 		this.sysTaskLogService.save(taskLog);
@@ -161,24 +159,10 @@ public class JobProxy{
 		taskLog.setUpdateDate(new Date());
 		sysTaskLogService.updateById(taskLog);
 		//记录上一次执行成功的时间
-		if(CommonExceptionCode.TASK_EXEC_STATUS_SUCCESS==execStatus){
+		if(SysConstants.TASK_EXEC_STATUS_SUCCESS==execStatus){
 			systask.setLastResult(execResult);
 			systask.setLastRunTime(taskLog.getBeginTime());
 			sysTaskService.updateResult(systask) ;
 		}
-	}
-	/**
-	 * 获取本机IP地址
-	 * @return
-	 */
-	private String getHostAddress(){
-		InetAddress inetAddres;
-		try {
-			inetAddres = InetAddress.getLocalHost();
-			return inetAddres.getHostAddress() ;
-		} catch (UnknownHostException e) {
-			logger.error("UnknownHostException",e);
-		}
-		return null ;
 	}
 }

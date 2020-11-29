@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 /**
- * @Description:
+ * spring上下文工具类
  * @Author: iscast
  * @Date: 2020/8/22 19:15
  */

@@ -9,8 +9,7 @@ import org.qboot.common.entity.BaseEntity;
 
 /**
  * <p>Title: SysDict</p>
- * <p>Description: 系统字典参数实体</p>
- * 
+ * <p>Description: 系统字典</p>
  * @author history
  * @date 2018-08-08
  */

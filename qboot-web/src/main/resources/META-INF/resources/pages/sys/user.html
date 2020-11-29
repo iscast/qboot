@@ -48,19 +48,16 @@
                 {type: 'numbers'},
                 {field: 'loginName', sort: true, title: msgs['sys.form.label.loginName']},
                 {field: 'name', sort: true, title: msgs['sys.form.label.name']},
-                {field: 'mobile', sort: true, title: msgs['sys.form.label.tel']},
-                {
-                    sort: true, templet: function (d) {
-                        return util.toDateString(d.createDate);
-                    }, title: msgs['sys.table.title.createTime']
-                },
-                {align: 'center', field: 'status', sort: false, templet: function(d){
+                {field: 'mobile', sort: true, title: msgs['sys.form.label.tel'], width: '15%',},
+                {sort: true, title: msgs['sys.table.title.createTime'], width: '15%',
+                    templet: function (d) { return util.toDateString(d.createDate);}},
+                {align: 'center', field: 'status', width: '10%',  sort: false, templet: function(d){
                 	var auth = JSON.parse(sessionStorage.getItem("auth"));
                 	var page = location.hash.substring(2);
                 	if(auth[page] && auth[page]['sys:user:update']){
                 		var swiftBtn = '<input type="checkbox" lay-filter="user-tpl-state" value="'+d.id
                             +'" lay-skin="switch" lay-text="'
-                            + msgs['sys.table.operation.valid']+'|'+ msgs['sys.table.operation.invalid'] +'"';
+                            + msgs['sys.form.operation.valid']+'|'+ msgs['sys.form.operation.invalid'] +'"';
                 		if(d.status == 0){
                 			swiftBtn+='/>';
                 		}else{
@@ -68,9 +65,9 @@
                 		}
             	        return swiftBtn;
             	    }else{
-            	    	var status = msgs['sys.table.operation.valid'];
+            	    	var status = msgs['sys.form.operation.valid'];
             	    	if(d.status == 0){
-            	    		status = msgs['sys.table.operation.invalid'];
+            	    		status = msgs['sys.form.operation.invalid'];
                 		}
             	    	return status;
             	    }
@@ -78,19 +75,22 @@
                 {align: 'center', templet: function(d){
                 	var auth = JSON.parse(sessionStorage.getItem("auth"));
                 	var page = location.hash.substring(2);
-                	var btn = '';
+                	var btn = '', delBtn = '';
                 	if(auth[page] && auth[page]['sys:user:update']){
                 		btn = '<a class="layui-btn layui-btn-xs" lay-event="edit">'+msgs['sys.form.operation.edit']+'</a>'
-                			+ '<a class="layui-btn layui-btn-xs" lay-event="reset">'+msgs['sys.form.operation.resetPwd']+'</a>';
+                			+ '<a class="layui-btn layui-btn-xs" lay-event="reset">'+msgs['sys.form.operation.resetPwd']+'</a>'
+                			+ '<a class="layui-btn layui-btn-xs" lay-event="unlock">'+msgs['sys.form.operation.unlock']+'</a>';
             	    }
+                    if(auth[page] && auth[page]['sys:user:delete']){
+                        delBtn = '<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" data-auth="sys:user:delete">'+msgs['sys.form.operation.delete']+'</a>';
+                    }
                 	if(btn == ''){
                 		return _i18n.getGlobalVal('layui.operation.tips.noPermission');
                 	}else{
-                		return btn;
+                        return btn+delBtn;
                 	}
                 }, title: msgs['sys.table.title.operation']}
             ]], done: function(res, curr, count){
-                //分页条国际化
                 _i18n.initPage();
             }
         });
@@ -107,23 +107,55 @@
 
             if (layEvent === 'edit') { // 修改
                 showEditModel(data);
+            } else if (layEvent === 'del') { // 删除
+                doDelete(obj);
+            } else if (layEvent === 'unlock') { // 解锁
+                layer.confirm(msgs['layer.confirm.msg.unlock'], _i18n.getBtns(), function (i) {
+                    layer.close(i);
+                    layer.load(2);
+                    admin.req('/sys/user/unlock?id=' + obj.data.id, {}, function (data) {
+                        layer.closeAll('loading');
+                        if (data.code != 0) {
+                            layer.msg(msgs['layer.error.code'] + data.code + msgs['layer.error.msg'] + data.msg, {icon: 2});
+                            return;
+                        }
+                        layer.msg(data.msg, {icon: 1});
+                    }, 'post');
+                });
             } else if (layEvent === 'reset') { // 重置密码
                 layer.confirm(msgs['layer.confirm.msg.resetPwd'],_i18n.getBtns(), function (i) {
                     layer.close(i);
                     layer.load(2);
                     admin.req('/sys/user/initPwd?id=' + obj.data.id, {}, function (data) {
                         layer.closeAll('loading');
-                        if (data.code == 0) {
-                            layer.msg(data.msg, {icon: 1, time: 5000});
-                        } else {
-                            layer.msg(data.msg, {icon: 2});
+                        if (data.code != 0) {
+                            layer.msg(msgs['layer.error.code'] + data.code + msgs['layer.error.msg'] + data.msg, {icon: 2});
+                            return;
                         }
+                        layer.msg(data.msg, {icon: 1, time: 5000});
                     }, 'post');
                 });
             }
         });
 
-        //显示表单弹窗
+        var doDelete = function (obj) {
+            layer.confirm(_i18n.getGlobalVal('ayer.confirm.delete.msg'),_i18n.getBtns(),function (i) {
+                layer.close(i);
+                layer.load(2);
+                admin.req('/sys/user/delete?id=' + obj.data.id, {}, function (data) {
+                    layer.closeAll('loading');
+                    if (data.code != 0) {
+                        layer.msg(msgs['layer.error.code'] + data.code + msgs['layer.error.msg'] + data.msg, {icon: 2});
+                        return
+                    }
+                    layer.msg(data.msg, {icon: 1});
+                    obj.del();
+                }, 'POST');
+            });
+        };
+
+
+    //显示表单弹窗
         var showEditModel = function (data) {
             var title = data ? msgs['layer.confirm.title.editUser'] : msgs['layer.confirm.title.addUser'];
             
@@ -132,18 +164,18 @@
                     id: data.id
                 }, function (data) {
                     layer.closeAll('loading');
-                    if (data.code == 0) {
-                        admin.putTempData('t_user', data.data);
-                        admin.popupCenter({
-                            title: title,
-                            path: 'pages/sys/user_form.html',
-                            finish: function () {
-                                table.reload('user-table', {});
-                            }
-                        });
-                    } else {
-                        layer.msg(data.msg, {icon: 2});
+                    if (data.code != 0) {
+                        layer.msg(msgs['layer.error.code'] + data.code + msgs['layer.error.msg'] + data.msg, {icon: 2});
+                        return;
                     }
+                    admin.putTempData('t_user', data.data);
+                    admin.popupCenter({
+                        title: title,
+                        path: 'pages/sys/user_form.html',
+                        finish: function () {
+                            table.reload('user-table', {});
+                        }
+                    });
                 }, 'post');
             }else{
                 admin.putTempData('t_user', {});
@@ -191,11 +223,12 @@
                 layer.closeAll('loading');
                 if (data.code == 0) {
                     layer.msg(data.msg, {icon: 1});
-                } else {
-                    layer.msg(data.msg, {icon: 2});
-                    $(obj.elem).prop('checked', !obj.elem.checked);
-                    form.render('checkbox');
+                    return
                 }
+
+                layer.msg(msgs['layer.error.code'] + data.code + msgs['layer.error.msg'] + data.msg, {icon: 2});
+                $(obj.elem).prop('checked', !obj.elem.checked);
+                form.render('checkbox');
             }, 'post');
         });
         

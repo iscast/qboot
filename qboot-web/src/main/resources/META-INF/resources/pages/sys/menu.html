@@ -110,10 +110,10 @@
                     	if(auth[page] && auth[page]['sys:menu:update']){
                     		if(d.isShow == 0){
                     			swiftBtn ='&nbsp;<input type="checkbox" lay-filter="menu-tpl-state" value="'+d.id+'" lay-skin="switch" lay-text="'
-										+ msgs['sys.table.operation.valid']+'|'+ msgs['sys.table.operation.invalid'] +'"/>';
+										+ msgs['sys.form.operation.valid']+'|'+ msgs['sys.form.operation.invalid'] +'"/>';
                     		}else{
                     			swiftBtn ='&nbsp;<input type="checkbox" lay-filter="menu-tpl-state" value="'+d.id+'" lay-skin="switch" lay-text="'
-										+ msgs['sys.table.operation.valid']+'|'+ msgs['sys.table.operation.invalid'] +'" checked="checked"/>';
+										+ msgs['sys.form.operation.valid']+'|'+ msgs['sys.form.operation.invalid'] +'" checked="checked"/>';
                     		}
                 	    }
                     	
@@ -216,7 +216,7 @@
                     	var swiftBtn = '';
                     	if(auth[page] && auth[page]['sys:menu:update']){
                     		swiftBtn = '<input type="checkbox" lay-filter="menubtn-tpl-state" value="'+d.id+'" lay-skin="switch" lay-text="'
-							+ msgs['sys.table.operation.valid']+'|'+ msgs['sys.table.operation.invalid'] +'"';
+							+ msgs['sys.form.operation.valid']+'|'+ msgs['sys.form.operation.invalid'] +'"';
                     		if(d.isShow == 0){
                     			swiftBtn+='/>&nbsp;';
                     		}else{
@@ -291,14 +291,15 @@
                 isShow: obj.elem.checked ? 1 : 0
             }, function (data) {
                 layer.closeAll('loading');
-                if (data.code == 0) {
-                    form.render('checkbox');
-                    //admin.refresh();
-                } else {
-                    layer.msg(data.msg, {icon: 2});
+                if (data.code != 0) {
+                    layer.msg(msgs['layer.error.code'] + data.code + msgs['layer.error.msg'] + data.msg, {icon: 2});
                     $(obj.elem).prop('checked', !obj.elem.checked);
                     form.render('checkbox');
+                    return
                 }
+
+                form.render('checkbox');
+                //admin.refresh();
             }, 'GET');
         });
         
@@ -311,15 +312,16 @@
                    isShow: obj.elem.checked ? 1 : 0
                }, function (data) {
                    layer.closeAll('loading');
-                   if (data.code == 0) {
-                       //admin.refresh();
-                       form.render('checkbox');
-                       //window.reload();
-                   } else {
-                       layer.msg(data.msg, {icon: 2});
+                   if (data.code != 0) {
+                       layer.msg(msgs['layer.error.code'] + data.code + msgs['layer.error.msg'] + data.msg, {icon: 2});
                        $(obj.elem).prop('checked', !obj.elem.checked);
                        form.render('checkbox');
+                       return
                    }
+
+                   //admin.refresh();
+                   form.render('checkbox');
+                   //window.reload();
                }, 'GET');
            });
            
@@ -337,19 +339,20 @@
     });
 	function del(obj, id) {
 		layer.confirm("你确定删除数据吗？如果存在下级节点则一并删除，此操作不能撤销！", {icon: 3, title:'提示'},
-				function(index){//确定回调
-					admin.req('/sys/menu/delete?id=' + id, {}, function (data) {
-						layer.closeAll('loading');
-						if (data.code == 0) {
-							layer.msg(data.msg, {icon: 1});
-							admin.refresh();
-						} else {
-							layer.msg(data.msg, {icon: 2});
-						}
-					}, 'GET');
-				},function (index) {//取消回调
-					layer.close(index);
-				}
+            function(index){//确定回调
+                admin.req('/sys/menu/delete?id=' + id, {}, function (data) {
+                    layer.closeAll('loading');
+                    if (data.code != 0) {
+                        layer.msg(msgs['layer.error.code'] + data.code + msgs['layer.error.msg'] + data.msg, {icon: 2});
+                        return
+                    }
+
+                    layer.msg(data.msg, {icon: 1});
+                    admin.refresh();
+                }, 'GET');
+            },function (index) {//取消回调
+                layer.close(index);
+            }
 		);
 	}
 
@@ -360,21 +363,21 @@
 				id: menuId
 			}, function (data) {
 				layer.closeAll('loading');
-				if (data.code == 0) {
-					data.data.menuType = type;
-					admin.putTempData('t_menu', data.data);
+				if (data.code != 0) {
+                    layer.msg(msgs['layer.error.code'] + data.code + msgs['layer.error.msg'] + data.msg, {icon: 2});
+                    return
+                }
 
-					admin.popupCenter({
-						title: title,
-						path: 'pages/sys/menu_form.html',
-						finish: function () {
-							admin.putTempData('t_menu', {});
-							admin.refresh();
-						}
-					});
-				} else {
-					layer.msg(data.msg, {icon: 2});
-				}
+                data.data.menuType = type;
+                admin.putTempData('t_menu', data.data);
+                admin.popupCenter({
+                    title: title,
+                    path: 'pages/sys/menu_form.html',
+                    finish: function () {
+                        admin.putTempData('t_menu', {});
+                        admin.refresh();
+                    }
+                });
 			}, 'post');
 		}
 

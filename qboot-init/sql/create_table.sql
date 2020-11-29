@@ -184,7 +184,7 @@ CREATE TABLE `sys_param_class`
     KEY `CREATE_DATE` (`CREATE_DATE`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
-  DEFAULT CHARSET = utf8mb4 COMMENT ='系统参数';
+  DEFAULT CHARSET = utf8mb4 COMMENT ='系统类型';
 
 DROP TABLE IF EXISTS `sys_param_type`;
 CREATE TABLE `sys_param_type`
@@ -208,7 +208,7 @@ CREATE TABLE `sys_param_type`
     KEY `param_key` (`PARAM_TYPE_ID`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
-  DEFAULT CHARSET = utf8mb4 COMMENT ='系统参数';
+  DEFAULT CHARSET = utf8mb4 COMMENT ='系统类型参数';
 
 DROP TABLE IF EXISTS `sys_role`;
 CREATE TABLE `sys_role`
@@ -270,7 +270,7 @@ CREATE TABLE `sys_task`
     `CREATE_BY`     varchar(64)           DEFAULT NULL COMMENT '创建者',
     `UPDATE_BY`     varchar(64)           DEFAULT NULL COMMENT '更新者',
     `EXEC_TYPE`     tinyint(1)       NOT NULL DEFAULT '0' COMMENT '执行方式:0阻塞 1非阻塞.',
-    `PHYSICS_FLAG`     tinyint(4)      DEFAULT '1' COMMENT '删除标识：1-正常；0-删除',
+    `PHYSICS_FLAG`  tinyint(4)      DEFAULT '1' COMMENT '删除标识：1-正常；0-删除',
     `version`      bigint DEFAULT '1' COMMENT '版本',
     PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE = InnoDB

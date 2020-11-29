@@ -109,29 +109,30 @@ var userType = null;
         layer.load(2);
         admin.req('/sys/role/qryAllWithScope', {}, function (data) {
             layer.closeAll('loading');
-            if (0 == data.code) {
-                // 渲染多选下拉框
-                var roleSelectData = new Array();
-                for (var i = 0; i < data.data.length; i++) {
-                    roleSelectData.push({name: data.data[i].name, value: data.data[i].id});
-                }
-                formSelects.data('roleId', 'local', {arr: roleSelectData});
-
-                // 回显user数据
-                if (user) {
-                    form.val('user-form', user);
-                    var rds = new Array();
-                    if(user.roleIds){
-                    	for (var i = 0; i < user.roleIds.length; i++) {
-                            rds.push(user.roleIds[i]);
-                        }
-                    }
-                    formSelects.value('roleId', rds);
-                }
-                form.render('select');//表单重新渲染，要不然添加完显示不出来新的option
-            } else {
-                layer.msg('获取角色失败', {icon: 2});
+            if (0 != data.code) {
+                layer.msg(msgs['layer.error.code'] + data.code + msgs['layer.error.msg'] + data.msg, {icon: 2});
+                return;
             }
+
+            // 渲染多选下拉框
+            var roleSelectData = new Array();
+            for (var i = 0; i < data.data.length; i++) {
+                roleSelectData.push({name: data.data[i].name, value: data.data[i].id});
+            }
+            formSelects.data('roleId', 'local', {arr: roleSelectData});
+
+            // 回显user数据
+            if (user) {
+                form.val('user-form', user);
+                var rds = new Array();
+                if(user.roleIds){
+                    for (var i = 0; i < user.roleIds.length; i++) {
+                        rds.push(user.roleIds[i]);
+                    }
+                }
+                formSelects.value('roleId', rds);
+            }
+            form.render('select');//表单重新渲染，要不然添加完显示不出来新的option
         }, 'post');
         
         //获取部门
@@ -155,33 +156,35 @@ var userType = null;
         layer.load(2);
         admin.req('/sys/paramtype/getParamType', {paramType:'SYS_USER_TYPE'}, function (data) {
             layer.closeAll('loading');
-            if (0 == data.code) {
-                // 渲染多选下拉框
-            	var seled = "";
-            	for (var i = 0; i < data.data.length; i++) {
-            		if(userType == 2){
-            			if(userType == data.data[i].paramTypeId){
-                    		seled = 'selected="selected"';
-                    		$("#userType").append('<option value="'+data.data[i].paramTypeId+'" '+seled+'>'+data.data[i].paramTypeName+'</option>');
-                    	}
-            		}else{
-            			if(userType == data.data[i].paramTypeId){
-                    		seled = 'selected="selected"';
-                    	}
-                        $("#userType").append('<option value="'+data.data[i].paramTypeId+'" '+seled+'>'+data.data[i].paramTypeName+'</option>');
-            		}
-            	}
-                
-                var userId = $('#id').val();
-                if(userId != null && userId != ''){
-                	$('#loginName').disabled='disabled';
-                	$('#loginName').attr('disabled',true);
-                }
-                form.render();//表单重新渲染，要不然添加完显示不出来新的option
-                form.render('select');//表单重新渲染，要不然添加完显示不出来新的option
-            } else {
-                layer.msg('获取用户类型失败', {icon: 2});
+            if (0 != data.code) {
+                layer.msg(msgs['layer.error.code'] + data.code + msgs['layer.error.msg'] + data.msg, {icon: 2});
+                return;
             }
+
+            // 渲染多选下拉框
+            var seled = "";
+            for (var i = 0; i < data.data.length; i++) {
+                if(userType == 2){
+                    if(userType == data.data[i].paramTypeId){
+                        seled = 'selected="selected"';
+                        $("#userType").append('<option value="'+data.data[i].paramTypeId+'" '+seled+'>'+data.data[i].paramTypeName+'</option>');
+                    }
+                }else{
+                    if(userType == data.data[i].paramTypeId){
+                        seled = 'selected="selected"';
+                    }
+                    $("#userType").append('<option value="'+data.data[i].paramTypeId+'" '+seled+'>'+data.data[i].paramTypeName+'</option>');
+                }
+            }
+
+            var userId = $('#id').val();
+            if(userId != null && userId != ''){
+                $('#loginName').disabled='disabled';
+                $('#loginName').attr('disabled',true);
+            }
+            form.render();//表单重新渲染，要不然添加完显示不出来新的option
+            form.render('select');//表单重新渲染，要不然添加完显示不出来新的option
+
         }, 'GET');
 
         // 表单提交事件
@@ -196,16 +199,18 @@ var userType = null;
             }
             admin.req(url, data.field, function (data) {
                 layer.closeAll('loading');
-                if (data.code == 0) {
-                    if(isSave){
-                    	layer.msg(data.msg, {icon: 1, time: 5000});
-                    }else{
-                    	layer.msg(data.msg, {icon: 1});
-                    }
-                    admin.finishPopupCenter();
-                } else {
-                    layer.msg(data.msg, {icon: 2});
+                if (data.code != 0) {
+                    layer.msg(msgs['layer.error.code'] + data.code + msgs['layer.error.msg'] + data.msg, {icon: 2});
+                    return;
                 }
+
+                if(isSave){
+                    layer.msg(data.msg, {icon: 1, time: 5000});
+                }else{
+                    layer.msg(data.msg, {icon: 1});
+                }
+                admin.finishPopupCenter();
+
             }, $('#user-form').attr('method'));
             return false;
         });

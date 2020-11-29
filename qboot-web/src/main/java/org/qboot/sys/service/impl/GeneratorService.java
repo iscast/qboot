@@ -5,17 +5,18 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.WordUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.qboot.sys.dto.DbTableDto;
+import org.qboot.common.config.FreeMarkerResolver;
+import org.qboot.common.constants.SysConstants;
+import org.qboot.common.enums.GenEnum;
+import org.qboot.common.exception.ErrorCodeException;
+import org.qboot.common.service.BaseService;
+import org.qboot.common.utils.GenTypeMappingUtils;
 import org.qboot.sys.dto.DbTableColumnDto;
+import org.qboot.sys.dto.DbTableDto;
 import org.qboot.sys.dto.GenColumnInfoDto;
 import org.qboot.sys.dto.SysGenDto;
+import org.qboot.sys.exception.SysGenException;
 import org.qboot.sys.vo.SysProjectGenVO;
-import org.qboot.common.constants.SysConstants;
-import org.qboot.common.exception.ServiceException;
-import org.qboot.common.service.BaseService;
-import org.qboot.common.config.FreeMarkerResolver;
-import org.qboot.common.enums.GenEnum;
-import org.qboot.common.utils.GenTypeMappingUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -190,7 +191,7 @@ public class GeneratorService extends BaseService {
 		try {
 			return this.zipCode(sysGen);
 		} catch (IOException e) {
-			throw new ServiceException(e);
+			throw new SysGenException(SysConstants.GLOBAL_DEFAULT_ERROR, e);
 		}
 	}
 

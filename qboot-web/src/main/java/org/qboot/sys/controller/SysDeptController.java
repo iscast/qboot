@@ -22,7 +22,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * <p>Title: DeptController</p>
+ * <p>Title: SysDeptController</p>
  * <p>Description: 部门controller</p>
  * @author history
  * @date 2018-08-08
@@ -30,7 +30,7 @@ import java.util.List;
 @RestController
 @Controller
 @RequestMapping("${admin.path}/sys/dept")
-public class DeptController extends BaseController {
+public class SysDeptController extends BaseController {
 
 	@Autowired
 	private SysDeptService sysDeptService;

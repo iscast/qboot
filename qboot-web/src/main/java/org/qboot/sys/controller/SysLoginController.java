@@ -8,27 +8,37 @@ import org.qboot.sys.service.impl.SysMenuService;
 import org.qboot.sys.service.impl.SysUserService;
 import org.qboot.common.annotation.AccLog;
 import org.qboot.common.controller.BaseController;
-import org.qboot.common.utils.TreeHelper;
 import org.qboot.common.entity.ResponeModel;
 import org.qboot.common.security.CustomUser;
 import org.qboot.common.security.SecurityUtils;
+import org.qboot.common.utils.MyAssertTools;
+import org.qboot.common.utils.RSAsecurity;
+import org.qboot.common.utils.TreeHelper;
+import org.qboot.sys.dto.SysMenuDto;
+import org.qboot.sys.dto.SysUserDto;
+import org.qboot.sys.service.impl.SysMenuService;
+import org.qboot.sys.service.impl.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import reactor.util.function.Tuple2;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+import static org.qboot.sys.exception.errorcode.SysUserErrTable.*;
+
 /**
- * <p>Title: LoginController</p>
- * <p>Description: 系统登录</p>
+ * <p>Title: SysLoginController</p>
+ * <p>Description: 登录控制器</p>
  * @author history
  * @date 2018-08-08
  */
 @RestController
 @RequestMapping("${admin.path}/user")
-public class LoginController extends BaseController {
+public class SysLoginController extends BaseController {
 
 	@Autowired
 	private SysUserService sysUserService;
@@ -41,7 +51,7 @@ public class LoginController extends BaseController {
 
     @Value("${admin.loginUrl:}")
     private String adminLoginUrl;
-	
+
 	private TreeHelper<SysMenuDto> treeHelper = new TreeHelper<SysMenuDto>();
 	
 	@PostMapping("/getUserMenus")
@@ -61,16 +71,16 @@ public class LoginController extends BaseController {
 	@GetMapping("/getUserInfo")
 	public ResponeModel getUserInfo() {
 		CustomUser sysUser = SecurityUtils.getUser();
-		if(sysUser != null) {
-			return ResponeModel.ok(sysUser);
-		}else {
-			return ResponeModel.error("failToFindUserInfo");
+		if(null == sysUser) {
+            return ResponeModel.error(SYS_USER_NOTEXISTS);
 		}
+
+        return ResponeModel.ok(sysUser);
 	}
 
 	@PostMapping("/updateInfo")
 	public ResponeModel updateInfo(SysUserDto user) {
-		Assert.hasLength(user.getName(), "userNameIsEmpty");
+        MyAssertTools.hasLength(user.getName(), SYS_USER_NAME_EMPTY);
 		SysUserDto sysUser = new SysUserDto();
 		sysUser.setPhoto(user.getPhoto());
 		sysUser.setName(user.getName());
@@ -78,7 +88,11 @@ public class LoginController extends BaseController {
 		sysUser.setMobile(user.getMobile());
 		sysUser.setId(SecurityUtils.getUserId());
 		int cnt = sysUserService.update(sysUser);
-		return ResponeModel.ok(cnt);
+        if(cnt > 0) {
+            return ok();
+        }
+        return ResponeModel.error();
+
 	}
 
     @GetMapping("/checkFirstLogin")
@@ -86,7 +100,7 @@ public class LoginController extends BaseController {
     	if (!SecurityUtils.isSuperAdmin(SecurityUtils.getLoginName())) {
     		boolean firstLogin = sysUserService.selectFirstLoginUser(SecurityUtils.getUserId());
         	if(firstLogin) {
-        		return ResponeModel.error("loginFirstTimeHint");
+        		return ResponeModel.error(SYS_USER_LOGIN_FIRST_TIME_HINT);
         	}
 		}
 		return ResponeModel.ok();
@@ -97,7 +111,7 @@ public class LoginController extends BaseController {
 	public ResponeModel updatePwd(@RequestParam String password, @RequestParam String oldPassword) {
 		Long userId = SecurityUtils.getUserId();
 		if (!sysUserService.validatePwd(oldPassword, userId)) {
-			return ResponeModel.error("originalPasswordIncorrect");
+			return ResponeModel.error(SYS_USER_ORIGINAL_PWD_INCORRECT);
 		}
 		SysUserDto sysUser = new SysUserDto();
 		sysUser.setId(userId);
@@ -110,7 +124,7 @@ public class LoginController extends BaseController {
 	public ResponeModel switchLanguage(@RequestParam String lang){
 		Long userId = SecurityUtils.getUserId();
 		if (StringUtils.isEmpty(lang)) {
-			return ResponeModel.error("langIncorrect");
+			return ResponeModel.error(SYS_USER_LANG_INCORRECT);
 		}
 		SysUserDto sysUser = new SysUserDto();
 		sysUser.setId(userId);
@@ -126,6 +140,13 @@ public class LoginController extends BaseController {
         return ResponeModel.ok(data);
     }
 
+	@GetMapping("/getPublicKey")
+	public ResponeModel getPublicKey(HttpServletRequest request) {
+		Tuple2<String, String> keyPair = RSAsecurity.getInstance().generateKeyPair();
+		request.getSession().setAttribute("privateKey", keyPair.getT2());
+		return ResponeModel.ok("GetPublicKeySuccess",keyPair.getT1());
+	}
+
     private String loginPage() {
         // 判断是否自定义了登陆页面
         String loginPage = "/login_pc.html";
@@ -135,5 +156,4 @@ public class LoginController extends BaseController {
         }
         return loginPage;
     }
-
 }

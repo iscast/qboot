@@ -1,5 +1,4 @@
 <!-- 表单弹窗 -->
-<link rel="stylesheet" href="pages/css/demo_from.css"/>
 <div class="wsh-layui-item">
     <form id="paramType-addForm" lay-filter="paramType-addForm" class="layui-form model-form">
         <div class="step1">
@@ -178,13 +177,14 @@
             data.field.paramTypeName = $('input[name="zhCN"]').val();
             admin.req(url, data.field, function (data) {
                 layer.closeAll('loading');
-                if (data.code == 0) {
-                    layer.msg(data.msg, {icon: 1});
-                    table.reload('sys_typeclass_table');
-                    layer.closeAll('page');
-                } else {
-                    layer.msg(data.msg, {icon: 2});
+                if (data.code != 0) {
+                    layer.msg(msgs['layer.error.code'] + data.code + msgs['layer.error.msg'] + data.msg, {icon: 2});
+                    return
                 }
+
+                layer.msg(data.msg, {icon: 1});
+                table.reload('sys_typeclass_table');
+                layer.closeAll('page');
             }, 'post');
             return false;
         });

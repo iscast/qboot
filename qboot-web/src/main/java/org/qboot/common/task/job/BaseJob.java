@@ -25,6 +25,5 @@ public interface BaseJob {
 	 * 			lastResult		String	上一次执行成功的执行结果 			{@link SysConstants.TASK_MAP_PARAMS_KEY_LAST_RESULT}<br/>
 	 * @return 执行结果描述,将持久化至 {@link SysTaskLog.execResult}
 	 */
-	public String execute(Map<String, Object> params);
-	
+	String execute(Map<String, Object> params);
 }

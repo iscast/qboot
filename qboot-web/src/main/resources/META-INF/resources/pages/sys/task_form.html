@@ -133,16 +133,17 @@
             console.log(data.field.params);
             admin.req(url, data.field, function (data) {
                 layer.closeAll('loading');
-                if (data.code == 0) {
-                    if(isSave){
-                    	layer.msg(data.msg, {icon: 1, time: 5000});
-                    }else{
-                    	layer.msg(data.msg, {icon: 1});
-                    }
-                    admin.finishPopupCenter();
-                } else {
-                    layer.msg(data.msg, {icon: 2});
+                if (data.code != 0) {
+                    layer.msg(msgs['layer.error.code'] + data.code + msgs['layer.error.msg'] + data.msg, {icon: 2});
+                    return
                 }
+
+                if(isSave){
+                    layer.msg(data.msg, {icon: 1, time: 5000});
+                }else{
+                    layer.msg(data.msg, {icon: 1});
+                }
+                admin.finishPopupCenter();
             }, "POST");
             return false;
         });

@@ -2,6 +2,7 @@ package org.qboot.common.utils;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.qboot.common.constants.CacheConstants;
 import org.redisson.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +24,6 @@ public class RedisTools {
     @Autowired
     private RedissonClient redissonClient;
     private final Long DEFAULT_CACHE_SECONDS = 3600L;
-    private final String LOCK_KEY = "REDISSON_LOCK_";
 
     public RedisTools() {
     }
@@ -224,7 +224,7 @@ public class RedisTools {
     }
 
     public boolean lock(String lockname, long timeout) {
-        String key = "REDISSON_LOCK_" + lockname;
+        String key = CacheConstants.CACHE_LOCK_KEY + lockname;
         RLock lock = this.getRLock(key);
 
         try {
@@ -250,7 +250,6 @@ public class RedisTools {
             }
 
         }
-
         return true;
     }
 
@@ -259,7 +258,7 @@ public class RedisTools {
     }
 
     public void unlock(String lockname) {
-        String key = "REDISSON_LOCK_" + lockname;
+        String key = CacheConstants.CACHE_LOCK_KEY + lockname;
         RLock lock = this.getRLock(key);
         lock.unlock();
         logger.debug("lockKey:{} 解锁成功", key);

@@ -1,5 +1,6 @@
 package org.qboot.sys.service.impl;
 
+import org.qboot.common.utils.MyAssertTools;
 import org.qboot.sys.dao.SysDictDao;
 import org.qboot.sys.dto.SysDictDto;
 import org.qboot.common.constants.CacheConstants;
@@ -7,10 +8,11 @@ import org.qboot.common.service.CrudService;
 import org.qboot.common.utils.RedisTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+
+import static org.qboot.sys.exception.errorcode.SysModuleErrTable.*;
 
 /**
  * <p>Title: SysDictService</p>
@@ -26,7 +28,7 @@ public class SysDictService extends CrudService<SysDictDao, SysDictDto> {
 
 	public int setStatus(SysDictDto t) {
 		SysDictDto sysDict = this.findById(t.getId());
-		Assert.notNull(sysDict,"dictExists");
+        MyAssertTools.notNull(sysDict, SYS_DICT_NO_EXIST);
 		sysDict.setStatus(t.getStatus());
 		sysDict.setUpdateBy(t.getUpdateBy());
 		sysDict.setUpdateDate(t.getUpdateDate());
@@ -34,7 +36,7 @@ public class SysDictService extends CrudService<SysDictDao, SysDictDto> {
 	}
 
 	public List<SysDictDto> findTypes(String type) {
-        Assert.notNull(type, "typeIsEmpty");
+	    MyAssertTools.hasLength(type, SYS_DICT_TYPE_NULL);
         String key = CacheConstants.CACHE_PREFIX_SYS_DICT_TYPE + type;
         List<SysDictDto> sdlist = redisTools.get(key);
         if(CollectionUtils.isEmpty(sdlist)) {

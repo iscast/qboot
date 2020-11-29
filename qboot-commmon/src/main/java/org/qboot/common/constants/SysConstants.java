@@ -27,14 +27,13 @@ public class SysConstants {
 
 
     /**
-     * default sucess response code
+     * default sucess code
      */
-    public final static String GLOBAL_DEFAULT_SUCCESS = "0";
+    public final static int GLOBAL_DEFAULT_SUCCESS = 0;
     /**
      * default error response code
-     * 默认逻辑错误响应吗,ResponeCodeException  默认错误也是这个，前端会对这个进行统一错误提示。
      */
-    public final static String GLOBAL_DEFAULT_ERROR = "-1";
+    public final static int GLOBAL_DEFAULT_ERROR = -1;
 
     public final static String GLOBAL_DEFAULT_SUCCESS_MSG = SUCESS;
 
@@ -43,7 +42,7 @@ public class SysConstants {
 	/**
 	 * super Administrator id
 	 */
-	public static final String SUPER_ADMIN_ID = "1";
+	public static final Long SUPER_ADMIN_ID = 1L;
     /**
      * super Administrator name
      */
@@ -86,5 +85,12 @@ public class SysConstants {
 	/** login status end */
 
     public static final char GAP_VERTICAL = '|';
+
+
+    /**任务执行失败*/
+    public static final int TASK_EXEC_STATUS_FAILED = 2;
+
+    /**任务执行成功*/
+    public static final int TASK_EXEC_STATUS_SUCCESS = 1;
 
 }

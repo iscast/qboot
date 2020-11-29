@@ -109,10 +109,10 @@ public class OperLogReceiverService extends CrudService<SysOperateLogDao, SysOpe
 						TimeUnit.SECONDS.sleep(5);
 						sleepSeconds +=5;
 					} catch (InterruptedException e) {
-						e.printStackTrace();
+						logger.error("optlog save fail", e);
 					}
-				} 
-				
+				}
+
 				if(sleepSeconds >= 60){
 					sleepSeconds = 0L;
 					isExec = true;

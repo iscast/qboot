@@ -2,7 +2,7 @@ admin:
   path: ''
 #  loginUrl: http://127.0.0.1:9000/login_pc.html
 server:
-  port: 9000
+  port: 8800
 spring:
   application:
     name: qboot

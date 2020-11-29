@@ -1,8 +1,8 @@
 package org.qboot.sys.controller;
 
 import com.github.pagehelper.PageInfo;
-import org.qboot.sys.dto.SysOperateLogDto;
-import org.qboot.sys.service.impl.SysOperateLogService;
+import org.qboot.sys.dto.SysLoginLogDto;
+import org.qboot.sys.service.impl.SysLoginLogService;
 import org.qboot.common.controller.BaseController;
 import org.qboot.common.entity.ResponeModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,30 +16,37 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.Serializable;
 
 /**
- * <p>Title: OperateLogController</p>
- * <p>Description: 日志管理</p>
+ * <p>Title: SysLoginLogController</p>
+ * <p>Description: 系统登陆日志</p>
  * @author history
  * @date 2018-08-08
  */
 @RestController
-@RequestMapping("${admin.path}/sys/operatelog")
-public class OperateLogController extends BaseController {
+@RequestMapping("${admin.path}/sys/loginlog")
+public class SysLoginLogController extends BaseController {
 
 	@Autowired
-	private SysOperateLogService operationLogService;
+	private SysLoginLogService sysLoginLogService;
 
-	@PreAuthorize("hasAuthority('sys:operatelog:qry')")
+	@PreAuthorize("hasAuthority('sys:loginlog:qry')")
 	@PostMapping("/qryPage")
-	public ResponeModel qryPage(SysOperateLogDto sysLog, BindingResult bindingResult) {
-		PageInfo<SysOperateLogDto> page = operationLogService.findByPage(sysLog);
+	public ResponeModel qryPage(SysLoginLogDto sysLoginLog, BindingResult bindingResult) {
+		PageInfo<SysLoginLogDto> page = sysLoginLogService.findByPage(sysLoginLog);
 		return ResponeModel.ok(page);
 	}
 	
-	@PreAuthorize("hasAuthority('sys:operatelog:qry')")
+	@PreAuthorize("hasAuthority('sys:loginlog:qry')")
 	@RequestMapping("/get")
 	public ResponeModel get(@RequestParam Serializable id) {
-		SysOperateLogDto sysLog = operationLogService.findById(id);
+		SysLoginLogDto sysLoginLog = sysLoginLogService.findById(id);
 		//富文本处理
-		return ResponeModel.ok(sysLog);
+		return ResponeModel.ok(sysLoginLog);
 	}
+
+	@PreAuthorize("hasAuthority('sys:loginlog:qry')")
+	@PostMapping("/qryOnlineUser")
+	public ResponeModel qryOnlineUser() {
+        return ResponeModel.error();
+	}
+	
 }

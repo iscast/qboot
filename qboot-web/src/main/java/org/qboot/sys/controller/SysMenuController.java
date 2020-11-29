@@ -26,15 +26,17 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.qboot.sys.exception.errorcode.SysModuleErrTable.*;
+
 /**
- * <p>Title: MenuController</p>
+ * <p>Title: SysMenuController</p>
  * <p>Description: 系统菜单权限</p>
  * @author history
  * @date 2018-08-08
  */
 @RestController
 @RequestMapping("${admin.path}/sys/menu")
-public class MenuController extends BaseController {
+public class SysMenuController extends BaseController {
 	
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -49,7 +51,7 @@ public class MenuController extends BaseController {
 	@GetMapping("/qryAuth")
 	public ResponeModel qryAuth() {
 		if(SecurityUtils.getUserId() == null) {
-			return ResponeModel.error("-1", "sys.response.msg.failToLoadAuth");
+			return ResponeModel.error(SYS_MENU_NO_AUTH);
 		}
 		List<SysMenuDto> list = new ArrayList<SysMenuDto>();
 		if(SecurityUtils.isSuperAdmin()) {
@@ -60,14 +62,17 @@ public class MenuController extends BaseController {
 		}else {
 			list = sysMenuService.qryAuth(SecurityUtils.getUserId());
 		}
-		
+
+		if(CollectionUtils.isEmpty(list)) {
+            return ResponeModel.error(SYS_MENU_NO_EXIST);
+        }
+
 		return ResponeModel.ok(treeHelper.treeGridList(list));
 	}
 	
 	@GetMapping("/qryAllMenus")
 	public ResponeModel qryAllMenus(@RequestParam(required=false) String roleId) {
 		try {
-			
 			List<SysMenuDto> list = new ArrayList<SysMenuDto>();
 			if(!SecurityUtils.isSuperAdmin()) {
 				List<SysRoleDto> roles = sysRoleService.findByUserId(SecurityUtils.getUserId());
@@ -98,19 +103,28 @@ public class MenuController extends BaseController {
 			if(StringUtils.isNotBlank(roleId)) {
 				roleAuths = sysMenuService.findByRoleId(roleId);
 			}
+
 			List<AuthTreeEntity> treeList = authTreeList(list, roleAuths);
+			if(CollectionUtils.isEmpty(treeList)) {
+                return ResponeModel.error(SYS_MENU_LOAD_FAIL);
+            }
+
 			Map<String, Object> retMap = new HashMap<String, Object>();
 			retMap.put("trees", treeList);
 			return ResponeModel.ok(retMap);
 		} catch (Exception e) {
-			logger.error("权限加载失败, {}", ExceptionUtils.getStackTrace(e));
+			logger.error("load auth menu fail:{}", ExceptionUtils.getStackTrace(e));
+		    return ResponeModel.error(SYS_MENU_NO_EXIST);
 		}
-		return ResponeModel.error();
 	}
 	
 	@GetMapping("/qryMenus")
-	public ResponeModel qryParentMenus(@RequestParam(required=false) String parentId) {
+	public ResponeModel qryMenus(@RequestParam(required=false) String parentId) {
 		List<SysMenuDto> list = sysMenuService.findMenuByParentId(parentId);
+		if(CollectionUtils.isEmpty(list)) {
+		    logger.warn("user{} qryMenus by parentId:{} is null", SecurityUtils.getUserId(), parentId);
+            return ResponeModel.error(SYS_MENU_NO_EXIST);
+        }
 		return ResponeModel.ok(list);
 	}
 	
@@ -120,6 +134,10 @@ public class MenuController extends BaseController {
 		sysMenu.setSortField("id,sort");
 		sysMenu.setDirection(SysConstants.DESC);
 		List<SysMenuDto> list = sysMenuService.findParentMenuList(sysMenu);
+        if(CollectionUtils.isEmpty(list)) {
+            logger.warn("user{} qryMenus by sysMenu is null", SecurityUtils.getUserId());
+            return ResponeModel.error(SYS_MENU_NO_EXIST);
+        }
 		return ResponeModel.ok(list);
 	}
 	
@@ -127,6 +145,9 @@ public class MenuController extends BaseController {
 	@RequestMapping("/get")
 	public ResponeModel get(@RequestParam Serializable id) {
 		SysMenuDto sysMenu = sysMenuService.findById(id);
+		if(null == sysMenu) {
+            return ResponeModel.error(SYS_MENU_QUERY_FAIL);
+        }
 		return ResponeModel.ok(sysMenu);
 	}
 
@@ -136,7 +157,7 @@ public class MenuController extends BaseController {
 	public ResponeModel save(@Validated SysMenuDto sysMenu, BindingResult bindingResult) {
 		SysMenuDto menu = sysMenuService.findByPermission(sysMenu.getPermission());
 		if(menu != null) {
-			return ResponeModel.error("authDuplicate");
+			return ResponeModel.error(SYS_MENU_DUPLICATE);
 		}
 		
 		SysMenuDto parent = null;
@@ -147,12 +168,11 @@ public class MenuController extends BaseController {
 		sysMenu.setIsShow("1");
 		sysMenu.setCreateBy(SecurityUtils.getLoginName());
 		sysMenu.setCreateDate(new Date());
-		int cnt = sysMenuService.save(sysMenu);
-		if(cnt > 0) {
-			return ResponeModel.ok();
-		}else {
-			return ResponeModel.error();
+
+		if(sysMenuService.save(sysMenu) > 0) {
+			return ok();
 		}
+        return ResponeModel.error(SYS_MENU_SAVE_FAIL);
 	}
 
     @AccLog
@@ -161,7 +181,7 @@ public class MenuController extends BaseController {
 	public ResponeModel update(@Validated SysMenuDto sysMenu, BindingResult bindingResult) {
 		SysMenuDto menu = sysMenuService.findByPermission(sysMenu.getPermission());
 		if(menu != null && !String.valueOf(menu.getId()).equals(sysMenu.getId())) {
-			return ResponeModel.error("authDuplicate");
+			return ResponeModel.error(SYS_MENU_DUPLICATE);
 		}
 		
 		SysMenuDto parent = null;
@@ -173,22 +193,19 @@ public class MenuController extends BaseController {
 		sysMenu.setUpdateDate(new Date());
 		int cnt = sysMenuService.updateSelecter(sysMenu);
 		if(cnt > 0) {
-			return ResponeModel.ok();
-		}else {
-			return ResponeModel.error();
+			return ok();
 		}
+        return ResponeModel.error(SYS_MENU_UPDATE_FAIL);
 	}
 
     @AccLog
 	@PreAuthorize("hasAuthority('sys:menu:delete')")
 	@GetMapping("/delete")
 	public ResponeModel delete(@RequestParam Serializable id) {
-		int cnt = sysMenuService.deleteById(id);
-		if(cnt > 0) {
-			return ResponeModel.ok();
-		}else {
-			return ResponeModel.error();
+		if(sysMenuService.deleteById(id) > 0) {
+			return ok();
 		}
+		return ResponeModel.error(SYS_MENU_DELETE_FAIL);
 	}
 
     @AccLog
@@ -196,7 +213,7 @@ public class MenuController extends BaseController {
 	@PostMapping("/batchSave")
 	public ResponeModel batchSave(@RequestBody List<SysMenuDto> list ) {
 		sysMenuService.batchSave(list);
-		return ResponeModel.ok();
+		return ok();
 	}
 	
 	@PostMapping("/qryByRoleId")
@@ -212,17 +229,16 @@ public class MenuController extends BaseController {
 			if(sysMenu != null) {
 				if(sysMenu.getPermission().equals("sys:menu") || sysMenu.getPermission().equals("sys:menu:save")  || sysMenu.getPermission().equals("sys:menu:update") 
 						|| sysMenu.getPermission().equals("sys:menu:delete") || sysMenu.getPermission().equals("sys:menu:qry")) {
-					return ResponeModel.error("cannotDisableMenu");
+					return ResponeModel.error(SYS_MENU_CANNOT_DISABLE);
 				}
 				sysMenu.setIsShow(isShow);
 				int cnt = sysMenuService.changeShowFlag(id, isShow);
 				return ResponeModel.ok(cnt);
 			}
 		} catch (Exception e) {
-			//e.printStackTrace();
-			logger.error("修改菜单状态失败！{}", ExceptionUtils.getStackTrace(e));
+			logger.error("update menu status fail {}", ExceptionUtils.getStackTrace(e));
 		}
-		return ResponeModel.error();
+        return ResponeModel.error(SYS_MENU_UPDATE_FAIL);
 	}
 
     private List<AuthTreeEntity> authTreeList(List<SysMenuDto> list, List<SysMenuDto> roleAuths) {
@@ -235,7 +251,7 @@ public class MenuController extends BaseController {
         List<AuthTreeEntity> result = new ArrayList<>();
         for (SysMenuDto t : list) {//
             if (parentId.equals(t.getParentId())) {
-                // 从跟节点开始
+                // start with root node
                 AuthTreeEntity ate = new AuthTreeEntity();
                 ate.setName(t.getName());
                 ate.setValue(t.getId());

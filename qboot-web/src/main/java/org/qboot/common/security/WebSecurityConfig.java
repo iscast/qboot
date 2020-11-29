@@ -2,6 +2,9 @@ package org.qboot.common.security;
 
 import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang3.StringUtils;
+import org.qboot.common.config.SysSecurityConfig;
+import org.qboot.common.exception.errorcode.SystemErrTable;
+import org.qboot.common.utils.SpringContextHolder;
 import org.qboot.common.entity.ResponeModel;
 import org.qboot.common.utils.SpringContextHolder;
 import org.slf4j.Logger;
@@ -20,6 +23,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
+import org.springframework.util.CollectionUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -63,8 +67,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				"/assets/**",
 				"/module/i18n/*",
                 loginPage,
-				"/sys/user/getPublicKey",
 				"/user/getLoginPage",
+				"/user/getPublicKey",
 				"/module/_config.js").permitAll()
 		.antMatchers((adminPath + "/**")).authenticated()
 		// 允许跨域
@@ -83,7 +87,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			public void commence(HttpServletRequest request, HttpServletResponse response,
 					AuthenticationException authException) throws IOException, ServletException {
 				String requestURI = request.getRequestURI();
-				logger.info("request uri address :{} current user no login!", requestURI);
+				logger.warn("request url :[{}] fail, no login!", requestURI);
 
 				if("/".equals(requestURI)) {
 				    if(StringUtils.isNotBlank(adminLoginUrl)) {
@@ -92,9 +96,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 					    response.sendRedirect("/login_pc.html");
                     }
 				} else {
-					ResponeModel expired = ResponeModel.error(String.valueOf(SecurityStatus.NO_LOGIN.getValue()));
 					response.setContentType("application/json;charset=UTF-8");
-					response.getWriter().print(JSON.toJSONString(expired));
+					response.getWriter().print(JSON.toJSONString(ResponeModel.error(SystemErrTable.AUTH_FAIL)));
 				}
 			}
 		}).accessDeniedHandler(new WebAccessDeniedHandler());
@@ -108,7 +111,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         }
         return loginPage;
     }
-	
+
 	/**
 	 * 配置user-detail服务
 	 */
@@ -119,8 +122,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	/**
 	 * 自定义登录过滤器 customAuthenticationFilter
-	 * @return
-	 * @throws Exception
 	 */
 	@Bean
 	public WebAuthenticationFilter customAuthenticationFilter() throws Exception {

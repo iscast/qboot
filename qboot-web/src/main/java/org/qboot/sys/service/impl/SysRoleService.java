@@ -1,6 +1,7 @@
 package org.qboot.sys.service.impl;
 
 import org.apache.commons.lang3.StringUtils;
+import org.qboot.common.utils.MyAssertTools;
 import org.qboot.sys.dao.SysRoleDao;
 import org.qboot.sys.dto.SysRoleDto;
 import org.qboot.sys.dto.SysRoleDeptDto;
@@ -8,12 +9,13 @@ import org.qboot.sys.dto.SysRoleMenuDto;
 import org.qboot.common.service.CrudService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static org.qboot.sys.exception.errorcode.SysModuleErrTable.*;
 
 /**
  * <p>Title: SysRoleService</p>
@@ -85,18 +87,18 @@ public class SysRoleService extends CrudService<SysRoleDao, SysRoleDto> {
 	}
 
 	public List<SysRoleDto> findByUserId(Long userId) {
-		Assert.notNull(userId, "userIdIsEmpty");
+        MyAssertTools.notNull(userId, SYS_ROLE_USER_ID_NULL);
 		return  this.d.findByUserId(userId);
 	}
 	
 	public List<String> findDeptIdsByRoleId(String roleId){
-		Assert.hasLength(roleId, "roleIdIsEmpty");
+        MyAssertTools.hasLength(roleId, SYS_ROLE_ID_NULL);
 		List<String> depts = this.d.selectDeptIdsByRoleId(roleId);
 		return depts;
 	}
 	public int removeUsersByRoleId(String roleId, List<Long> userIds) {
-		Assert.hasLength(roleId, "roleIdIsEmpty");
-		Assert.notEmpty(userIds, "removedUserNotExist");
+        MyAssertTools.hasLength(roleId, SYS_ROLE_ID_NULL);
+        MyAssertTools.notEmpty(userIds, SYS_ROLE_USER_IDS_NULL);
 		userIds.forEach((userId) -> {
 			this.d.deleteUserRoleByRoleIdAndUserId(roleId, userId);
 		});
@@ -104,8 +106,8 @@ public class SysRoleService extends CrudService<SysRoleDao, SysRoleDto> {
 	}
 	
 	public int addUsersByRoleId(String roleId, List<Long> userIds) {
-		Assert.hasLength(roleId, "roleIdIsEmpty");
-		Assert.notEmpty(userIds,"removedUserNotExist");
+        MyAssertTools.hasLength(roleId, SYS_ROLE_ID_NULL);
+        MyAssertTools.notEmpty(userIds, SYS_ROLE_USER_IDS_NULL);
 		userIds.forEach((userId) -> {
 			this.d.deleteUserRoleByRoleIdAndUserId(roleId, userId);
 			this.d.insertUserRole(roleId, userId);
@@ -114,14 +116,13 @@ public class SysRoleService extends CrudService<SysRoleDao, SysRoleDto> {
 	}
 
 	public List<String> selectMenuIdsByRoleId(Serializable roleId) {
-		Assert.notNull(roleId, "idIsEmpty");
+        MyAssertTools.notNull(roleId, SYS_ROLE_ID_NULL);
 		return this.d.selectMenuIdsByRoleId(roleId);
 	}
 
 	@Transactional(readOnly = true)
 	public SysRoleDto findByName(String name) {
-		Assert.notNull(name, "roleNameIsEmpty");
-		Assert.hasLength(name, "roleNameIsEmpty");
+        MyAssertTools.hasLength(name, SYS_ROLE_NAME_NULL);
 		return d.findByName(name);
 	}
 

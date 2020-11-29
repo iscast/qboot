@@ -1,12 +1,12 @@
 package org.qboot.sys.controller;
 
 import com.github.pagehelper.PageInfo;
-import org.qboot.sys.dto.SysOperateLogInfoDto;
-import org.qboot.sys.service.impl.SysOperateLogInfoService;
 import org.qboot.common.annotation.AccLog;
 import org.qboot.common.controller.BaseController;
 import org.qboot.common.entity.ResponeModel;
 import org.qboot.common.security.SecurityUtils;
+import org.qboot.sys.dto.SysOperateLogInfoDto;
+import org.qboot.sys.service.impl.SysOperateLogInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
@@ -19,14 +19,14 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.Serializable;
 
 /**
- * <p>Title: OperateLogInfoController</p>
+ * <p>Title: SysOperateLogInfoController</p>
  * <p>Description: 系统操作日志</p>
  * @author history
  * @date 2018-08-08
  */
 @RestController
 @RequestMapping("${admin.path}/sys/operateinfo")
-public class OperateLogInfoController extends BaseController {
+public class SysOperateLogInfoController extends BaseController {
 
 	@Autowired
 	private SysOperateLogInfoService operationLogInfoService;
