@@ -79,22 +79,19 @@
 <script>
     layui.config({
         base: 'module/'
-    }).use(['_config', 'form'], function () {
+    }).use(['form'], function () {
         var $ = layui.jquery;
         var form = layui.form;
-        var _config = layui._config;
+        var tableName = 'qboot';
+        var base_server = '';
 
         // repeat reflash login page
         // if (_config.getToken()) {
         //     location.replace('./');
         //     return;
         // }
-        var msgs;
-        var loginLang = $('#loginLang');
-        loginLang.change(function () {
-            switchLangFuc();
-        });
 
+        var msgs;
         var switchLangFuc = function () {
             sessionStorage.setItem("lang",$('#loginLang').val());
             $.ajax({
@@ -114,7 +111,15 @@
             });
         };
 
-        switchLangFuc();
+        $('#loginLang').change(function () {
+            switchLangFuc();
+        });
+
+        $.get('/i18n/getLocale', {}, function (d) {
+            let getLocale = d.data;
+            $('#loginLang').val(getLocale)
+            switchLangFuc();
+        });
 
         // $('.login-footer p').html('© 2019-'+new Date().getUTCFullYear()+' <a href="javascript:;" target="_blank">QBOOT提供支持</a>');
 
@@ -131,9 +136,8 @@
             }
 
             var publicKey;
-            //获取公钥
             $.ajax({
-                url: _config.base_server + "/user/getPublicKey",
+                url: base_server + "/user/getPublicKey",
                 async: false,
                 type: 'get',
                 success: function (data) {
@@ -158,7 +162,10 @@
                 dataType: 'JSON',
                 success: function (data) {
                     if (data.code == 0) {
-                    	_config.putToken(data);
+                        layui.sessionData(tableName, {
+                            key: 'token',
+                            value: JSON.stringify(data)
+                        });
                     	location.replace('./');
                     } else {
                         layer.closeAll('loading');

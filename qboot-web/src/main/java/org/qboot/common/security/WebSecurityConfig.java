@@ -30,7 +30,7 @@ import java.io.IOException;
 /**
  * <p>Title: WebSecurityConfig</p>
  * <p>Description: WEB safe config:</p>
- * @author history
+ * @author iscast
  * @EnableWebSecurity enable Web saft function
  * configure(WebSecurity) 配置Spring Security的Filter链
  * configure(HttpSecurity) 配置如何通过拦截器保护请求
@@ -63,10 +63,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				"/module/encrypt/jsencrypt.js",
 				"/assets/**",
 				"/module/i18n/*",
-                loginPage,
 				"/user/getLoginPage",
+				"/i18n/getLocale",
 				"/user/getPublicKey",
-				"/module/_config.js").permitAll()
+                loginPage).permitAll()
 		.antMatchers((adminPath + "/**")).authenticated()
 		// 允许跨域
 		.antMatchers(HttpMethod.OPTIONS).permitAll() 

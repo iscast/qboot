@@ -22,7 +22,7 @@ import java.util.Locale;
 /**
  * <p>Title: I18nController</p>
  * <p>Description: 国际化控制器</p>
- * @author history
+ * @author iscast
  * @date 2019-04-03 15:58
  */
 @RestController
@@ -35,13 +35,20 @@ public class I18nController extends BaseController {
     @GetMapping("/getLocale")
     public ResponeModel getLocale(HttpSession session, String lang){
         CustomUser user = SecurityUtils.getUser();
-        if(StringUtils.isBlank(lang)&&(user!=null&&StringUtils.isNotBlank(user.getLang()))){
+        if(user!=null && StringUtils.isNotBlank(user.getLang())) {
             String[] i18nStr = user.getLang().split("_");
-            if(i18nStr.length==2){
-                Locale userLocale = new Locale(i18nStr[0],i18nStr[1]);
-                session.setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, userLocale);
-            }
+            Locale userLocale = new Locale(i18nStr[0],i18nStr[1]);
+            session.setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, userLocale);
+            return ResponeModel.ok(userLocale);
         }
+
+        if(StringUtils.isNotBlank(lang)) {
+            String[] i18nStr = lang.split("_");
+            Locale locale = new Locale(i18nStr[0],i18nStr[1]);
+            session.setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, locale);
+            return ResponeModel.ok(locale);
+        }
+
         Locale locale = LocaleContextHolder.getLocale();
         return ResponeModel.ok(locale);
     }
