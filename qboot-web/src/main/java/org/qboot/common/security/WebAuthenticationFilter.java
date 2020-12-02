@@ -1,15 +1,17 @@
 package org.qboot.common.security;
 
 import org.apache.commons.lang3.StringUtils;
+import org.qboot.common.constants.SysConstants;
 import org.qboot.common.filter.ILoginProcessFilter;
 import org.qboot.common.filter.LoginProcessFailException;
 import org.qboot.common.utils.RSAsecurity;
 import org.qboot.common.utils.SpringContextHolder;
 import org.qboot.sys.dto.SysUserDto;
+import org.qboot.sys.service.impl.LoginSecurityService;
 import org.qboot.sys.service.impl.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationServiceException;
-import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -35,6 +37,9 @@ public class WebAuthenticationFilter extends AbstractAuthenticationProcessingFil
 
 	@Autowired
 	private SysUserService sysUserService;
+	@Autowired
+	private LoginSecurityService loginSecurityService;
+
     private ILoginProcessFilter customFilter;
     private String customFilterName;
 
@@ -64,13 +69,17 @@ public class WebAuthenticationFilter extends AbstractAuthenticationProcessingFil
             throw new UsernameNotFoundException("username or password can't be null");
 		}
 		username = RSAsecurity.getInstance().decrypt(String.valueOf(request.getSession().getAttribute("privateKey")), username.trim());
+		 if(loginSecurityService.isLocked(username)) {
+			 throw new LockedException("locked user");
+		 }
+
 		SysUserDto sysUser = sysUserService.findByLoginName(username);
 		if (sysUser == null) {
 			throw new UsernameNotFoundException(username + "account not exist");
 		}
 
-		if (sysUser.getStatus().equals("0")) {
-			throw new DisabledException(username + "账号已锁定，请联系管理员！");
+		if (SysConstants.SYS_DISABLE.equals(sysUser.getStatus())) {
+			throw new LockedException("locked user");
 		}
 
 		// 处理自定义过滤器逻辑

@@ -36,8 +36,6 @@ public class RedisTools {
             if (bucket.isExists()) {
                 value = bucket.get();
             }
-
-            logger.debug("get {} = {}", key, value);
         } catch (Exception e) {
             logger.warn("get {} = {}", new Object[]{key, value, ExceptionUtils.getStackTrace(e)});
         }
@@ -54,9 +52,9 @@ public class RedisTools {
         try {
             bucket = this.redissonClient.getBucket(key);
             bucket.set(value);
-            logger.debug("set {} = {}", key, bucket.get());
+            logger.debug("setNoLimit {} = {}", key, bucket.get());
         } catch (Exception var7) {
-            logger.warn("set {} = {}", new Object[]{key, bucket.get(), ExceptionUtils.getStackTrace(var7)});
+            logger.warn("setNoLimit {} = {}", new Object[]{key, bucket.get(), ExceptionUtils.getStackTrace(var7)});
         }
 
     }
@@ -81,18 +79,16 @@ public class RedisTools {
     public boolean del(String key) {
         RBucket<?> bucket = null;
         boolean isDel = false;
-
         try {
             bucket = this.redissonClient.getBucket(key);
             if (bucket.isExists()) {
                 isDel = bucket.delete();
             }
 
-            logger.debug("del {} :{}", key, isDel);
+            logger.debug("del cache key:{} result:{}", key, isDel);
         } catch (Exception var5) {
             logger.warn("del {}", key, ExceptionUtils.getStackTrace(var5));
         }
-
         return isDel;
     }
 
@@ -105,8 +101,7 @@ public class RedisTools {
             if (bucket.isExists()) {
                 isExpire = bucket.expire(secondsToLive, TimeUnit.SECONDS);
             }
-
-            logger.debug("expire {} :{}", key, isExpire);
+            logger.debug("expire cache key:{} result:{}", key, isExpire);
         } catch (Exception var7) {
             logger.warn("expire {}", key, ExceptionUtils.getStackTrace(var7));
         }

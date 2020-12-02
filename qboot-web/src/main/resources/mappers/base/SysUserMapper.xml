@@ -247,6 +247,17 @@
   </update>
   
   <update id="setStatus" parameterType="org.qboot.sys.dto.SysUserDto" >
-    update sys_user set status = #{status} where id = #{id} 
+    update sys_user set status = #{status} where
+      <choose>
+          <when test="id !=null">
+              id = #{id}
+          </when>
+          <when test="loginName !=null and loginName != ''">
+              login_name = #{loginName}
+          </when>
+          <otherwise>
+              login_name = ''
+          </otherwise>
+      </choose>
   </update>
 </mapper>

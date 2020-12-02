@@ -89,7 +89,7 @@
             // 获取当前用户信息
             index.getUser(function (user) {
                 $('.layui-layout-admin .layui-header').vm(user);
-                index.setLang();
+                index.switchLang();
                 index.initLeftNav(menus);
                 element.render('nav');
                 index.initRouter(menus);

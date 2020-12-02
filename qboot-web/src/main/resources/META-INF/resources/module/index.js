@@ -261,22 +261,34 @@ layui.define(['_config', 'admin', 'layer', 'laytpl', 'element', 'form','_i18n'],
                 }
             }, 'GET');
         },
-        setLang:function(){
+
+        switchLang:function(user_lang){
+            if(null !=user_lang && typeof(user_lang)!='undefined') {
+                sessionStorage.setItem("lang",user_lang);
+                $('#setLang').val(user_lang);
+                return;
+            }
+
             var lang = sessionStorage.getItem("lang");
             if(lang){
                 $('#setLang').val(lang);
-            }else{
-                var user = _config.getUser();
-                if(user&&user.lang){
-                    $('#setLang').val(user.lang);
+                return;
+            }
+
+            var user = _config.getUser();
+            if(user && null != user.lang && typeof(user.lang)!='undefined'){
+                $('#setLang').val(user.lang);
+                sessionStorage.setItem("lang",user.lang);
+            }else {
+                $.ajaxSettings.async = false;
+                $.get('/i18n/getLocale', {}, function (data) {
+                    $('#setLang').val(data.data);
                     sessionStorage.setItem("lang",user.lang);
-                }else {
-                    $.get('/i18n/getLocale', {}, function (data) {
-                        $('#setLang').val(data.data);
-                    })
-                }
+                })
+                $.ajaxSettings.async = true;
             }
         },
+
         // 页面元素绑定事件监听
         bindEvent: function () {
             _i18n.initPage();
@@ -303,19 +315,18 @@ layui.define(['_config', 'admin', 'layer', 'laytpl', 'element', 'form','_i18n'],
             $('#setPsw').click(function () {
                 admin.popupRight('pages/sys/password.html');
             });
-            $('#setLang').change(function () {
-                $.ajax({
-                    url: _config.base_server+'/user/switchLanguage',
-                    data:{access_token:_config.getToken().access_token,lang:$(this).val()},
-                    cache: false,
-                    method: 'get',
-                    success: function(res) {
 
-                    }
+            $('#setLang').change(function () {
+                var newLang = $(this).val();
+                // $.ajaxSettings.async = false;
+                $.get(_config.base_server + '/user/switchLanguage', {lang:newLang}, function(res) {
+                    index.switchLang(newLang);
+                    location.reload();
                 });
-                sessionStorage.setItem("lang",$(this).val());
-                location.reload();
+                // $.ajaxSettings.async = true;
+
             });
+
             // 个人信息
             $('#setInfo').click(function () {
 

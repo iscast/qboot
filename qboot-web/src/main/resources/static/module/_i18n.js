@@ -5,7 +5,6 @@ layui.define(['_config', 'admin'], function (exports) {
     var localeData = lang ? {lang: lang} : {};
     $.get('/i18n/getLocale', localeData, function (d) {
         locale = d.data;
-        //get all global
         var msgs;
         var moduleMsg = {};
         var i18nModuleCahe = {};
