@@ -34,19 +34,24 @@ public class I18nController extends BaseController {
 
     @GetMapping("/getLocale")
     public ResponeModel getLocale(HttpSession session, String lang){
+        if(StringUtils.isNotBlank(lang)) {
+            String[] i18nStr = lang.split("_");
+            Locale locale = new Locale(i18nStr[0],i18nStr[1]);
+            session.setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, locale);
+            return ResponeModel.ok(locale);
+        }
+
+        Object sessionAttr = session.getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
+        if(null != sessionAttr) {
+            return ResponeModel.ok(sessionAttr);
+        }
+
         CustomUser user = SecurityUtils.getUser();
         if(user!=null && StringUtils.isNotBlank(user.getLang())) {
             String[] i18nStr = user.getLang().split("_");
             Locale userLocale = new Locale(i18nStr[0],i18nStr[1]);
             session.setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, userLocale);
             return ResponeModel.ok(userLocale);
-        }
-
-        if(StringUtils.isNotBlank(lang)) {
-            String[] i18nStr = lang.split("_");
-            Locale locale = new Locale(i18nStr[0],i18nStr[1]);
-            session.setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, locale);
-            return ResponeModel.ok(locale);
         }
 
         Locale locale = LocaleContextHolder.getLocale();

@@ -93,7 +93,7 @@
 
         var msgs;
         var switchLangFuc = function () {
-            sessionStorage.setItem("lang",$('#loginLang').val());
+            // sessionStorage.setItem("lang",$('#loginLang').val());
             $.ajax({
                 url: 'module/i18n/global_' + $('#loginLang').val() + '.json',
                 type: "get",
