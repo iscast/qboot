@@ -6,13 +6,13 @@
 
 	<artifactId>${projectName}</artifactId>
  	<packaging>war</packaging>
- 	<version>1.1.1</version>
+ 	<version>1.1.2</version>
 	
 	<dependencies>
 		<dependency>
 			<groupId>org.qboot</groupId>
 			<artifactId>qboot-web</artifactId>
-			<version>1.1.1</version>
+			<version>1.1.2</version>
 		</dependency>
 		
 		<dependency>

@@ -5,12 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>qboot-web</artifactId>
     <packaging>jar</packaging>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
 
     <parent>
         <groupId>org.qboot</groupId>
         <artifactId>qboot-parent</artifactId>
-        <version>1.1.1</version>
+        <version>1.1.2</version>
     </parent>
 
     <properties>
@@ -116,7 +116,7 @@
         <dependency>
             <groupId>org.qboot</groupId>
             <artifactId>qboot-commmon</artifactId>
-            <version>1.1.1</version>
+            <version>1.1.2</version>
         </dependency>
         <dependency>
             <groupId>commons-lang</groupId>
