@@ -1,5 +1,7 @@
 admin:
   path: ''
+#  可自定义项目登陆页面
+#  loginUrl: http://127.0.0.1:9000/login_pc.html
 server:
   port: 8800
 spring:
@@ -37,10 +39,8 @@ spring:
     database: 1
     dnsMonitoring: false
     dnsMonitoringInterval: 5000
-    failedAttempts: 2
     idleConnectionTimeout: 10000
     pingTimeout: 1000
-    reconnectionTimeout: 3000
     retryAttempts: 2
     retryInterval: 1500
     subscriptionConnectionMinimumIdleSize: 1

@@ -37,10 +37,8 @@ spring:
     database: 8
     dnsMonitoring: false
     dnsMonitoringInterval: 5000
-    failedAttempts: 2
     idleConnectionTimeout: 10000
     pingTimeout: 1000
-    reconnectionTimeout: 3000
     retryAttempts: 2
     retryInterval: 1500
     subscriptionConnectionMinimumIdleSize: 1

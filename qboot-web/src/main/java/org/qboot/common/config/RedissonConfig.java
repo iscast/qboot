@@ -27,8 +27,6 @@ public class RedissonConfig {
     private int timeout=3000;
     private int retryAttempts=3;
     private int retryInterval=1500;
-    private int reconnectionTimeout=3000;
-    private int failedAttempts=3;
     private String password = null;
     private int subscriptionsPerConnection=5;
     private String clientName=null;
@@ -55,10 +53,8 @@ public class RedissonConfig {
                 .setSubscriptionConnectionPoolSize(subscriptionConnectionPoolSize)
                 .setSubscriptionsPerConnection(subscriptionsPerConnection)
                 .setClientName(clientName)
-                .setFailedAttempts(failedAttempts)
                 .setRetryAttempts(retryAttempts)
                 .setRetryInterval(retryInterval)
-                .setReconnectionTimeout(reconnectionTimeout)
                 .setTimeout(timeout)
                 .setConnectTimeout(connectTimeout)
                 .setIdleConnectionTimeout(idleConnectionTimeout)
@@ -69,7 +65,7 @@ public class RedissonConfig {
         config.setCodec(codec);
         config.setThreads(thread);
         config.setEventLoopGroup(new NioEventLoopGroup());
-        config.setUseLinuxNativeEpoll(false);
+//        config.setUseLinuxNativeEpoll(false);
         return Redisson.create(config);
     }
 
@@ -135,22 +131,6 @@ public class RedissonConfig {
 
     public void setRetryInterval(int retryInterval) {
         this.retryInterval = retryInterval;
-    }
-
-    public int getReconnectionTimeout() {
-        return reconnectionTimeout;
-    }
-
-    public void setReconnectionTimeout(int reconnectionTimeout) {
-        this.reconnectionTimeout = reconnectionTimeout;
-    }
-
-    public int getFailedAttempts() {
-        return failedAttempts;
-    }
-
-    public void setFailedAttempts(int failedAttempts) {
-        this.failedAttempts = failedAttempts;
     }
 
     public String getPassword() {

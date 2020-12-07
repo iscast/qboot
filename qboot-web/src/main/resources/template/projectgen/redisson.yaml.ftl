@@ -5,8 +5,6 @@ singleServerConfig:
     timeout: 3000
     retryAttempts: 3
     retryInterval: 1500
-    reconnectionTimeout: 3000
-    failedAttempts: 3
     password: SpreDis+dsfjiaDad23SD
     subscriptionsPerConnection: 5
     clientName: null

@@ -24,12 +24,12 @@ spring:
       test-on-return: false
       test-while-idle: true
       time-between-eviction-runs-millis: 60000
-      url: jdbc:mysql://10.13.14.238:3306/horn?useUnicode=true&characterEncoding=utf-8
-      username: horn_rw
+      url: jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=utf-8
+      username: test_rw
       validation-query: select 1
   redisson:
-    address: redis://10.13.14.238:6379
-    password: 8O1hPXKbq0qxF6
+    address: redis://127.0.0.1:6379
+    password: 666666
     codec: org.redisson.codec.FstCodec
     connectTimeout: 10000
     connectionMinimumIdleSize: 12
@@ -37,10 +37,8 @@ spring:
     database: 8
     dnsMonitoring: false
     dnsMonitoringInterval: 5000
-    failedAttempts: 2
     idleConnectionTimeout: 10000
     pingTimeout: 1000
-    reconnectionTimeout: 3000
     retryAttempts: 2
     retryInterval: 1500
     subscriptionConnectionMinimumIdleSize: 1
