@@ -137,45 +137,31 @@
      )
   </insert>
   
-  <insert id="insertBak" parameterType="org.qboot.sys.dto.SysUserDto" >
-    insert into sys_user_bak (dept_id, login_name, password, salt, name, mobile, photo, email, 
-      user_type, status, create_by, create_date, update_by, update_date, remarks)
-    values (#{deptId,jdbcType=VARCHAR}, #{loginName,jdbcType=VARCHAR}, 
-      #{password,jdbcType=VARCHAR}, #{salt,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
-      #{mobile,jdbcType=VARCHAR}, #{photo,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
-      #{userType,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, 
-      #{createDate,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, 
-      #{remarks,jdbcType=VARCHAR})
-      <selectKey keyProperty="id" resultType="java.lang.Long">
-      	select LAST_INSERT_ID() as id
-      </selectKey>
-  </insert>
-  
   <update id="update" parameterType="org.qboot.sys.dto.SysUserDto" >
     update sys_user u
     <set >
       <if test="deptId != null" >
         dept_id = #{deptId},
       </if>
-      <if test="loginName != null" >
+      <if test="loginName != null and loginName != ''" >
         login_name = #{loginName},
       </if>
-      <if test="password != null" >
+      <if test="password != null and password != ''" >
         password = #{password},
       </if>
-      <if test="salt != null" >
+      <if test="salt != null and salt != ''" >
         salt = #{salt},
       </if>
-      <if test="name != null" >
+      <if test="name != null and name != ''" >
         name = #{name},
       </if>
-      <if test="mobile != null" >
+      <if test="mobile != null and mobile != ''" >
         mobile = #{mobile},
       </if>
       <if test="photo != null" >
         photo = #{photo},
       </if>
-      <if test="email != null" >
+      <if test="email != null and email != ''" >
         email = #{email},
       </if>
       <if test="userType != null" >
@@ -187,7 +173,7 @@
       <if test="lang != null" >
          lang = #{lang},
       </if>
-      <if test="updateBy != null" >
+      <if test="updateBy != null and updateBy != ''" >
         update_by = #{updateBy},
       </if>
       <if test="updateDate != null" >
@@ -247,7 +233,8 @@
   </update>
   
   <update id="setStatus" parameterType="org.qboot.sys.dto.SysUserDto" >
-    update sys_user set status = #{status} where
+    update sys_user set status = #{status}, update_by = #{updateBy}, update_date = #{updateDate}
+      where
       <choose>
           <when test="id !=null">
               id = #{id}

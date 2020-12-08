@@ -1,7 +1,9 @@
 package org.qboot.sys.service.impl;
 
+import org.apache.commons.lang3.StringUtils;
 import org.qboot.common.constants.CacheConstants;
 import org.qboot.common.constants.SysConstants;
+import org.qboot.common.security.SecurityUtils;
 import org.qboot.common.service.BaseService;
 import org.qboot.common.utils.RedisTools;
 import org.qboot.sys.dto.SysUserDto;
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import java.util.Date;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -39,6 +42,12 @@ public class LoginSecurityService extends BaseService {
 		SysUserDto unlockUser = new SysUserDto();
 		unlockUser.setLoginName(loginName);
 		unlockUser.setStatus(SysConstants.SYS_ENABLE);
+        unlockUser.setUpdateDate(new Date());
+        String currentUser = SecurityUtils.getLoginName();
+        if(StringUtils.isBlank(currentUser)) {
+            currentUser = SysConstants.SYSTEM_CRATER_NAME;
+        }
+        unlockUser.setUpdateBy(currentUser);
 		sysUserService.setStatus(unlockUser);
 	}
 
@@ -57,6 +66,8 @@ public class LoginSecurityService extends BaseService {
 			SysUserDto lockUser = new SysUserDto();
 			lockUser.setLoginName(loginName);
 			lockUser.setStatus(SysConstants.SYS_DISABLE);
+            lockUser.setUpdateDate(new Date());
+            lockUser.setUpdateBy(SysConstants.SYSTEM_CRATER_NAME);
 			sysUserService.setStatus(lockUser);
 		}
 		return increment;

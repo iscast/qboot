@@ -176,6 +176,8 @@ public class SysUserController extends BaseController {
 		SysUserDto sysUser = new SysUserDto();
 		sysUser.setId(id);
 		sysUser.setStatus(status);
+        sysUser.setUpdateDate(new Date());
+        sysUser.setUpdateBy(SecurityUtils.getLoginName());
 		int cnt = this.sysUserService.setStatus(sysUser);
 		if(cnt > 0) {
 			loginSecurityService.clearUserSessions(sysUser.getLoginName());

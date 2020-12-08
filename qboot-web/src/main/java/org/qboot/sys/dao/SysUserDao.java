@@ -15,15 +15,15 @@ import org.qboot.common.dao.CrudDao;
  */
 public interface SysUserDao extends CrudDao<SysUserDto> {
 
-	public int deleteUserRoleByUserId(Long userId);
+	int deleteUserRoleByUserId(Long userId);
 	
-	public int insertUserRole(List<SysUserRoleDto> list);
+	int insertUserRole(List<SysUserRoleDto> list);
 	
-	public List<SysUserDto> findByLoginName(String loginName);
+	List<SysUserDto> findByLoginName(String loginName);
 	
-	public int updateSelect(SysUserDto sysUser);
+	int updateSelect(SysUserDto sysUser);
 
-	public int initPwd(SysUserDto sysUser);
-	public int setStatus(SysUserDto sysUser);
+	int initPwd(SysUserDto sysUser);
+	int setStatus(SysUserDto sysUser);
 	
 }
