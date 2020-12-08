@@ -58,7 +58,6 @@ var form,table, table1,_config,layer,util,admin,formSelects, msgs;
             even: true,
             height:460,
             cols: [[
-                {type: 'numbers', width: '5%'},
                 {field: 'paramTypeClass', sort: true, title: msgs['sys.form.label.paramTypeClass'], width: '35%'},
                 {field: 'paramTypeName', sort: true, title: msgs['sys.form.label.paramTypeName'], width: '40%'},
                 {align: 'center', sort: false, templet: function(d){
@@ -78,7 +77,7 @@ var form,table, table1,_config,layer,util,admin,formSelects, msgs;
                 	}else{
                 		return swiftBtn;
                 	}
-                }, title: msgs['sys.table.title.operation'], width: '20%'}
+                }, title: msgs['sys.table.title.operation'], width: '25%'}
             ]], done: function(res, curr, count){
 				_i18n.initPage();
 			}
@@ -157,7 +156,6 @@ var form,table, table1,_config,layer,util,admin,formSelects, msgs;
                 even: true,
                 height:460,
                 cols: [[
-                    {type: 'numbers', width: '5%'},
                     {field: 'paramTypeId', sort: true, title: msgs['sys.form.label.paramTypeId'], width: '35%'},
                     {field: 'paramTypeCode', sort: true, title: msgs['sys.form.label.paramTypeCode'], width: '40%'},
                     {align: 'center', sort: false, templet: function(d){
@@ -172,7 +170,7 @@ var form,table, table1,_config,layer,util,admin,formSelects, msgs;
                     	}else{
                     		return swiftBtn;
                     	}
-                    }, title: msgs['sys.table.title.operation'], width: '20%'}
+                    }, title: msgs['sys.table.title.operation'], width: '25%'}
                 ]]
             });
         }

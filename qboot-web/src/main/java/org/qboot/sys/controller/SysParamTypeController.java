@@ -3,10 +3,12 @@ package org.qboot.sys.controller;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.qboot.common.annotation.AccLog;
+import org.qboot.common.constants.CacheConstants;
 import org.qboot.common.controller.BaseController;
 import org.qboot.common.entity.ResponeModel;
 import org.qboot.common.security.SecurityUtils;
 import org.qboot.common.utils.MyAssertTools;
+import org.qboot.common.utils.RedisTools;
 import org.qboot.sys.dto.SysParamTypeDto;
 import org.qboot.sys.service.impl.SysParamTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import static org.qboot.sys.exception.errorcode.SysModuleErrTable.*;
@@ -37,6 +40,8 @@ public class SysParamTypeController extends BaseController {
 
 	@Autowired
 	private SysParamTypeService sysParamService;
+    @Autowired
+    RedisTools redisTools;
 
 	@PreAuthorize("hasAuthority('sys:param:qry')")
 	@PostMapping("/qryPage")
@@ -81,8 +86,8 @@ public class SysParamTypeController extends BaseController {
 			String i18nField = sysParam.getI18nField().replace("&quot;","\"");
 			sysParam.setI18nField(i18nField);
 		}
-		int cnt = sysParamService.save(sysParam);
-		if(cnt > 0) {
+		if(sysParamService.save(sysParam) > 0) {
+            redisTools.del(CacheConstants.CACHE_PREFIX_SYS_PARAMTYPE_KEY + sysParam.getParamTypeClass());
 			return ok();
 		}
 		return ResponeModel.error(SYS_PARAM_TYPE_SAVE_FAIL);
@@ -101,6 +106,7 @@ public class SysParamTypeController extends BaseController {
 			sysParam.setI18nField(i18nField);
 		}
 		if(sysParamService.update(sysParam) > 0) {
+            redisTools.del(CacheConstants.CACHE_PREFIX_SYS_PARAMTYPE_KEY + sysParam.getParamTypeClass());
 			return ResponeModel.ok();
 		}
 		return ResponeModel.error(SYS_PARAM_TYPE_UPDATE_FAIL);
@@ -114,7 +120,10 @@ public class SysParamTypeController extends BaseController {
 		SysParamTypeDto sysParam = new SysParamTypeDto();
 		sysParam.setId(String.valueOf(id));
 		sysParam.setPhysicsFlag(phyFlag);
+        sysParam.setUpdateDate(new Date());
+        sysParam.setUpdateBy(SecurityUtils.getLoginName());
 		if(sysParamService.changeById(sysParam) > 0) {
+            redisTools.del(CacheConstants.CACHE_PREFIX_SYS_PARAMTYPE_KEY + sysParam.getParamTypeClass());
 			return ResponeModel.ok();
 		}
 		return ResponeModel.error(SYS_PARAM_TYPE_DELETE_FAIL);

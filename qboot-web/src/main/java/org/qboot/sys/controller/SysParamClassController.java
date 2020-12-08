@@ -1,7 +1,9 @@
 package org.qboot.sys.controller;
 
 import com.github.pagehelper.PageInfo;
+import org.qboot.common.constants.CacheConstants;
 import org.qboot.common.utils.MyAssertTools;
+import org.qboot.common.utils.RedisTools;
 import org.qboot.sys.dto.SysParamClassDto;
 import org.qboot.sys.service.impl.SysParamClassService;
 import org.qboot.common.annotation.AccLog;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import static org.qboot.sys.exception.errorcode.SysModuleErrTable.*;
 
@@ -33,6 +36,8 @@ public class SysParamClassController extends BaseController {
 
 	@Autowired
 	private SysParamClassService sysParamClassService;
+    @Autowired
+    private RedisTools redisTools;
 
 	@PreAuthorize("hasAuthority('sys:param:qry')")
 	@PostMapping("/qryPage")
@@ -58,8 +63,7 @@ public class SysParamClassController extends BaseController {
 		sysParam.setCreateBy(SecurityUtils.getLoginName());
 		sysParam.setVisible(1); // 默认可用
 		sysParam.setPhysicsFlag(1);
-		int cnt = sysParamClassService.save(sysParam);
-		if(cnt > 0) {
+		if(sysParamClassService.save(sysParam) > 0) {
 			return ResponeModel.ok();
 		}
 		return ResponeModel.error(SYS_PARAM_CLASS_SAVE_FAIL);
@@ -70,8 +74,8 @@ public class SysParamClassController extends BaseController {
 	@PostMapping("/update")
 	public ResponeModel update(@Validated SysParamClassDto sysParam, BindingResult bindingResult) {
 		sysParam.setUpdateBy(SecurityUtils.getLoginName());
-		int cnt = sysParamClassService.update(sysParam);
-		if(cnt > 0) {
+		if(sysParamClassService.update(sysParam) > 0) {
+            redisTools.del(CacheConstants.CACHE_PREFIX_SYS_PARAMTYPE_KEY + sysParam.getParamTypeClass());
 			return ResponeModel.ok();
 		}
 		return ResponeModel.error(SYS_PARAM_CLASS_UPDATE_FAIL);
@@ -85,8 +89,8 @@ public class SysParamClassController extends BaseController {
 		SysParamClassDto sysParam = new SysParamClassDto();
 		sysParam.setId(String.valueOf(id));
 		sysParam.setPhysicsFlag(phyFlag);
-		int cnt = sysParamClassService.changeById(sysParam);
-		if(cnt > 0) {
+		if(sysParamClassService.changeById(sysParam) > 0) {
+            redisTools.del(CacheConstants.CACHE_PREFIX_SYS_PARAMTYPE_KEY + sysParam.getParamTypeClass());
 			return ResponeModel.ok();
 		}
 		return ResponeModel.error(SYS_PARAM_CLASS_DELETE_FAIL);
@@ -100,8 +104,10 @@ public class SysParamClassController extends BaseController {
 		SysParamClassDto sysParam = new SysParamClassDto();
 		sysParam.setId(String.valueOf(id));
 		sysParam.setVisible(visible);
-		int cnt = sysParamClassService.changeById(sysParam);
-		if(cnt > 0) {
+        sysParam.setUpdateDate(new Date());
+        sysParam.setUpdateBy(SecurityUtils.getLoginName());
+		if(sysParamClassService.changeById(sysParam) > 0) {
+            redisTools.del(CacheConstants.CACHE_PREFIX_SYS_PARAMTYPE_KEY + sysParam.getParamTypeClass());
 			return ResponeModel.ok();
 		}
 		return ResponeModel.error(SYS_PARAM_CLASS_UPDATE_FAIL);

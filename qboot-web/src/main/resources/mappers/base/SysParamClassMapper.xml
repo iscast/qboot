@@ -24,52 +24,43 @@
     from sys_param_class
     where id = #{id} 
   </select>
-  
-  <select id="classIsUsed" resultMap="BaseResultMap" parameterType="org.qboot.sys.dto.SysParamClassDto" >
-    select 
-    <include refid="Base_Column_List" />
-    from sys_param_class
-    where param_type_class = #{paramTypeClass}
-  </select>
-  
+
   <select id="findList" resultMap="BaseResultMap" parameterType="org.qboot.sys.dto.SysParamClassDto" >
     select 
     <include refid="Base_Column_List" />
     from sys_param_class
     <where>
-    		<if test="paramTypeClass !=null and paramTypeClass != '' ">
-    			and param_type_class like concat('%',#{paramTypeClass},'%')
-    		</if>
-    		<if test="paramTypeName !=null and paramTypeName != '' ">
-    			and param_type_name like concat('%',#{paramTypeName},'%')
-    		</if>
-    		<if test="visible !=null and visible > 0 ">
-    			and visible = #{visible}
-    		</if>
-    		<if test="physicsFlag !=null and physicsFlag > 0 ">
-    			and physics_flag = #{physicsFlag}
-    		</if>
+        <if test="paramTypeClass !=null and paramTypeClass != '' ">
+            and param_type_class like concat('%',#{paramTypeClass},'%')
+        </if>
+        <if test="paramTypeName !=null and paramTypeName != '' ">
+            and param_type_name like concat('%',#{paramTypeName},'%')
+        </if>
+        <if test="visible != null">
+            and visible = #{visible}
+        </if>
+        <if test="physicsFlag != null">
+            and physics_flag = #{physicsFlag}
+        </if>
     </where>
-    <choose>
-    	<!-- 有注入安全漏洞 后台系统忽略可以提高开发速度 -->
-		<when test="sortField != null and sortField != '' and direction != null and direction !=''">
-			order by ${sortField} ${direction}
-		</when>
-		<otherwise>
-			order by create_date desc
-		</otherwise>
-    </choose>
+  order by create_date desc
   </select>
   
   <update id="changeById" parameterType="org.qboot.sys.dto.SysParamClassDto" >
     update sys_param_class
-    <set >
-      <if test="visible != null" >
-        visible = #{visible,jdbcType=INTEGER},
-      </if>
-      <if test="physicsFlag != null" >
-        physics_flag = #{physicsFlag,jdbcType=INTEGER},
-      </if>
+    <set>
+        <if test="visible != null" >
+            visible = #{visible,jdbcType=INTEGER},
+        </if>
+        <if test="physicsFlag != null" >
+            physics_flag = #{physicsFlag,jdbcType=INTEGER},
+        </if>
+        <if test="updateBy != null and updateBy != ''" >
+            update_by = #{updateBy,jdbcType=VARCHAR},
+        </if>
+        <if test="updateDate != null" >
+            update_date = #{updateDate,jdbcType=TIMESTAMP},
+        </if>
     </set>
     where id = #{id} 
   </update>
@@ -84,19 +75,19 @@
   <update id="update" parameterType="org.qboot.sys.dto.SysParamClassDto" >
     update sys_param_class
     <set >
-      <if test="paramTypeClass != null" >
+      <if test="paramTypeClass != null and paramTypeClass != ''" >
         param_type_class = #{paramTypeClass,jdbcType=VARCHAR},
       </if>
-      <if test="paramTypeName != null" >
+      <if test="paramTypeName != null and paramTypeName != ''" >
         param_type_name = #{paramTypeName,jdbcType=VARCHAR},
       </if>
-      <if test="updateBy != null" >
+      <if test="updateBy != null and updateBy != ''" >
         update_by = #{updateBy,jdbcType=VARCHAR},
       </if>
       <if test="updateDate != null" >
         update_date = #{updateDate,jdbcType=TIMESTAMP},
       </if>
-      <if test="remarks != null" >
+      <if test="remarks != null and remarks != ''" >
         remarks = #{remarks,jdbcType=VARCHAR},
       </if>
     </set>

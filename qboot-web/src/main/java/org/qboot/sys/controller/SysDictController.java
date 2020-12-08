@@ -1,7 +1,9 @@
 package org.qboot.sys.controller;
 
 import com.github.pagehelper.PageInfo;
+import org.qboot.common.constants.CacheConstants;
 import org.qboot.common.utils.MyAssertTools;
+import org.qboot.common.utils.RedisTools;
 import org.qboot.sys.dto.SysDictDto;
 import org.qboot.sys.service.impl.SysDictService;
 import org.qboot.common.annotation.AccLog;
@@ -37,6 +39,8 @@ public class SysDictController extends BaseController {
 
 	@Autowired
 	private SysDictService sysDictService;
+    @Autowired
+    private RedisTools redisTools;
 
 	@PreAuthorize("hasAuthority('sys:dict:qry')")
 	@PostMapping("/qryPage")
@@ -69,6 +73,7 @@ public class SysDictController extends BaseController {
         sysDict.setStatus(SysConstants.SYS_ENABLE);
         sysDict.setCreateBy(SecurityUtils.getLoginName());
 		if(sysDictService.save(sysDict) > 0) {
+            redisTools.del(CacheConstants.CACHE_PREFIX_SYS_DICT_TYPE + sysDict.getType());
 			return ok();
 		}
 		return ResponeModel.error(SYS_DICT_SAVE_FAIL);
@@ -80,6 +85,7 @@ public class SysDictController extends BaseController {
 	public ResponeModel update(@Validated SysDictDto sysDict, BindingResult bindingResult) {
 		sysDict.setUpdateBy(SecurityUtils.getLoginName());
 		if(sysDictService.update(sysDict) > 0) {
+            redisTools.del(CacheConstants.CACHE_PREFIX_SYS_DICT_TYPE + sysDict.getType());
 			return ok();
 		}
 		return ResponeModel.error(SYS_DICT_UPDATE_FAIL);
@@ -96,6 +102,7 @@ public class SysDictController extends BaseController {
 		sysDict.setUpdateBy(SecurityUtils.getLoginName());
 		sysDict.setUpdateDate(new Date());
 		if(sysDictService.setStatus(sysDict) > 0) {
+            redisTools.del(CacheConstants.CACHE_PREFIX_SYS_DICT_TYPE + sysDict.getType());
 			return ok();
 		}
 		return ResponeModel.error(SYS_DICT_UPDATE_FAIL);
@@ -112,6 +119,7 @@ public class SysDictController extends BaseController {
 		sysDict.setUpdateBy(SecurityUtils.getLoginName());
 		sysDict.setUpdateDate(new Date());
 		if(sysDictService.setStatus(sysDict) > 0) {
+            redisTools.del(CacheConstants.CACHE_PREFIX_SYS_DICT_TYPE + sysDict.getType());
 			return ResponeModel.ok();
 		}
 		return ResponeModel.error(SYS_DICT_DELETE_FAIL);

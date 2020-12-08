@@ -42,31 +42,33 @@
     <include refid="Blob_Column_List" />
     from sys_param_type
     <where>
-    		<if test="paramTypeName !=null and paramTypeName != '' ">
-    			and param_type_name like concat('%',#{paramTypeName},'%')
-    		</if>
-    		<if test="paramTypeClass !=null and paramTypeClass != '' ">
-    			and param_type_class = #{paramTypeClass}
-    		</if>
-    		<if test="physicsFlag !=null and physicsFlag > 0 ">
-    			and physics_flag = #{physicsFlag}
-    		</if>
-    		<if test="paramTypeId != null">
-    			and param_type_id >= #{paramTypeId}
-    		</if>
+        <if test="paramTypeName !=null and paramTypeName != '' ">
+            and param_type_name like concat('%',#{paramTypeName},'%')
+        </if>
+        <if test="paramTypeClass !=null and paramTypeClass != '' ">
+            and param_type_class = #{paramTypeClass}
+        </if>
+        <if test="physicsFlag !=null">
+            and physics_flag = #{physicsFlag}
+        </if>
+        <if test="paramTypeId != null">
+            and param_type_id >= #{paramTypeId}
+        </if>
     </where>
-    <!-- 有注入安全漏洞 后台系统忽略可以提高开发速度 -->
-		<if test="sortField != null and sortField != '' and direction != null and direction !=''">
-			order by ${sortField} ${direction}
-		</if>
   </select>
   
   <update id="changeById" parameterType="org.qboot.sys.dto.SysParamTypeDto" >
     update sys_param_type
     <set >
-      <if test="physicsFlag != null" >
+        <if test="updateBy != null and updateBy != ''" >
+            update_by = #{updateBy,jdbcType=VARCHAR},
+        </if>
+        <if test="updateDate != null" >
+            update_date = #{updateDate,jdbcType=TIMESTAMP},
+        </if>
+        <if test="physicsFlag != null" >
         physics_flag = #{physicsFlag,jdbcType=INTEGER},
-      </if>
+        </if>
     </set>
     where id = #{id} 
   </update>
@@ -86,25 +88,25 @@
       <if test="paramTypeId != null" >
         param_type_id = #{paramTypeId,jdbcType=VARCHAR},
       </if>
-      <if test="paramTypeName != null" >
+      <if test="paramTypeName != null and paramTypeName != ''" >
         param_type_name = #{paramTypeName,jdbcType=VARCHAR},
       </if>
-      <if test="paramTypeCode != null" >
+      <if test="paramTypeCode != null and paramTypeCode != ''" >
         param_type_code = #{paramTypeCode,jdbcType=VARCHAR},
       </if>
-      <if test="paramTypeClass != null" >
+      <if test="paramTypeClass != null and paramTypeClass != ''" >
         param_type_class = #{paramTypeClass,jdbcType=VARCHAR},
       </if>
-      <if test="updateBy != null" >
+      <if test="updateBy != null and updateBy != ''" >
         update_by = #{updateBy,jdbcType=VARCHAR},
       </if>
       <if test="updateDate != null" >
         update_date = #{updateDate,jdbcType=TIMESTAMP},
       </if>
-      <if test="remarks != null" >
+      <if test="remarks != null and remarks != ''" >
         remarks = #{remarks,jdbcType=VARCHAR},
       </if>
-      <if test="i18nField != null">
+      <if test="i18nField != null and i18nField != ''">
         i18n_field = #{i18nField,jdbcType=LONGVARCHAR},
       </if>
     </set>
