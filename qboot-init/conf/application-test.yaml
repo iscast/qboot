@@ -1,7 +1,7 @@
 admin:
   path: ''
 server:
-  port: 8800
+  port: 8080
 spring:
   application:
     name: qboot
@@ -19,17 +19,17 @@ spring:
       max-wait: 60000
       min-evictable-idle-time-millis: 300000
       min-idle: 3
-      password: XI1pD&I3FX7%6q
+      password: 数据库密码
       test-on-borrow: true
       test-on-return: false
       test-while-idle: true
       time-between-eviction-runs-millis: 60000
-      url: jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=utf-8
-      username: test_rw
+      url: jdbc:mysql://数据库地址:数据库端口/数据库名称?useUnicode=true&characterEncoding=utf-8
+      username: 数据库用户名
       validation-query: select 1
   redisson:
-    address: redis://127.0.0.1:6379
-    password: 666666
+    address: redis://地址:端口
+    password: 密码
     codec: org.redisson.codec.FstCodec
     connectTimeout: 10000
     connectionMinimumIdleSize: 12
@@ -50,11 +50,5 @@ spring:
 sys:
   common:
     task:
-      #检测任务信息变更时间间隔,单位:秒
-      #此参数主要用来同步定时任务变更到所有任务执行节点,默认10s检测一次.
       checkUpdateInterval: 10
-      #是否初始化数据库任务
-      #默认为false,当设置为true时,应用将会加载数据库任务到内存并交由quartz任务调度器管理
-      #当多个节点配置为true时,任务根据redis锁竞争执行.
-      #此设置在做任务与查询服务分离时非常有用,当您的系统用户量上升系统负载变重时,可以考虑部署单独的查询服务,此时该值设置为false,即为快服务.
       loadTaskOnStartup: false

@@ -13,8 +13,6 @@ INSERT INTO `sys_dict`(ID, TYPE, CODE, NAME, SORT, STATUS, CREATE_BY, CREATE_DAT
 INSERT INTO `sys_dict`(ID, TYPE, CODE, NAME, SORT, STATUS, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS) VALUES (2, 'YES_NO', '0', '否', 2, '1', 'system', now(), 'system', now(), '');
 INSERT INTO `sys_dict`(ID, TYPE, CODE, NAME, SORT, STATUS, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS) VALUES (3, 'SYS_USER_TYPE', '1', '系统管理员', 1, '1', 'system', now(), 'system', now(), '');
 INSERT INTO `sys_dict`(ID, TYPE, CODE, NAME, SORT, STATUS, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS) VALUES (4, 'SYS_USER_TYPE', '2', '普通用户', 2, '1', 'system', now(), 'system', now(), '');
-INSERT INTO `sys_dict`(ID, TYPE, CODE, NAME, SORT, STATUS, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS) VALUES (5, 'SEX', '1', '男', 1, '1', 'system', now(), 'system', now(), '');
-INSERT INTO `sys_dict`(ID, TYPE, CODE, NAME, SORT, STATUS, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS) VALUES (6, 'SEX', '2', '女', 2, '1', 'system', now(), 'system', now(), '');
 COMMIT;
 
 -- ----------------------------
