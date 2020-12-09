@@ -6,6 +6,7 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.hibernate.validator.constraints.Length;
 
 import com.alibaba.fastjson.annotation.JSONField;
@@ -27,6 +28,7 @@ public class SysUserDto extends BaseEntity<Long> {
 	 */
 	@NotNull
 	@Length(min = 1, max = 32)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
 	private String deptId;
 
 	/**
@@ -39,12 +41,14 @@ public class SysUserDto extends BaseEntity<Long> {
 	/**
 	 * 密码
 	 */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
 	@JSONField(serialize = false)
 	private String password;
 
 	/**
 	 * 盐
 	 */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
 	@JSONField(serialize = false)
 	private String salt;
 
@@ -58,18 +62,21 @@ public class SysUserDto extends BaseEntity<Long> {
 	/**
 	 * 手机
 	 */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
 	@Length(max = 50)
 	private String mobile;
 
 	/**
 	 * 用户头像
 	 */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
 	@Length(max = 100)
 	private String photo;
 
 	/**
 	 * 邮箱
 	 */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
 	@Length(max = 50)
 	private String email;
 
@@ -90,57 +97,73 @@ public class SysUserDto extends BaseEntity<Long> {
 	/**
 	 * 数值备用字段1
 	 */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Integer fldN1;
 	/**
 	 * 数值备用字段2
 	 */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Integer fldN2;
 	/**
 	 * 字符串备用字段1
 	 */
 	@Length(max = 64)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String fldS1;
 	/**
 	 * 字符串备用字段2
 	 */
 	@Length(max = 64)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String fldS2;
     
 	
 	/** DB 字段截止 **/
+    @JsonInclude(JsonInclude.Include.NON_NULL)
 	private String deptName;
 	/**
 	 * 用户所拥有的角色ID
 	 */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
 	private List<String> roleIds;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
 	private List<SysMenuDto> menus;
 
 	
 	/**
 	 * 通过角色查询用户
 	 */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
 	private String roleId;
 	/**
 	 * 是否分配了某个角色
 	 */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
 	private String roleAssigned;
 	/**
 	 * 图像完整路径
 	 */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
 	private String photoFullUrl;
 	/**
 	 * 上次登录时间
 	 */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
 	private Date lastLoginTime;
 	/**
 	 * 登录ip
 	 */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
 	private String lastLoginIp;
 	/**
 	 * 上次登录地区
 	 */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
 	private String lastLoginArea;
-
+    /**
+     * 语言
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
 	private String lang;
 
 	public String getDeptId() {

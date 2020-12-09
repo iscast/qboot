@@ -139,7 +139,7 @@
         });
 
         var doDelete = function (obj) {
-            layer.confirm(_i18n.getGlobalVal('ayer.confirm.delete.msg'),_i18n.getBtns(),function (i) {
+            layer.confirm(_i18n.getGlobalVal('layer.confirm.delete.msg'),_i18n.getBtns(),function (i) {
                 layer.close(i);
                 layer.load(2);
                 admin.req('/sys/user/delete?id=' + obj.data.id, {}, function (data) {

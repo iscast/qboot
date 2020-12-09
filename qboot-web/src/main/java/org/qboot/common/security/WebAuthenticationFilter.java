@@ -86,9 +86,10 @@ public class WebAuthenticationFilter extends AbstractAuthenticationProcessingFil
         if(null != customFilter && !customFilter.doBusiness(request, sysUser)) {
             throw new LoginProcessFailException(String.format("customFilter:%s process login auth fail", customFilterName));
         }
-		
+
+         SysUserDto userSecretInfo = sysUserService.findSecretInfo(sysUser);
 		//解密传输的密文密码
-		password = RSAsecurity.getInstance().decrypt(String.valueOf(request.getSession().getAttribute("privateKey")), password) + sysUser.getSalt();
+		password = RSAsecurity.getInstance().decrypt(String.valueOf(request.getSession().getAttribute("privateKey")), password) + userSecretInfo.getSalt();
 		UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(username, password);
 		setDetails(request, authRequest);
 		return this.getAuthenticationManager().authenticate(authRequest);

@@ -1,5 +1,7 @@
 package org.qboot.common.entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -11,12 +13,19 @@ import java.util.Date;
 public class BaseEntity<PK extends Serializable> extends QueryEntity {
     private static final long serialVersionUID = 1L;
     private PK id;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String createBy;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Date createDate;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String updateBy;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Date updateDate;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String remarks;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Long version;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Integer physicsFlag;
 
     public BaseEntity() {

@@ -1,6 +1,7 @@
 package org.qboot.common.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.qboot.common.utils.SQLFilterUtils;
 
 import java.io.Serializable;
@@ -14,7 +15,10 @@ import java.util.Map;
  */
 public class QueryEntity implements Serializable {
     private static final long serialVersionUID = 1L;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String sortField;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String direction;
     @JsonIgnore
     private Integer page = 1;
@@ -22,6 +26,7 @@ public class QueryEntity implements Serializable {
     private Integer limit = 10;
     @JsonIgnore
     private Integer maxLimit = 1000;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Map<String, Object> ext;
 
     public QueryEntity() {

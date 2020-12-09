@@ -116,23 +116,25 @@ public class SysUserService extends CrudService<SysUserDao, SysUserDto> {
 	public boolean validatePwd(String password, Long userId) {
         MyAssertTools.hasLength(password, SYS_USER_PWD_EMPTY);
         MyAssertTools.notNull(userId, SYS_USER_UERID_EMPTY);
-		SysUserDto user = this.findById(userId);
-        MyAssertTools.notNull(user, SYS_USER_NOTEXISTS);
-		return user.getPassword().equals(CodecUtils.sha256(password + user.getSalt()));
+        SysUserDto qry = new SysUserDto();
+        qry.setId(userId);
+        SysUserDto secretInfo = d.findSecretInfo(qry);
+        MyAssertTools.notNull(secretInfo, SYS_USER_NOTEXISTS);
+		return secretInfo.getPassword().equals(CodecUtils.sha256(password + secretInfo.getSalt()));
 	}
 	
 	public int initPwd(SysUserDto t, int initFlag, String ip) {
-		SysUserDto sysUser = this.findById(t.getId());
-        MyAssertTools.notNull(sysUser, SYS_USER_NOTEXISTS);
-		sysUser.setPassword(encryptPwd(t.getPassword(), sysUser.getSalt()));
+        SysUserDto secretInfo = d.findSecretInfo(t);
+        MyAssertTools.notNull(secretInfo, SYS_USER_NOTEXISTS);
+        secretInfo.setPassword(encryptPwd(t.getPassword(), secretInfo.getSalt()));
 		if(initFlag == SysConstants.SYS_USER_PWD_STATUS_CHANGED) {
-			sysUser.setFldN1(1);
+            secretInfo.setFldN1(1);
 		}else {
             //首次登录需要修改密码
-			sysUser.setFldN1(0);
+            secretInfo.setFldN1(0);
 		}
-		int cnt = d.initPwd(sysUser);
-		sysLoginLogService.loginLogByLoginName(SysConstants.SYS_USER_LOGIN_STATUS_SUCCESS, sysUser.getLoginName(), ip, "", "", "", "", initFlag);
+		int cnt = d.initPwd(secretInfo);
+		sysLoginLogService.loginLogByLoginName(SysConstants.SYS_USER_LOGIN_STATUS_SUCCESS, secretInfo.getLoginName(), ip, "", "", "", "", initFlag);
 		return cnt;
 	}
 	
@@ -148,4 +150,9 @@ public class SysUserService extends CrudService<SysUserDao, SysUserDto> {
     	}
     	return false;
 	}
+
+	public SysUserDto findSecretInfo(SysUserDto qry){
+        MyAssertTools.notNull(qry, SYS_USER_NOTEXISTS);
+        return d.findSecretInfo(qry);
+    }
 }

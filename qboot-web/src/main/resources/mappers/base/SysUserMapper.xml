@@ -31,7 +31,8 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    u.*,d.name dept_name
+      u.id, u.dept_id, u.login_name, u.name, u.mobile, u.email, u.user_type, u.lang,
+      u.fld_n1, u.fld_n2, u.fld_s1, u.fld_s2, u.version, u.status, u.create_date, d.name dept_name
   </sql>
   
   <sql id="Join_Table" >
@@ -51,7 +52,19 @@
     from <include refid="Join_Table" />
     where u.login_name = #{loginName}
   </select>
-  
+
+    <select id="findSecretInfo" resultMap="BaseResultMap" parameterType="org.qboot.sys.dto.SysUserDto" >
+        select u.login_name, u.id, u.password, salt from sys_user u
+        <where>
+            <if test="id !=null">
+                and u.id = #{id}
+            </if>
+            <if test="loginName !=null and loginName!=''">
+                and u.login_name = #{loginName}
+            </if>
+        </where>
+    </select>
+
   <select id="findList" resultMap="BaseResultMap" parameterType="org.qboot.sys.dto.SysUserDto" >
     select 
     <include refid="Base_Column_List" />

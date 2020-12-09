@@ -25,5 +25,6 @@ public interface SysUserDao extends CrudDao<SysUserDto> {
 
 	int initPwd(SysUserDto sysUser);
 	int setStatus(SysUserDto sysUser);
-	
+
+    SysUserDto findSecretInfo(SysUserDto qry);
 }

@@ -47,7 +47,8 @@ public class CustomUserDetailsService implements UserDetailsService{
 				sysUser.getLoginName(), sysUser.getName(), sysUser.getStatus(),sysUser.getFldN1(),sysUser.getFldN2(),sysUser.getFldS1(),sysUser.getFldS2(),sysUser.getLang());
 		List<SysRoleDto> roles = sysRoleService.findByUserId(sysUser.getId());
 		user.setRoles(roles);
-		CustomUserDetails adminUserDetails = new CustomUserDetails(user, sysUser.getPassword(), getAuthorities(sysUser.getId(), sysUser.getLoginName()), false);
+        SysUserDto userSecretInfo = sysUserService.findSecretInfo(sysUser);
+		CustomUserDetails adminUserDetails = new CustomUserDetails(user, userSecretInfo.getPassword(), getAuthorities(sysUser.getId(), sysUser.getLoginName()), false);
 		return adminUserDetails;
 	}
 	
