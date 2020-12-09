@@ -16,14 +16,14 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    id, type, code, name, sort, status, create_by, create_date, update_by, update_date, remarks
+    id, type, code, name, sort, status, create_by, create_date, update_date
   </sql>
   
   <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
-    <include refid="Base_Column_List" />
+    <include refid="Base_Column_List" /> , remarks
     from sys_dict
-    where id = #{id} and status = 1
+    where id = #{id}
   </select>
   
   <select id="findList" resultMap="BaseResultMap" parameterType="org.qboot.sys.dto.SysDictDto" >
@@ -31,16 +31,15 @@
     <include refid="Base_Column_List" />
     from sys_dict
     <where>
-    		<if test="type !=null and type != ''">
-    			and type like concat('%',#{type},'%')
-    		</if>
-    		<if test="code !=null and code != ''">
-    			and code like concat('%',#{code},'%')
-    		</if>
-    		<if test="name !=null and name != ''">
-    			and name like concat('%',#{name},'%')
-    		</if>
-    		 and status = 1
+        <if test="type !=null and type != ''">
+            and type like concat('%',#{type},'%')
+        </if>
+        <if test="code !=null and code != ''">
+            and code like concat('%',#{code},'%')
+        </if>
+        <if test="name !=null and name != ''">
+            and name like concat('%',#{name},'%')
+        </if>
     </where>
     <!-- 有注入安全漏洞 后台系统忽略可以提高开发速度 -->
 	<choose>
@@ -54,7 +53,7 @@
   </select>
   
   <select id="findTypes" resultMap="BaseResultMap" parameterType="java.lang.String" >
-  	select <include refid="Base_Column_List" /> from sys_dict where type = #{type} order by sort asc
+  	select type, code, name, remarks from sys_dict where status = 1 and  type = #{type} order by sort asc
   </select>
   
   <delete id="deleteById" >
@@ -113,7 +112,7 @@
     where id = #{id,jdbcType=VARCHAR} 
   </update>
   
-  <update id="setStatus" parameterType="org.qboot.sys.dto.SysDictDto" >
+  <update id="editStatus" parameterType="org.qboot.sys.dto.SysDictDto" >
     update sys_dict set update_by = #{updateBy}, update_date = #{updateDate}, status = #{status} where id = #{id} 
   </update>
 </mapper>

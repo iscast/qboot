@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.io.Serializable;
 import java.util.List;
 
 import static org.qboot.sys.exception.errorcode.SysModuleErrTable.*;
@@ -26,13 +27,28 @@ public class SysDictService extends CrudService<SysDictDao, SysDictDto> {
 	@Autowired
 	private RedisTools redisTools;
 
-	public int setStatus(SysDictDto t) {
+    @Override
+    public int deleteById(Serializable id) {
+        SysDictDto sysDict = this.findById(id);
+        MyAssertTools.notNull(sysDict, SYS_DICT_NO_EXIST);
+        int isDelete = super.deleteById(id);
+        if(isDelete > 0) {
+            redisTools.del(CacheConstants.CACHE_PREFIX_SYS_DICT_TYPE + sysDict.getType());
+        }
+        return isDelete;
+    }
+
+	public int editStatus(SysDictDto t) {
 		SysDictDto sysDict = this.findById(t.getId());
         MyAssertTools.notNull(sysDict, SYS_DICT_NO_EXIST);
 		sysDict.setStatus(t.getStatus());
 		sysDict.setUpdateBy(t.getUpdateBy());
 		sysDict.setUpdateDate(t.getUpdateDate());
-		return d.setStatus(sysDict);
+		int isUpdate = d.editStatus(sysDict);
+        if(isUpdate > 0) {
+            redisTools.del(CacheConstants.CACHE_PREFIX_SYS_DICT_TYPE + sysDict.getType());
+        }
+        return isUpdate;
 	}
 
 	public List<SysDictDto> findTypes(String type) {

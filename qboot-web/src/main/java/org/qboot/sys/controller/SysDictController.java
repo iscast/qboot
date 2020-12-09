@@ -93,16 +93,15 @@ public class SysDictController extends BaseController {
 
     @AccLog
 	@PreAuthorize("hasAuthority('sys:dict:update')")
-	@PostMapping("/setStatus")
-	public ResponeModel setStatus(@RequestParam String id, @RequestParam String status) {
+	@PostMapping("/editStatus")
+	public ResponeModel editStatus(@RequestParam String id, @RequestParam String status) {
         MyAssertTools.notNull(id, SYS_DICT_ID_NULL);
         SysDictDto sysDict = new SysDictDto();
 		sysDict.setId(id);
 		sysDict.setStatus(status);
 		sysDict.setUpdateBy(SecurityUtils.getLoginName());
 		sysDict.setUpdateDate(new Date());
-		if(sysDictService.setStatus(sysDict) > 0) {
-            redisTools.del(CacheConstants.CACHE_PREFIX_SYS_DICT_TYPE + sysDict.getType());
+		if(sysDictService.editStatus(sysDict) > 0) {
 			return ok();
 		}
 		return ResponeModel.error(SYS_DICT_UPDATE_FAIL);
@@ -113,13 +112,7 @@ public class SysDictController extends BaseController {
 	@PostMapping("/delete")
 	public ResponeModel delete(@RequestParam String id) {
         MyAssertTools.notNull(id, SYS_DICT_ID_NULL);
-        SysDictDto sysDict = new SysDictDto();
-		sysDict.setId(id);
-		sysDict.setStatus(SysConstants.SYS_DISABLE);
-		sysDict.setUpdateBy(SecurityUtils.getLoginName());
-		sysDict.setUpdateDate(new Date());
-		if(sysDictService.setStatus(sysDict) > 0) {
-            redisTools.del(CacheConstants.CACHE_PREFIX_SYS_DICT_TYPE + sysDict.getType());
+		if(sysDictService.deleteById(id) > 0) {
 			return ResponeModel.ok();
 		}
 		return ResponeModel.error(SYS_DICT_DELETE_FAIL);

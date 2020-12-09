@@ -1,7 +1,7 @@
 <div class="layui-card">
     <div class="layui-card-body">
         <div class="layui-form toolbar">
-            <span class="layui-i18n" i18n-key="sys.form.label.paramName"></span>
+            <span class="layui-i18n" i18n-key="sys.table.title.name"></span>
             <input id="dictName" name="dictName" class="layui-input search-input i18n-input-hint" type="text" i18n-key="sys.form.hint.inputParamName"/>&emsp;
             <span class="layui-i18n" i18n-key="sys.form.label.paramKey"></span>
             <input id="type" name="type" class="layui-input search-input i18n-input-hint" type="text" i18n-key="sys.form.hint.inputParamKey"/>&emsp;
@@ -44,9 +44,30 @@
             even: true, //开启隔行背景
             cols: [[
                 {type: 'numbers'},
-                {field: 'name', sort: true, title: msgs['sys.form.label.paramName'], width: '14%'},
-                {field: 'type', sort: true, title: msgs['sys.form.label.paramKey'], width: '14%'},
+                {field: 'name', sort: true, title: msgs['sys.table.title.name'], width: '12%'},
+                {field: 'type', sort: true, title: msgs['sys.form.label.paramKey'], width: '12%'},
                 {field: 'code', sort: true, title: msgs['sys.form.label.paramValue']},
+                {align: 'center', field: 'status', width: '8%',  sort: false, templet: function(d){
+                        var auth = JSON.parse(sessionStorage.getItem("auth"));
+                        var page = location.hash.substring(2);
+                        if(auth[page] && auth[page]['sys:dict:update']){
+                            var swiftBtn = '<input type="checkbox" lay-filter="dict-tpl-state" value="'+d.id
+                                +'" lay-skin="switch" lay-text="'
+                                + msgs['sys.form.operation.valid']+'|'+ msgs['sys.form.operation.invalid'] +'"';
+                            if(d.status == 0){
+                                swiftBtn+='/>';
+                            }else{
+                                swiftBtn+=' checked="checked" />';
+                            }
+                            return swiftBtn;
+                        }else{
+                            var status = msgs['sys.form.operation.valid'];
+                            if(d.status == 0){
+                                status = msgs['sys.form.operation.invalid'];
+                            }
+                            return status;
+                        }
+                    }, title: msgs['sys.table.title.status']},
                 {field: 'createBy', sort: true, title: msgs['sys.table.title.createdBy'], width: '10%'},
                 {
                     field: 'createDate', sort: true, templet: function (d) {
@@ -114,10 +135,10 @@
             _i18n.initPage();
         });
         
-     // 修改user状态
+        // 修改数据字典状态
         form.on('switch(dict-tpl-state)', function (obj) {
             layer.load(2);
-            admin.req('/sys/dict/setStatus', {
+            admin.req('/sys/dict/editStatus', {
                 id: obj.elem.value,
                 status: obj.elem.checked ? 1 : 0
             }, function (data) {

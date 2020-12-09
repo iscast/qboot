@@ -11,7 +11,10 @@ import java.util.Date;
  * @Date: 2020/8/22 19:08
  */
 public class BaseEntity<PK extends Serializable> extends QueryEntity {
+
     private static final long serialVersionUID = 1L;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private PK id;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String createBy;

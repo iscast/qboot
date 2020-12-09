@@ -15,5 +15,5 @@ public interface SysDictDao extends CrudDao<SysDictDto>{
 	
     List<SysDictDto> findTypes(String type);
 
-	int setStatus(SysDictDto sysDict);
+	int editStatus(SysDictDto sysDict);
 }

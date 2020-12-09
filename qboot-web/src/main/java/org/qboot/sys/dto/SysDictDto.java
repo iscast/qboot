@@ -3,6 +3,7 @@ package org.qboot.sys.dto;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.hibernate.validator.constraints.Length;
 
 import org.qboot.common.entity.BaseEntity;
@@ -42,6 +43,7 @@ public class SysDictDto extends BaseEntity<String>{
      * 排序
      */
 	@NotNull
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Integer sort;
 
     /**
@@ -49,6 +51,7 @@ public class SysDictDto extends BaseEntity<String>{
      */
 	@NotNull
 	@Pattern(regexp="1|0")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String status;
     
     public String getType() {
