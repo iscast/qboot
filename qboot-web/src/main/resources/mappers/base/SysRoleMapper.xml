@@ -12,7 +12,7 @@
 	</resultMap>
 	
 	<sql id="Base_Column_List">
-		id, name, create_by, create_date, update_by, update_date, remarks
+		id, name, remarks, create_date
 	</sql>
 	
 	<select id="findById" resultMap="BaseResultMap" parameterType="java.lang.String">
