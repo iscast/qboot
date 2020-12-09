@@ -15,9 +15,6 @@ import org.qboot.common.entity.BaseEntity;
  */
 public class SysDictDto extends BaseEntity<String>{
 
-    /**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	/**

@@ -20,7 +20,7 @@
   </resultMap>
 
   <sql id="Base_Column_List" >
-    id, param_type_id, param_type_class, param_type_code, param_type_name, physics_flag, create_by, create_date, update_by, update_date, remarks
+    id, param_type_id, param_type_class, param_type_code, param_type_name, physics_flag
   </sql>
   <sql id="Blob_Column_List">
     i18n_field
@@ -31,6 +31,7 @@
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
+    , remarks
     from sys_param_type
     where id = #{id} 
   </select>
