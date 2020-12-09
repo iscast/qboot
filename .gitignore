@@ -32,3 +32,4 @@ Thumbs.db
 
 # flatten ignore
 .flattened-pom.xml
+/qboot-web/src/main/resources/application-dev.yaml
