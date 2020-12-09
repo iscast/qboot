@@ -1,5 +1,7 @@
 package org.qboot.common.entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.io.Serializable;
 
 /**
@@ -8,9 +10,14 @@ import java.io.Serializable;
  * @Date: 2020/8/22 19:14
  */
 public class TreeEntity<PK extends Serializable> extends BaseEntity<PK> {
+
     private static final long serialVersionUID = 1L;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String parentId;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String parentIds;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Integer sort;
 
     public TreeEntity() {

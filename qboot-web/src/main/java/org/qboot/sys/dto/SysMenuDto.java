@@ -1,13 +1,12 @@
 package org.qboot.sys.dto;
 
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import org.hibernate.validator.constraints.Length;
+import org.qboot.common.entity.TreeEntity;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-
-import org.hibernate.validator.constraints.Length;
-
-import org.qboot.common.entity.TreeEntity;
+import java.util.List;
 
 /**
  * <p>Title: SysMenu</p>
@@ -17,10 +16,6 @@ import org.qboot.common.entity.TreeEntity;
  */
 public class SysMenuDto extends TreeEntity<String> {
 
-	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -34,12 +29,14 @@ public class SysMenuDto extends TreeEntity<String> {
 	 * 链接
 	 */
 	@Length(max=200)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
 	private String href;
 
 	/**
 	 * 目标
 	 */
 	@Length(max=10)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
 	private String target;
 
 	/**
@@ -54,6 +51,7 @@ public class SysMenuDto extends TreeEntity<String> {
 	 * 图标
 	 */
 	@Length(max=50)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
 	private String icon;
 
 	/**
@@ -67,6 +65,7 @@ public class SysMenuDto extends TreeEntity<String> {
 	/**
 	 * 改变状态按钮
 	 */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
 	private String isShowString;
 
 	/**
@@ -78,8 +77,10 @@ public class SysMenuDto extends TreeEntity<String> {
 	/**
 	 * 是否有下级菜单
 	 */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
 	private Integer hasSub;
-	
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
 	private List<Long> ids;
 	
 	public String getName() {
@@ -161,5 +162,4 @@ public class SysMenuDto extends TreeEntity<String> {
 	public void setIds(List<Long> ids) {
 		this.ids = ids;
 	}
-
 }

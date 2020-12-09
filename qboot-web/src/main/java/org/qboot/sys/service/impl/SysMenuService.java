@@ -1,17 +1,16 @@
 package org.qboot.sys.service.impl;
 
-import java.io.Serializable;
-import java.util.List;
-
 import org.apache.commons.lang3.StringUtils;
+import org.qboot.common.constants.SysConstants;
+import org.qboot.common.service.CrudService;
 import org.qboot.common.utils.MyAssertTools;
 import org.qboot.sys.dao.SysMenuDao;
 import org.qboot.sys.dto.SysMenuDto;
-import org.qboot.common.constants.SysConstants;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import org.qboot.common.service.CrudService;
+import java.io.Serializable;
+import java.util.List;
 
 import static org.qboot.sys.exception.errorcode.SysModuleErrTable.*;
 
@@ -103,10 +102,6 @@ public class SysMenuService extends CrudService<SysMenuDao, SysMenuDto> {
 	 */
 	public List<SysMenuDto> qryAuth(Long userId){
 		return this.d.findByUserId(userId);
-	}
-	
-	public int updateSelecter(SysMenuDto menu){
-		return this.d.updateSelecter(menu);
 	}
 	
 	public int changeShowFlag(String menuId, String isShow) {

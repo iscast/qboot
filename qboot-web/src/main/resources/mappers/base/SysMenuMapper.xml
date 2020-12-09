@@ -23,13 +23,12 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    id, parent_id, parent_ids, name, sort, href, target, type, icon, is_show, permission, 
-    create_by, create_date, update_by, update_date, remarks
+    id, parent_id, parent_ids, name, sort, href, target, type, icon, is_show, permission
   </sql>
   
   <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
-    <include refid="Base_Column_List" />
+    <include refid="Base_Column_List" /> ,remarks
     from sys_menu
     where id = #{id}
   </select>
@@ -60,21 +59,21 @@
     , (select count(1) from sys_menu where parent_id = m.id and type <![CDATA[<>]]> '999' ) as hasSub
     from sys_menu m
     <where>
-    		<if test="parentId !=null and parentId!=''">
-    			parent_id = #{parentId,jdbcType=VARCHAR}
-    		</if>
-    		<if test="type !=null and type != ''">
-    			type = #{type,jdbcType=VARCHAR}
-    		</if>
-    		<if test="isShow !=null and isShow!=''">
-    			is_show = #{isShow,jdbcType=VARCHAR}
-    		</if>
-    		<if test="parentIds !=null and parentIds!=''">
-    			and parent_ids like concat(#{parentIds},'%')
-    		</if>
-    		<if test="name !=null and name!=''">
-    			and name like concat('%',#{name},'%')
-    		</if>
+        <if test="parentId !=null and parentId!=''">
+            parent_id = #{parentId,jdbcType=VARCHAR}
+        </if>
+        <if test="type !=null and type != ''">
+            type = #{type,jdbcType=VARCHAR}
+        </if>
+        <if test="isShow !=null and isShow!=''">
+            is_show = #{isShow,jdbcType=VARCHAR}
+        </if>
+        <if test="parentIds !=null and parentIds!=''">
+            and parent_ids like concat(#{parentIds},'%')
+        </if>
+        <if test="name !=null and name!=''">
+            and name like concat('%',#{name},'%')
+        </if>
     </where>
     <!-- 有注入安全漏洞 后台系统忽略可以提高开发速度 -->
 	<choose>
@@ -122,94 +121,53 @@
       #{createBy,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, 
       #{updateDate,jdbcType=TIMESTAMP}, #{remarks,jdbcType=VARCHAR})
   </insert>
+
+    <sql id="update_condition">
+        <set >
+            <if test="parentId != null and parentId != ''" >
+                parent_id = #{parentId,jdbcType=VARCHAR},
+            </if>
+            <if test="parentIds != null and parentIds != ''" >
+                parent_ids = #{parentIds,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null and name != ''" >
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="sort != null" >
+                sort = #{sort,jdbcType=INTEGER},
+            </if>
+            <if test="href != null and href != ''" >
+                href = #{href,jdbcType=VARCHAR},
+            </if>
+            <if test="target != null and target != ''" >
+                target = #{target,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null" >
+                type = #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="icon != null and icon != ''" >
+                icon = #{icon,jdbcType=VARCHAR},
+            </if>
+            <if test="isShow != null" >
+                is_show = #{isShow,jdbcType=CHAR},
+            </if>
+            <if test="permission != null" >
+                permission = #{permission,jdbcType=VARCHAR},
+            </if>
+            <if test="updateBy != null and updateBy != ''" >
+                update_by = #{updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null" >
+                update_date = #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="remarks != null and remarks != ''" >
+                remarks = #{remarks,jdbcType=VARCHAR},
+            </if>
+        </set>
+    </sql>
   
   <update id="update" parameterType="org.qboot.sys.dto.SysMenuDto" >
-    update sys_menu
-    <set >
-      <if test="parentId != null" >
-        parent_id = #{parentId,jdbcType=VARCHAR},
-      </if>
-      <if test="parentIds != null" >
-        parent_ids = #{parentIds,jdbcType=VARCHAR},
-      </if>
-      <if test="name != null" >
-        name = #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="sort != null" >
-        sort = #{sort,jdbcType=INTEGER},
-      </if>
-      <if test="href != null" >
-        href = #{href,jdbcType=VARCHAR},
-      </if>
-      <if test="target != null" >
-        target = #{target,jdbcType=VARCHAR},
-      </if>
-      <if test="type != null" >
-        type = #{type,jdbcType=VARCHAR},
-      </if>
-      <if test="icon != null" >
-        icon = #{icon,jdbcType=VARCHAR},
-      </if>
-      <if test="isShow != null" >
-        is_show = #{isShow,jdbcType=CHAR},
-      </if>
-      <if test="permission != null" >
-        permission = #{permission,jdbcType=VARCHAR},
-      </if>
-      <if test="updateBy != null" >
-        update_by = #{updateBy,jdbcType=VARCHAR},
-      </if>
-      <if test="updateDate != null" >
-        update_date = #{updateDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="remarks != null" >
-        remarks = #{remarks,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{id} 
-  </update>
-  
-  <update id="updateSelecter" parameterType="org.qboot.sys.dto.SysMenuDto" >
-    update sys_menu
-    <set >
-      <if test="parentId != null" >
-        parent_id = #{parentId,jdbcType=VARCHAR},
-      </if>
-      <if test="parentIds != null" >
-        parent_ids = #{parentIds,jdbcType=VARCHAR},
-      </if>
-      <if test="name != null" >
-        name = #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="sort != null" >
-        sort = #{sort,jdbcType=INTEGER},
-      </if>
-      <if test="href != null" >
-        href = #{href,jdbcType=VARCHAR},
-      </if>
-      <if test="target != null" >
-        target = #{target,jdbcType=VARCHAR},
-      </if>
-      <if test="type != null" >
-        type = #{type,jdbcType=VARCHAR},
-      </if>
-      <if test="icon != null" >
-        icon = #{icon,jdbcType=VARCHAR},
-      </if>
-      <if test="permission != null" >
-        permission = #{permission,jdbcType=VARCHAR},
-      </if>
-      <if test="updateBy != null" >
-        update_by = #{updateBy,jdbcType=VARCHAR},
-      </if>
-      <if test="updateDate != null" >
-        update_date = #{updateDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="remarks != null" >
-        remarks = #{remarks,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{id} 
+    update sys_menu <include refid="update_condition" /> where id = #{id}
   </update>
   
   <resultMap id="idResult" type="java.lang.Long" >

@@ -191,7 +191,7 @@ public class SysMenuController extends BaseController {
 		treeHelper.setParent(sysMenu, parent);
 		sysMenu.setUpdateBy(SecurityUtils.getLoginName());
 		sysMenu.setUpdateDate(new Date());
-		int cnt = sysMenuService.updateSelecter(sysMenu);
+		int cnt = sysMenuService.update(sysMenu);
 		if(cnt > 0) {
 			return ok();
 		}
