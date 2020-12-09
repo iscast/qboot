@@ -19,25 +19,25 @@
     <result column="i18n_field" jdbcType="LONGVARCHAR" property="i18nField" />
   </resultMap>
 
-  <sql id="Base_Column_List" >
+    <sql id="Base_Column_List" >
     id, param_type_id, param_type_class, param_type_code, param_type_name, physics_flag
-  </sql>
-  <sql id="Blob_Column_List">
+    </sql>
+    <sql id="Blob_Column_List">
     i18n_field
-  </sql>
+    </sql>
   
-  <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select 
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    , remarks
-    from sys_param_type
-    where id = #{id} 
-  </select>
+    <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select
+        <include refid="Base_Column_List" />
+        ,
+        <include refid="Blob_Column_List" />
+        , remarks
+        from sys_param_type
+        where id = #{id}
+    </select>
   
-  <select id="findList" resultMap="BaseResultMap" parameterType="org.qboot.sys.dto.SysParamTypeDto" >
-    select 
+    <select id="findList" resultMap="BaseResultMap" parameterType="org.qboot.sys.dto.SysParamTypeDto" >
+    select
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
@@ -56,62 +56,61 @@
             and param_type_id >= #{paramTypeId}
         </if>
     </where>
-  </select>
+    </select>
   
-  <update id="changeById" parameterType="org.qboot.sys.dto.SysParamTypeDto" >
-    update sys_param_type
-    <set >
-        <if test="updateBy != null and updateBy != ''" >
-            update_by = #{updateBy,jdbcType=VARCHAR},
-        </if>
-        <if test="updateDate != null" >
-            update_date = #{updateDate,jdbcType=TIMESTAMP},
-        </if>
-        <if test="physicsFlag != null" >
-        physics_flag = #{physicsFlag,jdbcType=INTEGER},
-        </if>
-    </set>
-    where id = #{id} 
-  </update>
-  
-  <insert id="insert" parameterType="org.qboot.sys.dto.SysParamTypeDto" >
+    <update id="changeById" parameterType="org.qboot.sys.dto.SysParamTypeDto" >
+        update sys_param_type
+        <set >
+            <if test="updateBy != null and updateBy != ''" >
+                update_by = #{updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null" >
+                update_date = #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="physicsFlag != null" >
+            physics_flag = #{physicsFlag,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <insert id="insert" parameterType="org.qboot.sys.dto.SysParamTypeDto" >
     insert into sys_param_type (param_type_id, param_type_class, param_type_code, param_type_name, physics_flag, create_by, create_date, update_by, update_date, remarks, i18n_field)
     values (#{paramTypeId,jdbcType=INTEGER}, #{paramTypeClass,jdbcType=VARCHAR}, #{paramTypeCode,jdbcType=VARCHAR}, #{paramTypeName,jdbcType=VARCHAR}
-    	, #{physicsFlag,jdbcType=INTEGER}, #{createBy,jdbcType=VARCHAR}
-    	, #{createDate,jdbcType=TIMESTAMP},  #{updateBy,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, #{remarks,jdbcType=VARCHAR}
-    	, #{i18nField,jdbcType=LONGVARCHAR}
-      )
-  </insert>
-  
-  <update id="update" parameterType="org.qboot.sys.dto.SysParamTypeDto" >
-    update sys_param_type
-    <set >
-      <if test="paramTypeId != null" >
-        param_type_id = #{paramTypeId,jdbcType=VARCHAR},
-      </if>
-      <if test="paramTypeName != null and paramTypeName != ''" >
-        param_type_name = #{paramTypeName,jdbcType=VARCHAR},
-      </if>
-      <if test="paramTypeCode != null and paramTypeCode != ''" >
-        param_type_code = #{paramTypeCode,jdbcType=VARCHAR},
-      </if>
-      <if test="paramTypeClass != null and paramTypeClass != ''" >
-        param_type_class = #{paramTypeClass,jdbcType=VARCHAR},
-      </if>
-      <if test="updateBy != null and updateBy != ''" >
-        update_by = #{updateBy,jdbcType=VARCHAR},
-      </if>
-      <if test="updateDate != null" >
-        update_date = #{updateDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="remarks != null and remarks != ''" >
-        remarks = #{remarks,jdbcType=VARCHAR},
-      </if>
-      <if test="i18nField != null and i18nField != ''">
-        i18n_field = #{i18nField,jdbcType=LONGVARCHAR},
-      </if>
-    </set>
-    where id = #{id} 
-  </update>
+        , #{physicsFlag,jdbcType=INTEGER}, #{createBy,jdbcType=VARCHAR}
+        , #{createDate,jdbcType=TIMESTAMP},  #{updateBy,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, #{remarks,jdbcType=VARCHAR}
+        , #{i18nField,jdbcType=LONGVARCHAR})
+    </insert>
+
+    <update id="update" parameterType="org.qboot.sys.dto.SysParamTypeDto" >
+        update sys_param_type
+        <set >
+          <if test="paramTypeId != null" >
+            param_type_id = #{paramTypeId,jdbcType=VARCHAR},
+          </if>
+          <if test="paramTypeName != null and paramTypeName != ''" >
+            param_type_name = #{paramTypeName,jdbcType=VARCHAR},
+          </if>
+          <if test="paramTypeCode != null and paramTypeCode != ''" >
+            param_type_code = #{paramTypeCode,jdbcType=VARCHAR},
+          </if>
+          <if test="paramTypeClass != null and paramTypeClass != ''" >
+            param_type_class = #{paramTypeClass,jdbcType=VARCHAR},
+          </if>
+          <if test="updateBy != null and updateBy != ''" >
+            update_by = #{updateBy,jdbcType=VARCHAR},
+          </if>
+          <if test="updateDate != null" >
+            update_date = #{updateDate,jdbcType=TIMESTAMP},
+          </if>
+          <if test="remarks != null and remarks != ''" >
+            remarks = #{remarks,jdbcType=VARCHAR},
+          </if>
+          <if test="i18nField != null and i18nField != ''">
+            i18n_field = #{i18nField,jdbcType=LONGVARCHAR},
+          </if>
+        </set>
+        where id = #{id}
+    </update>
   
 </mapper>

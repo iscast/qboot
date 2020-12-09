@@ -18,7 +18,7 @@
     id, param_type_class, param_type_name, visible, physics_flag
   </sql>
   
-  <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.String" >
+  <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" /> , create_by, create_date, update_by, update_date, remarks
     from sys_param_class

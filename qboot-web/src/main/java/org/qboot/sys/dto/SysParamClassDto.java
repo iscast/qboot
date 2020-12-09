@@ -1,21 +1,17 @@
 package org.qboot.sys.dto;
 
-import javax.validation.constraints.NotNull;
-
 import org.qboot.common.entity.BaseEntity;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * <p>Title: SysParamClass</p>
  * <p>Description: 系统参数</p>
- * 
  * @author history
  * @date 2018-08-08
  */
-public class SysParamClassDto extends BaseEntity<String> {
+public class SysParamClassDto extends BaseEntity<Long> {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	/**

@@ -19,7 +19,7 @@
     id, type, code, name, sort, status, create_by, create_date, update_date
   </sql>
   
-  <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.String" >
+  <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" /> , remarks
     from sys_dict

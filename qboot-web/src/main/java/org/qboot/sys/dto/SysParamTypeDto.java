@@ -1,21 +1,18 @@
 package org.qboot.sys.dto;
 
-import javax.validation.constraints.NotNull;
-
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.qboot.common.entity.BaseEntity;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * <p>Title: SysParamType</p>
  * <p>Description: 系统类型参数</p>
- * 
- * @author history
+ * @author iscast
  * @date 2018-08-08
  */
-public class SysParamTypeDto extends BaseEntity<String> {
+public class SysParamTypeDto extends BaseEntity<Long> {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -46,8 +43,10 @@ public class SysParamTypeDto extends BaseEntity<String> {
 	 * 删除标识
 	 */
 	@NotNull
+    @JsonInclude(JsonInclude.Include.NON_NULL)
 	private Integer physicsFlag;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
 	private String i18nField;
 
 	public String getParamTypeClass() {

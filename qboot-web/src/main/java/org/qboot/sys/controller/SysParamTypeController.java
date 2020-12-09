@@ -65,7 +65,7 @@ public class SysParamTypeController extends BaseController {
 	
 	@PreAuthorize("hasAuthority('sys:param:qry')")
 	@RequestMapping("/get")
-	public ResponeModel get(@RequestParam Serializable id) {
+	public ResponeModel get(@RequestParam Long id) {
 		SysParamTypeDto sysParam = sysParamService.findById(id);
 		if(null == sysParam) {
             return ResponeModel.ok(SYS_PARAM_TYPE_QUERY_FAIL);
@@ -115,10 +115,10 @@ public class SysParamTypeController extends BaseController {
     @AccLog
 	@PreAuthorize("hasAuthority('sys:param:delete')")
 	@PostMapping("/delete")
-	public ResponeModel delete(@RequestParam Serializable id, @RequestParam Integer phyFlag) {
+	public ResponeModel delete(@RequestParam Long id, @RequestParam Integer phyFlag) {
         MyAssertTools.notNull(id, SYS_PARAM_TYPE_ID_NULL);
 		SysParamTypeDto sysParam = new SysParamTypeDto();
-		sysParam.setId(String.valueOf(id));
+		sysParam.setId(id);
 		sysParam.setPhysicsFlag(phyFlag);
         sysParam.setUpdateDate(new Date());
         sysParam.setUpdateBy(SecurityUtils.getLoginName());

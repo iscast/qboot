@@ -1,12 +1,11 @@
 package org.qboot.sys.dto;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.hibernate.validator.constraints.Length;
-
 import org.qboot.common.entity.BaseEntity;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 /**
  * <p>Title: SysDict</p>
@@ -14,7 +13,7 @@ import org.qboot.common.entity.BaseEntity;
  * @author history
  * @date 2018-08-08
  */
-public class SysDictDto extends BaseEntity<String>{
+public class SysDictDto extends BaseEntity<Long>{
 
 	private static final long serialVersionUID = 1L;
 

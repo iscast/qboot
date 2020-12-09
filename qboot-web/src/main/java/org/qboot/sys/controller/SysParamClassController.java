@@ -1,15 +1,15 @@
 package org.qboot.sys.controller;
 
 import com.github.pagehelper.PageInfo;
+import org.qboot.common.annotation.AccLog;
 import org.qboot.common.constants.CacheConstants;
+import org.qboot.common.controller.BaseController;
+import org.qboot.common.entity.ResponeModel;
+import org.qboot.common.security.SecurityUtils;
 import org.qboot.common.utils.MyAssertTools;
 import org.qboot.common.utils.RedisTools;
 import org.qboot.sys.dto.SysParamClassDto;
 import org.qboot.sys.service.impl.SysParamClassService;
-import org.qboot.common.annotation.AccLog;
-import org.qboot.common.controller.BaseController;
-import org.qboot.common.entity.ResponeModel;
-import org.qboot.common.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import static org.qboot.sys.exception.errorcode.SysModuleErrTable.*;
@@ -48,7 +47,7 @@ public class SysParamClassController extends BaseController {
 	
 	@PreAuthorize("hasAuthority('sys:param:qry')")
 	@RequestMapping("/get")
-	public ResponeModel get(@RequestParam Serializable id) {
+	public ResponeModel get(@RequestParam Long id) {
 		SysParamClassDto sysParam = sysParamClassService.findById(id);
 		if(null == sysParam) {
             return ResponeModel.error(SYS_PARAM_CLASS_QUERY_FAIL);
@@ -84,10 +83,10 @@ public class SysParamClassController extends BaseController {
     @AccLog
 	@PreAuthorize("hasAuthority('sys:param:delete')")
 	@PostMapping("/delete")
-	public ResponeModel delete(@RequestParam Serializable id, @RequestParam Integer phyFlag) {
+	public ResponeModel delete(@RequestParam Long id, @RequestParam Integer phyFlag) {
         MyAssertTools.notNull(id, SYS_PARAM_CLASS_ID_NULL);
 		SysParamClassDto sysParam = new SysParamClassDto();
-		sysParam.setId(String.valueOf(id));
+		sysParam.setId(id);
 		sysParam.setPhysicsFlag(phyFlag);
 		if(sysParamClassService.changeById(sysParam) > 0) {
             redisTools.del(CacheConstants.CACHE_PREFIX_SYS_PARAMTYPE_KEY + sysParam.getParamTypeClass());
@@ -99,10 +98,10 @@ public class SysParamClassController extends BaseController {
     @AccLog
 	@PreAuthorize("hasAuthority('sys:param:update')")
 	@PostMapping("/visible")
-	public ResponeModel visible(@RequestParam Serializable id, @RequestParam Integer visible) {
+	public ResponeModel visible(@RequestParam Long id, @RequestParam Integer visible) {
         MyAssertTools.notNull(id, SYS_PARAM_CLASS_ID_NULL);
 		SysParamClassDto sysParam = new SysParamClassDto();
-		sysParam.setId(String.valueOf(id));
+		sysParam.setId(id);
 		sysParam.setVisible(visible);
         sysParam.setUpdateDate(new Date());
         sysParam.setUpdateBy(SecurityUtils.getLoginName());
