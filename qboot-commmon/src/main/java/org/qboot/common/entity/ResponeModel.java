@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.qboot.common.constants.SysConstants;
+import org.qboot.common.error.ErrorCode;
 import org.qboot.common.error.IError;
 
 import java.io.Serializable;
@@ -50,6 +51,13 @@ public final class ResponeModel implements Serializable {
 	public static ResponeModel ok() {
 		return ok(SysConstants.GLOBAL_DEFAULT_SUCCESS_MSG);
 	}
+
+    public static ResponeModel ok(IError errorCode) {
+        ResponeModel responeModel = new ResponeModel();
+        responeModel.setCode(errorCode.getErrorCode());
+        responeModel.setMsg(errorCode.getErrorInfo());
+        return responeModel;
+    }
 
 	public static ResponeModel ok(Object data) {
 		ResponeModel responeModel = new ResponeModel();
