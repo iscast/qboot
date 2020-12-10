@@ -25,6 +25,8 @@ public class SysConstants {
     public static final String SYS_ENABLE = "1";
     public static final String SYS_DISABLE = "0";
 
+    public static final Integer SYS_DELFLAG_NORMAL = 1;
+    public static final Integer SYS_DELFLAG_DEL = 0;
 
     /**
      * default sucess code

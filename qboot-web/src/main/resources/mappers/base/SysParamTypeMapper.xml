@@ -37,25 +37,48 @@
     </select>
   
     <select id="findList" resultMap="BaseResultMap" parameterType="org.qboot.sys.dto.SysParamTypeDto" >
-    select
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from sys_param_type
-    <where>
-        <if test="paramTypeName !=null and paramTypeName != '' ">
-            and param_type_name like concat('%',#{paramTypeName},'%')
-        </if>
-        <if test="paramTypeClass !=null and paramTypeClass != '' ">
-            and param_type_class = #{paramTypeClass}
-        </if>
-        <if test="physicsFlag !=null">
-            and physics_flag = #{physicsFlag}
-        </if>
-        <if test="paramTypeId != null">
-            and param_type_id >= #{paramTypeId}
-        </if>
-    </where>
+        select
+        <include refid="Base_Column_List" />
+        ,
+        <include refid="Blob_Column_List" />
+        from sys_param_type
+        <where>
+            <if test="paramTypeName !=null and paramTypeName != '' ">
+                and param_type_name like concat('%',#{paramTypeName},'%')
+            </if>
+            <if test="paramTypeClass !=null and paramTypeClass != '' ">
+                and param_type_class = #{paramTypeClass}
+            </if>
+            <if test="physicsFlag !=null">
+                and physics_flag = #{physicsFlag}
+            </if>
+            <if test="paramTypeId != null">
+                and param_type_id = #{paramTypeId}
+            </if>
+        </where>
+    </select>
+
+    <select id="findByDto" resultMap="BaseResultMap" parameterType="org.qboot.sys.dto.SysParamTypeDto" >
+        select
+        <include refid="Base_Column_List" />
+        ,
+        <include refid="Blob_Column_List" />
+        , remarks
+        from sys_param_type
+        <where>
+            <if test="paramTypeName !=null and paramTypeName != '' ">
+                and param_type_name = #{paramTypeName}
+            </if>
+            <if test="paramTypeClass !=null and paramTypeClass != '' ">
+                and param_type_class = #{paramTypeClass}
+            </if>
+            <if test="paramTypeCode !=null and paramTypeCode != '' ">
+                and param_type_code = #{paramTypeCode}
+            </if>
+            <if test="paramTypeId != null">
+                and param_type_id = #{paramTypeId}
+            </if>
+        </where>
     </select>
   
     <update id="changeById" parameterType="org.qboot.sys.dto.SysParamTypeDto" >

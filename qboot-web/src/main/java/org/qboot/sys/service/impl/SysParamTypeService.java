@@ -26,17 +26,13 @@ public class SysParamTypeService extends CrudService<SysParamTypeDao, SysParamTy
 	@Autowired
     RedisTools redisTools;
 
-	public SysParamTypeDto findByParamKey(String paramKey) {
-        MyAssertTools.hasLength(paramKey, SYS_PARAM_TYPE_CLASS_NULL);
-		SysParamTypeDto sysParam = new SysParamTypeDto();
-		sysParam.setParamTypeClass(paramKey);
-		List<SysParamTypeDto> list = this.findList(sysParam);
-		return list.isEmpty()?null:list.get(0);
-	}
-
 	public int changeById(SysParamTypeDto sysParamType) {
 		return d.changeById(sysParamType);
 	}
+
+    public SysParamTypeDto findByDto(SysParamTypeDto sysParamType) {
+        return d.findByDto(sysParamType);
+    }
 
 	public List<SysParamTypeDto> findParamTypes(String paramKey) {
         MyAssertTools.hasLength(paramKey, SYS_PARAM_TYPE_CLASS_NULL);

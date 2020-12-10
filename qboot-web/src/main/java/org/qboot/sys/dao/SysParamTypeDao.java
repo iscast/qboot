@@ -1,7 +1,7 @@
 package org.qboot.sys.dao;
 
-import org.qboot.sys.dto.SysParamTypeDto;
 import org.qboot.common.dao.CrudDao;
+import org.qboot.sys.dto.SysParamTypeDto;
 
 /**
  * <p>Title: SysParamTypeDao</p>
@@ -12,4 +12,5 @@ import org.qboot.common.dao.CrudDao;
 public interface SysParamTypeDao extends CrudDao<SysParamTypeDto> {
 
 	int changeById(SysParamTypeDto sysParamType);
+    SysParamTypeDto findByDto(SysParamTypeDto sysParamType);
 }

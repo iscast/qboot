@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.qboot.common.annotation.AccLog;
 import org.qboot.common.constants.CacheConstants;
+import org.qboot.common.constants.SysConstants;
 import org.qboot.common.controller.BaseController;
 import org.qboot.common.entity.ResponeModel;
 import org.qboot.common.security.SecurityUtils;
@@ -78,7 +79,7 @@ public class SysParamTypeController extends BaseController {
 	@PostMapping("/save")
 	public ResponeModel save(@Validated SysParamTypeDto sysParam, BindingResult bindingResult, HttpServletRequest request) {
 		sysParam.setCreateBy(SecurityUtils.getLoginName());
-		sysParam.setPhysicsFlag(1);
+		sysParam.setPhysicsFlag(SysConstants.SYS_DELFLAG_NORMAL);
 		if (StringUtils.isNotBlank(sysParam.getParamTypeName())) {
 			sysParam.setParamTypeName(request.getParameter("paramTypeName"));
 		}

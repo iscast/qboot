@@ -3,6 +3,7 @@ package org.qboot.sys.controller;
 import com.github.pagehelper.PageInfo;
 import org.qboot.common.annotation.AccLog;
 import org.qboot.common.constants.CacheConstants;
+import org.qboot.common.constants.SysConstants;
 import org.qboot.common.controller.BaseController;
 import org.qboot.common.entity.ResponeModel;
 import org.qboot.common.security.SecurityUtils;
@@ -61,7 +62,7 @@ public class SysParamClassController extends BaseController {
 	public ResponeModel save(@Validated SysParamClassDto sysParam, BindingResult bindingResult) {
 		sysParam.setCreateBy(SecurityUtils.getLoginName());
 		sysParam.setVisible(1); // 默认可用
-		sysParam.setPhysicsFlag(1);
+		sysParam.setPhysicsFlag(SysConstants.SYS_DELFLAG_NORMAL);
 		if(sysParamClassService.save(sysParam) > 0) {
 			return ResponeModel.ok();
 		}
