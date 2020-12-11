@@ -68,7 +68,7 @@ public class WebControllerAdvice {
 	@ResponseBody
 	@ExceptionHandler(ErrorCodeException.class)
 	public ResponeModel responeException(ErrorCodeException e, HttpServletRequest request) {
-        logRequest(request, e);
+        logRequestBusiness(request, e);
 		return ResponeModel.error(e);
 	}
 
@@ -103,6 +103,28 @@ public class WebControllerAdvice {
         String method = request.getMethod();
         String eMsg = e.getMessage();
         logger.error("error msg: client ip:[{}] request method:[{}] , errorMsg:[{}], stackTrace:{}", remoteIp, method, eMsg, ExceptionUtils.getStackTrace(e));
+    }
+
+    /**
+     * 业务逻辑异常
+     * @author: iscast
+     * @date: 2020/12/11 10:36
+     */
+    private void logRequestBusiness(HttpServletRequest request, ErrorCodeException e) {
+        String[] stackFrames = ExceptionUtils.getStackFrames(e);
+        int errorCode = e.getErrorCode();
+        String errorInfo = e.getErrorInfo();
+        String stack0 = stackFrames[0];
+        String stack1 = stackFrames[1];
+        String stack2 = stackFrames[2];
+        if(null == request) {
+            logger.error("businessError code:[{}] errMsg:[{}] \n {} \n {} \n {}", errorCode, errorInfo, stack0, stack1, stack2);
+            return;
+        }
+
+        String remoteIp = request.getRemoteAddr();
+        String method = request.getMethod();
+        logger.error("businessError client ip:[{}] request method:[{}] code:[{}] errMsg:[{}] \n {} \n {} \n {}", remoteIp, method, errorCode, errorInfo, stack0, stack1, stack2);
     }
 
 }
