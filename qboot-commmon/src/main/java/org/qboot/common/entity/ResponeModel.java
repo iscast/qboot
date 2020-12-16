@@ -59,6 +59,13 @@ public final class ResponeModel implements Serializable {
         return responeModel;
     }
 
+    public static ResponeModel ok(ErrorCode errorCode) {
+        ResponeModel responeModel = new ResponeModel();
+        responeModel.setCode(errorCode.getErrorCode());
+        responeModel.setMsg(errorCode.getErrorInfo());
+        return responeModel;
+    }
+
 	public static ResponeModel ok(Object data) {
 		ResponeModel responeModel = new ResponeModel();
         responeModel.setCode(SysConstants.GLOBAL_DEFAULT_SUCCESS);
