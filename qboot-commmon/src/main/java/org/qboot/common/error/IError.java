@@ -11,7 +11,7 @@ public interface IError {
 
     //定义成功的错误码和错误信息
     int SUCC_CODE = SysConstants.GLOBAL_DEFAULT_SUCCESS;
-    String SUCC_INFO = SysConstants.SUCESS;
+    String SUCC_INFO = SysConstants.SUCCESS;
 
     int getErrorCode();
     String getErrorInfo();

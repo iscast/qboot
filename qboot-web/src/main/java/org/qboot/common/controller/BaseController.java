@@ -12,8 +12,6 @@ import org.springframework.util.StringUtils;
 
 import java.util.Locale;
 
-import static org.qboot.common.constants.SysConstants.*;
-
 /**
  * <p>Title: BaseController</p>
  * <p>Description: 基础 Controller</p>
@@ -48,7 +46,7 @@ public class BaseController {
 		return msg ;
 	}
 
-	protected ResponeModel ok(){ return ResponeModel.ok(SystemErrTable.SUCESS); }
+	protected ResponeModel ok(){ return ResponeModel.ok(SystemErrTable.SUCCESS); }
 
 	protected ResponeModel err(){ return ResponeModel.error(SystemErrTable.ERR); }
 }

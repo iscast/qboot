@@ -27,7 +27,7 @@ public final class ResponeModel implements Serializable {
 	/**
 	 * 响应信息
 	 */
-	private String msg = SysConstants.SUCESS;
+	private String msg = SysConstants.SUCCESS;
 	/**
 	 * 请求id
 	 */

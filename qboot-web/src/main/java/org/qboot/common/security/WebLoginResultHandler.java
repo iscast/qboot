@@ -85,7 +85,7 @@ public class WebLoginResultHandler implements AuthenticationSuccessHandler,Authe
 		ResponeModel ok = ResponeModel.ok();
 		String loginName = this.obtainUsername(request);
 		loginLog(SysConstants.SYS_USER_LOGIN_STATUS_SUCCESS, loginName, request);
-		logger.info("user:[{}] login sucess ！", loginName);
+		logger.info("user:[{}] login success ！", loginName);
 		String sessionId = request.getSession().getId();
 		loginSecurityService.setUserSessionId(loginName, sessionId);
 		loginSecurityService.clearLoginFailTimes(loginName);
@@ -120,7 +120,7 @@ public class WebLoginResultHandler implements AuthenticationSuccessHandler,Authe
 		if(StringUtils.isNotBlank(userName)) {
 			loginSecurityService.clearUserSessions(userName);
 		}
-		this.print(response, JSON.toJSONString(ResponeModel.ok("logout sucess")));
+		this.print(response, JSON.toJSONString(ResponeModel.ok("logout success")));
 	}
 
 	/**

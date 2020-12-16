@@ -19,7 +19,7 @@ import static org.qboot.common.constants.SysConstants.*;
  */
 public class SystemErrTable {
 
-    public static final ErrorCode SUCESS = new ErrorCode(GLOBAL_DEFAULT_SUCCESS, GLOBAL_DEFAULT_SUCCESS_MSG);
+    public static final ErrorCode SUCCESS = new ErrorCode(GLOBAL_DEFAULT_SUCCESS, GLOBAL_DEFAULT_SUCCESS_MSG);
     public static final ErrorCode ERR = new ErrorCode(GLOBAL_DEFAULT_ERROR, GLOBAL_DEFAULT_ERROR_MSG);
 
     public static final ErrorCode AUTH_FAIL = new ErrorCode(60000, "auth.no.login");

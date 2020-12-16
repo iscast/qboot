@@ -18,7 +18,7 @@ public class SysConstants {
 	
 	public static final String SEPARATOR = ",";
 
-	public static final String SUCESS = "sucess";
+	public static final String SUCCESS = "success";
 	public static final String ERROR = "error";
 	public static final String FAIL = "fail";
 
@@ -29,7 +29,7 @@ public class SysConstants {
     public static final Integer SYS_DELFLAG_DEL = 0;
 
     /**
-     * default sucess code
+     * default success code
      */
     public final static int GLOBAL_DEFAULT_SUCCESS = 0;
     /**
@@ -37,7 +37,7 @@ public class SysConstants {
      */
     public final static int GLOBAL_DEFAULT_ERROR = -1;
 
-    public final static String GLOBAL_DEFAULT_SUCCESS_MSG = SUCESS;
+    public final static String GLOBAL_DEFAULT_SUCCESS_MSG = SUCCESS;
 
     public final static String GLOBAL_DEFAULT_ERROR_MSG = ERROR;
 
