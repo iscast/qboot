@@ -1,5 +1,6 @@
 package org.qboot.sys.service.impl;
 
+import org.qboot.common.constants.SysConstants;
 import org.qboot.common.utils.MyAssertTools;
 import org.qboot.sys.dao.SysParamTypeDao;
 import org.qboot.sys.dto.SysParamTypeDto;
@@ -43,6 +44,7 @@ public class SysParamTypeService extends CrudService<SysParamTypeDao, SysParamTy
 		}
 
 		SysParamTypeDto sysParam = new SysParamTypeDto();
+        sysParam.setPhysicsFlag(SysConstants.SYS_DELFLAG_NORMAL);
 		sysParam.setParamTypeClass(paramKey);
 		list = this.findList(sysParam);
 		redisTools.set(key, list, 60*5);

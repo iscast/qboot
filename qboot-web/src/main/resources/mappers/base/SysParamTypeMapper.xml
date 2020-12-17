@@ -33,7 +33,7 @@
         <include refid="Blob_Column_List" />
         , remarks
         from sys_param_type
-        where id = #{id}
+        where id = #{id} and physics_flag = 1
     </select>
   
     <select id="findList" resultMap="BaseResultMap" parameterType="org.qboot.sys.dto.SysParamTypeDto" >
@@ -43,14 +43,12 @@
         <include refid="Blob_Column_List" />
         from sys_param_type
         <where>
+            physics_flag = 1
             <if test="paramTypeName !=null and paramTypeName != '' ">
                 and param_type_name like concat('%',#{paramTypeName},'%')
             </if>
             <if test="paramTypeClass !=null and paramTypeClass != '' ">
                 and param_type_class = #{paramTypeClass}
-            </if>
-            <if test="physicsFlag !=null">
-                and physics_flag = #{physicsFlag}
             </if>
             <if test="paramTypeId != null">
                 and param_type_id = #{paramTypeId}
@@ -66,6 +64,7 @@
         , remarks
         from sys_param_type
         <where>
+            physics_flag = 1
             <if test="paramTypeName !=null and paramTypeName != '' ">
                 and param_type_name = #{paramTypeName}
             </if>
@@ -80,7 +79,7 @@
             </if>
         </where>
     </select>
-  
+
     <update id="changeById" parameterType="org.qboot.sys.dto.SysParamTypeDto" >
         update sys_param_type
         <set >
@@ -91,7 +90,7 @@
                 update_date = #{updateDate,jdbcType=TIMESTAMP},
             </if>
             <if test="physicsFlag != null" >
-            physics_flag = #{physicsFlag,jdbcType=INTEGER},
+                physics_flag = #{physicsFlag,jdbcType=INTEGER},
             </if>
         </set>
         where id = #{id}
