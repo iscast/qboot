@@ -45,10 +45,9 @@
             page: true,
             even: true, //开启隔行背景
             cols: [[
-                {type: 'numbers'},
                 {field: 'loginName', sort: true, title: msgs['sys.form.label.loginName']},
                 {field: 'name', sort: true, title: msgs['sys.form.label.name']},
-                {field: 'mobile', sort: true, title: msgs['sys.form.label.tel'], width: '15%',},
+                {field: 'mobile', sort: true, title: msgs['sys.form.label.tel'], width: '15%'},
                 {sort: true, title: msgs['sys.table.title.createTime'], width: '15%',
                     templet: function (d) { return util.toDateString(d.createDate);}},
                 {align: 'center', field: 'status', width: '10%',  sort: false, templet: function(d){

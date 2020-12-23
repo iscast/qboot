@@ -73,8 +73,7 @@
             // ,iconOpen:true//是否显示图标【默认显示】
             ,isOpenDefault: false//节点默认是展开还是折叠【默认展开】
             ,cols: [[
-                {type:'numbers', width: '30'}
-                ,{field:'name', title: msgs['sys.table.title.menuName'],templet: function(d){
+                {field:'name', title: msgs['sys.table.title.menuName'],templet: function(d){
                         let originalName = d.name;
                         if('zh_cn' != _i18n.getLang()) {
                             let ornModule = d.permission;
@@ -207,7 +206,6 @@
                 height: 550,
                 width: 415,
                 cols: [[
-                    {align: 'left', type: 'numbers', width: '20'},
                     {align: 'left', field: 'name', title: msgs['sys.table.title.name'], width: '80'},
                     {align: 'left', field:'permission', title: msgs['sys.table.title.authority'], width: '110'},
                     {align: 'left', field: 'status', templet: function(d){
