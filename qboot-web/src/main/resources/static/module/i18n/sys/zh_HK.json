@@ -53,6 +53,7 @@
   "sys.form.label.inputParamTypeName":"請輸入分類名稱",
   "sys.form.label.inputUriName":"請輸入URI名稱",
   "sys.form.label.inputUriAddr":"請輸入URI地址",
+  "sys.form.label.log.level":"日誌級別",
 
 
   "sys.form.hint.inputMenuName":"請輸入菜單名稱",

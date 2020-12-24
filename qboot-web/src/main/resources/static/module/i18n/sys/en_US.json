@@ -53,6 +53,7 @@
   "sys.form.label.inputParamTypeName":"please input parameter type name",
   "sys.form.label.inputUriName":"please input uri name",
   "sys.form.label.inputUriAddr":"please input uri addr",
+  "sys.form.label.log.level":"log level",
 
 
   "sys.form.hint.inputMenuName":"please input menu name",

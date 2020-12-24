@@ -68,6 +68,9 @@ public class SysModuleErrTable {
     public static final ErrorCode SYS_DICT_DELETE_FAIL = new ErrorCode(30542, "sys.dict.delete.fail");
     public static final ErrorCode SYS_DICT_QUERY_FAIL = new ErrorCode(30543, "sys.dict.query.fail");
 
+    // log 306xx
+    public static final ErrorCode SYS_LOG_NO_EXIST = new ErrorCode(30600, "sys.log.no.exist");
+
     // task 309xx
     /** 任务重复 */
     public static final ErrorCode SYS_TASK_DUPLICATE = new ErrorCode(30900, "sys.task.duplicate");

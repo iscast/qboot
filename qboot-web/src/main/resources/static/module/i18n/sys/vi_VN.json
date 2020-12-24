@@ -53,6 +53,7 @@
   "sys.form.label.inputParamTypeName":"xin vui lòng nhập tham số Kiểu Tên",
   "sys.form.label.inputUriName":"vui lòng nhập tên tiểu",
   "sys.form.label.inputUriAddr":"vui lòng nhập địa chỉ tiểu",
+  "sys.form.label.log.level":"Nhật ký cấp độ",
 
 
   "sys.form.hint.inputMenuName":"xin vui lòng nhập thực đơn Tên",

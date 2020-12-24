@@ -71,6 +71,10 @@ public class SysConstants {
 	public static final String TASK_MAP_PARAMS_KEY_LAST_RESULT = "lastResult";
 
 
+	/** log param begin */
+
+    /** log param end */
+
 	/** login status begin */
     public static final int SYS_USER_PWD_STATUS_NORMAL = 0;
     public static final int SYS_USER_PWD_STATUS_INIT = 1;

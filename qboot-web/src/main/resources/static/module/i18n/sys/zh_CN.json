@@ -53,6 +53,7 @@
     "sys.form.label.inputParamTypeName":"请输入分类名称",
     "sys.form.label.inputUriName":"请输入URI名称",
     "sys.form.label.inputUriAddr":"请输入URI地址",
+    "sys.form.label.log.level":"日志级别",
 
 
     "sys.form.hint.inputMenuName":"请输入菜单名称",

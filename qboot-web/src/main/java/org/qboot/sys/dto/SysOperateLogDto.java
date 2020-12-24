@@ -1,8 +1,8 @@
 package org.qboot.sys.dto;
 
-import java.util.Date;
-
 import org.qboot.common.entity.BaseEntity;
+
+import java.util.Date;
 
 /**
  * <p>Title: SysOperateLogDto</p>

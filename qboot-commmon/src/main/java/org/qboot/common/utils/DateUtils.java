@@ -41,6 +41,10 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         return formatDate(date, "yyyy-MM-dd HH:mm:ss");
     }
 
+    public static String formatDateTimeMilli(Date date) {
+        return formatDate(date, "yyyy-MM-dd HH:mm:ss.SSS");
+    }
+
     public static String getTime() {
         return formatDate(new Date(), "HH:mm:ss");
     }

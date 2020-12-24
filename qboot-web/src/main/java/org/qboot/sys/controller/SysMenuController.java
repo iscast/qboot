@@ -151,7 +151,6 @@ public class SysMenuController extends BaseController {
 		return ResponeModel.ok(sysMenu);
 	}
 
-	// todo 菜单/按钮的保存有问题
     @AccLog
 	@PreAuthorize("hasAuthority('sys:menu:save')")
 	@PostMapping("/save")
@@ -221,7 +220,8 @@ public class SysMenuController extends BaseController {
 	public ResponeModel qryMenuByRoleId(@RequestParam(required=false) String roleId) {
 		return ResponeModel.ok(sysMenuService.findByRoleId(roleId));
 	}
-	
+
+	@AccLog
 	@PreAuthorize("hasAuthority('sys:menu:update')")
 	@GetMapping("/changeShowFlag")
 	public ResponeModel changeShowFlag(@RequestParam(required=false) String id, @RequestParam(required=false) String isShow) {
