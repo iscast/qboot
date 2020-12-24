@@ -45,9 +45,8 @@
         <label class="layui-form-label layui-i18n" i18n-key="sys.form.label.menuType"></label>
         <div class="layui-input-block">
             <select id="type" name="type" lay-filter="type">
-		        <!-- <option value="0">功能模块</option>
-	            <option value="1" selected="selected">菜单</option>
-	            <option value="999">按钮</option> -->
+		        <option value="0">模块</option>
+	            <option value="1">菜单</option>
 		    </select>
         </div>
     </div>
@@ -114,18 +113,19 @@
         	}else{
         		m_parentId = menu.parentMenuId;
         	}
-        	menuType = menu.type;
-            form.val('menu-form', menu);
-            if(menu.icon){
-            /**
-              * 选中图标 （常用于更新时默认选中图标）
-               * @param filter lay-filter
-               * @param iconName 图标名称，自动识别fontClass/unicode
-               */
-              iconPicker.checkIcon('iconPic', menu.icon);
+
+        	if("999" == menu.type) {
+                $("#type").append('<option value="999" selected="selected">按钮</option>');
+                $("#type").attr("disabled","disabled");
             }
+
+            form.val('menu-form', menu);
+
+            // 选中图标 （常用于更新时默认选中图标）
+            if(menu.icon)
+              iconPicker.checkIcon('iconPic', menu.icon);
         }
-        
+
         form.on('select(parentMenu)', function(data){
         	var selectVal = $('#parentMenu').find('option:selected').val();
         	$('#parentId').val(selectVal);
@@ -134,8 +134,8 @@
         // 表单提交事件
         form.on('submit(menu-form-submit)', function (data) {
         	var selectVal = $('#parentMenu').find('option:selected').val();
-        	var menuType = $('#type').val();
-        	if(menuType != 0 && (selectVal == null || selectVal == '')){
+        	var selectType = $('#type').val();
+        	if(selectType != 0 && (selectVal == null || selectVal == '')){
         		layer.msg(msgs['sys.form.label.parentMenu'], {icon: 2});
         		return false;
         	}
@@ -161,27 +161,6 @@
             return false;
         });
 
-        var menuId = $('#id').val();
-        if(menuId == null || menuId == ''){
-        	if(menuType == 1){
-            	$("#type").append('<option value="999" selected="selected">按钮</option>'); 
-            	$("#type").attr("disabled","disabled");
-            }else{
-            	$("#type").append('<option value="0" '+(menuType==0?'selected="selected"':'')+'>模块</option>'); 
-            	$("#type").append('<option value="1" '+(menuType==1?'selected="selected"':'')+'>菜单</option>'); 
-            	$("#type").append('<option value="999" '+(menuType==999?'selected="selected"':'')+'>按钮</option>'); 
-            }
-        }else{
-        	if(menuType == 999){
-            	$("#type").append('<option value="999" selected="selected">按钮</option>'); 
-            	$("#type").attr("disabled","disabled");
-            }else{
-            	$("#type").append('<option value="0" '+(menuType==0?'selected="selected"':'')+'>模块</option>'); 
-            	$("#type").append('<option value="1" '+(menuType==1?'selected="selected"':'')+'>菜单</option>'); 
-            	$("#type").append('<option value="999" '+(menuType==999?'selected="selected"':'')+'>按钮</option>'); 
-            }
-        }
-        
         // 获取所有菜单
         layer.load(2);
         admin.req('/sys/menu/qryParentMenus', {}, function (data) {
@@ -207,8 +186,6 @@
         }, 'GET');
 
         form.render();//表单重新渲染，要不然添加完显示不出来新的option
-
-        
     });
     
 </script>

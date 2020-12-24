@@ -1,4 +1,3 @@
-
 <style>
 	.treeTable{
 		overflow-y: auto;
@@ -22,7 +21,7 @@
     </div>
     <div class="layui-col-md4 tableBG">
     		<div class="layui-btn-group tableBG">
-			  <button id="menu-btn-add1" class="layui-btn layui-icon layui-icon-add-circle-fine layui-i18n" i18n-key="sys.btn.addPermissions" data-auth="sys:menu:save"></button>
+			  <button id="menu-btn-addBtn" class="layui-btn layui-icon layui-icon-add-circle-fine layui-i18n" i18n-key="sys.btn.addPermissions" data-auth="sys:menu:save"></button>
           </div>
 	      <div class="grid-demo btnTable tableBG" id="btnLayTable">
 	      	<input type="hidden" id="parentId" name="parentId"/>
@@ -190,9 +189,7 @@
             	edit(obj.data.id, obj.data.type,msgs['sys.btn.editMenu']);
             }
         });
-        
         setButtons([], null);
-
         function setButtons(data, parentId) {
     		$('#parentId').val('');
         	if(parentId != null && parentId != ''){
@@ -267,9 +264,8 @@
             });
         });
      // 添加按钮点击事件
-        $('#menu-btn-add1').click(function () {
-        	admin.putTempData('t_menu', {});
-        	admin.putTempData('t_menu', {parentMenuId:$('#parentId').val(), type:1});
+        $('#menu-btn-addBtn').click(function () {
+        	admin.putTempData('t_menu', {parentMenuId:$('#parentId').val(), type:999});
         	var title = msgs['sys.btn.addPermissions'];
             admin.popupCenter({
                 title: title,
