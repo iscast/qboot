@@ -5,10 +5,6 @@
             <input type="text" id="optStartDate" name="optStartDate" class="layui-input search-input i18n-input-hint"  i18n-key="sys.form.hint.startTime"> -
 	        <input type="text" id="optEndDate" name="optEndDate" class="layui-input search-input i18n-input-hint" i18n-key="sys.form.hint.endTime">
 	        <button id="operateLog-btn-search" class="layui-btn icon-btn layui-btn-search"></button><br><br>
-	        
-          <div class="layui-btn-group">
-			  <button id="log-btn-set" class="layui-btn layui-icon layui-icon-set-sm layui-i18n" i18n-key="sys.btn.configLog" data-auth="sys:operateinfo:qry" onclick="logSet()"></button>
-          </div>
         </div>
         <!-- 数据表格 -->
         <div id="operateLogLayTable">
@@ -86,13 +82,5 @@
         /*table.on('sort(operateLog-table)',function () {
             _i18n.initPage();
         });*/
-
-        // 日志操作界面
-        $('#log-btn-set').click(function () {
-        	index.loadView("sys_operateinfo", 'pages/sys/operateinfo.html', msgs['sys.btn.configLog']);
-            location.hash = '#!sys_operateinfo';
-        });
-        
     });
-    
 </script>

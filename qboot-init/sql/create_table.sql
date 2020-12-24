@@ -145,25 +145,6 @@ CREATE TABLE `sys_operate_log`
   AUTO_INCREMENT = 1
   DEFAULT CHARSET = utf8mb4 COMMENT ='操作日志表.';
 
-DROP TABLE IF EXISTS `sys_operate_log_info`;
-CREATE TABLE `sys_operate_log_info`
-(
-    `LOG_ID`       bigint(20) NOT NULL AUTO_INCREMENT COMMENT '日志ID.',
-    `REQ_URI`      varchar(128)    DEFAULT NULL COMMENT '请求URI',
-    `URI_NAME`     varchar(128)    DEFAULT NULL COMMENT 'URI名称.',
-    `URI_TYPE`     tinyint(4) DEFAULT '0' COMMENT 'URI类型.1:菜单地址，2：操作地址，0：其它;默认为0.',
-    `PHYSICS_FLAG` tinyint(4) DEFAULT '1' COMMENT '删除标识：1-正常；0-删除',
-    `CREATE_DATE`  timestamp  NULL DEFAULT NULL COMMENT '创建时间.',
-    `UPDATE_DATE`  timestamp  NULL DEFAULT NULL COMMENT '更新时间',
-    `UPDATE_BY`    varchar(8)      DEFAULT NULL COMMENT '更新人',
-    `CREATE_BY`    varchar(8)      DEFAULT NULL COMMENT '创建人',
-    `REMARKS`      varchar(255)    DEFAULT NULL COMMENT '备注',
-    `version`      bigint DEFAULT '1' COMMENT '版本',
-    PRIMARY KEY (`LOG_ID`) USING BTREE
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 1
-  DEFAULT CHARSET = utf8mb4 COMMENT ='操作日志配置表.';
-
 DROP TABLE IF EXISTS `sys_param_class`;
 CREATE TABLE `sys_param_class`
 (
