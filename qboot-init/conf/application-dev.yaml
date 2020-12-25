@@ -4,6 +4,7 @@ admin:
 #  loginUrl: http://127.0.0.1:8080/login_pc.html
 server:
   port: 8080
+  logPath: 日志文件路径
 spring:
   application:
     name: qboot
