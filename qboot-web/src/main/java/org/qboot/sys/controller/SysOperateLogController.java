@@ -1,9 +1,11 @@
 package org.qboot.sys.controller;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.qboot.common.annotation.AccLog;
 import org.qboot.common.controller.BaseController;
 import org.qboot.common.entity.ResponeModel;
-import org.qboot.common.security.SecurityUtils;
 import org.qboot.sys.exception.errorcode.SysModuleErrTable;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,11 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URLEncoder;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 /**
  * 访问日志
@@ -30,22 +31,18 @@ public class SysOperateLogController extends BaseController {
 
     @Value("${server.logPath:}")
     private String logPath = "logs";
-
-//    private final static String info = "info";
-//    private final static String warn = "warn";
-//    private final static String error = "error";
     private final static String access = "access";
 
+    @AccLog
 	@PreAuthorize("hasAuthority('sys:operatelog:qry')")
 	@GetMapping("/download")
 	public ResponeModel download(String date, String level, HttpServletResponse response) throws Exception {
-        logger.info("user:{} download system date:{} level:{} log {}", SecurityUtils.getLoginName(), date, level, logPath);
-        response.setContentType("multipart/form-data");
         if(StringUtils.isBlank(level)) {
             level = access;
         }
 
-        String fileName = logPath + File.separator + "log_" + level + ".log";
+        String targetName = "log_" + level;
+        String fileName = logPath + File.separator + targetName + ".log";
         if(StringUtils.isNotBlank(date)) {
             String dirStr = logPath + File.separator + level;
             File dir = new File(dirStr);
@@ -59,39 +56,26 @@ public class SysOperateLogController extends BaseController {
             }
         }
 
-        if (StringUtils.isBlank(fileName)) {
+        File file = new File(fileName);
+        if (!file.exists())
             return ResponeModel.error(SysModuleErrTable.SYS_LOG_NO_EXIST);
-        }
 
-        ServletOutputStream out = null;
-        InputStream inputStream = null;
-        try{
-            File file = new File(fileName);
-            response.setHeader("Content-Disposition", "attachment;filename=" + file.getName());
-            inputStream = new FileInputStream(file);
-            out = response.getOutputStream();
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ZipOutputStream zos = new ZipOutputStream(bos);
+        zos.putNextEntry(new ZipEntry("logs" + File.separator + file.getName()));
+        byte[] bytes = FileUtils.readFileToByteArray(file);
+        IOUtils.write(bytes, zos);
+        zos.closeEntry();
+        zos.close();
+        byte[] byteArray = bos.toByteArray();
 
-            int b = 0;
-            byte[] buffer = new byte[512];
-            while (b != -1){
-                b = inputStream.read(buffer);
-                //4.写到输出流(out)中
-                out.write(buffer,0,b);
-            }
-            inputStream.close();
-            out.close();
-            out.flush();
-
-        } catch (IOException e) {
-            logger.error("down log file fail", e);
-        }finally {
-            if(null != out)
-                out.close();
-
-            if(null != inputStream)
-                inputStream.close();
-        }
-
+        response.setContentType("application/zip");
+        response.setHeader("Content-Disposition", "attachment;filename="+ targetName + ".zip");
+        response.setContentLength(byteArray.length);
+        ServletOutputStream output = response.getOutputStream();
+        IOUtils.write(byteArray, output);
+        IOUtils.closeQuietly(output);
+        IOUtils.closeQuietly(bos);
 		return ResponeModel.ok();
 	}
 

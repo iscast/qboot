@@ -1,11 +1,6 @@
 package org.qboot.sys.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import org.qboot.sys.dto.SysMenuDto;
-import org.qboot.sys.dto.SysUserDto;
-import org.qboot.sys.service.impl.SysLoginLogService;
-import org.qboot.sys.service.impl.SysMenuService;
-import org.qboot.sys.service.impl.SysUserService;
 import org.qboot.common.annotation.AccLog;
 import org.qboot.common.controller.BaseController;
 import org.qboot.common.entity.ResponeModel;
@@ -20,7 +15,6 @@ import org.qboot.sys.service.impl.SysMenuService;
 import org.qboot.sys.service.impl.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import reactor.util.function.Tuple2;
@@ -45,9 +39,6 @@ public class SysLoginController extends BaseController {
 	
 	@Autowired
 	private SysMenuService sysMenuService;
-
-	@Autowired
-	private SysLoginLogService sysLoginLogService;
 
     @Value("${admin.loginUrl:}")
     private String adminLoginUrl;
