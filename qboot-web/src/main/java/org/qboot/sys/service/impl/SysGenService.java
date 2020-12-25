@@ -1,19 +1,17 @@
 package org.qboot.sys.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import org.qboot.common.service.CrudService;
+import org.qboot.common.utils.GenTypeMappingUtils;
 import org.qboot.sys.dao.SysGenDao;
-import org.qboot.sys.dto.DbTableDto;
 import org.qboot.sys.dto.DbTableColumnDto;
+import org.qboot.sys.dto.DbTableDto;
 import org.qboot.sys.dto.GenColumnInfoDto;
 import org.qboot.sys.dto.SysGenDto;
-import org.qboot.sys.vo.SysProjectGenVO;
-import org.qboot.common.utils.GenTypeMappingUtils;
-import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
@@ -21,7 +19,6 @@ import java.util.List;
 /**
  * 代码生成
  * @author history
- *
  */
 @Service
 public class SysGenService extends CrudService<SysGenDao, SysGenDto> {
@@ -90,11 +87,6 @@ public class SysGenService extends CrudService<SysGenDao, SysGenDto> {
 		SysGenDto sysGen = this.findById(id);
 		Assert.notNull(sysGen,"方案为空");
 		return this.generatorService.codeGen(sysGen);
-	}
-
-	public byte[] projectGen(SysProjectGenVO sysProjectGenVo) throws IOException {
-		Assert.notNull(sysProjectGenVo,"项目生成方案为空");
-		return this.generatorService.projectGen(sysProjectGenVo);
 	}
 	
 }

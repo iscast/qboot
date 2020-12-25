@@ -8,7 +8,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.qboot.common.config.FreeMarkerResolver;
 import org.qboot.common.constants.SysConstants;
 import org.qboot.common.enums.GenEnum;
-import org.qboot.common.exception.ErrorCodeException;
 import org.qboot.common.service.BaseService;
 import org.qboot.common.utils.GenTypeMappingUtils;
 import org.qboot.sys.dto.DbTableColumnDto;
@@ -16,7 +15,6 @@ import org.qboot.sys.dto.DbTableDto;
 import org.qboot.sys.dto.GenColumnInfoDto;
 import org.qboot.sys.dto.SysGenDto;
 import org.qboot.sys.exception.SysGenException;
-import org.qboot.sys.vo.SysProjectGenVO;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -40,32 +38,15 @@ public class GeneratorService extends BaseService {
 	/**
 	 * 默认有的字段
 	 */
-	private static final String[] defaultFields = { "id", "create_by", "create_date", "update_by", "update_date",
-			"remarks" };
+	private static final String[] defaultFields = { "id", "create_by", "create_date", "update_by", "update_date", "remarks" };
 
 	/**
 	 * 待生成代码模板
 	 */
 	private static final String[] ftls = {"gen/mapper.xml.ftl","gen/entity.java.ftl","gen/dao.java.ftl","gen/service.java.ftl","gen/serviceImpl.java.ftl","gen/controller.java.ftl","gen/page.html.ftl","gen/menu.sql.ftl"};
-	
-	/**
-	 * 待生成项目模板
-	 */
-	private static final String[] projectFtls = {"projectgen/pom.xml.ftl","projectgen/RapidDevelopmentPlatformApplicationTests.java.ftl","projectgen/web.xml.ftl"
-			,"projectgen/_config.js.ftl","projectgen/application.properties.ftl","projectgen/index.html.ftl","projectgen/login.html.ftl"
-			,"projectgen/logback-spring.xml.ftl","projectgen/mybatis-config.xml.ftl","projectgen/redisson.yaml.ftl"
-			,"projectgen/RapidDevelopmentPlatformApplication.java.ftl"};
-	
 	private static final String javaFolder = "/code/src/main/java/";
 	private static final String resourcesFolder = "/code/src/main/resources/";
 	private static final String staticFolder = "/code/src/main/webapp/static/";
-	
-	private static final String projectStaticFolder = "/code/src/main/resources/static/";
-	private static final String moduleFolder = "/code/src/main/resources/static/module/";
-	private static final String pagesFolder = "/code/src/main/resources/static/pages/";
-	private static final String testFolder = "/code/src/test/java/org/qboot/";
-	private static final String webFolder = "/code/src/main/webapp/WEB-INF/";
-	private static final String folder = "/code/";
 
 
 	/**
@@ -256,49 +237,4 @@ public class GeneratorService extends BaseService {
 		return WordUtils.capitalizeFully(name, new char[] { '_' }).replace("_", "");
 	}
 
-	public byte[] projectGen(SysProjectGenVO sysProjectGenVo) throws IOException {
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		ZipOutputStream zos = new ZipOutputStream(bos);
-		for (String ftl : projectFtls) {
-			String content = FreeMarkerResolver.renderTemplate(ftl, sysProjectGenVo);
-			logger.info("ftl {}:\r\n{}",ftl,content);
-			zos.putNextEntry(new ZipEntry(this.getZipEntryName(ftl, sysProjectGenVo)));
-			IOUtils.write(content, zos);
-			zos.closeEntry();
-		}
-		zos.close();
-		byte[] byteArray = bos.toByteArray();
-		return byteArray;
-	}
-
-	private String getZipEntryName(String ftl, SysProjectGenVO sysProjectGenVo) {
-		String name = null;
-		String projectName = sysProjectGenVo.getProjectName();
-
-		if (ftl.contains("web.xml")) {
-			name = webFolder + "web.xml";
-		} else if(ftl.contains("RapidDevelopmentPlatformApplicationTests.java")) {
-			name = testFolder + projectName + "/" + "RapidDevelopmentPlatformApplicationTests.java";
-		} else if(ftl.contains("pom.xml")) {
-			name = folder + "pom.xml";
-		} else if(ftl.contains("_config.js")) {
-			name = moduleFolder + "_config.js";
-		} else if(ftl.contains("index.html")) {
-			name = pagesFolder + "index.html";
-		} else if(ftl.contains("login.html")) {
-			name = pagesFolder + "login.html";
-		} else if(ftl.contains("application.properties")) {
-			name = projectStaticFolder + "application.properties";
-		} else if(ftl.contains("logback-spring.xml")) {
-			name = projectStaticFolder + "logback-spring.xml";
-		} else if(ftl.contains("mybatis-config.xml")) {
-			name = projectStaticFolder + "mybatis-config.xml";
-		} else if(ftl.contains("redisson.yaml")) {
-			name = projectStaticFolder + "redisson.yaml";
-		} else if(ftl.contains("RapidDevelopmentPlatformApplication.java")) {
-			name = javaFolder + projectName + "/" + "RapidDevelopmentPlatformApplication.java";
-		}
-		Assert.hasLength(name, "zipEntryName 为空");
-		return name;
-	}
 }

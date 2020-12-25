@@ -6,7 +6,6 @@ import org.apache.commons.io.IOUtils;
 import org.qboot.sys.dto.GenColumnInfoDto;
 import org.qboot.sys.dto.SysGenDto;
 import org.qboot.sys.service.impl.SysGenService;
-import org.qboot.sys.vo.SysProjectGenVO;
 import org.qboot.common.annotation.AccLog;
 import org.qboot.common.constants.SysConstants;
 import org.qboot.common.controller.BaseController;
@@ -107,22 +106,6 @@ public class SysGenController extends BaseController {
 		byte[] codeGen = this.sysGenService.codeGen(id);
 		response.setContentType("application/zip");
 		response.setHeader("Content-Disposition", "attachment;filename="+ CodecUtils.urlEncode("代码生成.zip")); 
-		response.setContentLength(codeGen.length);
-		ServletOutputStream output = response.getOutputStream();
-		IOUtils.write(codeGen, output);
-		IOUtils.closeQuietly(output);
-	}
-	
-	@PreAuthorize("hasAuthority('sys:gen:qry')")
-	@GetMapping("/projectGen")
-	public void projectGen(@RequestParam(required=true) String projectName, @RequestParam(required=true) int projectType, 
-			HttpServletResponse response) throws Exception {
-		SysProjectGenVO sysProjectGenVo = new SysProjectGenVO();
-		sysProjectGenVo.setProjectName(projectName);
-		sysProjectGenVo.setProjectType(projectType);
-		byte[] codeGen = this.sysGenService.projectGen(sysProjectGenVo);
-		response.setContentType("application/zip");
-		response.setHeader("Content-Disposition", "attachment;filename="+ CodecUtils.urlEncode("项目生成.zip")); 
 		response.setContentLength(codeGen.length);
 		ServletOutputStream output = response.getOutputStream();
 		IOUtils.write(codeGen, output);
