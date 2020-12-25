@@ -26,7 +26,6 @@
     <result column="fld_s2" property="fldS2" jdbcType="VARCHAR" />
     <result column="PHYSICS_FLAG" property="physicsFlag" jdbcType="BIGINT" />
     <result column="version" property="version" jdbcType="BIGINT" />
-    <!-- DB 字段截止 -->
     <result column="dept_name" property="deptName" jdbcType="VARCHAR" />
   </resultMap>
   
@@ -88,17 +87,6 @@
     		<if test="mobile !=null and mobile !=''">
     			and u.mobile like concat('%',#{mobile},'%')
     		</if>
-    		<if test="roleId !=null and roleId!=''">
-    			<choose>
-    				<when test="roleAssigned == '1'.toString()">
-    				exists (select 1 from sys_user_role ur where role_id = #{roleId} and u.id = ur.user_id )
-    				</when>
-    				<when test="roleAssigned == '0'.toString()">
-    				not exists (select 1 from sys_user_role ur where role_id = #{roleId} and u.id = ur.user_id )
-    				</when>
-    			</choose>
-    		</if>
-    		
     		<if test="fldN1 !=null">
     			and u.fld_n1 = #{fldN1}
     		</if>
@@ -120,10 +108,6 @@
 			order by ${sortField} ${direction}
 		</if>
   </select>
-  
-  <delete id="deleteByPrimaryKey">
-    delete u from sys_user u where id = #{id} 
-  </delete>
   
   <delete id="deleteUserRoleByUserId" parameterType="java.lang.Long">
 		delete from sys_user_role where user_id= #{userId}

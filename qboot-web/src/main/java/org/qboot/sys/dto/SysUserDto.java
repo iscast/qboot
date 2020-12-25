@@ -1,16 +1,11 @@
 package org.qboot.sys.dto;
 
-import java.util.Date;
 import java.util.List;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.hibernate.validator.constraints.Length;
-
 import com.alibaba.fastjson.annotation.JSONField;
-
 import org.qboot.common.entity.BaseEntity;
 
 /**
@@ -116,55 +111,32 @@ public class SysUserDto extends BaseEntity<Long> {
 	@Length(max = 64)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String fldS2;
-    
+
+    /**
+     * 语言
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String lang;
 	
 	/** DB 字段截止 **/
     @JsonInclude(JsonInclude.Include.NON_NULL)
 	private String deptName;
+
+
 	/**
 	 * 用户所拥有的角色ID
 	 */
     @JsonInclude(JsonInclude.Include.NON_NULL)
 	private List<String> roleIds;
+
     @JsonInclude(JsonInclude.Include.NON_NULL)
 	private List<SysMenuDto> menus;
 
-	
 	/**
 	 * 通过角色查询用户
 	 */
     @JsonInclude(JsonInclude.Include.NON_NULL)
 	private String roleId;
-	/**
-	 * 是否分配了某个角色
-	 */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-	private String roleAssigned;
-	/**
-	 * 图像完整路径
-	 */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-	private String photoFullUrl;
-	/**
-	 * 上次登录时间
-	 */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-	private Date lastLoginTime;
-	/**
-	 * 登录ip
-	 */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-	private String lastLoginIp;
-	/**
-	 * 上次登录地区
-	 */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-	private String lastLoginArea;
-    /**
-     * 语言
-     */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-	private String lang;
 
 	public String getDeptId() {
 		return deptId;
@@ -270,52 +242,12 @@ public class SysUserDto extends BaseEntity<Long> {
 		this.menus = menus;
 	}
 
-	public String getPhotoFullUrl() {
-		return photoFullUrl;
-	}
-
-	public void setPhotoFullUrl(String photoFullUrl) {
-		this.photoFullUrl = photoFullUrl;
-	}
-
 	public String getRoleId() {
 		return roleId;
 	}
 
 	public void setRoleId(String roleId) {
 		this.roleId = roleId;
-	}
-
-	public String getRoleAssigned() {
-		return roleAssigned;
-	}
-
-	public void setRoleAssigned(String roleAssigned) {
-		this.roleAssigned = roleAssigned;
-	}
-
-	public Date getLastLoginTime() {
-		return lastLoginTime;
-	}
-
-	public void setLastLoginTime(Date lastLoginTime) {
-		this.lastLoginTime = lastLoginTime;
-	}
-
-	public String getLastLoginIp() {
-		return lastLoginIp;
-	}
-
-	public void setLastLoginIp(String lastLoginIp) {
-		this.lastLoginIp = lastLoginIp;
-	}
-
-	public String getLastLoginArea() {
-		return lastLoginArea;
-	}
-
-	public void setLastLoginArea(String lastLoginArea) {
-		this.lastLoginArea = lastLoginArea;
 	}
 
 	public Integer getFldN1() {

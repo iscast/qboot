@@ -8,15 +8,12 @@ import org.qboot.common.entity.TreeEntity;
 /**
  * <p>Title: SysDept</p>
  * <p>Description: 部门实体</p>
- * 
  * @author history
  * @date 2018-08-08
  */
 public class SysDeptDto extends TreeEntity<String> {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
+
 	/**
 	 * 部门名称
 	 */
