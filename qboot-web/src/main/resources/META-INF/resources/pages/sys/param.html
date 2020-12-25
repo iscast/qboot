@@ -98,7 +98,7 @@ var form,table, table1,_config,layer,util,admin,formSelects, msgs;
             admin.popupCenter({
                 title: data.paramTypeClass+msgs['layer.confirm.title.addParamTypeElem'],
                 path: 'pages/sys/paramtype_form.html',
-                area: ['800px','600px'],
+                area: ['700px','450px'],
                 finish: function () {
                     table.reload('sys_typeclass_table', {paramTypeClass:paramTypeClass});
                 }
@@ -175,7 +175,6 @@ var form,table, table1,_config,layer,util,admin,formSelects, msgs;
             });
         }
         loadTypeClass(null);
-
 
         table1.on('tool(sys_type_table)', function (obj) {
             var data = obj.data;
@@ -268,7 +267,7 @@ var form,table, table1,_config,layer,util,admin,formSelects, msgs;
                         admin.popupCenter({
                             title: title,
                             path: 'pages/sys/paramtype_form.html',
-                            area: ['800px','600px'],
+                            area: ['700px','450px'],
                             finish: function () {
                                 table1.reload('sys_type_table', {});
                             }
@@ -280,7 +279,7 @@ var form,table, table1,_config,layer,util,admin,formSelects, msgs;
                 admin.popupCenter({
                     title: title,
                     path: 'pages/sys/paramtype_form.html',
-                    area: ['800px','600px'],
+                    area: ['700px','450px'],
                     finish: function () {
                         table1.reload('sys_type_table', {});
                     }

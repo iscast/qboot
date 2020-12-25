@@ -157,8 +157,8 @@ COMMIT;
 -- ----------------------------
 BEGIN;
 INSERT INTO sys_param_class (PARAM_TYPE_CLASS, PARAM_TYPE_NAME, VISIBLE, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS, PHYSICS_FLAG, version) VALUES ('SYS_USER_TYPE', 'SYS_USER_TYPE', 1, 'system', now(), 'system', now(), 'SYS_USER_TYPE', 1, 1);
-INSERT INTO sys_param_type (PARAM_TYPE_CLASS, PARAM_TYPE_ID, PARAM_TYPE_CODE, PARAM_TYPE_NAME, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS, PHYSICS_FLAG, i18n_field, version) VALUES ('SYS_USER_TYPE', 1, 'MANAGER', '管理员', 'system', now(), 'system', now(), '', 1, '[{"key":"zh_CN","value":"管理员","name":"中文简体"}]', 1);
-INSERT INTO sys_param_type (PARAM_TYPE_CLASS, PARAM_TYPE_ID, PARAM_TYPE_CODE, PARAM_TYPE_NAME, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS, PHYSICS_FLAG, i18n_field, version) VALUES ('SYS_USER_TYPE', 2, 'USER', '普通用户', 'system', now(), 'system', now(), '', 1, '[{"key":"zh_CN","value":"普通用户","name":"中文简体"}]', 1);
+INSERT INTO sys_param_type (PARAM_TYPE_CLASS, PARAM_TYPE_ID, PARAM_TYPE_CODE, PARAM_TYPE_NAME, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS, PHYSICS_FLAG, version) VALUES ('SYS_USER_TYPE', 1, 'MANAGER', '管理员', 'system', now(), 'system', now(), '', 1, 1);
+INSERT INTO sys_param_type (PARAM_TYPE_CLASS, PARAM_TYPE_ID, PARAM_TYPE_CODE, PARAM_TYPE_NAME, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS, PHYSICS_FLAG, version) VALUES ('SYS_USER_TYPE', 2, 'USER', '普通用户', 'system', now(), 'system', now(), '', 1, 1);
 COMMIT;
 
 -- ----------------------------

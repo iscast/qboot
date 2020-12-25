@@ -181,7 +181,6 @@ CREATE TABLE `sys_param_type`
     `UPDATE_DATE`      datetime     DEFAULT NULL COMMENT '更新时间',
     `REMARKS`          varchar(255) DEFAULT NULL COMMENT '备注信息',
     `PHYSICS_FLAG`     tinyint(4)      DEFAULT '1' COMMENT '删除标识：1-正常；0-删除',
-    `i18n_field`       text COMMENT 'json格式的国际化信息',
     `version`      bigint DEFAULT '1' COMMENT '版本',
     PRIMARY KEY (`ID`) USING BTREE,
     KEY `CREATE_BY` (`CREATE_BY`) USING BTREE,

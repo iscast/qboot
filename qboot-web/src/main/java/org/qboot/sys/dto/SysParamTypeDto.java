@@ -6,9 +6,8 @@ import org.qboot.common.entity.BaseEntity;
 import javax.validation.constraints.NotNull;
 
 /**
- * <p>Title: SysParamType</p>
- * <p>Description: 系统类型参数</p>
- * @author iscast
+ * 系统类型参数
+ * @author history
  * @date 2018-08-08
  */
 public class SysParamTypeDto extends BaseEntity<Long> {
@@ -45,9 +44,6 @@ public class SysParamTypeDto extends BaseEntity<Long> {
 	@NotNull
     @JsonInclude(JsonInclude.Include.NON_NULL)
 	private Integer physicsFlag;
-
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-	private String i18nField;
 
 	public String getParamTypeClass() {
 		return paramTypeClass;
@@ -96,14 +92,5 @@ public class SysParamTypeDto extends BaseEntity<Long> {
 
 	public void setPhysicsFlag(Integer physicsFlag) {
 		this.physicsFlag = physicsFlag;
-	}
-
-
-	public String getI18nField() {
-		return i18nField;
-	}
-
-	public void setI18nField(String i18nField) {
-		this.i18nField = i18nField;
 	}
 }

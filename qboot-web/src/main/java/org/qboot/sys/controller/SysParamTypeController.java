@@ -23,18 +23,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 import static org.qboot.sys.exception.errorcode.SysModuleErrTable.*;
 
-/**
- * <p>Title: SysParamTypeController</p>
- * <p>Description: 系统类型参数</p>
- * @author history
- * @date 2018-08-08
- */
 @RestController
 @RequestMapping("${admin.path}/sys/paramtype")
 public class SysParamTypeController extends BaseController {
@@ -83,10 +76,6 @@ public class SysParamTypeController extends BaseController {
 		if (StringUtils.isNotBlank(sysParam.getParamTypeName())) {
 			sysParam.setParamTypeName(request.getParameter("paramTypeName"));
 		}
-		if (StringUtils.isNotBlank(sysParam.getI18nField())) {
-			String i18nField = sysParam.getI18nField().replace("&quot;","\"");
-			sysParam.setI18nField(i18nField);
-		}
 		if(sysParamService.save(sysParam) > 0) {
             redisTools.del(CacheConstants.CACHE_PREFIX_SYS_PARAMTYPE_KEY + sysParam.getParamTypeClass());
 			return ok();
@@ -101,10 +90,6 @@ public class SysParamTypeController extends BaseController {
 		sysParam.setUpdateBy(SecurityUtils.getLoginName());
 		if (StringUtils.isNotBlank(sysParam.getParamTypeName())) {
 			sysParam.setParamTypeName(request.getParameter("paramTypeName"));
-		}
-		if (StringUtils.isNotBlank(sysParam.getI18nField())) {
-			String i18nField = sysParam.getI18nField().replace("&quot;","\"");
-			sysParam.setI18nField(i18nField);
 		}
 		if(sysParamService.update(sysParam) > 0) {
             redisTools.del(CacheConstants.CACHE_PREFIX_SYS_PARAMTYPE_KEY + sysParam.getParamTypeClass());

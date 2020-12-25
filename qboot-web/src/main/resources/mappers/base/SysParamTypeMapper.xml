@@ -1,46 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.qboot.sys.dao.SysParamTypeDao" >
-  <resultMap id="BaseResultMap" type="org.qboot.sys.dto.SysParamTypeDto" >
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="param_type_class" property="paramTypeClass" jdbcType="VARCHAR" />
-    <result column="param_type_id" property="paramTypeId" jdbcType="INTEGER" />
-    <result column="param_type_code" property="paramTypeCode" jdbcType="VARCHAR" />
-    <result column="param_type_name" property="paramTypeName" jdbcType="VARCHAR" />
-    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
-    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
-    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
-    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
-    <result column="remarks" property="remarks" jdbcType="VARCHAR" />
-    <result column="physics_flag" property="physicsFlag" jdbcType="INTEGER" />
-  </resultMap>
-
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="org.qboot.sys.dto.SysParamTypeDto">
-    <result column="i18n_field" jdbcType="LONGVARCHAR" property="i18nField" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="org.qboot.sys.dto.SysParamTypeDto" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="param_type_class" property="paramTypeClass" jdbcType="VARCHAR" />
+        <result column="param_type_id" property="paramTypeId" jdbcType="INTEGER" />
+        <result column="param_type_code" property="paramTypeCode" jdbcType="VARCHAR" />
+        <result column="param_type_name" property="paramTypeName" jdbcType="VARCHAR" />
+        <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+        <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+        <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+        <result column="physics_flag" property="physicsFlag" jdbcType="INTEGER" />
+    </resultMap>
 
     <sql id="Base_Column_List" >
-    id, param_type_id, param_type_class, param_type_code, param_type_name, physics_flag
+        id, param_type_id, param_type_class, param_type_code, param_type_name, physics_flag
     </sql>
-    <sql id="Blob_Column_List">
-    i18n_field
-    </sql>
-  
+
     <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
         select
-        <include refid="Base_Column_List" />
-        ,
-        <include refid="Blob_Column_List" />
-        , remarks
-        from sys_param_type
-        where id = #{id} and physics_flag = 1
+        <include refid="Base_Column_List" />, remarks
+        from sys_param_type where id = #{id} and physics_flag = 1
     </select>
   
     <select id="findList" resultMap="BaseResultMap" parameterType="org.qboot.sys.dto.SysParamTypeDto" >
         select
         <include refid="Base_Column_List" />
-        ,
-        <include refid="Blob_Column_List" />
         from sys_param_type
         <where>
             physics_flag = 1
@@ -58,10 +45,7 @@
 
     <select id="findByDto" resultMap="BaseResultMap" parameterType="org.qboot.sys.dto.SysParamTypeDto" >
         select
-        <include refid="Base_Column_List" />
-        ,
-        <include refid="Blob_Column_List" />
-        , remarks
+        <include refid="Base_Column_List" />, remarks
         from sys_param_type
         <where>
             physics_flag = 1
@@ -97,11 +81,10 @@
     </update>
 
     <insert id="insert" parameterType="org.qboot.sys.dto.SysParamTypeDto" >
-    insert into sys_param_type (param_type_id, param_type_class, param_type_code, param_type_name, physics_flag, create_by, create_date, update_by, update_date, remarks, i18n_field)
+    insert into sys_param_type (param_type_id, param_type_class, param_type_code, param_type_name, physics_flag, create_by, create_date, update_by, update_date, remarks)
     values (#{paramTypeId,jdbcType=INTEGER}, #{paramTypeClass,jdbcType=VARCHAR}, #{paramTypeCode,jdbcType=VARCHAR}, #{paramTypeName,jdbcType=VARCHAR}
         , #{physicsFlag,jdbcType=INTEGER}, #{createBy,jdbcType=VARCHAR}
-        , #{createDate,jdbcType=TIMESTAMP},  #{updateBy,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, #{remarks,jdbcType=VARCHAR}
-        , #{i18nField,jdbcType=LONGVARCHAR})
+        , #{createDate,jdbcType=TIMESTAMP},  #{updateBy,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, #{remarks,jdbcType=VARCHAR})
     </insert>
 
     <update id="update" parameterType="org.qboot.sys.dto.SysParamTypeDto" >
@@ -127,9 +110,6 @@
           </if>
           <if test="remarks != null and remarks != ''" >
             remarks = #{remarks,jdbcType=VARCHAR},
-          </if>
-          <if test="i18nField != null and i18nField != ''">
-            i18n_field = #{i18nField,jdbcType=LONGVARCHAR},
           </if>
         </set>
         where id = #{id}
