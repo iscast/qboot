@@ -24,7 +24,7 @@ redis 4.0+
     1),将application-dev.yaml拷贝到工程的resources目录下
     2),运行QBootApplication类启动项目
     
-2，maben依赖qboot项目
+2，maven依赖qboot项目
     1),将qboot项目执行maven指令 clean install后，将qboot打包到本地maven仓库
     2),新建一个jar工程，将qboot-common,qboot-web加入依赖
     3),将application-dev.yaml拷贝到工程的resources目录下
