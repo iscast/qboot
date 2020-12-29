@@ -100,17 +100,17 @@
                 ,{field:'href', title: msgs['sys.table.title.menuAddr'], width: '120', align:'left'}
                 ,{field:'permission', title: msgs['sys.table.title.authority'], width: '80', align:'left'}
                 ,{field:'sort', title: msgs['sys.table.title.order'], width: '60', align:'left'}
-                ,{width: '85', title: msgs['sys.table.title.status'], align:'left'
+                ,{width: '10%', title: msgs['sys.table.title.status'], align:'left'
                     ,templet: function(d){
                         var auth = JSON.parse(sessionStorage.getItem("auth"));
                     	var page = location.hash.substring(2);
                 		var swiftBtn = '';
                     	if(auth[page] && auth[page]['sys:menu:update']){
                     		if(d.isShow == 0){
-                    			swiftBtn ='&nbsp;<input type="checkbox" lay-filter="menu-tpl-state" value="'+d.id+'" lay-skin="switch" lay-text="'
+                    			swiftBtn ='<input type="checkbox" lay-filter="menu-tpl-state" value="'+d.id+'" lay-skin="switch" lay-text="'
 										+ msgs['sys.form.operation.valid']+'|'+ msgs['sys.form.operation.invalid'] +'"/>';
                     		}else{
-                    			swiftBtn ='&nbsp;<input type="checkbox" lay-filter="menu-tpl-state" value="'+d.id+'" lay-skin="switch" lay-text="'
+                    			swiftBtn ='<input type="checkbox" lay-filter="menu-tpl-state" value="'+d.id+'" lay-skin="switch" lay-text="'
 										+ msgs['sys.form.operation.valid']+'|'+ msgs['sys.form.operation.invalid'] +'" checked="checked"/>';
                     		}
                 	    }
