@@ -2,10 +2,9 @@ package org.qboot.common.filter;
 
 import com.alibaba.fastjson.JSONObject;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.annotation.*;
+import org.qboot.common.error.IError;
+import org.qboot.common.exception.ErrorCodeException;
 import org.qboot.common.security.SecurityUtils;
 import org.qboot.common.utils.IpUtils;
 import org.qboot.sys.bo.AccLogBO;
@@ -20,9 +19,9 @@ import java.util.Date;
 import java.util.Map;
 
 /**
- * 操作日志监控
- * @author history
- *
+ * 通过切面记录操作日志
+ * @author iscast
+ * @date 2020-12-24
  */
 @Aspect
 @Component
@@ -67,6 +66,31 @@ public class AccLogAspect {
         	}
         } catch (Exception e) {
             logger.error("acc log fail after request errMsg:{}", e.getMessage());
+        }
+    }
+
+    @AfterThrowing(value = "webRequestLog()", throwing = "e")
+    public void afterThrowing(JoinPoint joinPoint, Exception e) {
+        logger.debug("acc log occur exception:{}", e.getMessage());
+        try {
+            AccLogBO accLog = tlocal.get();
+            if(accLog != null) {
+                tlocal.remove();
+                if(e instanceof ErrorCodeException) {
+                    ErrorCodeException errCode = (ErrorCodeException) e;
+                    IError error = errCode.getError();
+                    accLog.setResponseParams(JSONObject.toJSONString(error, true));
+                } else {
+                    JSONObject json = new JSONObject();
+                    json.put("code", -1);
+                    json.put("msg", e.getMessage());
+                    accLog.setResponseParams(JSONObject.toJSONString(json, true));
+                }
+                accLog.setCostTime(System.currentTimeMillis() - accLog.getRequestTime().getTime());
+                ACC.trace(accLog.toString());
+            }
+        } catch (Exception ex) {
+            logger.error("acc log fail after request errMsg:{}", ex.getMessage());
         }
     }
 
