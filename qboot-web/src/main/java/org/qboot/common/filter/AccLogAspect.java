@@ -3,6 +3,7 @@ package org.qboot.common.filter;
 import com.alibaba.fastjson.JSONObject;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
+import org.qboot.common.error.ErrorCode;
 import org.qboot.common.error.IError;
 import org.qboot.common.exception.ErrorCodeException;
 import org.qboot.common.security.SecurityUtils;
@@ -17,6 +18,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.Map;
+
+import static org.qboot.common.constants.SysConstants.GLOBAL_DEFAULT_ERROR;
 
 /**
  * 通过切面记录操作日志
@@ -81,10 +84,7 @@ public class AccLogAspect {
                     IError error = errCode.getError();
                     accLog.setResponseParams(JSONObject.toJSONString(error, true));
                 } else {
-                    JSONObject json = new JSONObject();
-                    json.put("code", -1);
-                    json.put("msg", e.getMessage());
-                    accLog.setResponseParams(JSONObject.toJSONString(json, true));
+                    accLog.setResponseParams(JSONObject.toJSONString(new ErrorCode(GLOBAL_DEFAULT_ERROR, e.getMessage()), true));
                 }
                 accLog.setCostTime(System.currentTimeMillis() - accLog.getRequestTime().getTime());
                 ACC.trace(accLog.toString());
