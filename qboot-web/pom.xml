@@ -180,6 +180,7 @@
                         <exclude>application-dev.yaml</exclude>
                         <exclude>application-prod.yaml</exclude>
                         <exclude>application-test.yaml</exclude>
+                        <exclude>logback-spring.xml</exclude>
                         <exclude>rebel.xml</exclude>
                     </excludes>
                 </configuration>

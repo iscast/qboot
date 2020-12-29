@@ -4,6 +4,8 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.redisson.api.RedissonClient;
 import org.redisson.spring.cache.RedissonSpringCacheManager;
 import org.redisson.spring.session.config.EnableRedissonHttpSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -32,12 +34,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @EnableCaching
 public class QBootApplication extends SpringBootServletInitializer{
-	
-	/**
-	 * 启动服务main
-	 */
+
+    private static Logger logger = LoggerFactory.getLogger(QBootApplication.class);
+
 	public static void main(String[] args) {
-		SpringApplication.run(QBootApplication.class, args);
+        try {
+            SpringApplication.run(QBootApplication.class, args);
+        }catch(Throwable e) {
+            logger.error("qboot startup error", e);
+        }
 	}
 	
 	@Override
