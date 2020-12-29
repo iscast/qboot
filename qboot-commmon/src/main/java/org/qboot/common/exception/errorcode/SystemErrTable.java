@@ -26,6 +26,7 @@ public class SystemErrTable {
     public static final ErrorCode AUTH_NO_RIGHTS = new ErrorCode(60001, "auth.no.right");
     public static final ErrorCode AUTH_REPEAT_LOGIN = new ErrorCode(60002, "auth.repeat.login");
 
+    public static final ErrorCode SYS_NULL_POINT_ERROR = new ErrorCode(62000, "sys.null.point");
     public static final ErrorCode SYS_PARAM_ILLEGAL = new ErrorCode(62001, "sys.param.illegal");
     public static final ErrorCode SYS_PARAM_BIND_ERROR = new ErrorCode(62002, "sys.param.bind.error");
     public static final ErrorCode SYS_PARAM_ID_NULL_ERROR = new ErrorCode(62003, "sys.param.id.null.error");

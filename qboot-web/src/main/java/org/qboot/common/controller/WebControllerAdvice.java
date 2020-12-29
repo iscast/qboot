@@ -20,8 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.beans.PropertyEditorSupport;
 import java.util.Date;
 
-import static org.qboot.common.exception.errorcode.SystemErrTable.SYS_PARAM_BIND_ERROR;
-import static org.qboot.common.exception.errorcode.SystemErrTable.SYS_PARAM_ILLEGAL;
+import static org.qboot.common.exception.errorcode.SystemErrTable.*;
 
 /**
  * <p>Title: QControllerAdvice</p>
@@ -84,6 +83,13 @@ public class WebControllerAdvice {
     public ResponeModel IllegalArgumentException(IllegalArgumentException e, HttpServletRequest request) {
         logRequest(request, e);
         return ResponeModel.error(SYS_PARAM_ILLEGAL);
+    }
+
+    @ResponseBody
+    @ExceptionHandler(NullPointerException.class)
+    public ResponeModel NullPointerException(NullPointerException e, HttpServletRequest request) {
+        logRequest(request, e);
+        return ResponeModel.error(SYS_NULL_POINT_ERROR);
     }
 	
 	@ResponseBody
