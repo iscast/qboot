@@ -40,10 +40,10 @@
             page: true,
             even: true, //开启隔行背景
             cols: [[
-                {field: 'name', sort: true, title: msgs['sys.form.label.roleName']},
-                {field: 'remarks', sort: true, title: msgs['sys.form.label.remark']},
+                {field: 'name', title: msgs['sys.form.label.roleName']},
+                {field: 'remarks', title: msgs['sys.form.label.remark']},
                 {
-                    field: 'createDate', sort: true, templet: function (d) {
+                    field: 'createDate', templet: function (d) {
                         return util.toDateString(d.createDate);
                     }, title: msgs['sys.table.title.createTime']
                 },

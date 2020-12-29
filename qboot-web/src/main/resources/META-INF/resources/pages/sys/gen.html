@@ -39,12 +39,12 @@
             page: true,
             even: true, //开启隔行背景
             cols: [[
-                {field: 'tableName', width:'10%',  sort: true, title: '表名'},
-                {field: 'menuName', width: '12%', sort: true, title: '菜单名称'},
-                {field: 'moduleName', width: '12%', sort: true, title: '模块名称'},
-                {field: 'className', width: '12%', sort: true, title: '类名'},
+                {field: 'tableName', width:'15%',  title: '表名'},
+                {field: 'menuName', width: '12%', title: '菜单名称'},
+                {field: 'moduleName', width: '12%', title: '模块名称'},
+                {field: 'className', width: '12%', title: '类名'},
                 { 
-                	sort: true, templet: function (d) {
+                	templet: function (d) {
                 		if (d.template == '1'){//基本增删改查
                 			return "<span class='label label-success'>增删改查</span>";
         				} else if (d.template == '2') {//树形结构
@@ -53,7 +53,7 @@
 	                }, title: '生成模板'
 	            },
                 {
-                    sort: true, templet: function (d) {
+                    templet: function (d) {
                         return util.toDateString(d.updateDate);
                     }, width: '15%', title: '更新时间'
                 },

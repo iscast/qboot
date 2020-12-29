@@ -69,8 +69,8 @@
             },
             limits:_config.limits,
             cols: [[
-                {field: 'taskName', sort: true, title: msgs['sys.task.table.name'],width:200,fixed:'left'},
-                {align: 'center', field: 'status', sort: false, templet: function(d){
+                {field: 'taskName', title: msgs['sys.task.table.name'],width:"15%",fixed:'left'},
+                {align: 'center', field: 'status', templet: function(d){
                 	var auth = JSON.parse(sessionStorage.getItem("auth"));
                 	var page = location.hash.substring(2);
                 	if(auth[page] && auth[page]['sys:task:update']){
@@ -91,21 +91,20 @@
                 	}else{
                 		return '<span style="color:green;">'+d.runStatusName+'</span>'
                 	}
-                }, sort: false, title: msgs['sys.task.table.runStatusName'],width:100},
-                {field: 'cronExp', sort: true, title: msgs['sys.task.table.cronExp'],width:150},
-                {field: 'groupName', sort: true, title: msgs['sys.task.table.groupName'],width:150},
-                {field: 'taskTarget', sort: true, title: msgs['sys.task.table.taskTarget'],width:200},
-                {field: 'execType', sort: true,templet: function (d) {
+                }, title: msgs['sys.task.table.runStatusName'],width:100},
+                {field: 'cronExp', title: msgs['sys.task.table.cronExp'],width:150},
+                {field: 'groupName', title: msgs['sys.task.table.groupName'],width:150},
+                {field: 'taskTarget', title: msgs['sys.task.table.taskTarget'],width:200},
+                {field: 'execType', templet: function (d) {
                 		if(d.execType==1){
                 			return "非阻塞" ;
                 		}else{
                 			return "阻塞";
                 		}
                 	}, title: msgs['sys.task.table.execType'],width:150},
-                {field: 'params', sort: false, title: msgs['sys.task.table.params'],width:150},
-                {field: 'createDate',sort: true, templet: function (d) {return util.toDateString(d.createDate);}, title: msgs['sys.task.table.createDate'],width:160},
-                {field: 'updateDate',sort: true, templet: function (d) {return util.toDateString(d.updateDate);}, title: msgs['sys.task.table.updateDate'],width:160},
-                {field: 'remarks', sort: false, title: msgs['sys.task.table.remarks'],width:200},
+                {field: 'params', title: msgs['sys.task.table.params'],width:150},
+                {field: 'createDate',templet: function (d) {return util.toDateString(d.createDate);}, title: msgs['sys.table.title.createDate'],width:180},
+                {field: 'updateDate',templet: function (d) {return util.toDateString(d.updateDate);}, title: msgs['sys.table.title.updateDate'],width:180},
                 {align: 'center', templet: function(d){
                 	var auth = JSON.parse(sessionStorage.getItem("auth"));
                 	var page = location.hash.substring(2);
@@ -199,6 +198,7 @@
 	                },
 	                limits:_config.limits,
 	                cols: [[
+                    {type: 'numbers'},
 					{field: 'execStatus',templet:function(d){
 							if(d.execStatus==1){
 								return "成功";
@@ -207,12 +207,12 @@
 							}else{
 								return "未知" ;
 							}
-						},sort: true, title: msgs['sys.task.table.execStatus'],width:120},
-					{field: 'costTime', sort: true,templet: function (d) {return admin.accDiv(d.costTime,1000);}, title: msgs['sys.task.table.costTime'],width:120},
-					{field: 'execIp', sort: false, title: msgs['sys.task.table.execIp'],width:120},
-					{field: 'execResult', sort: false, title: msgs['sys.task.table.execResult'],width:200},
-					{field: 'beginTime', sort: true,templet: function (d) {return util.toDateString(d.beginTime);}, title: msgs['sys.task.table.beginTime'],width:160},
-					{field: 'endTime', sort: true,templet: function (d) {return util.toDateString(d.endTime);}, title: msgs['sys.task.table.endTime'],width:160},
+						},title: msgs['sys.task.table.execStatus'],width:120},
+					{field: 'costTime', templet: function (d) {return admin.accDiv(d.costTime,1000);}, title: msgs['sys.task.table.costTime'],width:120},
+					{field: 'execIp', title: msgs['sys.task.table.execIp'],width:120},
+					{field: 'execResult', title: msgs['sys.task.table.execResult'],width:200},
+					{field: 'beginTime', templet: function (d) {return util.toDateString(d.beginTime);}, title: msgs['sys.task.table.beginTime'],width:180},
+					{field: 'endTime', templet: function (d) {return util.toDateString(d.endTime);}, title: msgs['sys.task.table.endTime'],width:180},
 	                ]],
 	                done: function(res, curr, count){
 	                	var data = res.data;

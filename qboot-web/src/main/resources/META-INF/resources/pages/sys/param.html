@@ -58,9 +58,9 @@ var form,table, table1,_config,layer,util,admin,formSelects, msgs;
             even: true,
             height:460,
             cols: [[
-                {field: 'paramTypeClass', sort: true, title: msgs['sys.form.label.paramTypeClass'], width: '35%'},
-                {field: 'paramTypeName', sort: true, title: msgs['sys.form.label.paramTypeName'], width: '40%'},
-                {align: 'center', sort: false, templet: function(d){
+                {field: 'paramTypeClass', title: msgs['sys.form.label.paramTypeClass'], width: '35%'},
+                {field: 'paramTypeName', title: msgs['sys.form.label.paramTypeName'], width: '40%'},
+                {align: 'center', templet: function(d){
                 	var auth = JSON.parse(sessionStorage.getItem("auth"));
                 	var page = location.hash.substring(2);
                 	var swiftBtn = '';
@@ -156,9 +156,9 @@ var form,table, table1,_config,layer,util,admin,formSelects, msgs;
                 even: true,
                 height:460,
                 cols: [[
-                    {field: 'paramTypeId', sort: true, title: msgs['sys.form.label.paramTypeId'], width: '35%'},
-                    {field: 'paramTypeCode', sort: true, title: msgs['sys.form.label.paramTypeCode'], width: '40%'},
-                    {align: 'center', sort: false, templet: function(d){
+                    {field: 'paramTypeId', title: msgs['sys.form.label.paramTypeId'], width: '35%'},
+                    {field: 'paramTypeCode', title: msgs['sys.form.label.paramTypeCode'], width: '40%'},
+                    {align: 'center', templet: function(d){
                     	var auth = JSON.parse(sessionStorage.getItem("auth"));
                     	var page = location.hash.substring(2);
                     	var swiftBtn = '';

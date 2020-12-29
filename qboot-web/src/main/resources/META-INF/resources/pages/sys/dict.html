@@ -43,10 +43,10 @@
             page: true,
             even: true, //开启隔行背景
             cols: [[
-                {field: 'name', sort: true, title: msgs['sys.table.title.name'], width: '12%'},
-                {field: 'type', sort: true, title: msgs['sys.form.label.paramKey'], width: '12%'},
-                {field: 'code', sort: true, title: msgs['sys.form.label.paramValue']},
-                {align: 'center', field: 'status', width: '8%',  sort: false, templet: function(d){
+                {field: 'name', title: msgs['sys.table.title.name'], width: '12%'},
+                {field: 'type', title: msgs['sys.form.label.paramKey'], width: '12%'},
+                {field: 'code', title: msgs['sys.form.label.paramValue']},
+                {align: 'center', field: 'status', width: '8%',  templet: function(d){
                         var auth = JSON.parse(sessionStorage.getItem("auth"));
                         var page = location.hash.substring(2);
                         if(auth[page] && auth[page]['sys:dict:update']){
@@ -67,14 +67,14 @@
                             return status;
                         }
                     }, title: msgs['sys.table.title.status']},
-                {field: 'createBy', sort: true, title: msgs['sys.table.title.createdBy'], width: '10%'},
+                {field: 'createBy', title: msgs['sys.table.title.createdBy'], width: '10%'},
                 {
-                    field: 'createDate', sort: true, templet: function (d) {
+                    field: 'createDate', templet: function (d) {
                         return util.toDateString(d.createDate);
                     }, title: msgs['sys.table.title.createDate'], width: '15%'
                 },
                 {
-                    field: 'updateDate', sort: true, templet: function (d) {
+                    field: 'updateDate', templet: function (d) {
                         if(d.updateDate != null){
                         	return util.toDateString(d.updateDate);
                         }else{

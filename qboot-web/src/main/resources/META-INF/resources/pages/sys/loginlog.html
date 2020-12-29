@@ -45,13 +45,13 @@
             page: true,
             even: true, //开启隔行背景
             cols: [[
-                {field: 'loginName', sort: true, title: msgs['sys.form.label.loginName']},
-                {field: 'userName', sort: true, title: msgs['sys.form.label.userName']},
-                {field: 'loginTime', sort: true, templet: function (d) {
+                {field: 'loginName', title: msgs['sys.form.label.loginName']},
+                {field: 'userName', title: msgs['sys.form.label.userName']},
+                {field: 'loginTime', templet: function (d) {
                     return util.toDateString(d.loginTime);
                 }, title: msgs['sys.form.label.loginTime']},
-                {field: 'ip', sort: true, title: msgs['sys.form.label.ipAddress']},
-                {field: 'firstLogin', sort: false, templet: function (data){
+                {field: 'ip', title: msgs['sys.form.label.ipAddress']},
+                {field: 'firstLogin', templet: function (data){
                         var vname = msgs['sys.form.label.user.normal'];
                         if(data.firstLogin == 1){
                             vname = msgs['sys.form.label.user.initPwd'];
@@ -60,9 +60,9 @@
                         }
                         return vname;
                     }, title: msgs['sys.table.title.status'], width: '8%'},
-                {field: 'deviceName', sort: true, title: msgs['sys.form.label.deviceName']},
-                {field: 'browserName', sort: true, title: msgs['sys.form.label.browserName']},
-                {field: 'userAgent', sort: true, title: msgs['sys.form.label.userAgent']}
+                {field: 'deviceName', title: msgs['sys.form.label.deviceName']},
+                {field: 'browserName', title: msgs['sys.form.label.browserName']},
+                {field: 'userAgent', title: msgs['sys.form.label.userAgent']}
             ]], done: function(res, curr, count){
                 _i18n.initPage();
             }
