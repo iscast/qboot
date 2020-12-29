@@ -74,7 +74,6 @@ public class AccLogAspect {
 
     @AfterThrowing(value = "webRequestLog()", throwing = "e")
     public void afterThrowing(JoinPoint joinPoint, Exception e) {
-        logger.debug("acc log occur exception:{}", e.getMessage());
         try {
             AccLogBO accLog = tlocal.get();
             if(accLog != null) {
@@ -83,6 +82,8 @@ public class AccLogAspect {
                     ErrorCodeException errCode = (ErrorCodeException) e;
                     IError error = errCode.getError();
                     accLog.setResponseParams(JSONObject.toJSONString(error, true));
+                } else if(e instanceof NullPointerException) {
+                    accLog.setResponseParams(JSONObject.toJSONString(new ErrorCode(GLOBAL_DEFAULT_ERROR, "System NullPointerException"), true));
                 } else {
                     accLog.setResponseParams(JSONObject.toJSONString(new ErrorCode(GLOBAL_DEFAULT_ERROR, e.getMessage()), true));
                 }
