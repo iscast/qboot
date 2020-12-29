@@ -18,17 +18,25 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <skipTests>true</skipTests>
         <redisson.version>3.8.2</redisson.version>
+        <fst.version>2.57</fst.version>
         <commons-codec.version>1.11</commons-codec.version>
         <pagehelper.version>5.1.4</pagehelper.version>
-        <commons.lang3.version>3.7</commons.lang3.version>
+        <commons-commons-text>1.4</commons-commons-text>
         <servlet.version>3.1.0</servlet.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.redisson</groupId>
-            <artifactId>redisson-spring-boot-starter</artifactId>
+            <artifactId>redisson</artifactId>
             <version>${redisson.version}</version>
+        </dependency>
+
+        <!-- 快速序列号  用于加速redis客户端序列化缓存内容  -->
+        <dependency>
+            <groupId>de.ruedigermoeller</groupId>
+            <artifactId>fst</artifactId>
+            <version>${fst.version}</version>
         </dependency>
 
         <dependency>
@@ -45,8 +53,31 @@
 
         <dependency>
             <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>${commons.lang3.version}</version>
+            <artifactId>commons-text</artifactId>
+            <version>${commons-commons-text}</version>
+        </dependency>
+
+        <!-- servlet依赖 -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>provided</scope>
+            <version>3.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>5.0.9.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>5.0.9.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+            <version>5.0.9.RELEASE</version>
         </dependency>
     </dependencies>
 

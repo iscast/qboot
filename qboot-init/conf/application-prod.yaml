@@ -35,16 +35,10 @@ spring:
     connectTimeout: 10000
     connectionMinimumIdleSize: 12
     connectionPoolSize: 64
-    database: 8
-    dnsMonitoring: false
-    dnsMonitoringInterval: 5000
+    database: 1
     idleConnectionTimeout: 10000
-    pingTimeout: 1000
     retryAttempts: 2
     retryInterval: 1500
-    subscriptionConnectionMinimumIdleSize: 1
-    subscriptionConnectionPoolSize: 50
-    subscriptionsPerConnection: 5
     thread: 4
     timeout: 3000
 
