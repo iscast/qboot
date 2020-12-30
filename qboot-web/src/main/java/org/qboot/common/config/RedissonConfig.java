@@ -38,14 +38,14 @@ public class RedissonConfig {
     RedissonClient redisson() throws Exception {
         Config config = new Config();
         config.useSingleServer().setAddress(address)
-                .setConnectionMinimumIdleSize(connectionMinimumIdleSize)
+//                .setConnectionMinimumIdleSize(connectionMinimumIdleSize)
+//                .setIdleConnectionTimeout(idleConnectionTimeout)
                 .setConnectionPoolSize(connectionPoolSize)
                 .setDatabase(database)
                 .setRetryAttempts(retryAttempts)
                 .setRetryInterval(retryInterval)
                 .setTimeout(timeout)
                 .setConnectTimeout(connectTimeout)
-                .setIdleConnectionTimeout(idleConnectionTimeout)
                 .setPassword(password);
 
         Codec codec= (Codec) ClassUtils.forName(this.codec, ClassUtils.getDefaultClassLoader()).newInstance();
