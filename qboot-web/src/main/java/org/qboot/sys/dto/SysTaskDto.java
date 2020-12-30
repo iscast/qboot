@@ -21,22 +21,22 @@ public class SysTaskDto extends BaseEntity<Long> {
 	/**任务状态.0未启用;1启用*/
 	private Integer status;
 	/**任务状态.1启用*/
-	public static final int TASK_ENABLED = 1 ;
+	public static final Integer TASK_ENABLED = 1 ;
 	/**任务状态.0未启用;*/
-	public static final int TASK_DISABLED = 0 ;
+	public static final Integer TASK_DISABLED = 0 ;
 	
 	/**
 	 * 内存运行状态 0 初始 1执行中
 	 */
-	private int runStatus ;
+	private Integer runStatus ;
 	/**
 	 * 内存运行状态 0 初始
 	 */
-	public static final int RUN_STATUS_INI = 0 ;
+	public static final Integer RUN_STATUS_INI = 0 ;
 	/**
 	 * 内存运行状态 1执行中
 	 */
-	public static final int RUN_STATUS_RUNNING = 1 ;
+	public static final Integer RUN_STATUS_RUNNING = 1 ;
 	/**
 	 * 执行方式:0阻塞 1非阻塞.
 	 */
@@ -131,23 +131,24 @@ public class SysTaskDto extends BaseEntity<Long> {
 	public String getStatusName(){
 		if(null==status){
 			return "未知" ;
-		}else if(TASK_ENABLED==status){
+		}else if(TASK_ENABLED.equals(status)){
 			return "启用";
-		}else if(TASK_DISABLED==status){
+		}else if(TASK_DISABLED.equals(status)){
 			return "禁用";
 		}
 		return "未知" ;
 	}
-	public int getRunStatus() {
+	public Integer getRunStatus() {
 		return runStatus;
 	}
-	public void setRunStatus(int runStatus) {
+	public void setRunStatus(Integer runStatus) {
 		this.runStatus = runStatus;
 	}
+
 	public String getRunStatusName(){
-		if(RUN_STATUS_INI==runStatus){
+		if(RUN_STATUS_INI.equals(runStatus)){
 			return "初始";
-		}else if(RUN_STATUS_RUNNING==runStatus){
+		}else if(RUN_STATUS_RUNNING.equals(runStatus)){
 			return "执行中";
 		}
 		return "未知" ;
@@ -187,7 +188,7 @@ public class SysTaskDto extends BaseEntity<Long> {
 		if(null==status){
 			//未知的状态,默认认为关闭
 			return true ;
-		}else if(status==TASK_DISABLED){
+		}else if(TASK_DISABLED.equals(status)){
 			return true ;
 		}
 		return false;
@@ -197,7 +198,7 @@ public class SysTaskDto extends BaseEntity<Long> {
 	 * @return
 	 */
 	public boolean isEnabled() {
-		if(null!=status&&status==TASK_ENABLED){
+		if(null!=status && TASK_ENABLED.equals(status)){
 			return true ;
 		}
 		return false;

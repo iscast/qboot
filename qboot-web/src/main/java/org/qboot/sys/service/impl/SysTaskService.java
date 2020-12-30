@@ -39,9 +39,6 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTaskDto> {
 
 	@Override
 	public PageInfo<SysTaskDto> findByPage(SysTaskDto sysTask) {
-		if(sysTask.getStatus()==-1){
-			sysTask.setStatus(null);
-		}
 		PageInfo<SysTaskDto> result = super.findByPage(sysTask) ;
 		Map<Long, String> runningTask = this.getRunningTask() ;
 		Page<SysTaskDto>  iniList = new Page<SysTaskDto>();

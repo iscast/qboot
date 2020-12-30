@@ -7,13 +7,13 @@
 			<input id="search_groupName" name="groupName" class="layui-input search-input i18n-input-hint" type="text" i18n-key="sys.task.group" type="text"/>&emsp;
 			<span class="layui-i18n" i18n-key="sys.task.table.taskTarget"></span>
 			<input id="search_taskTarget" name="taskTarget" class="layui-input search-input i18n-input-hint" type="text" i18n-key="sys.task.table.taskTarget" type="text"/>&emsp;
-			<select name="status" lay-verify="">
-			  <option value="-1">请选择状态</option>
+			<select name="taskStatus" lay-verify="">
+			  <option value="">请选择状态</option>
 			  <option value="1">启用</option>
 			  <option value="0">禁用</option>
 			</select>&emsp;
 			<select name="runStatus" lay-verify="">
-			  <option value="-1">请选择执行状态</option>
+			  <option value="">请选择执行状态</option>
 			  <option value="0">初始</option>
 			  <option value="1">执行中</option>
 			</select>&emsp; 
@@ -60,7 +60,7 @@
             loading: true,
             where: {
                 access_token: _config.getToken().access_token,
-                taskName: taskName, groupName: groupName,taskTarget: taskTarget,status: $('select[name="status"]').val(),runStatus: $('select[name="runStatus"]').val() 
+                taskName: taskName, groupName: groupName,taskTarget: taskTarget,status: $('select[name="taskStatus"]').val(),runStatus: $('select[name="runStatus"]').val()
             },
             page: true,
             even: false, 
@@ -105,7 +105,7 @@
                 {field: 'params', title: msgs['sys.task.table.params'],width:150},
                 {field: 'createDate',templet: function (d) {return util.toDateString(d.createDate);}, title: msgs['sys.table.title.createDate'],width:180},
                 {field: 'updateDate',templet: function (d) {return util.toDateString(d.updateDate);}, title: msgs['sys.table.title.updateDate'],width:180},
-                {align: 'center', templet: function(d){
+                {templet: function(d){
                 	var auth = JSON.parse(sessionStorage.getItem("auth"));
                 	var page = location.hash.substring(2);
                 	var btn = '' ;
@@ -120,7 +120,7 @@
                 	}else{
                 		return btn;
                 	}
-                }, title: msgs["sys.table.title.operation"], width:140,fixed:'right'}
+                }, title: msgs["sys.table.title.operation"], width:'12%',fixed:'right'}
             ]],
             done: function(res, curr, count){
                 _i18n.initPage();
@@ -257,7 +257,7 @@
         };
 		var reloadTable = function (){
 			 table.reload('task-table', {where: {taskName: $('#search_taskName').val(), groupName: $('#search_groupName').val(),
-	            	taskTarget: $('#search_taskTarget').val(),status: $('select[name="status"]').val(),runStatus: $('select[name="runStatus"]').val()}, page:1});
+	            	taskTarget: $('#search_taskTarget').val(),status: $('select[name="taskStatus"]').val(),runStatus: $('select[name="runStatus"]').val()}, page:1});
 		}
         // 搜索按钮点击事件
         $('#task-btn-search').click(function () {
