@@ -19,11 +19,10 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.bind.annotation.RestController;
 
-/**	
- * <p>Title: QBootApplication</p>
- * <p>Description: 程序入口</p>
- * @author history
- * @date 2018-08-08
+/**
+ * qboot启动类
+ * @author iscast
+ * @date 2020-09-25
  */
 @SpringBootApplication
 @ComponentScan(basePackages = {"org.qboot","com"}, includeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION,
@@ -34,7 +33,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @EnableCaching
 public class QBootApplication extends SpringBootServletInitializer{
-
     private static Logger logger = LoggerFactory.getLogger(QBootApplication.class);
 
 	public static void main(String[] args) {
@@ -49,10 +47,7 @@ public class QBootApplication extends SpringBootServletInitializer{
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
         return application.sources(QBootApplication.class);
     }
-	
-	/**
-	 * 适配Spring Cache
-	 */
+
 	@Autowired
 	RedissonClient redissonClient;
 	@Bean
