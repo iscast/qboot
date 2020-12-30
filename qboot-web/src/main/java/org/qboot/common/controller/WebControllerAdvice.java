@@ -106,9 +106,9 @@ public class WebControllerAdvice {
         }
 
         String remoteIp = request.getRemoteAddr();
-        String method = request.getMethod();
+        String requestURI = request.getRequestURI();
         String eMsg = e.getMessage();
-        logger.error("error msg: client ip:[{}] request method:[{}] , errorMsg:[{}], stackTrace:{}", remoteIp, method, eMsg, ExceptionUtils.getStackTrace(e));
+        logger.error("error msg: client ip:[{}] requestURI:[{}], errorMsg:[{}], stackTrace:{}", remoteIp, requestURI, eMsg, ExceptionUtils.getStackTrace(e));
     }
 
     /**
