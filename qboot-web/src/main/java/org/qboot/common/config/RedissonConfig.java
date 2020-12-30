@@ -25,7 +25,7 @@ public class RedissonConfig {
     private int connectTimeout=10000;
     private int timeout=3000;
     private int retryAttempts=1;
-    private int retryInterval=1500;
+    private int retryInterval=500;
     private String password = null;
     private int connectionPoolSize = 64;
     private int database = 0;
