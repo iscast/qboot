@@ -16,18 +16,18 @@
     </resultMap>
 
     <sql id="Base_Column_List" >
-        id, param_type_id, param_type_class, param_type_code, param_type_name, physics_flag
+        id, param_type_id, param_type_class, param_type_code, param_type_name, physics_flag, remarks
     </sql>
 
     <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
         select
-        <include refid="Base_Column_List" />, remarks
+        <include refid="Base_Column_List" />
         from sys_param_type where id = #{id} and physics_flag = 1
     </select>
   
     <select id="findList" resultMap="BaseResultMap" parameterType="org.qboot.sys.dto.SysParamTypeDto" >
         select
-        <include refid="Base_Column_List" />
+        id, param_type_id, param_type_class, param_type_code, param_type_name
         from sys_param_type
         <where>
             physics_flag = 1
@@ -45,7 +45,7 @@
 
     <select id="findByDto" resultMap="BaseResultMap" parameterType="org.qboot.sys.dto.SysParamTypeDto" >
         select
-        <include refid="Base_Column_List" />, remarks
+        <include refid="Base_Column_List" />
         from sys_param_type
         <where>
             physics_flag = 1
