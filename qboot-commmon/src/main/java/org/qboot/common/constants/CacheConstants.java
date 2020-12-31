@@ -31,8 +31,6 @@ public class CacheConstants {
 
     public static final String CACHE_PREFIX_SYS_PARAMTYPE_KEY = "qboot:sys:paramtype:";
 
-    public static final String CACHE_PREFIX_SYS_OPTLOG_URL = "qboot:sys:optlog:url:";
-
     /** system redis cache prefix end */
 
 
