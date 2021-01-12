@@ -5,10 +5,9 @@ import org.qboot.common.entity.BaseEntity;
 import javax.validation.constraints.NotNull;
 
 /**
- * <p>Title: SysParamClass</p>
- * <p>Description: 系统参数</p>
- * @author history
- * @date 2018-08-08
+ * 系统参数
+ * @author iscast
+ * @date 2020-09-25
  */
 public class SysParamClassDto extends BaseEntity<Long> {
 

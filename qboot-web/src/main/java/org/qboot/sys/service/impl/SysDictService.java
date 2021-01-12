@@ -16,10 +16,9 @@ import java.util.List;
 import static org.qboot.sys.exception.errorcode.SysModuleErrTable.*;
 
 /**
- * <p>Title: SysDictService</p>
- * <p>Description: system dict service</p>
- * @author history
- * @date 2018-08-08
+ * system dict service
+ * @author iscast
+ * @date 2020-09-25
  */
 @Service
 public class SysDictService extends CrudService<SysDictDao, SysDictDto> {
@@ -62,5 +61,19 @@ public class SysDictService extends CrudService<SysDictDao, SysDictDto> {
             }
         }
 		return sdlist;
+	}
+
+	public SysDictDto findType(String type) {
+	    MyAssertTools.hasLength(type, SYS_DICT_TYPE_NULL);
+        String key = CacheConstants.CACHE_PREFIX_SYS_DICT_TYPE_SINGLE + type;
+        SysDictDto target = redisTools.get(key);
+        if(null == target) {
+            List<SysDictDto> sdlist = this.d.findTypes(type);
+            if(!CollectionUtils.isEmpty(sdlist)) {
+                target = sdlist.get(0);
+            }
+            redisTools.set(key, target, 2*60*60);
+        }
+		return target;
 	}
 }

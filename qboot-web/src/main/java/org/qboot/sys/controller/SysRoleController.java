@@ -24,10 +24,8 @@ import java.util.List;
 import static org.qboot.sys.exception.errorcode.SysModuleErrTable.*;
 
 /**
- * <p>Title: SysRoleController</p>
- * <p>Description: sysRole</p>
- * @author history
- * @date 2018-08-08
+ * @author iscast
+ * @date 2020-09-25
  */
 @RestController
 @RequestMapping("${admin.path}/sys/role")

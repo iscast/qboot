@@ -12,11 +12,9 @@ import org.springframework.util.Assert;
 
 
 /**
- * <p>Title: SysDeptService</p>
- * <p>Description: 部门service</p>
- * 
- * @author history
- * @date 2018-08-08
+ * 部门service
+ * @author iscast
+ * @date 2020-09-25
  */
 @Service
 public class SysDeptService extends CrudService<SysDeptDao, SysDeptDto> {

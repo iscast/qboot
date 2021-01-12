@@ -24,10 +24,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * <p>Title: LoginPasswordEncoder</p>
- * <p>Description: 自定义登录/p>
- * @author history
- * @date 2018-09-11
+ * 自定义登录
+ * @author iscast
+ * @date 2020-09-25
  */
 public class WebAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 

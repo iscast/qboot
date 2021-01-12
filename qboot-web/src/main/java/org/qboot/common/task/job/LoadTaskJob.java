@@ -16,8 +16,8 @@ import org.qboot.sys.service.impl.SysTaskService;
 /**
  * 从数据库加载任务Job
  * 为保证所有节点都能及时感知到任务信息更新,我们每隔1秒从数据库重新初始化任务
- * @author history
- * @date 2018年11月8日 下午8:12:11
+ * @author iscast
+ * @date 2020-09-25
  */
 @Component
 @ConfigurationProperties(prefix="sys.common.task")

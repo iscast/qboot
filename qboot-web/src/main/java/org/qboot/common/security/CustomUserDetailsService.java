@@ -21,10 +21,9 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * <p>Title: CustomUserDetailsService</p>
- * <p>Description: 登录用户信息 Service</p>
- * @author history
- * @date 2018-09-08
+ * 登录用户信息 Service
+ * @author iscast
+ * @date 2020-09-25
  */
 @Service
 public class CustomUserDetailsService implements UserDetailsService{

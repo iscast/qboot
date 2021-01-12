@@ -22,10 +22,9 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * <p>Title: SysDeptController</p>
- * <p>Description: 部门controller</p>
- * @author history
- * @date 2018-08-08
+ * 部门controller
+ * @author iscast
+ * @date 2020-09-25
  */
 @RestController
 @Controller

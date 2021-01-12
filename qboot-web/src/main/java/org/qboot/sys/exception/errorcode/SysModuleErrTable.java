@@ -6,7 +6,7 @@ import org.qboot.common.error.ErrorCode;
  * 系统模块错误编码
  * 30XXX
  * @Author: iscast
- * @Date: 2020/11/4 10:13
+ * @Date: 2020-11-04 10:13
  */
 public class SysModuleErrTable {
 

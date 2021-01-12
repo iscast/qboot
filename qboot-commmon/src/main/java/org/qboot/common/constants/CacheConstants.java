@@ -3,7 +3,7 @@ package org.qboot.common.constants;
 /**
  * cache key prefix constants
  * @author iscast
- * @date 2018年11月9日 上午11:38:11
+ * @date 2020-09-25
  */
 public class CacheConstants {
 	
@@ -28,6 +28,8 @@ public class CacheConstants {
     public final static String CACHE_LOCK_KEY = "qboot:lock:";
 
     public static final String CACHE_PREFIX_SYS_DICT_TYPE = "qboot:sys:dict:";
+
+    public static final String CACHE_PREFIX_SYS_DICT_TYPE_SINGLE = "qboot:sys:dict:single:";
 
     public static final String CACHE_PREFIX_SYS_PARAMTYPE_KEY = "qboot:sys:paramtype:";
 

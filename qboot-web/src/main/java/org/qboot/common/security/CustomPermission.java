@@ -3,10 +3,9 @@ package org.qboot.common.security;
 import org.springframework.security.core.GrantedAuthority;
 
 /**
- * <p>Title: CustomPermission</p>
- * <p>Description: 权限ID</p>
- * @author history
- * @date 2018-09-08
+ * CustomPermission
+ * @author iscast
+ * @date 2020-09-25
  */
 public class CustomPermission implements GrantedAuthority {
 

@@ -9,10 +9,9 @@ import com.alibaba.fastjson.annotation.JSONField;
 import org.qboot.common.entity.BaseEntity;
 
 /**
- * <p>Title: SysUser</p>
- * <p>Description: 系统用户实体</p>
- * @author history
- * @date 2018-08-08
+ * 系统用户实体
+ * @author iscast
+ * @date 2020-09-25
  */
 public class SysUserDto extends BaseEntity<Long> {
 

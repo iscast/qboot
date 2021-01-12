@@ -28,10 +28,9 @@ import java.util.List;
 import static org.qboot.sys.exception.errorcode.SysModuleErrTable.*;
 
 /**
- * <p>Title: SysDictController</p>
- * <p>Description: 系统字典</p>
- * @author history
- * @date 2018-08-08
+ * 系统字典
+ * @author iscast
+ * @date 2020-09-25
  */
 @RestController
 @RequestMapping("${admin.path}/sys/dict")

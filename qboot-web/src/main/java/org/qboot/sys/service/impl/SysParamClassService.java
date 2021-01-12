@@ -6,10 +6,9 @@ import org.qboot.sys.dto.SysParamClassDto;
 import org.springframework.stereotype.Service;
 
 /**
- * <p>Title: SysParamClassService</p>
- * <p>Description: 系统类型service</p>
- * @author history
- * @date 2018-08-08
+ * 系统类型service
+ * @author iscast
+ * @date 2020-09-25
  */
 @Service
 public class SysParamClassService extends CrudService<SysParamClassDao, SysParamClassDto>{

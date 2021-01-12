@@ -13,7 +13,7 @@ import org.springframework.util.ClassUtils;
 /**
  * redis单点配置
  * @Author: iscast
- * @Date: 2020/10/29 14:32
+ * @Date: 2020-10-29 14:32
  */
 @ConfigurationProperties(prefix = "spring.redisson")
 @Configuration

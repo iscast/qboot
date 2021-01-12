@@ -5,10 +5,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.Assert;
 
 /**
- * <p>Title: LoginPasswordEncoder</p>
- * <p>Description: custom password encode</p>
- * @author history
- * @date 2018-09-11
+ * custom password encode
+ * @author iscast
+ * @date 2020-09-25
  */
 public class CustomPasswordEncoder implements PasswordEncoder{
 

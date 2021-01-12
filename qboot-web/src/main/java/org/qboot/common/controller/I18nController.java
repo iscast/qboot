@@ -15,10 +15,9 @@ import java.util.Locale;
 
 
 /**
- * <p>Title: I18nController</p>
- * <p>Description: 国际化</p>
+ * 国际化控制器
  * @author iscast
- * @date 2019-04-03 15:58
+ * @date 2020-09-25
  */
 @RestController
 @RequestMapping("/i18n")

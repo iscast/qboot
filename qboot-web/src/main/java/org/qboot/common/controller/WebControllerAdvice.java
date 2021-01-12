@@ -23,10 +23,9 @@ import java.util.Date;
 import static org.qboot.common.exception.errorcode.SystemErrTable.*;
 
 /**
- * <p>Title: QControllerAdvice</p>
- * <p>Description: 自定义逻辑处理、异常捕获处理</p>
- * @author history
- * @date 2018-09-08
+ * 异常捕获处理QControllerAdvice
+ * @author iscast
+ * @date 2020-09-25
  */
 @Component
 @ControllerAdvice

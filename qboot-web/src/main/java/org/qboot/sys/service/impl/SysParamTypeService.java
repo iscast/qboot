@@ -16,10 +16,9 @@ import java.util.List;
 import static org.qboot.sys.exception.errorcode.SysModuleErrTable.SYS_PARAM_TYPE_CLASS_NULL;
 
 /**
- * <p>Title: SysParamTypeService</p>
- * <p>Description: 系统类型service</p>
- * @author history
- * @date 2018-08-08
+ * 系统类型service
+ * @author iscast
+ * @date 2020-09-25
  */
 @Service
 public class SysParamTypeService extends CrudService<SysParamTypeDao, SysParamTypeDto>{

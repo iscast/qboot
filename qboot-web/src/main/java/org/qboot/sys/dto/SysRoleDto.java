@@ -10,10 +10,9 @@ import org.hibernate.validator.constraints.Length;
 import org.qboot.common.entity.BaseEntity;
 
 /**
- * <p>Title: SysRole</p>
- * <p>Description: 系统角色实体</p>
- * @author history
- * @date 2018-08-08
+ * 系统角色实体
+ * @author iscast
+ * @date 2020-09-25
  */
 public class SysRoleDto extends BaseEntity<String>{
 

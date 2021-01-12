@@ -2,11 +2,9 @@ package org.qboot.sys.dto;
 
 
 /**
- * <p>Title: SysRoleMenu</p>
- * <p>Description: 角色权限关系实体</p>
- * 
- * @author history
- * @date 2018-08-08
+ * 角色权限关系实体
+ * @author iscast
+ * @date 2020-09-25
  */
 public class SysRoleMenuDto {
 

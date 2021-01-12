@@ -1,11 +1,9 @@
 package org.qboot.common.security;
 
 /**
- * <p>Title: SecurityStatus</p>
- * <p>Description: HTTP返回状态码</p>
- * 
- * @author history
- * @date 2018-08-08
+ * HTTP返回状态码
+ * @author iscast
+ * @date 2020-09-25
  */
 public enum SecurityStatus {
 	/**

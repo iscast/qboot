@@ -17,10 +17,9 @@ import java.util.List;
 import static org.qboot.sys.exception.errorcode.SysUserErrTable.*;
 
 /**
- * <p>Title: SysUserService</p>
- * <p>Description: 系统用户service</p>
- * @author history
- * @date 2018-08-08
+ * 系统用户service
+ * @author iscast
+ * @date 2020-09-25
  */
 @Service
 public class SysUserService extends CrudService<SysUserDao, SysUserDto> {

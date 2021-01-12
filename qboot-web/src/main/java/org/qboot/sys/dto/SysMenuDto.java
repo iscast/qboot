@@ -9,10 +9,9 @@ import javax.validation.constraints.Pattern;
 import java.util.List;
 
 /**
- * <p>Title: SysMenu</p>
- * <p>Description: 菜单权限实体</p>
- * @author history
- * @date 2018-08-08
+ * 菜单权限实体
+ * @author iscast
+ * @date 2020-09-25
  */
 public class SysMenuDto extends TreeEntity<String> {
 

@@ -1,11 +1,9 @@
 package org.qboot.sys.dto;
 
 /**
- * <p>Title: SysUserRole</p>
- * <p>Description: 用户角色关系实体</p>
- * 
- * @author history
- * @date 2018-08-08
+ * 用户角色关系实体
+ * @author iscast
+ * @date 2020-09-25
  */
 public class SysUserRoleDto {
 

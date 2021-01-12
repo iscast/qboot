@@ -15,10 +15,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * <p>Title: MessageUtil</p>
- * <p>Description: 国际化工具</p>
- * @author history
- * @date 2019-04-03 15:05
+ * 国际化工具
+ * @author iscast
+ * @date 2020-09-25
  */
 public class MessageResolver {
     private static Logger logger = LoggerFactory.getLogger(MessageResolver.class) ;

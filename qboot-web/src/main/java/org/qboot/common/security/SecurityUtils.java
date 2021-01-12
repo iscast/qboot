@@ -5,10 +5,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
- * <p>Title: LoginUser</p>
- * <p>Description: current login user tool</p>
- * @author history
- * @date 2018-09-08
+ * current login user tool
+ * @author iscast
+ * @date 2020-09-25
  */
 public class SecurityUtils {
 	

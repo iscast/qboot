@@ -25,10 +25,9 @@ import java.util.Date;
 import static org.qboot.sys.exception.errorcode.SysModuleErrTable.*;
 
 /**
- * <p>Title: SysParamClassController</p>
- * <p>Description: 系统类型</p>
- * @author history
- * @date 2018-08-08
+ * 系统类型
+ * @author iscast
+ * @date 2020-09-25
  */
 @RestController
 @RequestMapping("${admin.path}/sys/paramclass")

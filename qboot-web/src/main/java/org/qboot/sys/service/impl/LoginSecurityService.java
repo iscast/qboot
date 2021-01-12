@@ -18,10 +18,9 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
- * <p>Title: LoginSecurityService</p>
- * <p>Description: 安全登录</p>
- * @author history
- * @date 2018-08-08
+ * 安全登录</p>
+ * @author iscast
+ * @date 2020-09-25
  */
 @Service
 public class LoginSecurityService extends BaseService {

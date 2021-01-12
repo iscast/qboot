@@ -7,8 +7,8 @@ import javax.validation.constraints.NotNull;
 
 /**
  * 系统类型参数
- * @author history
- * @date 2018-08-08
+ * @author iscast
+ * @date 2020-09-25
  */
 public class SysParamTypeDto extends BaseEntity<Long> {
 

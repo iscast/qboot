@@ -7,10 +7,9 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * <p>Title: SysMenuDao</p>
- * <p>Description: 菜单权限</p>
- * @author history
- * @date 2018-08-08
+ * 菜单权限
+ * @author iscast
+ * @date 2020-09-25
  */
 public interface SysMenuDao extends CrudDao<SysMenuDto> {
 

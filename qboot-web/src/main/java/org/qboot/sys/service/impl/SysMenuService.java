@@ -16,10 +16,9 @@ import static org.qboot.sys.exception.errorcode.SysModuleErrTable.*;
 
 
 /**
- * <p>Title: SysMenuService</p>
- * <p>Description: 菜单service</p>
- * @author history
- * @date 2018-08-08
+ * 菜单service
+ * @author iscast
+ * @date 2020-09-25
  */
 @Service
 public class SysMenuService extends CrudService<SysMenuDao, SysMenuDto> {

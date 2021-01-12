@@ -7,8 +7,8 @@ import java.util.List;
 
 /**
  * crud persistence
- * @Author: iscast
- * @Date: 2020/8/22 18:16
+ * @author iscast
+ * @date 2020-09-25
  */
 public interface CrudDao <T extends BaseEntity<?>> extends BaseDao {
     int insert(T t);

@@ -4,10 +4,9 @@ import org.qboot.common.dao.CrudDao;
 import org.qboot.sys.dto.SysParamTypeDto;
 
 /**
- * <p>Title: SysParamTypeDao</p>
- * <p>Description: 系统类型</p>
+ * 系统类型
  * @author iscast
- * @date 2018-08-08
+ * @date 2020-09-25
  */
 public interface SysParamTypeDao extends CrudDao<SysParamTypeDto> {
 

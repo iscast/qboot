@@ -8,10 +8,9 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * Job模板接口
- * 所有快速开发平台定时任务都应该实现此接口,请务必遵守!
- * @author history
- * @date 2018年11月8日 下午8:08:09
+ * Job模板接口 定时任务需实现此接口
+ * @author iscast
+ * @date 2020-09-25
  */
 public interface BaseJob {
 	

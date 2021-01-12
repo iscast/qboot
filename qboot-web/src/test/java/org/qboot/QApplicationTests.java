@@ -14,10 +14,9 @@ import org.springframework.web.context.WebApplicationContext;
 
 
 /**	
- * <p>Title: QApplicationTests</p>
- * <p>Description: 程序测试入口</p>
- * @author history
- * @date 2018-10-22
+ * 程序测试入口
+ * @author iscast
+ * @date 2020-09-25
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest

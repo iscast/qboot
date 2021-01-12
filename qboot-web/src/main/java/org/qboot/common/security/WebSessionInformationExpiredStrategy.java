@@ -8,10 +8,9 @@ import org.springframework.security.web.session.SessionInformationExpiredEvent;
 import org.springframework.security.web.session.SessionInformationExpiredStrategy;
 
 /**
- * <p>Title: CustomSessionInformationExpiredStrategy</p>
- * <p>Description: 重复登录</p>
- * @author history
- * @date 2018-09-21
+ * 重复登录
+ * @author iscast
+ * @date 2020-09-25
  */
 public class WebSessionInformationExpiredStrategy implements SessionInformationExpiredStrategy {
 

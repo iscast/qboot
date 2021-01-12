@@ -11,11 +11,9 @@ import org.qboot.sys.dto.SysRoleMenuDto;
 import org.qboot.common.dao.CrudDao;
 
 /**
- * <p>Title: SysRoleDao</p>
- * <p>Description: 系统角色</p>
- * 
- * @author history
- * @date 2018-08-08
+ * 系统角色
+ * @author iscast
+ * @date 2020-09-25
  */
 public interface SysRoleDao extends CrudDao<SysRoleDto>{
     public int deleteRoleMenuByRoleId(Serializable roleId);

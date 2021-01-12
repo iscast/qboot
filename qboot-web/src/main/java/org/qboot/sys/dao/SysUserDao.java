@@ -7,11 +7,9 @@ import org.qboot.sys.dto.SysUserRoleDto;
 import org.qboot.common.dao.CrudDao;
 
 /**
- * <p>Title: SysUserDao</p>
- * <p>Description: 系统用户</p>
- * 
- * @author history
- * @date 2018-08-08
+ * 系统用户
+ * @author iscast
+ * @date 2020-09-25
  */
 public interface SysUserDao extends CrudDao<SysUserDto> {
 

@@ -8,10 +8,9 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import java.util.Locale;
 
 /**
- * <p>Title: ConfigurableSessionLocaleResolver</p>
- * <p>Description: locale解析器</p>
- * @author history
- * @date 2019-04-03 14:42
+ * locale解析器
+ * @author iscast
+ * @date 2020-09-25
  */
 public class ConfigurableSessionLocaleResolver extends SessionLocaleResolver {
     private Logger logger = LoggerFactory.getLogger(getClass()) ;

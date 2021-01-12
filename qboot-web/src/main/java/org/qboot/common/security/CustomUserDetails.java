@@ -8,10 +8,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 /**
- * <p>Title: UserDetails</p>
- * <p>Description: 登录用户详细信息</p>
- * @author history
- * @date 2018-09-08
+ * 登录用户详细信息
+ * @author iscast
+ * @date 2020-09-25
  */
 public class CustomUserDetails implements UserDetails {
 

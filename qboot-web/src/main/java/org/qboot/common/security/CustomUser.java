@@ -6,11 +6,9 @@ import java.util.List;
 import org.qboot.sys.dto.SysRoleDto;
 
 /**
- * <p>Title: LoginUser</p>
- * <p>Description: 用户信息</p>
- * 
- * @author history
- * @date 2018-09-08
+ * 用户信息
+ * @author iscast
+ * @date 2020-09-25
  */
 public class CustomUser implements Serializable {
 

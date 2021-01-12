@@ -10,11 +10,9 @@ import org.qboot.common.constants.SysConstants;
 import org.qboot.common.entity.BaseEntity;
 
 /**
- * <p>Title: SysLoginLog</p>
- * <p>Description: 登陆日志实体</p>
- * 
- * @author history
- * @date 2018-08-08
+ * 登陆日志实体
+ * @author iscast
+ * @date 2020-09-25
  */
 public class SysLoginLogDto extends BaseEntity<String> {
 

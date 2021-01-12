@@ -29,10 +29,9 @@ import java.util.stream.Collectors;
 import static org.qboot.sys.exception.errorcode.SysModuleErrTable.*;
 
 /**
- * <p>Title: SysMenuController</p>
- * <p>Description: 系统菜单权限</p>
- * @author history
- * @date 2018-08-08
+ * 系统菜单权限
+ * @author iscast
+ * @date 2020-09-25
  */
 @RestController
 @RequestMapping("${admin.path}/sys/menu")

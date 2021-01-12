@@ -8,10 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * shell脚本型任务
- * 	提供执行shell脚本的方法callScript
- * @author history
- * @date 2018年11月12日 上午10:40:48
+ * shell脚本型任务 提供执行shell脚本的方法callScript
+ * @author iscast
+ * @date 2020-09-25
  */
 public abstract class ShellJob implements BaseJob{
 	

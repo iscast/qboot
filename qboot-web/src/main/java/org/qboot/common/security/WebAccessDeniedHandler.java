@@ -12,10 +12,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 /**
- * <p>Title: QAccessDeniedHandler</p>
- * <p>Description: 定义未授权访问处理器/p>
- * @author history
- * @date 2018-09-11
+ * 定义未授权访问处理器
+ * @author iscast
+ * @date 2020-09-25
  */
 @ControllerAdvice
 public class WebAccessDeniedHandler implements AccessDeniedHandler{

@@ -25,10 +25,9 @@ import java.util.List;
 import static org.qboot.sys.exception.errorcode.SysUserErrTable.*;
 
 /**
- * <p>Title: SysLoginController</p>
- * <p>Description: 登录控制器</p>
- * @author history
- * @date 2018-08-08
+ * 登录控制器
+ * @author iscast
+ * @date 2020-09-25
  */
 @RestController
 @RequestMapping("${admin.path}/user")

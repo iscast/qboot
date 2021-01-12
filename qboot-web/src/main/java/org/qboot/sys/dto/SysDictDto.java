@@ -8,13 +8,11 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 /**
- * <p>Title: SysDict</p>
- * <p>Description: 系统字典</p>
- * @author history
- * @date 2018-08-08
+ * 系统字典
+ * @author iscast
+ * @date 2020-09-25
  */
 public class SysDictDto extends BaseEntity<Long>{
-
 	private static final long serialVersionUID = 1L;
 
 	/**

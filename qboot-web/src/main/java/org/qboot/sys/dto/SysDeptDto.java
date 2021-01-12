@@ -6,10 +6,9 @@ import org.hibernate.validator.constraints.Length;
 import org.qboot.common.entity.TreeEntity;
 
 /**
- * <p>Title: SysDept</p>
- * <p>Description: 部门实体</p>
- * @author history
- * @date 2018-08-08
+ * 部门实体
+ * @author iscast
+ * @date 2020-09-25
  */
 public class SysDeptDto extends TreeEntity<String> {
 	private static final long serialVersionUID = 1L;

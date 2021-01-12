@@ -1,10 +1,9 @@
 package org.qboot.common.constants;
 
 /**
- * <p>Title: SysConstants</p>
- * <p>Description: qboot system constants</p>
- * @author history
- * @date 2018-09-08
+ * qboot system constants
+ * @author icast
+ * @date 2020-09-25
  */
 public class SysConstants {
 

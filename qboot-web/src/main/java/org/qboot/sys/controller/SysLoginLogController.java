@@ -16,10 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.Serializable;
 
 /**
- * <p>Title: SysLoginLogController</p>
- * <p>Description: 系统登陆日志</p>
- * @author history
- * @date 2018-08-08
+ * 系统登陆日志
+ * @author iscast
+ * @date 2020-09-25
  */
 @RestController
 @RequestMapping("${admin.path}/sys/loginlog")

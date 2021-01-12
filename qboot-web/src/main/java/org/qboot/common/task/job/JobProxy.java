@@ -31,8 +31,8 @@ import static org.qboot.sys.exception.errorcode.SysModuleErrTable.SYS_TASK_EXECU
 /**
  * Job 代理类
  * 所有任务的入口并记录Job执行日志
- * @author history
- * @date 2018年11月8日 下午8:10:00
+ * @author iscast
+ * @date 2020-09-25
  */
 @Component
 public class JobProxy{

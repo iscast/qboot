@@ -38,10 +38,9 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * <p>Title: LoginResultHandler</p>
- * <p>Description: 登录结果处理器</p>
- * @author history
- * @date 2018-09-11
+ * 登录结果处理器
+ * @author iscast
+ * @date 2020-09-25
  */
 public class WebLoginResultHandler implements AuthenticationSuccessHandler,AuthenticationFailureHandler,LogoutSuccessHandler {
 
