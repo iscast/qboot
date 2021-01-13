@@ -1,15 +1,14 @@
 <!-- 表单弹窗 -->
 <div class="wsh-layui-item">
     <form id="paramType-addForm" lay-filter="paramType-addForm" class="layui-form model-form">
-        <div class="step1">
-            <input id="id" name="id" type="hidden"/>
-            <div class="layui-form-item">
-                <label class="layui-form-label layui-i18n" i18n-key="sys.form.label.paramTypeClass"></label>
-                <div class="layui-input-inline">
-                    <input id="paramTypeClass" name="paramTypeClass" type="text" class="layui-input"
-                           disabled="disabled"/>
-                </div>
+        <input id="id" name="id" type="hidden"/>
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-i18n" i18n-key="sys.form.label.paramTypeClass"></label>
+            <div class="layui-input-inline">
+                <input id="paramTypeClass" name="paramTypeClass" type="text" class="layui-input"
+                       disabled="disabled"/>
             </div>
+        </div>
 
         <div class="layui-form-item">
             <label class="layui-form-label layui-i18n" i18n-key="sys.form.label.paramTypeId"></label>
@@ -17,25 +16,37 @@
                 <input id="paramTypeId" name="paramTypeId" i18n-key="sys.form.hint.inputParamTypeId" type="text" class="layui-input i18n-input-hint"
                        lay-verify="required|number" required/>
             </div>
-			<div class="layui-form-mid">*</div>
+            <div class="layui-form-mid">*</div>
         </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label layui-i18n" i18n-key="sys.form.label.paramTypeCode"></label>
-                <div class="layui-input-inline">
-                    <input id="paramTypeCode" name="paramTypeCode" i18n-key="sys.form.hint.inputParamTypeCode" type="text" class="layui-input i18n-input-hint"
-                           maxlength="200"
-                           lay-verify="required" required/>
-                </div>
-				<div class="layui-form-mid">*</div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-i18n" i18n-key="sys.form.label.paramTypeCode"></label>
+            <div class="layui-input-inline">
+                <input id="paramTypeCode" name="paramTypeCode" i18n-key="sys.form.hint.inputParamTypeCode" type="text" class="layui-input i18n-input-hint"
+                       maxlength="200"
+                       lay-verify="required" required/>
             </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label layui-i18n" i18n-key="sys.form.label.remark"></label>
-                <div class="layui-input-block wsh-layui-block-150">
-                    <textarea id="remarks" name="remarks" class="layui-textarea"
-                              maxlength="2000"></textarea>
-                </div>
+            <div class="layui-form-mid">*</div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-i18n" i18n-key="sys.table.title.name"></label>
+            <div class="layui-input-inline">
+                <input id="paramTypeName" name="paramTypeName" i18n-key="sys.table.title.name" type="text" class="layui-input i18n-input-hint"
+                       maxlength="200"
+                       lay-verify="required" required/>
+            </div>
+            <div class="layui-form-mid">*</div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-i18n" i18n-key="sys.form.label.remark"></label>
+            <div class="layui-input-block wsh-layui-block-150">
+                <textarea id="remarks" name="remarks" class="layui-textarea"
+                          maxlength="2000"></textarea>
             </div>
         </div>
+
         <div class="layui-form-item model-form-footer">
             <button class="layui-btn layui-btn-primary layui-btn-cancel" ew-event="closeDialog" type="button"></button>
             <button class="layui-btn layui-btn-save" lay-filter="paramType-addForm-submit" lay-submit></button>
@@ -86,7 +97,6 @@
                 url = '/sys/paramtype/update';
             }
 
-            // data.field.paramTypeName = $('input[name="zhCN"]').val();
             admin.req(url, data.field, function (data) {
                 layer.closeAll('loading');
                 if (data.code != 0) {

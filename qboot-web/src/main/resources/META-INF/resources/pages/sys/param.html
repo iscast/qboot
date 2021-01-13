@@ -18,7 +18,7 @@
 	</div>
 	<div class="layui-col-md6 tableBG">
 		<div class="layui-btn-group">
-			<button id="param-class-btn-add" class="layui-btn icon-btn layui-icon layui-icon-add-circle-fine layui-i18n" i18n-key="layer.confirm.title.addParamTypeElem" data-auth="sys:param:save"></button>
+			<button id="param-type-btn-add" class="layui-btn icon-btn layui-icon layui-icon-add-circle-fine layui-i18n" i18n-key="layer.confirm.title.addParamTypeElem" data-auth="sys:param:save"></button>
         </div>
 		<div class="grid-demo tableBG" id="typeLayTable">
 			<input type="hidden" id="paramTypeClass" name="paramTypeClass"/>
@@ -81,7 +81,7 @@ var form,table, table1,_config,layer,util,admin,formSelects, msgs;
             showEditModel(null);
         });
 
-        $('#param-class-btn-add').click(function () {
+        $('#param-type-btn-add').click(function () {
         	var paramTypeClass = $('#paramTypeClass').val();
         	if(paramTypeClass == null || paramTypeClass == ''){
         		layer.msg(msgs['sys.form.hint.inputParamTypeClass'], {icon: 2});
@@ -122,7 +122,7 @@ var form,table, table1,_config,layer,util,admin,formSelects, msgs;
 
         $('#classLayTable').on('click', 'tbody tr', function (e) {
         	var data = $(this);
-        	var paramTypeClass = data[0].cells[1].innerText;
+        	var paramTypeClass = data[0].cells[0].innerText;
 			var index = $(this).attr('data-index');
         	$('#paramTypeClass').val(paramTypeClass);
         	loadTypeClass(paramTypeClass);
@@ -162,7 +162,8 @@ var form,table, table1,_config,layer,util,admin,formSelects, msgs;
                 even: true,
                 height:460,
                 cols: [[
-                    {field: 'paramTypeId', title: msgs['sys.form.label.paramTypeId'], width: '35%'},
+                    {field: 'paramTypeId', title: msgs['sys.form.label.paramTypeId'], width: '15%'},
+                    {field: 'paramTypeName', title: msgs['sys.table.title.name'], width: '20%'},
                     {field: 'paramTypeCode', title: msgs['sys.form.label.paramTypeCode'], width: '40%'},
                     {align: 'center', templet: function(d){
                     	var auth = JSON.parse(sessionStorage.getItem("auth"));
@@ -269,7 +270,7 @@ var form,table, table1,_config,layer,util,admin,formSelects, msgs;
                         admin.popupCenter({
                             title: title,
                             path: 'pages/sys/paramtype_form.html',
-                            area: ['700px','450px'],
+                            area: ['700px','470px'],
                             finish: function () {
                                 table1.reload('sys_type_table', {});
                             }
@@ -281,7 +282,7 @@ var form,table, table1,_config,layer,util,admin,formSelects, msgs;
                 admin.popupCenter({
                     title: title,
                     path: 'pages/sys/paramtype_form.html',
-                    area: ['700px','450px'],
+                    area: ['700px','470px'],
                     finish: function () {
                         table1.reload('sys_type_table', {});
                     }

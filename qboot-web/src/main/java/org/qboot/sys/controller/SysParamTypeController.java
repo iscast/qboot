@@ -72,9 +72,6 @@ public class SysParamTypeController extends BaseController {
 	public ResponeModel save(@Validated SysParamTypeDto sysParam, BindingResult bindingResult, HttpServletRequest request) {
 		sysParam.setCreateBy(SecurityUtils.getLoginName());
 		sysParam.setPhysicsFlag(SysConstants.SYS_DELFLAG_NORMAL);
-		if (StringUtils.isNotBlank(sysParam.getParamTypeName())) {
-			sysParam.setParamTypeName(request.getParameter("paramTypeName"));
-		}
 		if(sysParamService.save(sysParam) > 0) {
             redisTools.del(CacheConstants.CACHE_PREFIX_SYS_PARAMTYPE_KEY + sysParam.getParamTypeClass());
 			return ok();
@@ -87,9 +84,6 @@ public class SysParamTypeController extends BaseController {
 	@PostMapping("/update")
 	public ResponeModel update(@Validated SysParamTypeDto sysParam, BindingResult bindingResult, HttpServletRequest request) {
 		sysParam.setUpdateBy(SecurityUtils.getLoginName());
-		if (StringUtils.isNotBlank(sysParam.getParamTypeName())) {
-			sysParam.setParamTypeName(request.getParameter("paramTypeName"));
-		}
 		if(sysParamService.update(sysParam) > 0) {
             redisTools.del(CacheConstants.CACHE_PREFIX_SYS_PARAMTYPE_KEY + sysParam.getParamTypeClass());
 			return ResponeModel.ok();
