@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
 import java.util.List;
 
 import static org.qboot.sys.exception.errorcode.SysModuleErrTable.*;
@@ -101,15 +100,10 @@ public class SysParamTypeController extends BaseController {
     @AccLog
 	@PreAuthorize("hasAuthority('sys:param:delete')")
 	@PostMapping("/delete")
-	public ResponeModel delete(@RequestParam Long id, @RequestParam Integer phyFlag) {
+	public ResponeModel delete(@RequestParam Long id, @RequestParam String paramTypeClass) {
         MyAssertTools.notNull(id, SYS_PARAM_TYPE_ID_NULL);
-		SysParamTypeDto sysParam = new SysParamTypeDto();
-		sysParam.setId(id);
-		sysParam.setPhysicsFlag(phyFlag);
-        sysParam.setUpdateDate(new Date());
-        sysParam.setUpdateBy(SecurityUtils.getLoginName());
-		if(sysParamService.changeById(sysParam) > 0) {
-            redisTools.del(CacheConstants.CACHE_PREFIX_SYS_PARAMTYPE_KEY + sysParam.getParamTypeClass());
+		if(sysParamService.deleteById(id) > 0 && StringUtils.isNotBlank(paramTypeClass)) {
+            redisTools.del(CacheConstants.CACHE_PREFIX_SYS_PARAMTYPE_KEY + paramTypeClass);
 			return ResponeModel.ok();
 		}
 		return ResponeModel.error(SYS_PARAM_TYPE_DELETE_FAIL);

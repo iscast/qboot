@@ -26,10 +26,6 @@ public class SysParamTypeService extends CrudService<SysParamTypeDao, SysParamTy
 	@Autowired
     RedisTools redisTools;
 
-	public int changeById(SysParamTypeDto sysParamType) {
-		return d.changeById(sysParamType);
-	}
-
     public SysParamTypeDto findByDto(SysParamTypeDto sysParamType) {
         return d.findByDto(sysParamType);
     }
@@ -46,7 +42,7 @@ public class SysParamTypeService extends CrudService<SysParamTypeDao, SysParamTy
         sysParam.setPhysicsFlag(SysConstants.SYS_DELFLAG_NORMAL);
 		sysParam.setParamTypeClass(paramKey);
 		list = this.findList(sysParam);
-		redisTools.set(key, list, 60*5);
+		redisTools.set(key, list, 300);
 		return list;
 	}
 }

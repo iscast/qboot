@@ -83,11 +83,11 @@ public class SysParamClassController extends BaseController {
     @AccLog
 	@PreAuthorize("hasAuthority('sys:param:delete')")
 	@PostMapping("/delete")
-	public ResponeModel delete(@RequestParam Long id, @RequestParam Integer phyFlag) {
+	public ResponeModel delete(@RequestParam Long id, @RequestParam String paramTypeClass) {
         MyAssertTools.notNull(id, SYS_PARAM_CLASS_ID_NULL);
 		SysParamClassDto sysParam = new SysParamClassDto();
 		sysParam.setId(id);
-		sysParam.setPhysicsFlag(phyFlag);
+		sysParam.setPhysicsFlag(SysConstants.SYS_DELFLAG_DEL);
 		if(sysParamClassService.changeById(sysParam) > 0) {
             redisTools.del(CacheConstants.CACHE_PREFIX_SYS_PARAMTYPE_KEY + sysParam.getParamTypeClass());
 			return ResponeModel.ok();

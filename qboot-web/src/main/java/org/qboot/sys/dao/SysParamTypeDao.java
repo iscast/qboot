@@ -9,7 +9,5 @@ import org.qboot.sys.dto.SysParamTypeDto;
  * @date 2020-09-25
  */
 public interface SysParamTypeDao extends CrudDao<SysParamTypeDto> {
-
-	int changeById(SysParamTypeDto sysParamType);
     SysParamTypeDto findByDto(SysParamTypeDto sysParamType);
 }

@@ -101,14 +101,25 @@ var form,table, table1,_config,layer,util,admin,formSelects, msgs;
 
         // 工具条点击事件
         table.on('tool(sys_typeclass_table)', function (obj) {
-            let data = obj.data;
             if (obj.event === 'edit') {
-                showEditModel(data);
+                showEditModel(obj.data);
             } else if (obj.event === 'del') {
-                doDelete(data);
+                layer.confirm(_i18n.getGlobalVal('layer.confirm.delete.msg'), _i18n.getBtns(), function (i) {
+                    layer.close(i);
+                    layer.load(2);
+                    admin.req('/sys/paramclass/delete', {id:obj.data.id, paramTypeClass:obj.data.paramTypeClass}, function (data) {
+                        layer.closeAll('loading');
+                        if (data.code != 0) {
+                            layer.msg(msgs['layer.error.code'] + data.code + msgs['layer.error.msg'] + data.msg, {icon: 2});
+                            return
+                        }
+                        layer.msg(data.msg, {icon: 1});
+                        obj.del();
+                    }, 'post');
+                });
             }
         });
-        
+
         $('#classLayTable').on('click', 'tbody tr', function (e) {
         	var data = $(this);
         	var paramTypeClass = data[0].cells[1].innerText;
@@ -134,17 +145,18 @@ var form,table, table1,_config,layer,util,admin,formSelects, msgs;
         });
 
         $('#param-btn-search').click(function () {
-            table.reload('sys_typeclass_table', {where: {paramTypeName: $('#search_paramTypeName').val(), paramTypeClass: $('#search_paramTypeClass').val()}, page:1});
+            reloadTableTypeClass();
         });
+
+        let reloadTableTypeClass = function() {
+            table.reload('sys_typeclass_table', {where: {paramTypeName: $('#search_paramTypeName').val(), paramTypeClass: $('#search_paramTypeClass').val()}, page:1});
+        };
 
     	let loadTypeClass = function(typeClass) {
     		table1.render({
             	elem: '#sys_type_table',
                 url: _config.base_server + '/sys/paramtype/qryPage',
-                where: {
-                    access_token: _config.getToken().access_token,
-                    paramTypeClass: typeClass
-                },
+                where: {paramTypeClass: typeClass},
                 method: 'post',
                 page: true,
                 even: true,
@@ -159,6 +171,9 @@ var form,table, table1,_config,layer,util,admin,formSelects, msgs;
                     	if(auth[page] && auth[page]['sys:param:update']){
                     		swiftBtn+='<a class="layui-btn layui-btn-xs" lay-event="edit" data-auth="sys:param:update">'+msgs['sys.form.operation.edit']+'</a>';
                 	    }
+                        if(auth[page] && auth[page]['sys:param:delete']){
+                            swiftBtn+= '<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" data-auth="sys:param:delete">' + msgs['sys.form.operation.delete'] + '</a>';
+                        }
                     	if(swiftBtn == ''){
                     		return _i18n.getGlobalVal('layui.operation.tips.noPermission');
                     	}else{
@@ -171,9 +186,22 @@ var form,table, table1,_config,layer,util,admin,formSelects, msgs;
         loadTypeClass(null);
 
         table1.on('tool(sys_type_table)', function (obj) {
-            var data = obj.data;
             if (obj.event === 'edit') {
-                showEditTypeModel(data);
+                showEditTypeModel(obj.data);
+            }else {
+                layer.confirm(msgs['layer.confirm.delete'], function (i) {
+                    layer.close(i);
+                    layer.load(2);
+                    admin.req('/sys/paramtype/delete', {id: obj.data.id, paramTypeClass:obj.data.paramTypeClass}, function (data) {
+                        layer.closeAll('loading');
+                        if (data.code != 0) {
+                            layer.msg(msgs['layer.error.code'] + data.code + msgs['layer.error.msg'] + data.msg, {icon: 2});
+                            return
+                        }
+                        layer.msg(data.msg, {icon: 1});
+                        obj.del();
+                    }, 'post');
+                });
             }
         });
     	
@@ -186,61 +214,41 @@ var form,table, table1,_config,layer,util,admin,formSelects, msgs;
         	}
         });
 
-        let doDelete = function (obj) {
-            layer.confirm(msgs['layer.confirm.delete'], function (i) {
-                layer.load(2);
-                admin.req('/sys/paramtype/delete', {
-                    id: obj.elem.value,
-                    phyFlag: obj.elem.checked ? 1 : 0
-                }, function (data) {
-                    layer.closeAll('loading');
-                    if (data.code != 0) {
-                        layer.msg(msgs['layer.error.code'] + data.code + msgs['layer.error.msg'] + data.msg, {icon: 2});
-                        $(obj.elem).prop('checked', !obj.elem.checked);
-                        form.render('checkbox');
-                        return
-                    }
-
-                    layer.msg(data.msg, {icon: 1});
-                }, 'post');
-            });
-        };
-
 
         let showEditModel = function (data) {
             admin.putTempData('t_param', {});
             let title = data ? msgs['sys.form.operation.edit'] : msgs['sys.form.operation.add'];
-            if(data){
-                $.ajax({
-                    url: _config.base_server + '/sys/paramclass/get?id=' + data.id,
-                    dataType: 'json',
-                    method: 'get',
-                    success: function(data){
-                        layer.closeAll('loading');
-                        if (data.code != 0) {
-                            layer.msg(msgs['layer.error.code'] + data.code + msgs['layer.error.msg'] + data.msg, {icon: 2});
-                            return
-                        }
-
-                        admin.putTempData('t_param', data.data);
-                        admin.popupCenter({
-                            title: title,
-                            path: 'pages/sys/param_form.html',
-                            finish: function () {
-                                table.reload('sys_typeclass_table', {});
-                            }
-                        });
-                    }
-                });
-            }else{
+            if(!data){
                 admin.popupCenter({
                     title: title,
                     path: 'pages/sys/param_form.html',
                     finish: function () {
-                        table.reload('sys_typeclass_table', {});
+                        reloadTableTypeClass();
                     }
                 });
+                return;
             }
+            $.ajax({
+                url: _config.base_server + '/sys/paramclass/get?id=' + data.id,
+                dataType: 'json',
+                method: 'get',
+                success: function(data){
+                    layer.closeAll('loading');
+                    if (data.code != 0) {
+                        layer.msg(msgs['layer.error.code'] + data.code + msgs['layer.error.msg'] + data.msg, {icon: 2});
+                        return
+                    }
+
+                    admin.putTempData('t_param', data.data);
+                    admin.popupCenter({
+                        title: title,
+                        path: 'pages/sys/param_form.html',
+                        finish: function () {
+                            reloadTableTypeClass();
+                        }
+                    });
+                }
+            });
         };
 
         let showEditTypeModel = function (data) {

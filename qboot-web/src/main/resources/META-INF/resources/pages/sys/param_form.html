@@ -51,15 +51,6 @@
         var param = admin.getTempData('t_param');
         $('#param-form').attr('method', 'POST');
         if (!!param) {
-            let _$createBy = $('<div class="layui-form-item"><label class="layui-form-label layui-i18n" i18n-key="sys.table.title.createdBy"></label><div class="layui-input-inline"><input readonly name="_createdBy" type="text" class="layui-input i18n-input-hint" value="' + param.createBy + '" maxlength="200"/></div></div>');
-            let _$updateBy = $('<div class="layui-form-item"><label class="layui-form-label layui-i18n" i18n-key="sys.table.title.updateBy"></label><div class="layui-input-inline"><input readonly name="_updateBy" type="text" class="layui-input i18n-input-hint" value="' + param.updateBy + '" maxlength="200"/></div></div>');
-            let _$createDate = $('<div class="layui-form-item"><label class="layui-form-label layui-i18n" i18n-key="sys.table.title.createDate"></label><div class="layui-input-inline"><input readonly name="_createDate" type="text" class="layui-input i18n-input-hint" value="' + util.toDateString(param.createDate) + '" maxlength="200"/></div></div>');
-            let _$updateDate = $('<div class="layui-form-item"><label class="layui-form-label layui-i18n" i18n-key="sys.table.title.updateDate"></label><div class="layui-input-inline"><input readonly name="_updateDate" type="text" class="layui-input i18n-input-hint" value="' + util.toDateString(param.updateDate) + '" maxlength="200"/></div></div>');
-
-            $("#paramTypeClass_form_div").after(_$updateDate);
-            $("#paramTypeClass_form_div").after(_$updateBy);
-            $("#paramTypeClass_form_div").after(_$createDate);
-            $("#paramTypeClass_form_div").after(_$createBy);
             form.val('param-form', param);
         }
         _i18n.initPage();
