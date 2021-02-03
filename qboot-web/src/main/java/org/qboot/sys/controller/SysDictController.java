@@ -73,6 +73,7 @@ public class SysDictController extends BaseController {
         sysDict.setCreateBy(SecurityUtils.getLoginName());
 		if(sysDictService.save(sysDict) > 0) {
             redisTools.del(CacheConstants.CACHE_PREFIX_SYS_DICT_TYPE + sysDict.getType());
+            redisTools.del(CacheConstants.CACHE_PREFIX_SYS_DICT_TYPE_SINGLE + sysDict.getType());
 			return ok();
 		}
 		return ResponeModel.error(SYS_DICT_SAVE_FAIL);
@@ -85,6 +86,7 @@ public class SysDictController extends BaseController {
 		sysDict.setUpdateBy(SecurityUtils.getLoginName());
 		if(sysDictService.update(sysDict) > 0) {
             redisTools.del(CacheConstants.CACHE_PREFIX_SYS_DICT_TYPE + sysDict.getType());
+            redisTools.del(CacheConstants.CACHE_PREFIX_SYS_DICT_TYPE_SINGLE + sysDict.getType());
 			return ok();
 		}
 		return ResponeModel.error(SYS_DICT_UPDATE_FAIL);

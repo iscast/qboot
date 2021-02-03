@@ -33,6 +33,7 @@ public class SysDictService extends CrudService<SysDictDao, SysDictDto> {
         int isDelete = super.deleteById(id);
         if(isDelete > 0) {
             redisTools.del(CacheConstants.CACHE_PREFIX_SYS_DICT_TYPE + sysDict.getType());
+            redisTools.del(CacheConstants.CACHE_PREFIX_SYS_DICT_TYPE_SINGLE + sysDict.getType());
         }
         return isDelete;
     }
@@ -46,6 +47,7 @@ public class SysDictService extends CrudService<SysDictDao, SysDictDto> {
 		int isUpdate = d.editStatus(sysDict);
         if(isUpdate > 0) {
             redisTools.del(CacheConstants.CACHE_PREFIX_SYS_DICT_TYPE + sysDict.getType());
+            redisTools.del(CacheConstants.CACHE_PREFIX_SYS_DICT_TYPE_SINGLE + sysDict.getType());
         }
         return isUpdate;
 	}
@@ -57,7 +59,7 @@ public class SysDictService extends CrudService<SysDictDao, SysDictDto> {
         if(CollectionUtils.isEmpty(sdlist)) {
             sdlist = this.d.findTypes(type);
             if(!CollectionUtils.isEmpty(sdlist)) {
-                redisTools.set(key, sdlist, 2*60*60);
+                redisTools.set(key, sdlist, 60*60);
             }
         }
 		return sdlist;
@@ -72,7 +74,7 @@ public class SysDictService extends CrudService<SysDictDao, SysDictDto> {
             if(!CollectionUtils.isEmpty(sdlist)) {
                 target = sdlist.get(0);
             }
-            redisTools.set(key, target, 2*60*60);
+            redisTools.set(key, target, 60*60);
         }
 		return target;
 	}
