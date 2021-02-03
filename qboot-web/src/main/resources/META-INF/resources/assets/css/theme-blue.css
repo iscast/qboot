@@ -101,8 +101,8 @@
     color: #1E9FFF !important;
 }
 
-.layui-table-click{background-color: #63F2C9 !important;}
-.layui-table-tips-main{display:none}
-.layui-table-tips-c{display:none}
-.layui-table-cell { height:auto; overflow:visible; text-overflow:inherit; white-space:normal; }
+/*.layui-table-click{background-color: #63F2C9 !important;}*/
+/*.layui-table-tips-main{display:none}*/
+/*.layui-table-tips-c{display:none}*/
+/*.layui-table-cell { height:auto; overflow:visible; text-overflow:inherit; white-space:normal; }*/
 .tableBG{ background-color: white;}
