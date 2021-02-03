@@ -65,6 +65,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				"/module/i18n/*",
 				"/user/getLoginPage",
 				"/i18n/getLocale",
+				"/favicon.ico",
 				"/user/getPublicKey",
                 loginPage).permitAll()
 		.antMatchers((adminPath + "/**")).authenticated()

@@ -20,5 +20,8 @@ spring:
     basename: i18n/msg
     encoding: UTF-8
     param_name: lang
+  mvc:
+    favicon:
+      enabled: false
   profiles:
     active: dev
