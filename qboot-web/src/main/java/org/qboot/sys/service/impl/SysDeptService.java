@@ -22,8 +22,6 @@ public class SysDeptService extends CrudService<SysDeptDao, SysDeptDto> {
 	public List<SysDeptDto> findByParentIds(String parentId){
 		//Assert.hasLength(parentIds,"parentIds 不能为空");
 		SysDeptDto sysDept = new SysDeptDto();
-		sysDept.setSortField("sort");
-		sysDept.setDirection(SysConstants.ASC);
 		sysDept.setParentId(parentId==null?"0":parentId);
 		return this.findList(sysDept);
 	}

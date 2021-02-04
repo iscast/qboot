@@ -57,10 +57,6 @@
     			and module_name = #{moduleName,jdbcType=VARCHAR}
     		</if>
     </where>
-    <!-- 有注入安全漏洞 后台系统忽略可以提高开发速度 -->
-	<if test="sortField != null and sortField != '' and direction != null and direction !=''">
-		order by #{sortField} #{direction}
-	</if>
   </select>
   
   <select id="findTable" parameterType="String" resultType="org.qboot.sys.dto.DbTableDto">

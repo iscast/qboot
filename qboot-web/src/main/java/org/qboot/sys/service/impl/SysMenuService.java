@@ -89,8 +89,6 @@ public class SysMenuService extends CrudService<SysMenuDao, SysMenuDto> {
 	public List<SysMenuDto> findShowMenuAll(){
 		SysMenuDto menu = new SysMenuDto();
 		menu.setIsShow(SysConstants.YES);
-		menu.setSortField("sort,parent_ids");
-		menu.setDirection(SysConstants.ASC);
 		return this.findList(menu);
 	} 
 	

@@ -16,10 +16,6 @@ import java.util.Map;
 public class QueryEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private String sortField;
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private String direction;
     @JsonIgnore
     private Integer page = 1;
     @JsonIgnore
@@ -43,22 +39,6 @@ public class QueryEntity implements Serializable {
             this.ext.put(key, value);
             return this.ext;
         }
-    }
-
-    public String getSortField() {
-        return SQLFilterUtils.sqlFilter(this.sortField);
-    }
-
-    public void setSortField(String sortField) {
-        this.sortField = sortField;
-    }
-
-    public String getDirection() {
-        return SQLFilterUtils.sqlFilter(this.direction);
-    }
-
-    public void setDirection(String direction) {
-        this.direction = direction;
     }
 
     public Map<String, Object> getExt() {

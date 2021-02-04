@@ -71,8 +71,6 @@ public class SysLoginLogService extends CrudService<SysLoginLogDao, SysLoginLogD
 		loginLog.setLimit(2);
 		loginLog.setUserId(userId);
 		loginLog.setStatus(SysConstants.SYS_USER_LOGIN_STATUS_SUCCESS);
-		loginLog.setSortField("l.login_time");
-		loginLog.setDirection(SysConstants.DESC);
 		PageInfo<SysLoginLogDto> findByPage = this.findByPage(loginLog);
 		List<SysLoginLogDto> list = findByPage.getList();
 		if (!list.isEmpty()) {

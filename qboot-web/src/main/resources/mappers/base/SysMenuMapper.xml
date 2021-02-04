@@ -47,10 +47,6 @@
     <where>
     		type <![CDATA[<>]]> '999'
     </where>
-    <!-- 有注入安全漏洞 后台系统忽略可以提高开发速度 -->
-	<if test="sortField != null and sortField != '' and direction != null and direction !=''">
-		order by ${sortField} ${direction}
-	</if>
   </select>
   
   <select id="findList" resultMap="BaseResultMap" parameterType="org.qboot.sys.dto.SysMenuDto" >
@@ -75,15 +71,7 @@
             and name like concat('%',#{name},'%')
         </if>
     </where>
-    <!-- 有注入安全漏洞 后台系统忽略可以提高开发速度 -->
-	<choose>
-		<when test="sortField != null and sortField != '' and direction != null and direction !=''">
-			order by ${sortField} ${direction}
-		</when>
-		<otherwise>
-			order by sort,id asc
-		</otherwise>
-	</choose>
+      order by sort,id asc
   </select>
   
   <select id="findByRoleId" parameterType="String" resultMap="BaseResultMap">
