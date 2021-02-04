@@ -83,36 +83,9 @@ layui.define(['_config', 'layer'], function (exports) {
             };
             return layer.open(param);
         },
-		// 封装ajax请求，返回数据类型为json
-        reqGen: function (url, data, success, method, contentType) {
-            if ('put' == method.toLowerCase()) {
-                method = 'POST';
-                data._method = 'PUT';
-            } else if ('delete' == method.toLowerCase()) {
-                method = 'POST';
-                data._method = 'DELETE';
-            }
-            var token = _config.getToken();
-            if (token) {
-                data.access_token = token.access_token;
-            }
-            admin.ajax({
-                url: _config.base_server + url,
-                data: data,
-                type: method,
-				dataType: 'json',
-                contentType: contentType,
-                success: success,
-                beforeSend: function (xhr) {
-                    var token = _config.getToken();
-                    if (token) {
-                        xhr.setRequestHeader('Authorization', 'Basic ' + token.access_token);
-                    }
-                }
-            });
-        },
+
         // 封装ajax请求，返回数据类型为json
-        req: function (url, data, success, method) {
+        req: function (url, data, success, method, contentType) {
             if ('put' == method.toLowerCase()) {
                 method = 'POST';
                 data._method = 'PUT';
@@ -128,6 +101,7 @@ layui.define(['_config', 'layer'], function (exports) {
                 url: _config.base_server + url,
                 data: data,
                 type: method,
+                contentType: contentType?contentType:'',
                 dataType: 'json',
                 success: success,
                 beforeSend: function (xhr) {

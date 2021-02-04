@@ -67,14 +67,6 @@
 </#list>
     </where>
 </#if>
-	<choose>
-    <when test="sortField != null and sortField != '' and direction != null and direction !=''">
-    order by ${r'#{sortField} #{direction}'}
-    </when>
-    <otherwise>
-   <!-- 默认排序设置 -->
-    </otherwise>
-    </choose>
   </select>
   <delete id="deleteById" >
     delete from ${tableName}
@@ -107,7 +99,6 @@
         where ${columnInfo.javaFieldName} = ${"#"}{${columnInfo.dbColumnName}}
       </#if>
     </#list>
-
   </update>
   <update id="update" parameterType="${moduleName}.entity.${className}Dto" >
     update ${tableName}

@@ -25,12 +25,9 @@
         table.render({
             elem: '#${functionName}-table',
             url: _config.base_server + '/${functionName}/qryPage',
-            where: {
-                access_token: _config.getToken().access_token
-            },
+            where: {},
             method: 'post',
             page: true,
-            even: true, //开启隔行背景
             cols: [[
                 {type: 'numbers'},
                 <#list columnInfos as columnInfo>
@@ -86,26 +83,7 @@
                 doDelete(obj);
             }
         });
-        
-     // 修改
-        form.on('switch(${functionName}-tpl-state)', function (obj) {
-            layer.load(2);
-            admin.req('/${functionName}/setStatus', {
-                id: obj.elem.value,
-                status: obj.elem.checked ? 0 : 1
-            }, function (data) {
-                layer.closeAll('loading');
-                if (data.code == 0) {
-                    layer.msg(data.msg, {icon: 1});
-                } else {
-                    layer.msg(data.msg, {icon: 2});
-                    $(obj.elem).prop('checked', !obj.elem.checked);
-                    form.render('checkbox');
-                }
-            }, 'post');
-        });
-        
-        
+
         // 搜索按钮点击事件
         $('#${functionName}-btn-search').click(function () {
             var ${functionName}Name = $('#${functionName}Name').val();
