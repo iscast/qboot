@@ -41,7 +41,6 @@ public class SysParamTypeDto extends BaseEntity<Long> {
 	/**
 	 * 删除标识
 	 */
-	@NotNull
     @JsonInclude(JsonInclude.Include.NON_NULL)
 	private Integer physicsFlag;
 

@@ -1,5 +1,6 @@
 package org.qboot.sys.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.qboot.common.entity.BaseEntity;
 
 import javax.validation.constraints.NotNull;
@@ -34,7 +35,7 @@ public class SysParamClassDto extends BaseEntity<Long> {
 	/**
 	 * 删除标识
 	 */
-	@NotNull
+    @JsonInclude(JsonInclude.Include.NON_NULL)
 	private Integer physicsFlag;
 
 	public String getParamTypeClass() {

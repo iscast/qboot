@@ -4,7 +4,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.qboot.sys.dto.SysDeptDto;
 import org.qboot.sys.service.impl.SysDeptService;
 import org.qboot.common.annotation.AccLog;
-import org.qboot.common.constants.SysConstants;
 import org.qboot.common.controller.BaseController;
 import org.qboot.common.utils.TreeHelper;
 import org.qboot.common.entity.ResponeModel;
@@ -22,7 +21,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * 部门controller
+ * 部门
  * @author iscast
  * @date 2020-09-25
  */
@@ -58,8 +57,6 @@ public class SysDeptController extends BaseController {
 	@PreAuthorize("hasAuthority('sys:dept:qry')")
 	@GetMapping("/qryAll")
 	public ResponeModel qryAll(SysDeptDto sysDept) {
-		sysDept.setSortField("sort,parent_ids");
-		sysDept.setDirection(SysConstants.ASC);
 		List<SysDeptDto> list = sysDeptService.findList(sysDept);
 		//数据机构调整
 		return ResponeModel.ok(treeHelper.treeGridList(list));

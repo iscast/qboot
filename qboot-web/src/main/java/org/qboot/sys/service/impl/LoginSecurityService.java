@@ -40,7 +40,7 @@ public class LoginSecurityService extends BaseService {
 		redisTools.del(CacheConstants.CACHE_PREFIX_LOGIN_FAILCOUNT + loginName);
 		SysUserDto unlockUser = new SysUserDto();
 		unlockUser.setLoginName(loginName);
-		unlockUser.setStatus(SysConstants.SYS_ENABLE);
+		unlockUser.setStatus(SysConstants.SYS_ENABLED);
         unlockUser.setUpdateDate(new Date());
         String currentUser = SecurityUtils.getLoginName();
         if(StringUtils.isBlank(currentUser)) {
@@ -64,7 +64,7 @@ public class LoginSecurityService extends BaseService {
 		if(null != increment && increment >= LOGIN_FAIL_COUNT) {
 			SysUserDto lockUser = new SysUserDto();
 			lockUser.setLoginName(loginName);
-			lockUser.setStatus(SysConstants.SYS_DISABLE);
+			lockUser.setStatus(SysConstants.SYS_DISABLED);
             lockUser.setUpdateDate(new Date());
             lockUser.setUpdateBy(SysConstants.SYSTEM_CRATER_NAME);
 			sysUserService.setStatus(lockUser);

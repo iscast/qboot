@@ -22,6 +22,8 @@ public class SystemErrTable {
     public static final ErrorCode SUCCESS = new ErrorCode(GLOBAL_DEFAULT_SUCCESS, GLOBAL_DEFAULT_SUCCESS_MSG);
     public static final ErrorCode ERR = new ErrorCode(GLOBAL_DEFAULT_ERROR, GLOBAL_DEFAULT_ERROR_MSG);
 
+    public static final ErrorCode PARAM_FIELD_ERROR = new ErrorCode(30000, "param.field.err");
+
     public static final ErrorCode AUTH_FAIL = new ErrorCode(60000, "auth.no.login");
     public static final ErrorCode AUTH_NO_RIGHTS = new ErrorCode(60001, "auth.no.right");
     public static final ErrorCode AUTH_REPEAT_LOGIN = new ErrorCode(60002, "auth.repeat.login");

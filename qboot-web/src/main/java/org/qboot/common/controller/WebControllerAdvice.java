@@ -4,6 +4,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.qboot.common.entity.ResponeModel;
 import org.qboot.common.exception.ErrorCodeException;
+import org.qboot.common.exception.ParamFailException;
 import org.qboot.common.exception.errorcode.SystemErrTable;
 import org.qboot.common.utils.DateUtils;
 import org.slf4j.Logger;
@@ -23,16 +24,13 @@ import java.util.Date;
 import static org.qboot.common.exception.errorcode.SystemErrTable.*;
 
 /**
- * 异常捕获处理QControllerAdvice
+ * 异常捕获处理
  * @author iscast
  * @date 2020-09-25
  */
 @Component
 @ControllerAdvice
 public class WebControllerAdvice {
-	/**
-	 * 日志对象
-	 */
 	private static Logger logger = LoggerFactory.getLogger(WebControllerAdvice.class);
 	
 	/**
@@ -97,6 +95,12 @@ public class WebControllerAdvice {
         logRequest(request, e);
 		return ResponeModel.error(SystemErrTable.ERR);
 	}
+
+    @ResponseBody
+    @ExceptionHandler(ParamFailException.class)
+    public ResponeModel paramFailException(ParamFailException e, HttpServletRequest request) {
+        return ResponeModel.error(e.getError());
+    }
 
 	private void logRequest(HttpServletRequest request, Exception e) {
 	    if(null == request) {

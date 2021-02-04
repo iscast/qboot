@@ -19,7 +19,7 @@ public class CustomUser implements Serializable {
 	private String deptName;
 	private String loginName;
 	private String name;
-	private String status;
+	private Integer status;
 	private String lang;
 
 	private Integer fldN1;
@@ -30,7 +30,7 @@ public class CustomUser implements Serializable {
 	private List<SysRoleDto> roles;
 
 	public CustomUser(Long userId, String deptId, String deptName, String loginName,
-                      String name, String status, Integer fldN1, Integer fldN2, String fldS1, String fldS2, String lang) {
+                      String name, Integer status, Integer fldN1, Integer fldN2, String fldS1, String fldS2, String lang) {
 		super();
 		this.userId = userId;
 		this.deptId = deptId;
@@ -96,15 +96,15 @@ public class CustomUser implements Serializable {
 		this.name = name;
 	}
 
-	public String getStatus() {
-		return status;
-	}
+    public Integer getStatus() {
+        return status;
+    }
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
 
-	public Integer getFldN1() {
+    public Integer getFldN1() {
 		return fldN1;
 	}
 

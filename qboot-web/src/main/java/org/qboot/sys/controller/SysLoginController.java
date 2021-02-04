@@ -72,7 +72,6 @@ public class SysLoginController extends BaseController {
 	public ResponeModel updateInfo(SysUserDto user) {
         MyAssertTools.hasLength(user.getName(), SYS_USER_NAME_EMPTY);
 		SysUserDto sysUser = new SysUserDto();
-		sysUser.setPhoto(user.getPhoto());
 		sysUser.setName(user.getName());
 		sysUser.setEmail(user.getEmail());
 		sysUser.setMobile(user.getMobile());

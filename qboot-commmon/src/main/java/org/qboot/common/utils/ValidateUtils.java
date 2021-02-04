@@ -1,38 +1,39 @@
 package org.qboot.common.utils;
 
-import org.qboot.common.entity.ResponeModel;
+import org.qboot.common.exception.ParamFailException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
+import java.util.List;
+
+import static org.qboot.common.constants.SysConstants.*;
+
 /**
- * validate utils
+ * validate bean utils
  * @Author: iscast
  * @Date: 2020/10/13 16:13
  */
 public class ValidateUtils {
-
     private static Logger logger = LoggerFactory.getLogger(ValidateUtils.class);
 
-    public static ResponeModel fieldError(BindingResult bindingResult) {
-
-        FieldError fieldError = bindingResult.getFieldError();
-
-        Thread thread = Thread.currentThread();
-        // get caller and method
-        StackTraceElement[] stackTrace = thread.getStackTrace();
-        if(null != stackTrace && stackTrace.length>3) {
-            StackTraceElement stackTraceElement = stackTrace[2];
-            logger.warn("class {}.{} required args[{}] error:{}", stackTraceElement.getClassName(),
-                    stackTraceElement.getMethodName(), fieldError.getField(), fieldError.getDefaultMessage());
-
-        } else {
-            logger.warn("required args[{}] error:{}", fieldError.getField(), fieldError.getDefaultMessage());
+    public static Boolean checkBind(BindingResult bindingResult) {
+        List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+        if(null == fieldErrors || fieldErrors.size() == 0) {
+            return true;
         }
 
-        return ResponeModel.error("required args[" + fieldError.getField() + "] can't be null or error format");
-
+        StringBuilder errFile = new StringBuilder("field error : ");
+        for(FieldError fieldError : fieldErrors) {
+            errFile.append(GAP_M_L_BRACKET);
+            errFile.append(fieldError.getField());
+            errFile.append(GAP_COLON);
+            errFile.append(fieldError.getDefaultMessage());
+            errFile.append(GAP_M_R_BRACKET);
+        }
+        logger.warn("{} {}", bindingResult.getObjectName(), errFile.toString());
+        throw new ParamFailException(errFile.toString());
     }
 
 }

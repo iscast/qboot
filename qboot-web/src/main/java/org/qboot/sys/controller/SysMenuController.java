@@ -9,6 +9,7 @@ import org.qboot.common.entity.AuthTreeEntity;
 import org.qboot.common.entity.ResponeModel;
 import org.qboot.common.security.SecurityUtils;
 import org.qboot.common.utils.TreeHelper;
+import org.qboot.common.utils.ValidateUtils;
 import org.qboot.sys.dto.SysMenuDto;
 import org.qboot.sys.dto.SysRoleDto;
 import org.qboot.sys.service.impl.SysMenuService;
@@ -55,8 +56,6 @@ public class SysMenuController extends BaseController {
 		List<SysMenuDto> list = new ArrayList<SysMenuDto>();
 		if(SecurityUtils.isSuperAdmin()) {
 			SysMenuDto sysMenu = new SysMenuDto();
-			sysMenu.setSortField("sort,parent_ids");
-			sysMenu.setDirection(SysConstants.ASC);
 			list = sysMenuService.findList(sysMenu);
 		}else {
 			list = sysMenuService.qryAuth(SecurityUtils.getUserId());
@@ -93,8 +92,6 @@ public class SysMenuController extends BaseController {
 				}
 			}else {
 				SysMenuDto sysMenu = new SysMenuDto();
-				sysMenu.setSortField("sort,parent_ids");
-				sysMenu.setDirection(SysConstants.ASC);
 				list = sysMenuService.findList(sysMenu);
 			}
 			
@@ -128,10 +125,8 @@ public class SysMenuController extends BaseController {
 	}
 	
 	@GetMapping("/qryParentMenus")
-	public ResponeModel qryParentMenus(@Validated SysMenuDto sysMenu, BindingResult bindingResult) {
+	public ResponeModel qryParentMenus(SysMenuDto sysMenu) {
 		sysMenu.setIsShow(sysMenu.getIsShow());
-		sysMenu.setSortField("id,sort");
-		sysMenu.setDirection(SysConstants.DESC);
 		List<SysMenuDto> list = sysMenuService.findParentMenuList(sysMenu);
         if(CollectionUtils.isEmpty(list)) {
             logger.warn("user{} qryMenus by sysMenu is null", SecurityUtils.getUserId());
@@ -154,6 +149,7 @@ public class SysMenuController extends BaseController {
 	@PreAuthorize("hasAuthority('sys:menu:save')")
 	@PostMapping("/save")
 	public ResponeModel save(@Validated SysMenuDto sysMenu, BindingResult bindingResult) {
+        ValidateUtils.checkBind(bindingResult);
 		SysMenuDto menu = sysMenuService.findByPermission(sysMenu.getPermission());
 		if(menu != null) {
 			return ResponeModel.error(SYS_MENU_DUPLICATE);
@@ -178,6 +174,7 @@ public class SysMenuController extends BaseController {
 	@PreAuthorize("hasAuthority('sys:menu:update')")
 	@PostMapping("/update")
 	public ResponeModel update(@Validated SysMenuDto sysMenu, BindingResult bindingResult) {
+        ValidateUtils.checkBind(bindingResult);
 		SysMenuDto menu = sysMenuService.findByPermission(sysMenu.getPermission());
 		if(menu != null && !String.valueOf(menu.getId()).equals(sysMenu.getId())) {
 			return ResponeModel.error(SYS_MENU_DUPLICATE);

@@ -9,10 +9,9 @@
     <result column="salt" property="salt" jdbcType="VARCHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="mobile" property="mobile" jdbcType="VARCHAR" />
-    <result column="photo" property="photo" jdbcType="VARCHAR" />
     <result column="email" property="email" jdbcType="VARCHAR" />
     <result column="user_type" property="userType" jdbcType="VARCHAR" />
-    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
     <result column="create_by" property="createBy" jdbcType="VARCHAR" />
     <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
     <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
@@ -75,7 +74,7 @@
     		<if test="deptId !=null and deptId!=''">
     			and (d.id = #{deptId} or d.parent_ids like concat('%', #{deptId},'%'))
     		</if>
-    		<if test="status !=null and status!=''">
+    		<if test="status !=null">
     			and u.status = #{status}
     		</if>
     		<if test="loginName !=null and loginName!=''">
@@ -118,13 +117,13 @@
   </insert>
 	
   <insert id="insert" parameterType="org.qboot.sys.dto.SysUserDto" useGeneratedKeys="true" keyProperty="id">
-    insert into sys_user (dept_id, login_name, password, salt, name, mobile, photo, email, user_type, status, create_by, create_date, update_by, 
+    insert into sys_user (dept_id, login_name, password, salt, name, mobile, email, user_type, status, create_by, create_date, update_by,
     update_date, remarks, fld_n1, fld_n2, fld_s1, fld_s2)
     values (
     	#{deptId,jdbcType=VARCHAR}, #{loginName,jdbcType=VARCHAR}, 
       	#{password,jdbcType=VARCHAR}, #{salt,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
-      	#{mobile,jdbcType=VARCHAR}, #{photo,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
-      	#{userType,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, 
+      	#{mobile,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR},
+      	#{userType,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{createBy,jdbcType=VARCHAR},
       	#{createDate,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, 
       	#{remarks,jdbcType=VARCHAR}, 
       	#{fldN1,jdbcType=INTEGER}, #{fldN2,jdbcType=INTEGER}, #{fldS1,jdbcType=VARCHAR}, #{fldS2,jdbcType=VARCHAR}
@@ -151,9 +150,6 @@
       </if>
       <if test="mobile != null and mobile != ''" >
         mobile = #{mobile},
-      </if>
-      <if test="photo != null" >
-        photo = #{photo},
       </if>
       <if test="email != null and email != ''" >
         email = #{email},

@@ -66,7 +66,7 @@ public class CustomUserDetails implements UserDetails {
 
 	@Override
 	public boolean isEnabled() {
-		return !SysConstants.SYS_DISABLE.equals(user.getStatus());
+		return !SysConstants.SYS_DISABLED.equals(user.getStatus());
 	}
 
 	public CustomUser getUser() {

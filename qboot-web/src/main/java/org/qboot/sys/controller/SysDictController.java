@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import org.qboot.common.constants.CacheConstants;
 import org.qboot.common.utils.MyAssertTools;
 import org.qboot.common.utils.RedisTools;
+import org.qboot.common.utils.ValidateUtils;
 import org.qboot.sys.dto.SysDictDto;
 import org.qboot.sys.service.impl.SysDictService;
 import org.qboot.common.annotation.AccLog;
@@ -21,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -43,7 +43,7 @@ public class SysDictController extends BaseController {
 
 	@PreAuthorize("hasAuthority('sys:dict:qry')")
 	@PostMapping("/qryPage")
-	public ResponeModel qryPage(SysDictDto sysDict, BindingResult bindingResult) {
+	public ResponeModel qryPage(SysDictDto sysDict) {
 		PageInfo<SysDictDto> page = sysDictService.findByPage(sysDict);
 		if(null == page) {
             return ResponeModel.error(SYS_DICT_LIST_EMPTY);
@@ -66,7 +66,8 @@ public class SysDictController extends BaseController {
 	@PreAuthorize("hasAuthority('sys:dict:save')")
 	@PostMapping("/save")
 	public ResponeModel save(@Validated SysDictDto sysDict, BindingResult bindingResult) {
-		if(null == sysDict.getSort()) {
+        ValidateUtils.checkBind(bindingResult);
+        if(null == sysDict.getSort()) {
             sysDict.setSort(0);
         }
         sysDict.setStatus(SysConstants.SYS_ENABLE);
@@ -83,6 +84,7 @@ public class SysDictController extends BaseController {
 	@PreAuthorize("hasAuthority('sys:dict:update')")
 	@PostMapping("/update")
 	public ResponeModel update(@Validated SysDictDto sysDict, BindingResult bindingResult) {
+        ValidateUtils.checkBind(bindingResult);
 		sysDict.setUpdateBy(SecurityUtils.getLoginName());
 		if(sysDictService.update(sysDict) > 0) {
             redisTools.del(CacheConstants.CACHE_PREFIX_SYS_DICT_TYPE + sysDict.getType());

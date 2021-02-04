@@ -27,14 +27,14 @@ public class SysMenuDto extends TreeEntity<String> {
 	/**
 	 * 链接
 	 */
-	@Length(max=200)
+	@Length(max=256)
     @JsonInclude(JsonInclude.Include.NON_NULL)
 	private String href;
 
 	/**
 	 * 目标
 	 */
-	@Length(max=10)
+	@Length(max=20)
     @JsonInclude(JsonInclude.Include.NON_NULL)
 	private String target;
 

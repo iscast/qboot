@@ -24,6 +24,9 @@ public class SysConstants {
     public static final String SYS_ENABLE = "1";
     public static final String SYS_DISABLE = "0";
 
+    public static final Integer SYS_ENABLED = 1;
+    public static final Integer SYS_DISABLED = 2;
+
     public static final Integer SYS_DELFLAG_NORMAL = 1;
     public static final Integer SYS_DELFLAG_DEL = 0;
 
@@ -90,6 +93,9 @@ public class SysConstants {
 	/** login status end */
 
     public static final char GAP_VERTICAL = '|';
+    public static final char GAP_M_L_BRACKET = '[';
+    public static final char GAP_COLON = ':';
+    public static final char GAP_M_R_BRACKET = ']';
 
 
     /**任务执行失败*/

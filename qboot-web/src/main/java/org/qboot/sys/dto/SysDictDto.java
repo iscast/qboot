@@ -16,38 +16,32 @@ public class SysDictDto extends BaseEntity<Long>{
 	private static final long serialVersionUID = 1L;
 
 	/**
-     * 字典类型
+     * 类型
      */
 	@NotNull
-	@Length(min=1,max=50)
     private String type;
 
     /**
      * 编码
      */
 	@NotNull
-	@Length(min=1,max=50)
     private String code;
 
     /**
      * 名称
      */
 	@NotNull
-	@Length(min=1,max=50)
     private String name;
 
     /**
      * 排序
      */
-	@NotNull
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Integer sort;
 
     /**
      * 是否启用1：是，0：否
      */
-	@NotNull
-	@Pattern(regexp="1|0")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String status;
     

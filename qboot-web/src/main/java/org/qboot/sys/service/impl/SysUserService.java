@@ -73,8 +73,10 @@ public class SysUserService extends CrudService<SysUserDao, SysUserDto> {
         MyAssertTools.notNull(sysUser, SYS_USER_NOTEXISTS);
 		return super.update(t);
 	}
-	
-	public int updateSelect(SysUserDto t) {
+
+
+    @Override
+    public int updateById(SysUserDto t) {
 		SysUserDto sysUser = this.findById(t.getId());
         MyAssertTools.notNull(sysUser, SYS_USER_NOTEXISTS);
 

@@ -11,6 +11,7 @@ import org.qboot.common.entity.ResponeModel;
 import org.qboot.common.security.SecurityUtils;
 import org.qboot.common.utils.IpUtils;
 import org.qboot.common.utils.MyAssertTools;
+import org.qboot.common.utils.ValidateUtils;
 import org.qboot.sys.dto.SysRoleDto;
 import org.qboot.sys.dto.SysUserDto;
 import org.qboot.sys.exception.errorcode.SysUserErrTable;
@@ -50,7 +51,7 @@ public class SysUserController extends BaseController {
 
 	@PreAuthorize("hasAuthority('sys:user:qry')")
 	@GetMapping("/qryPage")
-	public ResponeModel qryPage(SysUserDto user, BindingResult bindingResult) {
+	public ResponeModel qryPage(SysUserDto user) {
 		if(!SecurityUtils.isSuperAdmin()) {
 			user.setCreateBy(SecurityUtils.getLoginName());
 		}
@@ -85,21 +86,20 @@ public class SysUserController extends BaseController {
 	@PreAuthorize("hasAuthority('sys:user:save')")
 	@PostMapping("/save")
 	public ResponeModel save(@Validated SysUserDto sysUser, BindingResult bindingResult) {
+        ValidateUtils.checkBind(bindingResult);
 		boolean user = sysUserService.checkLoginName(null, sysUser.getLoginName());
 		if(user) {
 			return ResponeModel.error(SysUserErrTable.SYS_USER_DUPLICATE);
 		}
-		sysUser.setStatus(SysConstants.SYS_ENABLE);
+        sysUser.setStatus(SysConstants.SYS_ENABLED);
 		sysUser.setCreateBy(SecurityUtils.getLoginName());
-		
 		String password = RandomStringUtils.randomAlphanumeric(8);
 		sysUser.setPassword(password);
 		if(StringUtils.isNotBlank(sysUser.getRoleId())) {
 			sysUser.setRoleIds(Arrays.asList(sysUser.getRoleId().split(",")));
 		}
 		sysUser.setCreateDate(new Date());
-		int cnt = sysUserService.save(sysUser);
-		if(cnt > 0) {
+		if(sysUserService.save(sysUser) > 0) {
 			return ResponeModel.ok(String.format(initPwdStr, password));
 		}
 		return ResponeModel.error(SYS_USER_SAVE_FAIL);
@@ -108,8 +108,9 @@ public class SysUserController extends BaseController {
 
     @AccLog
 	@PreAuthorize("hasAuthority('sys:user:update')")
-	@PostMapping("/updateSelect")
-	public ResponeModel updateSelect(@Validated SysUserDto sysUser, BindingResult bindingResult, HttpServletRequest request) {
+	@PostMapping("/update")
+	public ResponeModel update(@Validated SysUserDto sysUser, BindingResult bindingResult, HttpServletRequest request) {
+        ValidateUtils.checkBind(bindingResult);
 		boolean user = sysUserService.checkLoginName(sysUser.getId(), sysUser.getLoginName());
 		if(user) {
 			return ResponeModel.error(SYS_USER_LOGINNAME_DUPLICATE);
@@ -122,16 +123,14 @@ public class SysUserController extends BaseController {
 		if(!String.valueOf(sysUser.getId()).equals(String.valueOf(updateId))) {
 			return ResponeModel.error(SYS_USER_UPDATE_OVER_RIGHT);
 		}
-		
-		if (SecurityUtils.isSuperAdmin(sysUser.getLoginName()) && SysConstants.SYS_DISABLE.equals(sysUser.getStatus())) {
-			return ResponeModel.error(SYS_USER_UPDATE_NO_ADMIN);
-		}
+
 		if(StringUtils.isNotBlank(sysUser.getRoleId())) {
 			sysUser.setRoleIds(Arrays.asList(sysUser.getRoleId().split(",")));
 		}
+
 		sysUser.setUpdateBy(SecurityUtils.getLoginName());
 		sysUser.setUpdateDate(new Date());
-		int cnt = sysUserService.updateSelect(sysUser);
+		int cnt = sysUserService.updateById(sysUser);
 		if(cnt > 0) {
 			loginSecurityService.clearUserSessions(sysUser.getLoginName());
 			return ok();
@@ -163,7 +162,7 @@ public class SysUserController extends BaseController {
     @AccLog
 	@PreAuthorize("hasAuthority('sys:user:update')")
 	@PostMapping("/setStatus")
-	public ResponeModel setStatus(@RequestParam Long id, @RequestParam String status) {
+	public ResponeModel setStatus(@RequestParam Long id, @RequestParam Integer status) {
 		SysUserDto user = sysUserService.findById(id);
 		MyAssertTools.notNull(user, SYS_USER_NOTEXISTS);
 		if (SecurityUtils.isSuperAdmin(user.getLoginName())) {
@@ -177,8 +176,7 @@ public class SysUserController extends BaseController {
 		sysUser.setStatus(status);
         sysUser.setUpdateDate(new Date());
         sysUser.setUpdateBy(SecurityUtils.getLoginName());
-		int cnt = this.sysUserService.setStatus(sysUser);
-		if(cnt > 0) {
+		if(sysUserService.setStatus(sysUser) > 0) {
 			loginSecurityService.clearUserSessions(sysUser.getLoginName());
 			return ok();
 		}

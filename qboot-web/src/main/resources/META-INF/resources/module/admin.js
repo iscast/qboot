@@ -97,11 +97,27 @@ layui.define(['_config', 'layer'], function (exports) {
             if (token) {
                 data.access_token = token.access_token;
             }
+            if(typeof(contentType) == "undefined" && contentType != null) {
+                admin.ajax({
+                    url: _config.base_server + url,
+                    data: data,
+                    type: method,
+                    dataType: 'json',
+                    contentType: contentType,
+                    success: success,
+                    beforeSend: function (xhr) {
+                        var token = _config.getToken();
+                        if (token) {
+                            xhr.setRequestHeader('Authorization', 'Basic ' + token.access_token);
+                        }
+                    }
+                });
+                return;
+            }
             admin.ajax({
                 url: _config.base_server + url,
                 data: data,
                 type: method,
-                contentType: contentType?contentType:'',
                 dataType: 'json',
                 success: success,
                 beforeSend: function (xhr) {
