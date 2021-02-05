@@ -37,20 +37,19 @@
                 menuName: menuName, moduleName: moduleName
             },
             page: true,
-            even: true, //开启隔行背景
             cols: [[
                 {field: 'tableName', width:'15%',  title: '表名'},
                 {field: 'menuName', width: '12%', title: '菜单名称'},
-                {field: 'moduleName', width: '12%', title: '模块名称'},
+                {field: 'moduleName', width: '12%', title: '路径'},
                 {field: 'className', width: '12%', title: '类名'},
-                { 
+                {field: 'template', width: '10%',
                 	templet: function (d) {
-                		if (d.template == '1'){//基本增删改查
+                		if (d.template == '1'){
                 			return "<span class='label label-success'>增删改查</span>";
-        				} else if (d.template == '2') {//树形结构
+        				} else if (d.template == '2') {
         					return "<span class='label label-danger'>树结构</span>"
         				}
-	                }, title: '生成模板'
+	                }, title: '模板类型'
 	            },
                 {
                     templet: function (d) {

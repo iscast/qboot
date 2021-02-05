@@ -149,9 +149,9 @@
                     		return "<input name='columnInfos[][columnComment]' type='text' value='" + d.columnComment + "' class='layui-input'/>";
     	                }, title: '备注'
     	            },
-                    { 
+                    { width: '10%',
                     	templet: function (d) {
-                            return "<select name='columnInfos[][columnType]'>" +
+                            return "<select lay-ignore name='columnInfos[][columnType]'>" +
                                 "<option value='String' " +
                                 (d.javaType=='String'?"selected='selected'":"") +
                                 " >String</option>" +
@@ -210,7 +210,7 @@
     	            },
                     { 
                     	templet: function (d) {
-                            return "<select name='columnInfos[][queryType]'>"
+                            return "<select lay-ignore name='columnInfos[][queryType]'>"
                                 +"<option value=''>请选择</option>" +
                                 "<option value='=' " +
                                 (d.queryType=="="?"selected='selected'":"") +
