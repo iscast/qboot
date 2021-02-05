@@ -23,7 +23,7 @@ public class CacheConstants {
 	 */
 	public static final String TASK_LOCK = "SYS_TASK_LOCK_";
 
-    /** system redis cache prefix begin */
+    /** system cache prefix begin */
 
     public final static String CACHE_LOCK_KEY = "qboot:lock:";
 
@@ -33,7 +33,9 @@ public class CacheConstants {
 
     public static final String CACHE_PREFIX_SYS_PARAMTYPE_KEY = "qboot:sys:paramtype:";
 
-    /** system redis cache prefix end */
+    public static final String CACHE_PREFIX_USER_QRY_KEY = "qboot:user:page:qry:";
+
+    /** system cache prefix end */
 
 
     public static final String CACHE_PREFIX_LOGIN_FAILCOUNT = "qboot:login:failcount:";

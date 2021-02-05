@@ -88,6 +88,30 @@ public class CrudService<D extends CrudDao<T>, T extends BaseEntity<? extends Se
 
     @Transactional(readOnly = true)
     public PageInfo<T> findByPage(T t) {
+//        有问题的分页缓存
+//        String clzName = this.getClass().getName();
+//        Long userId = SecurityUtils.getUserId();
+//        if(null != userId && StringUtils.isNotBlank(clzName)) {
+//            String cacheName = CacheConstants.CACHE_PREFIX_USER_QRY_KEY + clzName + userId;
+//            Long totleCount = LocalCacheTools.getL(cacheName);
+//            boolean isCount = true;
+//            if(null != totleCount) {
+//                isCount = false;
+//            }
+//
+//            PageHelper.startPage(t.getPage(), t.getLimit(), isCount);
+//            List<T> list = this.findList(t);
+//
+//            PageInfo<T> pageInfo = new PageInfo(list);
+//
+//            if(isCount) {
+//                Long total = pageInfo.getTotal();
+//                LocalCacheTools.setL(cacheName, total);
+//            } else {
+//                pageInfo.setTotal(totleCount);
+//            }
+//            return pageInfo;
+//        }
         return this.findByPage(t, Boolean.TRUE);
     }
 }
