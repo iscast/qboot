@@ -1,6 +1,7 @@
 package org.qboot.sys.service.impl;
 
 import org.apache.commons.lang3.StringUtils;
+import org.qboot.common.constants.SysConstants;
 import org.qboot.common.utils.MyAssertTools;
 import org.qboot.sys.dao.SysRoleDao;
 import org.qboot.sys.dto.SysRoleDto;
@@ -19,7 +20,7 @@ import static org.qboot.sys.exception.errorcode.SysModuleErrTable.*;
 
 /**
  * 系统角色service
- * @author iscast
+ * @author history
  * @date 2020-09-25
  */
 @Service
@@ -35,11 +36,13 @@ public class SysRoleService extends CrudService<SysRoleDao, SysRoleDto> {
 			}
 		}
 		if(StringUtils.isNotBlank(t.getAuthMenuIds())) {
-			t.setMenuIds(Arrays.asList(t.getAuthMenuIds().split(",")));
+			t.setMenuIds(Arrays.asList(StringUtils.split(t.getAuthMenuIds(), SysConstants.GAP_COMMA)));
 			this.saveRoleMenus(t.getId(), t.getMenuIds());
 		}
 		return cnt;
 	}
+
+
 	@Override
 	public int deleteById(Serializable id) {
 		//删除role_menu

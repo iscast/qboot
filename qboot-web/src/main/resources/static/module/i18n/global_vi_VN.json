@@ -35,6 +35,7 @@
 	"login.form.hint.verifyCode":"kiểm chứng code",
 	"login.form.hint.verifyCode.error":"kiểm chứng code lỗi",
 	"login.error.msg.loginInfo": "xin vui lòng nhập chính xác tài khoản hoặc mật khẩu!",
+    "login.error.msg.nomenu":"Người dùng không có bất kỳ menu nào, vui lòng liên hệ với quản trị viên hệ thống, quay lại trang đăng nhập",
 	"layui.btn.closeCurTab":"đóng hiện hành Chuyển hướng",
 	"layui.btn.closeOtherTabs":"đóng khác Chuyển hướng",
 	"layui.btn.closeAllTabs":"đóng tất cả Chuyển hướng",

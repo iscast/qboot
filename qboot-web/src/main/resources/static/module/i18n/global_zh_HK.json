@@ -35,6 +35,7 @@
   "login.form.hint.verifyCode":"驗證碼",
   "login.form.hint.verifyCode.error":"驗證碼錯誤",
   "login.error.msg.loginInfo": "賬號或密碼錯誤",
+  "login.error.msg.nomenu":"用戶沒有配置菜單請聯系管理員, 準備返回登陸頁面",
   "layui.btn.closeCurTab":"關閉當前標簽頁",
   "layui.btn.closeOtherTabs":"關閉其它標簽頁",
   "layui.btn.closeAllTabs":"關閉全部標簽頁",

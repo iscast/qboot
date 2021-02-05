@@ -35,6 +35,7 @@
 	"login.form.hint.verifyCode":"verify code",
 	"login.form.hint.verifyCode.error":"verify code error",
 	"login.error.msg.loginInfo": "please input correct account or password!",
+    "login.error.msg.nomenu":"user do not have any menu, please contact system admin, back to login page",
 	"layui.btn.closeCurTab":"close current tab",
 	"layui.btn.closeOtherTabs":"close other tabs",
 	"layui.btn.closeAllTabs":"close all tabs",

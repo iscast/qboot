@@ -140,10 +140,12 @@ layui.define(['_config', 'admin', 'layer', 'laytpl', 'element', 'form','_i18n'],
                         var authObject = {};
                         
                         if(data == null || data.length == 0){
-                            layer.msg('get user fail', {icon: 2});
-                            let loginPage = _config.getLoginPage();
-                            _config.removeToken();
-                            location.replace(loginPage);
+                            layer.msg(_i18n.getGlobalVal("login.error.msg.nomenu"), {icon: 2, time:3000});
+                            setTimeout(function(){
+                                let loginPage = _config.getLoginPage();
+                                _config.removeToken();
+                                location.replace(loginPage);
+                            }, 3000);
                         }
                         
                         for( var i = 0; i < data.length; i ++ ) {
@@ -372,10 +374,9 @@ layui.define(['_config', 'admin', 'layer', 'laytpl', 'element', 'form','_i18n'],
     // tab选项卡切换监听
     element.on('tab(admin-pagetabs)', function (data) {
         var layId = $(this).attr('lay-id');
-
         Q.go(layId);
     });
-    
+
     admin.req('/user/checkFirstLogin',{}, function (data) {
         if (0 != data.code ) {
         	layer.msg(data.msg, {icon: 1, time: 5000});

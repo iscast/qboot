@@ -16,20 +16,20 @@ import org.qboot.common.dao.CrudDao;
  * @date 2020-09-25
  */
 public interface SysRoleDao extends CrudDao<SysRoleDto>{
-    public int deleteRoleMenuByRoleId(Serializable roleId);
-    public int deleteUserRoleByRoleId(Serializable roleId);
-    public int deleteUserRoleByRoleIdAndUserId(@Param("roleId") String roleId,@Param("userId") Long userId);
-    public int insertUserRole(@Param("roleId") String roleId,@Param("userId") Long userId);
-    public int insertRoleMenu(List<SysRoleMenuDto> roleMenus);
-    public List<SysRoleDto> findByUserId(Long userId);
-    public int deleteRoleDeptByRoleId(Serializable roleId);
-    public int insertRoleDept(List<SysRoleDeptDto> list);
+    int deleteRoleMenuByRoleId(Serializable roleId);
+    int deleteUserRoleByRoleId(Serializable roleId);
+    int deleteUserRoleByRoleIdAndUserId(@Param("roleId") String roleId,@Param("userId") Long userId);
+    int insertUserRole(@Param("roleId") String roleId,@Param("userId") Long userId);
+    int insertRoleMenu(List<SysRoleMenuDto> roleMenus);
+    List<SysRoleDto> findByUserId(Long userId);
+    int deleteRoleDeptByRoleId(Serializable roleId);
+    int insertRoleDept(List<SysRoleDeptDto> list);
     
-    public List<String> selectMenuIdsByRoleId(Serializable roleId);
-    public List<String> selectDeptIdsByRoleId(String roleId);
+    List<String> selectMenuIdsByRoleId(Serializable roleId);
+    List<String> selectDeptIdsByRoleId(String roleId);
     
-    public int delete(@Param("roleId") java.lang.String roleId);
+    int delete(@Param("roleId") java.lang.String roleId);
 
-	public SysRoleDto findByName(String name);
+	SysRoleDto findByName(String name);
 
 }

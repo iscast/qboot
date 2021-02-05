@@ -93,6 +93,7 @@ public class SysConstants {
 	/** login status end */
 
     public static final char GAP_VERTICAL = '|';
+    public static final char GAP_COMMA = ',';
     public static final char GAP_M_L_BRACKET = '[';
     public static final char GAP_COLON = ':';
     public static final char GAP_M_R_BRACKET = ']';
