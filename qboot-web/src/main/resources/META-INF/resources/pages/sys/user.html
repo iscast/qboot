@@ -75,8 +75,7 @@
                 	var btn = '', delBtn = '';
                 	if(auth[page] && auth[page]['sys:user:update']){
                 		btn = '<a class="layui-btn layui-btn-xs" lay-event="edit">'+msgs['sys.form.operation.edit']+'</a>'
-                			+ '<a class="layui-btn layui-btn-xs" lay-event="reset">'+msgs['sys.form.operation.resetPwd']+'</a>'
-                			+ '<a class="layui-btn layui-btn-xs" lay-event="unlock">'+msgs['sys.form.operation.unlock']+'</a>';
+                			+ '<a class="layui-btn layui-btn-xs" lay-event="reset">'+msgs['sys.form.operation.resetPwd']+'</a>';
             	    }
                     if(auth[page] && auth[page]['sys:user:delete']){
                         delBtn = '<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" data-auth="sys:user:delete">'+msgs['sys.form.operation.delete']+'</a>';
@@ -106,19 +105,6 @@
                 showEditModel(data);
             } else if (layEvent === 'del') { // 删除
                 doDelete(obj);
-            } else if (layEvent === 'unlock') { // 解锁
-                layer.confirm(msgs['layer.confirm.msg.unlock'], _i18n.getBtns(), function (i) {
-                    layer.close(i);
-                    layer.load(2);
-                    admin.req('/sys/user/unlock?id=' + obj.data.id, {}, function (data) {
-                        layer.closeAll('loading');
-                        if (data.code != 0) {
-                            layer.msg(msgs['layer.error.code'] + data.code + msgs['layer.error.msg'] + data.msg, {icon: 2});
-                            return;
-                        }
-                        layer.msg(data.msg, {icon: 1});
-                    }, 'post');
-                });
             } else if (layEvent === 'reset') { // 重置密码
                 layer.confirm(msgs['layer.confirm.msg.resetPwd'],_i18n.getBtns(), function (i) {
                     layer.close(i);
@@ -152,7 +138,6 @@
         };
 
 
-    //显示表单弹窗
         var showEditModel = function (data) {
             var title = data ? msgs['layer.confirm.title.editUser'] : msgs['layer.confirm.title.addUser'];
             
@@ -212,6 +197,7 @@
 
         // 修改user状态
         form.on('switch(user-tpl-state)', function (obj) {
+            // msgs['layer.confirm.msg.unlock']
             layer.load(2);
             admin.req('/sys/user/setStatus', {
                 id: obj.elem.value,
