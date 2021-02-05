@@ -37,7 +37,7 @@ public class SysRoleController extends BaseController {
 	
 	@PreAuthorize("hasAuthority('sys:role:qry')")
 	@PostMapping("/qryPage")
-	public ResponeModel qryPage(@Validated SysRoleDto sysRole) {
+	public ResponeModel qryPage(SysRoleDto sysRole) {
 		if(!SecurityUtils.isSuperAdmin()) {
 			sysRole.setCreateBy(SecurityUtils.getLoginName());
 		}
