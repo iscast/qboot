@@ -7,6 +7,7 @@ import org.qboot.common.entity.ResponeModel;
 import org.qboot.common.security.CustomUser;
 import org.qboot.common.security.SecurityUtils;
 import org.qboot.common.utils.MyAssertTools;
+import org.qboot.common.utils.ValidateUtils;
 import org.qboot.sys.dto.SysRoleDto;
 import org.qboot.sys.service.impl.SysRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,7 @@ public class SysRoleController extends BaseController {
 	
 	@PreAuthorize("hasAuthority('sys:role:qry')")
 	@PostMapping("/qryPage")
-	public ResponeModel qryPage(@Validated SysRoleDto sysRole, BindingResult bindingResult) {
+	public ResponeModel qryPage(@Validated SysRoleDto sysRole) {
 		if(!SecurityUtils.isSuperAdmin()) {
 			sysRole.setCreateBy(SecurityUtils.getLoginName());
 		}
@@ -101,6 +102,7 @@ public class SysRoleController extends BaseController {
 	@PreAuthorize("hasAuthority('sys:role:save')")
 	@PostMapping("/save")
 	public ResponeModel save(@Validated SysRoleDto sysRole, BindingResult bindingResult) {
+        ValidateUtils.checkBind(bindingResult);
 		SysRoleDto role = sysRoleService.findByName(sysRole.getName());
 		if(role != null) {
 			return ResponeModel.error(SYS_ROLE_DUPLICATE);
@@ -123,6 +125,7 @@ public class SysRoleController extends BaseController {
 	@PreAuthorize("hasAuthority('sys:role:update')")
 	@PostMapping("/update")
 	public ResponeModel update(@Validated SysRoleDto sysRole, BindingResult bindingResult) {
+        ValidateUtils.checkBind(bindingResult);
 		SysRoleDto role = sysRoleService.findByName(sysRole.getName());
 		if(role != null && !String.valueOf(role.getId()).equals(String.valueOf(sysRole.getId()))) {
 			return ResponeModel.error(SYS_ROLE_DUPLICATE);

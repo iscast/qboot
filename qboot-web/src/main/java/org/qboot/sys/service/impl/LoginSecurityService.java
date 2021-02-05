@@ -60,6 +60,7 @@ public class LoginSecurityService extends BaseService {
 	}
 
 	public Long incrementLoginFailTimes(String loginName) {
+	    // 账户锁定
 		Long increment = redisTools.incrWithTime(CacheConstants.CACHE_PREFIX_LOGIN_FAILCOUNT + loginName, 1L, LOGIN_FAIL_EXPIRE_TIME);
 		if(null != increment && increment >= LOGIN_FAIL_COUNT) {
 			SysUserDto lockUser = new SysUserDto();

@@ -29,7 +29,6 @@ public class SysParamClassDto extends BaseEntity<Long> {
 	/**
 	 * 使用状态
 	 */
-	@NotNull
 	private Integer visible;
 	
 	/**

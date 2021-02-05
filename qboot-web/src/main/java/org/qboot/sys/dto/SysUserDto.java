@@ -6,7 +6,6 @@ import javax.validation.constraints.*;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.hibernate.validator.constraints.Length;
 import com.alibaba.fastjson.annotation.JSONField;
-import org.qboot.common.constants.SysConstants;
 import org.qboot.common.entity.BaseEntity;
 
 /**

@@ -229,24 +229,4 @@ public class SysUserController extends BaseController {
 		}
 		return ResponeModel.error(SYS_USER_ORIGINAL_PWD_INCORRECT);
 	}
-	
-	/**
-	 * 账户锁定24小时 解锁
-	 * 用户信息修改panel 双击图像解锁
-	 * @param id
-	 * @return
-	 */
-    @AccLog
-	@PreAuthorize("hasAuthority('sys:user:update')")
-	@PostMapping("/unlock")
-	public ResponeModel unlock(@RequestParam Long id) {
-		SysUserDto user = sysUserService.findById(id);
-        MyAssertTools.notNull(user, SYS_USER_NOTEXISTS);
-		if (SecurityUtils.isSuperAdmin(user.getLoginName())) {
-			return ResponeModel.error(SYS_USER_PWD_CHANGE_NO_ADMIN);
-		}
-		loginSecurityService.unLock(user.getLoginName());
-		return ok();
-	}
-	
 }

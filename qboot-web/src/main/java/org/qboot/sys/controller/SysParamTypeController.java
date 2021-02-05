@@ -10,6 +10,7 @@ import org.qboot.common.entity.ResponeModel;
 import org.qboot.common.security.SecurityUtils;
 import org.qboot.common.utils.MyAssertTools;
 import org.qboot.common.utils.RedisTools;
+import org.qboot.common.utils.ValidateUtils;
 import org.qboot.sys.dto.SysParamTypeDto;
 import org.qboot.sys.service.impl.SysParamTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,6 +71,7 @@ public class SysParamTypeController extends BaseController {
 	@PreAuthorize("hasAuthority('sys:param:save')")
 	@PostMapping("/save")
 	public ResponeModel save(@Validated SysParamTypeDto sysParam, BindingResult bindingResult, HttpServletRequest request) {
+        ValidateUtils.checkBind(bindingResult);
 		sysParam.setCreateBy(SecurityUtils.getLoginName());
 		sysParam.setPhysicsFlag(SysConstants.SYS_DELFLAG_NORMAL);
 		if(sysParamService.save(sysParam) > 0) {
@@ -83,6 +85,7 @@ public class SysParamTypeController extends BaseController {
 	@PreAuthorize("hasAuthority('sys:param:update')")
 	@PostMapping("/update")
 	public ResponeModel update(@Validated SysParamTypeDto sysParam, BindingResult bindingResult, HttpServletRequest request) {
+        ValidateUtils.checkBind(bindingResult);
 		sysParam.setUpdateBy(SecurityUtils.getLoginName());
 		if(sysParamService.update(sysParam) > 0) {
             redisTools.del(CacheConstants.CACHE_PREFIX_SYS_PARAMTYPE_KEY + sysParam.getParamTypeClass());

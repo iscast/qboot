@@ -1,6 +1,7 @@
 package org.qboot.sys.controller;
 
 import org.apache.commons.lang3.StringUtils;
+import org.qboot.common.utils.ValidateUtils;
 import org.qboot.sys.dto.SysDeptDto;
 import org.qboot.sys.service.impl.SysDeptService;
 import org.qboot.common.annotation.AccLog;
@@ -84,6 +85,7 @@ public class SysDeptController extends BaseController {
 	@PreAuthorize("hasAuthority('sys:dept:save')")
 	@PostMapping("/save")
 	public ResponeModel save(@Validated SysDeptDto sysDept, BindingResult bindingResult) {
+        ValidateUtils.checkBind(bindingResult);
 		SysDeptDto parent = null;
 		if (StringUtils.isNotEmpty(sysDept.getParentId())) {
 			parent = sysDeptService.findById(sysDept.getParentId());
@@ -100,6 +102,7 @@ public class SysDeptController extends BaseController {
 	@PreAuthorize("hasAuthority('sys:dept:update')")
 	@PostMapping("/update")
 	public ResponeModel update(@Validated SysDeptDto sysDept, BindingResult bindingResult) {
+        ValidateUtils.checkBind(bindingResult);
 		SysDeptDto parent = null;
 		if (StringUtils.isNotEmpty(sysDept.getParentId())) {
 			parent = sysDeptService.findById(sysDept.getParentId());

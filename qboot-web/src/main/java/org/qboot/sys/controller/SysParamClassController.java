@@ -9,6 +9,7 @@ import org.qboot.common.entity.ResponeModel;
 import org.qboot.common.security.SecurityUtils;
 import org.qboot.common.utils.MyAssertTools;
 import org.qboot.common.utils.RedisTools;
+import org.qboot.common.utils.ValidateUtils;
 import org.qboot.sys.dto.SysParamClassDto;
 import org.qboot.sys.service.impl.SysParamClassService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +60,7 @@ public class SysParamClassController extends BaseController {
 	@PreAuthorize("hasAuthority('sys:param:save')")
 	@PostMapping("/save")
 	public ResponeModel save(@Validated SysParamClassDto sysParam, BindingResult bindingResult) {
+        ValidateUtils.checkBind(bindingResult);
 		sysParam.setCreateBy(SecurityUtils.getLoginName());
 		sysParam.setVisible(1); // 默认可用
 		sysParam.setPhysicsFlag(SysConstants.SYS_DELFLAG_NORMAL);
@@ -72,6 +74,7 @@ public class SysParamClassController extends BaseController {
 	@PreAuthorize("hasAuthority('sys:param:update')")
 	@PostMapping("/update")
 	public ResponeModel update(@Validated SysParamClassDto sysParam, BindingResult bindingResult) {
+        ValidateUtils.checkBind(bindingResult);
 		sysParam.setUpdateBy(SecurityUtils.getLoginName());
 		if(sysParamClassService.update(sysParam) > 0) {
             redisTools.del(CacheConstants.CACHE_PREFIX_SYS_PARAMTYPE_KEY + sysParam.getParamTypeClass());
