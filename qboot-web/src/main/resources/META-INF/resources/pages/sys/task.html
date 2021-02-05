@@ -17,8 +17,9 @@
 			  <option value="0">初始</option>
 			  <option value="1">执行中</option>
 			</select>&emsp; 
-			<button id="task-btn-search" class="layui-btn icon-btn  layui-btn-search task_auth" data-auth="sys:task:qry"></button><br><br>
+			<button id="task-btn-search" class="layui-btn icon-btn  layui-btn-search task_auth" data-auth="sys:task:qry"></button>
 			<button id="task-btn-add" class="layui-btn icon-btn layui-icon layui-icon-add-circle-fine task_auth layui-i18n" i18n-key="sys.form.operation.add" data-auth="sys:task:save"></button>
+            <br>
 		</div>
         
 		  <div id="taskLayTable">
@@ -191,8 +192,9 @@
 	                    access_token: _config.getToken().access_token,
 	                    taskId: taskId
 	                },
-	                page: true,
-	                even: true, //开启隔行背景
+                     page: {
+                         layout:['prev', 'limit', 'next', 'skip', 'count']
+                     },
 	                text: {
 	                    none: "no data"
 	                },

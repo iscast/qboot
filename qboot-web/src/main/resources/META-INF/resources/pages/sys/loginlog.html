@@ -12,7 +12,8 @@
             -
             <input id="endDate" name="endDate" class="layui-input search-input i18n-input-hint" type="text" i18n-key="sys.form.hint.endTime"/>
 
-            <button id="loginLog-btn-search" class="layui-btn icon-btn layui-btn-search"><i class="layui-icon">&#xe615;</i>搜索</button><br><br>
+            <button id="loginLog-btn-search" class="layui-btn icon-btn layui-btn-search"><i class="layui-icon">&#xe615;</i>搜索</button>
+            <br>
         </div>
 
         <div id="loginLogLayTable">
@@ -42,8 +43,9 @@
                 userId: $('#userId').val(), loginName: $('#loginName').val(),userName:$('#userName').val(),startDate:$('#startDate').val(),endDate:$('#endDate').val()
             },
             method: 'post',
-            page: true,
-            even: true, //开启隔行背景
+            page: {
+                layout:['prev', 'limit', 'next', 'skip', 'count']
+            },
             cols: [[
                 {field: 'loginName', title: msgs['sys.form.label.loginName']},
                 {field: 'userName', title: msgs['sys.form.label.userName']},
@@ -66,16 +68,6 @@
             ]], done: function(res, curr, count){
                 _i18n.initPage();
             }
-        });
-
-        //点击行变色
-        $('#loginLogLayTable').on('click', 'tbody tr', function (e) {
-            var fals = $(this).hasClass('layui-table-click');
-        	if(!fals){
-        		$(this).addClass('layui-table-click');
-        	}else{
-        		$(this).removeClass('layui-table-click');
-        	}
         });
 
         // 搜索按钮点击事件

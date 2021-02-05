@@ -7,14 +7,11 @@
             <input id="type" name="type" class="layui-input search-input i18n-input-hint" type="text" i18n-key="sys.form.hint.inputParamKey"/>&emsp;
             <span class="layui-i18n" i18n-key="sys.form.label.paramValue"></span>
             <input id="code" name="code" class="layui-input search-input i18n-input-hint" type="text" i18n-key="sys.form.hint.inputParamValue"/>&emsp;
-            <button id="dict-btn-search" class="layui-btn icon-btn  layui-btn-search"></button><br><br>
-            
-            <div class="layui-btn-group">
-			    <button id="dict-btn-add" class="layui-btn  layui-btn-add" data-auth="sys:dict:save"></button>
-            </div>
+            <button id="dict-btn-search" class="layui-btn icon-btn  layui-btn-search"></button>
+            <button id="dict-btn-add" class="layui-btn  layui-btn-add" data-auth="sys:dict:save"></button>
+            <br>
         </div>
 
-        <!-- 数据表格 -->
         <div id="dictLayTable">
         	<table class="layui-table dict_auth" id="dict-table" lay-filter="dict-table" data-auth="sys:dict:qry"></table>
         </div>
@@ -40,8 +37,9 @@
                 name: $('#dictName').val(), type: $('#dictType').val(),code:$('#code').val()
             },
             method: 'post',
-            page: true,
-            even: true, //开启隔行背景
+            page: {
+                layout:['prev', 'limit', 'next', 'skip', 'count']
+            },
             cols: [[
                 {field: 'name', title: msgs['sys.table.title.name'], width: '12%'},
                 {field: 'type', title: msgs['sys.form.label.paramKey'], width: '12%'},
@@ -103,16 +101,6 @@
             ]], done: function(res, curr, count){
                 _i18n.initPage();
             }
-        });
-
-        //点击行变色
-        $('#dictLayTable').on('click', 'tbody tr', function (e) {
-            var fals = $(this).hasClass('layui-table-click');
-        	if(!fals){
-        		$(this).addClass('layui-table-click');
-        	}else{
-        		$(this).removeClass('layui-table-click');
-        	}
         });
 
         // 添加按钮点击事件

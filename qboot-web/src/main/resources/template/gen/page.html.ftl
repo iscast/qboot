@@ -1,7 +1,5 @@
 <div class="layui-card">
     <div class="layui-card-body">
-
-        <!-- 数据表格 -->
         <div id="${functionName}LayTable">
         	<table class="layui-table ${functionName}_auth" id="${functionName}-table" lay-filter="${functionName}-table" data-auth="${functionName}:qry"></table>
         </div>
@@ -27,7 +25,9 @@
             url: _config.base_server + '/${functionName}/qryPage',
             where: {},
             method: 'post',
-            page: true,
+            page: {
+                layout:['prev', 'limit', 'next', 'skip', 'count']
+            },
             cols: [[
                 {type: 'numbers'},
                 <#list columnInfos as columnInfo>

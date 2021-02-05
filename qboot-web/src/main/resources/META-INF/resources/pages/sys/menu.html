@@ -239,15 +239,6 @@
                 ]]
             });
         }
-        //点击行变色
-        $('#btnLayTable').on('click', 'tbody tr', function (e) {
-            var fals = $(this).hasClass('layui-table-click');
-        	if(!fals){
-        		$(this).addClass('layui-table-click');
-        	}else{
-        		$(this).removeClass('layui-table-click');
-        	}
-        });
         
         // 添加点击事件
         $('#menu-btn-add').click(function () {

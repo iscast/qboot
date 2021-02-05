@@ -7,16 +7,16 @@
             <input id="name" name="name" class="layui-input search-input i18n-input-hint" type="text" i18n-key="sys.form.hint.inputName"/>&emsp;
             <span class="layui-i18n" i18n-key="sys.form.label.tel"></span>
             <input id="mobile" name="mobile" class="layui-input search-input i18n-input-hint" type="text" i18n-key="sys.form.hint.inputTel"/>&emsp;
-            <button id="user-btn-search" class="layui-btn icon-btn user_auth layui-btn-search" data-auth="sys:user:qry"><i class="layui-icon">&#xe615;</i>搜索</button><br><br>
-            
-            <div class="layui-btn-group">
-			    <button id="user-btn-add" class="layui-btn layui-btn-add" data-auth="sys:user:save"><i class="layui-icon">&#xe608;</i>添加</button>
-            </div>
+            <button id="user-btn-search" class="layui-btn icon-btn user_auth layui-btn-search" data-auth="sys:user:qry"><i class="layui-icon">&#xe615;</i>搜索</button>
+            <button id="user-btn-add" class="layui-btn layui-btn-add" data-auth="sys:user:save"><i class="layui-icon">&#xe608;</i>添加</button>
+            <br>
         </div>
         
 		<div id="userLayTable">
         	<table class="layui-table" id="user-table" lay-filter="user-table"></table>
+            <div id="user-table-page"></div>
         </div>
+
     </div>
 </div>
 <script>
@@ -33,15 +33,16 @@
         var realName = $('#name').val();
         var mobile = $('#mobile').val();
 
-        // 渲染表格
         table.render({
             elem: '#user-table',
             url: _config.base_server + '/sys/user/qryPage',
             method: 'GET',
+            page: {
+                layout:['prev', 'limit', 'next', 'skip', 'count']
+            },
             where: {
                 loginName: loginName, name: realName,mobile:mobile
             },
-            page: true,
             cols: [[
                 {field: 'loginName',  title: msgs['sys.form.label.loginName']},
                 {field: 'name',  title: msgs['sys.form.label.name']},
@@ -184,17 +185,6 @@
             table.reload('user-table', {where: {loginName: loginName, name: realName,mobile:mobile}, page:1});
         });
         
-        //点击行变色
-        $('#userLayTable').on('click', 'tbody tr', function (e) {
-        	var parent = $(this).parent();
-            var fals = $(this).hasClass('layui-table-click');
-        	if(!fals){
-        		$(this).addClass('layui-table-click');
-        	}else{
-        		$(this).removeClass('layui-table-click');
-        	}
-        });
-
         // 修改user状态
         form.on('switch(user-tpl-state)', function (obj) {
             // msgs['layer.confirm.msg.unlock']

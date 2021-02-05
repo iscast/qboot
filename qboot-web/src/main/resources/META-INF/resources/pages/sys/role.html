@@ -3,14 +3,10 @@
         <div class="layui-form toolbar">
             <span class="layui-i18n" i18n-key="sys.form.label.roleName"></span>
             <input id="roleName" name="roleName" class="layui-input search-input i18n-input-hint" type="text" i18n-key="sys.form.hint.inputRoleName"/>&emsp;
-            <button id="role-btn-search" class="layui-btn icon-btn layui-btn-search"></button><br><br>
-            
-            <div class="layui-btn-group">
-			    <button id="role-btn-add" class="layui-btn layui-btn-add" data-auth="sys:role:save"></button>
-            </div>
+            <button id="role-btn-search" class="layui-btn icon-btn layui-btn-search"></button>
+            <button id="role-btn-add" class="layui-btn layui-btn-add" data-auth="sys:role:save"></button>
+            <br>
         </div>
-
-        <!-- 数据表格 -->
         <div id="roleLayTable">
         	<table class="layui-table role_auth" id="role-table" lay-filter="role-table" data-auth="sys:role:qry"></table>
         </div>
@@ -37,8 +33,9 @@
                 name: $('#roleName').val()
             },
             method: 'post',
-            page: true,
-            even: true, //开启隔行背景
+            page: {
+                layout:['prev', 'limit', 'next', 'skip', 'count']
+            },
             cols: [[
                 {field: 'name', title: msgs['sys.form.label.roleName']},
                 {field: 'remarks', title: msgs['sys.form.label.remark']},
@@ -68,15 +65,6 @@
             ]], done: function(res, curr, count){
                 _i18n.initPage();
             }
-        });
-        //点击行变色
-        $('#roleLayTable').on('click', 'tbody tr', function (e) {
-            var fals = $(this).hasClass('layui-table-click');
-        	if(!fals){
-        		$(this).addClass('layui-table-click');
-        	}else{
-        		$(this).removeClass('layui-table-click');
-        	}
         });
 
         // 添加按钮点击事件

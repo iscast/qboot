@@ -4,8 +4,9 @@
         <div class="layui-form toolbar">
             菜单名称：<input id="menuName" name="menuName" class="layui-input search-input" type="text" placeholder="输入菜单名称"/>&emsp;
             模块名称：<input id="moduleName" name="moduleName" class="layui-input search-input" type="text" placeholder="输入模块名称"/>&emsp;
-            <button id="gen-btn-search" class="layui-btn icon-btn gen_auth" data-auth="sys:gen:qry"><i class="layui-icon">&#xe615;</i>搜索</button><br><br>
+            <button id="gen-btn-search" class="layui-btn icon-btn gen_auth" data-auth="sys:gen:qry"><i class="layui-icon">&#xe615;</i>搜索</button>
             <button id="gen-btn-add" class="layui-btn icon-btn gen_auth" data-auth="sys:gen:save"><i class="layui-icon">&#xe654;</i>添加</button>
+            <br>
         </div>
         
 		<div id="genLayTable">
@@ -13,9 +14,6 @@
         </div>
     </div>
 </div>
-<style>
-	#genLayTable tbody .layui-table-click{background-color: #ccffeb !important;}
-</style>
 <script>
     layui.use(['form', 'table', 'util', '_config', 'admin'], function () {
         var form = layui.form;
@@ -36,7 +34,9 @@
                 access_token: _config.getToken().access_token,
                 menuName: menuName, moduleName: moduleName
             },
-            page: true,
+            page: {
+                layout:['prev', 'limit', 'next', 'skip', 'count']
+            },
             cols: [[
                 {field: 'tableName', width:'15%',  title: '表名'},
                 {field: 'menuName', width: '12%', title: '菜单名称'},
