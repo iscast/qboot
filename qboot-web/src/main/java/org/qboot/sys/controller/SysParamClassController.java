@@ -11,7 +11,7 @@ import org.qboot.common.utils.MyAssertTools;
 import org.qboot.common.utils.RedisTools;
 import org.qboot.common.utils.ValidateUtils;
 import org.qboot.sys.dto.SysParamClassDto;
-import org.qboot.sys.service.impl.SysParamClassService;
+import org.qboot.sys.service.SysParamClassService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;

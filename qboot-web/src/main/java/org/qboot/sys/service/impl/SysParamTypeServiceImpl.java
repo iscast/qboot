@@ -7,6 +7,7 @@ import org.qboot.sys.dto.SysParamTypeDto;
 import org.qboot.common.constants.CacheConstants;
 import org.qboot.common.service.CrudService;
 import org.qboot.common.utils.RedisTools;
+import org.qboot.sys.service.SysParamTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -21,15 +22,17 @@ import static org.qboot.sys.exception.errorcode.SysModuleErrTable.SYS_PARAM_TYPE
  * @date 2020-09-25
  */
 @Service
-public class SysParamTypeService extends CrudService<SysParamTypeDao, SysParamTypeDto>{
+public class SysParamTypeServiceImpl extends CrudService<SysParamTypeDao, SysParamTypeDto> implements SysParamTypeService {
 
 	@Autowired
     RedisTools redisTools;
 
+	@Override
     public SysParamTypeDto findByDto(SysParamTypeDto sysParamType) {
         return d.findByDto(sysParamType);
     }
 
+    @Override
 	public List<SysParamTypeDto> findParamTypes(String paramKey) {
         MyAssertTools.hasLength(paramKey, SYS_PARAM_TYPE_CLASS_NULL);
         String key = CacheConstants.CACHE_PREFIX_SYS_PARAMTYPE_KEY + paramKey;

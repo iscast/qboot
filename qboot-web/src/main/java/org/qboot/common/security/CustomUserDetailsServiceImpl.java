@@ -1,13 +1,13 @@
 package org.qboot.common.security;
 
 import org.apache.commons.lang3.StringUtils;
+import org.qboot.common.constants.SysConstants;
 import org.qboot.sys.dto.SysMenuDto;
 import org.qboot.sys.dto.SysRoleDto;
 import org.qboot.sys.dto.SysUserDto;
-import org.qboot.sys.service.impl.SysMenuService;
-import org.qboot.sys.service.impl.SysRoleService;
-import org.qboot.sys.service.impl.SysUserService;
-import org.qboot.common.constants.SysConstants;
+import org.qboot.sys.service.SysMenuService;
+import org.qboot.sys.service.SysRoleService;
+import org.qboot.sys.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,7 +26,7 @@ import java.util.List;
  * @date 2020-09-25
  */
 @Service
-public class CustomUserDetailsService implements UserDetailsService{
+public class CustomUserDetailsServiceImpl implements UserDetailsService{
 
 	@Autowired
 	private SysUserService sysUserService;

@@ -1,15 +1,15 @@
 package org.qboot.sys.controller;
 
 import org.apache.commons.lang3.StringUtils;
-import org.qboot.common.utils.ValidateUtils;
-import org.qboot.sys.dto.SysDeptDto;
-import org.qboot.sys.service.impl.SysDeptService;
 import org.qboot.common.annotation.AccLog;
 import org.qboot.common.controller.BaseController;
-import org.qboot.common.utils.TreeHelper;
 import org.qboot.common.entity.ResponeModel;
 import org.qboot.common.security.CustomUser;
 import org.qboot.common.security.SecurityUtils;
+import org.qboot.common.utils.TreeHelper;
+import org.qboot.common.utils.ValidateUtils;
+import org.qboot.sys.dto.SysDeptDto;
+import org.qboot.sys.service.SysDeptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;

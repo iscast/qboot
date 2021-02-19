@@ -7,6 +7,8 @@ import org.qboot.common.utils.MyAssertTools;
 import org.qboot.sys.dao.SysLoginLogDao;
 import org.qboot.sys.dto.SysLoginLogDto;
 import org.qboot.sys.dto.SysUserDto;
+import org.qboot.sys.service.SysLoginLogService;
+import org.qboot.sys.service.SysUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +25,14 @@ import static org.qboot.sys.exception.errorcode.SysUserErrTable.SYS_USER_UERID_E
  * @author history
  */
 @Service
-public class SysLoginLogService extends CrudService<SysLoginLogDao, SysLoginLogDto>{
+public class SysLoginLogServiceImpl extends CrudService<SysLoginLogDao, SysLoginLogDto> implements SysLoginLogService {
 
-	protected Logger logger = LoggerFactory.getLogger(SysLoginLogService.class);
+	protected Logger logger = LoggerFactory.getLogger(SysLoginLogServiceImpl.class);
 	
 	@Autowired
 	private SysUserService sysUserService;
 
+	@Override
 	public void loginLogByLoginName(String status,String loginName,String ip,String userAgent,String browser,String deviceName, String area, int firstLogin) {
 	    MyAssertTools.hasLength(status, SYS_USER_LOGIN_STATUS_EMPTY);
 
@@ -49,8 +52,8 @@ public class SysLoginLogService extends CrudService<SysLoginLogDao, SysLoginLogD
         this.save(loginLog);
 	}
 
+	@Override
     public void loginLogByLoginId(String status,Long userId,String ip,String userAgent,String browser,String deviceName, String area) {
-
         SysLoginLogDto loginLog = initPojo(status, ip, userAgent, browser, deviceName, area, SysConstants.SYS_USER_PWD_STATUS_NORMAL);
         loginLog.setUserId(userId);
         SysUserDto user = sysUserService.findById(userId);
@@ -64,6 +67,7 @@ public class SysLoginLogService extends CrudService<SysLoginLogDao, SysLoginLogD
         this.save(loginLog);
     }
 
+    @Override
 	public SysLoginLogDto findLastLoginInfo(Long userId) {
         MyAssertTools.notNull(userId, SYS_USER_UERID_EMPTY);
 		SysLoginLogDto loginLog = new SysLoginLogDto();
@@ -78,8 +82,6 @@ public class SysLoginLogService extends CrudService<SysLoginLogDao, SysLoginLogD
 		}
 		return null;
 	}
-
-
 
     private SysLoginLogDto initPojo(String status, String ip, String userAgent, String browser, String deviceName, String area, int firstLogin) {
         SysLoginLogDto loginLog = new SysLoginLogDto();

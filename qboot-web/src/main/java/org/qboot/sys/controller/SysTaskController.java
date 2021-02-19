@@ -9,7 +9,7 @@ import org.qboot.common.security.SecurityUtils;
 import org.qboot.sys.dto.SysTaskDto;
 import org.qboot.sys.exception.SysTaskException;
 import org.qboot.sys.exception.errorcode.SysModuleErrTable;
-import org.qboot.sys.service.impl.SysTaskService;
+import org.qboot.sys.service.SysTaskService;
 import org.quartz.CronExpression;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,7 +31,7 @@ import static org.qboot.sys.exception.errorcode.SysModuleErrTable.*;
 public class SysTaskController extends BaseController {
 	
 	@Autowired
-	SysTaskService sysTaskService;
+    private SysTaskService sysTaskService;
 	
 	@PreAuthorize("hasAuthority('sys:task:qry')")
 	@GetMapping("/qryPage")

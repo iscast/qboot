@@ -9,7 +9,7 @@ import org.qboot.common.security.SecurityUtils;
 import org.qboot.common.utils.MyAssertTools;
 import org.qboot.common.utils.ValidateUtils;
 import org.qboot.sys.dto.SysRoleDto;
-import org.qboot.sys.service.impl.SysRoleService;
+import org.qboot.sys.service.SysRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.CollectionUtils;

@@ -1,11 +1,12 @@
 package org.qboot.sys.service.impl;
 
-import org.qboot.common.utils.MyAssertTools;
-import org.qboot.sys.dao.SysDictDao;
-import org.qboot.sys.dto.SysDictDto;
 import org.qboot.common.constants.CacheConstants;
 import org.qboot.common.service.CrudService;
+import org.qboot.common.utils.MyAssertTools;
 import org.qboot.common.utils.RedisTools;
+import org.qboot.sys.dao.SysDictDao;
+import org.qboot.sys.dto.SysDictDto;
+import org.qboot.sys.service.SysDictService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -13,7 +14,8 @@ import org.springframework.util.CollectionUtils;
 import java.io.Serializable;
 import java.util.List;
 
-import static org.qboot.sys.exception.errorcode.SysModuleErrTable.*;
+import static org.qboot.sys.exception.errorcode.SysModuleErrTable.SYS_DICT_NO_EXIST;
+import static org.qboot.sys.exception.errorcode.SysModuleErrTable.SYS_DICT_TYPE_NULL;
 
 /**
  * system dict service
@@ -21,7 +23,7 @@ import static org.qboot.sys.exception.errorcode.SysModuleErrTable.*;
  * @date 2020-09-25
  */
 @Service
-public class SysDictService extends CrudService<SysDictDao, SysDictDto> {
+public class SysDictServiceImpl extends CrudService<SysDictDao, SysDictDto> implements SysDictService {
 
 	@Autowired
 	private RedisTools redisTools;
@@ -38,6 +40,7 @@ public class SysDictService extends CrudService<SysDictDao, SysDictDto> {
         return isDelete;
     }
 
+    @Override
 	public int editStatus(SysDictDto t) {
 		SysDictDto sysDict = this.findById(t.getId());
         MyAssertTools.notNull(sysDict, SYS_DICT_NO_EXIST);
@@ -52,6 +55,7 @@ public class SysDictService extends CrudService<SysDictDao, SysDictDto> {
         return isUpdate;
 	}
 
+    @Override
 	public List<SysDictDto> findTypes(String type) {
 	    MyAssertTools.hasLength(type, SYS_DICT_TYPE_NULL);
         String key = CacheConstants.CACHE_PREFIX_SYS_DICT_TYPE + type;
@@ -65,6 +69,7 @@ public class SysDictService extends CrudService<SysDictDao, SysDictDto> {
 		return sdlist;
 	}
 
+    @Override
 	public SysDictDto findType(String type) {
 	    MyAssertTools.hasLength(type, SYS_DICT_TYPE_NULL);
         String key = CacheConstants.CACHE_PREFIX_SYS_DICT_TYPE_SINGLE + type;

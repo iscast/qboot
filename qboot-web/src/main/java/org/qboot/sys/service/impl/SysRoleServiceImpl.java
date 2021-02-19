@@ -8,6 +8,7 @@ import org.qboot.sys.dto.SysRoleDto;
 import org.qboot.sys.dto.SysRoleDeptDto;
 import org.qboot.sys.dto.SysRoleMenuDto;
 import org.qboot.common.service.CrudService;
+import org.qboot.sys.service.SysRoleService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +25,7 @@ import static org.qboot.sys.exception.errorcode.SysModuleErrTable.*;
  * @date 2020-09-25
  */
 @Service
-public class SysRoleService extends CrudService<SysRoleDao, SysRoleDto> {
+public class SysRoleServiceImpl extends CrudService<SysRoleDao, SysRoleDto> implements SysRoleService {
 
 	@Override
 	public int save(SysRoleDto t) {
@@ -64,28 +65,6 @@ public class SysRoleService extends CrudService<SysRoleDao, SysRoleDto> {
 		this.d.deleteRoleDeptByRoleId(t.getId());
 		this.saveRoleDepts(t.getId(), t.getDeptIds());
 		return super.update(t);
-	}
-
-	private int saveRoleMenus(String roleId, List<String> menuIds) {
-		if (null != menuIds && !menuIds.isEmpty()) {
-			List<SysRoleMenuDto> roleMenus = new ArrayList<>();
-			for (String menuId : menuIds) {
-				roleMenus.add(new SysRoleMenuDto(roleId, menuId));
-			}
-			return this.d.insertRoleMenu(roleMenus);
-		}
-		return 0;
-	}
-	
-	private int saveRoleDepts(String roleId, List<String> deptIds) {
-		if (null != deptIds && !deptIds.isEmpty()) {
-			List<SysRoleDeptDto> roleDepts =  new ArrayList<>();
-			for (String deptId : deptIds) {
-				roleDepts.add(new SysRoleDeptDto(roleId, deptId));
-			}
-			return this.d.insertRoleDept(roleDepts);
-		}
-		return 0;
 	}
 
 	public List<SysRoleDto> findByUserId(Long userId) {
@@ -128,4 +107,26 @@ public class SysRoleService extends CrudService<SysRoleDao, SysRoleDto> {
 		return d.findByName(name);
 	}
 
+
+    private int saveRoleMenus(String roleId, List<String> menuIds) {
+        if (null != menuIds && !menuIds.isEmpty()) {
+            List<SysRoleMenuDto> roleMenus = new ArrayList<>();
+            for (String menuId : menuIds) {
+                roleMenus.add(new SysRoleMenuDto(roleId, menuId));
+            }
+            return this.d.insertRoleMenu(roleMenus);
+        }
+        return 0;
+    }
+
+    private int saveRoleDepts(String roleId, List<String> deptIds) {
+        if (null != deptIds && !deptIds.isEmpty()) {
+            List<SysRoleDeptDto> roleDepts =  new ArrayList<>();
+            for (String deptId : deptIds) {
+                roleDepts.add(new SysRoleDeptDto(roleId, deptId));
+            }
+            return this.d.insertRoleDept(roleDepts);
+        }
+        return 0;
+    }
 }

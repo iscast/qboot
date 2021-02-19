@@ -7,12 +7,12 @@ import eu.bitwalker.useragentutils.OperatingSystem;
 import eu.bitwalker.useragentutils.UserAgent;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.qboot.sys.service.impl.LoginSecurityService;
-import org.qboot.sys.service.impl.SysLoginLogService;
 import org.qboot.common.constants.SysConstants;
+import org.qboot.common.entity.ResponeModel;
 import org.qboot.common.utils.IpUtils;
 import org.qboot.common.utils.RSAsecurity;
-import org.qboot.common.entity.ResponeModel;
+import org.qboot.sys.service.SysLoginLogService;
+import org.qboot.sys.service.impl.LoginSecurityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,8 +50,8 @@ public class WebLoginResultHandler implements AuthenticationSuccessHandler,Authe
 	private LoginSecurityService loginSecurityService;
 	@Autowired
 	private SysLoginLogService sysLoginLogService;
-	@Override
 
+	@Override
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException exception) throws IOException, ServletException {
 		String loginName = this.obtainUsername(request);
