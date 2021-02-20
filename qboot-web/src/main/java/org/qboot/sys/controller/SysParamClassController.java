@@ -12,7 +12,9 @@ import org.qboot.common.utils.MyAssertTools;
 import org.qboot.common.utils.RedisTools;
 import org.qboot.common.utils.ValidateUtils;
 import org.qboot.sys.dto.SysParamClassDto;
+import org.qboot.sys.dto.SysParamTypeDto;
 import org.qboot.sys.service.SysParamClassService;
+import org.qboot.sys.service.SysParamTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
+import java.util.List;
 
 import static org.qboot.sys.exception.errorcode.SysModuleErrTable.*;
 
@@ -37,6 +40,8 @@ public class SysParamClassController extends BaseController {
 
 	@Autowired
 	private SysParamClassService sysParamClassService;
+    @Autowired
+    private SysParamTypeService sysParamTypeService;
     @Autowired
     private RedisTools redisTools;
 
@@ -90,13 +95,17 @@ public class SysParamClassController extends BaseController {
 	@PostMapping("/delete")
 	public ResponeModel delete(@RequestParam String id, @RequestParam String paramTypeClass) {
         MyAssertTools.notNull(id, SYS_PARAM_CLASS_ID_NULL);
-		SysParamClassDto sysParam = new SysParamClassDto();
-		sysParam.setId(id);
-		sysParam.setPhysicsFlag(SysConstants.SYS_DELFLAG_DEL);
-        sysParam.setUpdateDate(new Date());
-        sysParam.setUpdateBy(SecurityUtils.getLoginName());
-		if(sysParamClassService.update(sysParam) > 0) {
-            redisTools.del(CacheConstants.CACHE_PREFIX_SYS_PARAMTYPE_KEY + sysParam.getParamTypeClass());
+		if(sysParamClassService.deleteById(id) > 0) {
+            try {
+                redisTools.del(CacheConstants.CACHE_PREFIX_SYS_PARAMTYPE_KEY + paramTypeClass);
+            } catch (Exception e) {
+                logger.error("clear {} redis cache fail", CacheConstants.CACHE_PREFIX_SYS_PARAMTYPE_KEY + paramTypeClass);
+            }
+            List<SysParamTypeDto> paramTypes = sysParamTypeService.findParamTypes(paramTypeClass);
+            for(SysParamTypeDto dto : paramTypes) {
+                sysParamTypeService.deleteById(dto.getId());
+            }
+
 			return ResponeModel.ok();
 		}
 		return ResponeModel.error(SYS_PARAM_CLASS_DELETE_FAIL);

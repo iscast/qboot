@@ -7,11 +7,11 @@ import org.qboot.sys.dto.SysParamTypeDto;
 import java.util.List;
 
 /**
- * 系统类型service
+ * 系统类型
  */
 public interface SysParamTypeService extends ICrudService<SysParamTypeDao, SysParamTypeDto> {
 
     SysParamTypeDto findByDto(SysParamTypeDto sysParamType);
 
-	List<SysParamTypeDto> findParamTypes(String paramKey);
+	List<SysParamTypeDto> findParamTypes(String paramTypeClass);
 }

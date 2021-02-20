@@ -17,7 +17,7 @@ import java.util.List;
 import static org.qboot.sys.exception.errorcode.SysModuleErrTable.SYS_PARAM_TYPE_CLASS_NULL;
 
 /**
- * 系统类型service
+ * 系统类型
  * @author iscast
  * @date 2020-09-25
  */
@@ -33,9 +33,9 @@ public class SysParamTypeServiceImpl extends CrudService<SysParamTypeDao, SysPar
     }
 
     @Override
-	public List<SysParamTypeDto> findParamTypes(String paramKey) {
-        MyAssertTools.hasLength(paramKey, SYS_PARAM_TYPE_CLASS_NULL);
-        String key = CacheConstants.CACHE_PREFIX_SYS_PARAMTYPE_KEY + paramKey;
+	public List<SysParamTypeDto> findParamTypes(String paramTypeClass) {
+        MyAssertTools.hasLength(paramTypeClass, SYS_PARAM_TYPE_CLASS_NULL);
+        String key = CacheConstants.CACHE_PREFIX_SYS_PARAMTYPE_KEY + paramTypeClass;
 		List<SysParamTypeDto> list = redisTools.get(key);
 		if(!CollectionUtils.isEmpty(list)){
 			return list;
@@ -43,7 +43,7 @@ public class SysParamTypeServiceImpl extends CrudService<SysParamTypeDao, SysPar
 
 		SysParamTypeDto sysParam = new SysParamTypeDto();
         sysParam.setPhysicsFlag(SysConstants.SYS_DELFLAG_NORMAL);
-		sysParam.setParamTypeClass(paramKey);
+		sysParam.setParamTypeClass(paramTypeClass);
 		list = this.findList(sysParam);
 		redisTools.set(key, list, 300);
 		return list;
