@@ -70,10 +70,10 @@ CREATE TABLE `sys_gen`
 DROP TABLE IF EXISTS `sys_login_log`;
 CREATE TABLE `sys_login_log`
 (
-    `ID`           varchar(32)  NOT NULL COMMENT '编号',
-    `USER_ID`      varchar(32) NOT NULL COMMENT '用户ID',
-    `STATUS`       tinyint(4)  NOT NULL COMMENT '登录状态0:成功;1.密码错误；2.禁用;3.锁定24小时',
-    `LOGIN_TIME`   datetime    NOT NULL COMMENT '登录时间',
+    `ID`           varchar(32)   NOT NULL COMMENT '编号',
+    `NAME`         varchar(50)   DEFAULT NULL COMMENT '姓名',
+    `STATUS`       tinyint(4)    NOT NULL COMMENT '登录状态 0:成功;1.密码错误；2.已禁用;3.锁定24小时;7.修改密码;8.待初始化密码;9.系统错误;',
+    `LOGIN_TIME`   datetime      NOT NULL COMMENT '登录时间',
     `IP`           varchar(16)   DEFAULT NULL COMMENT 'IP地址',
     `AREA`         varchar(20)   DEFAULT NULL COMMENT '登录地区',
     `USER_AGENT`   varchar(1000) DEFAULT NULL COMMENT '用户代理',
@@ -84,10 +84,8 @@ CREATE TABLE `sys_login_log`
     `UPDATE_BY`    varchar(32)   DEFAULT NULL COMMENT '更新者',
     `UPDATE_DATE`  datetime      DEFAULT NULL COMMENT '更新时间',
     `REMARKS`      varchar(255)  DEFAULT NULL COMMENT '备注信息',
-    `FIRST_LOGIN`  tinyint(4)        DEFAULT '0' COMMENT '是否需要修改密码：0-正常；1-初始化密码；2-已修改密码',
     `PHYSICS_FLAG` tinyint(4) DEFAULT '1' COMMENT '删除标识：1-正常；0-删除',
     PRIMARY KEY (`ID`) USING BTREE,
-    KEY `USER_ID` (`USER_ID`) USING BTREE,
     KEY `IP` (`IP`) USING BTREE,
     KEY `LOGIN_TIME` (`LOGIN_TIME`) USING BTREE
 ) ENGINE = InnoDB
