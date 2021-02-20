@@ -53,7 +53,7 @@
 			)
 	</delete>
 
-	<select id="findById" parameterType="java.lang.Long" resultType="org.qboot.sys.dto.SysTaskLogDto">
+	<select id="findById" parameterType="java.lang.String" resultType="org.qboot.sys.dto.SysTaskLogDto">
 		select * from sys_task_log where id = #{id}
 	</select>
 	
