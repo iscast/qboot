@@ -7,6 +7,7 @@ import org.qboot.common.constants.SysConstants;
 import org.qboot.common.controller.BaseController;
 import org.qboot.common.entity.ResponeModel;
 import org.qboot.common.security.SecurityUtils;
+import org.qboot.common.utils.IdGen;
 import org.qboot.common.utils.MyAssertTools;
 import org.qboot.common.utils.RedisTools;
 import org.qboot.common.utils.ValidateUtils;
@@ -70,6 +71,7 @@ public class SysDictController extends BaseController {
         if(null == sysDict.getSort()) {
             sysDict.setSort(0);
         }
+        sysDict.setId(IdGen.uuid());
         sysDict.setStatus(SysConstants.SYS_ENABLE);
         sysDict.setCreateBy(SecurityUtils.getLoginName());
 		if(sysDictService.save(sysDict) > 0) {
