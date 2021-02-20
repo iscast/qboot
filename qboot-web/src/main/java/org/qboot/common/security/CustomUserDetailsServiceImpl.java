@@ -51,7 +51,7 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService{
 		return adminUserDetails;
 	}
 	
-	private List<GrantedAuthority> getAuthorities(Long userId,String username){
+	private List<GrantedAuthority> getAuthorities(String userId,String username){
 		Assert.hasLength(username, "username 为空");
 		List<GrantedAuthority> authorities = new ArrayList<>();
 		List<SysMenuDto> menus = null;

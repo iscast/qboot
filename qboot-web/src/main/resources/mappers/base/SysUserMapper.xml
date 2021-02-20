@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.qboot.sys.dao.SysUserDao" >
   <resultMap id="BaseResultMap" type="org.qboot.sys.dto.SysUserDto" >
-    <id column="id" property="id" jdbcType="BIGINT" />
+    <id column="id" property="id" jdbcType="VARCHAR" />
     <result column="dept_id" property="deptId" jdbcType="VARCHAR" />
     <result column="login_name" property="loginName" jdbcType="VARCHAR" />
     <result column="password" property="password" jdbcType="VARCHAR" />
@@ -37,7 +37,7 @@
     sys_user u left join sys_dept d on u.dept_id = d.id
   </sql>
   
-  <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+  <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
     from <include refid="Join_Table" />
@@ -105,9 +105,14 @@
       order by id desc
   </select>
   
-  <delete id="deleteUserRoleByUserId" parameterType="java.lang.Long">
-		delete from sys_user_role where user_id= #{userId}
-  </delete>
+    <delete id="deleteUserRoleByUserId" parameterType="java.lang.String">
+        delete from sys_user_role where user_id= #{userId}
+    </delete>
+
+    <delete id="deleteById" parameterType="java.lang.String" >
+        update sys_user set PHYSICS_FLAG=0,version=#{version}+1,update_date=now() where id = #{id}
+    </delete>
+
   
   <insert id="insertUserRole" parameterType="java.util.List">
 		insert into sys_user_role (user_id, role_id) values
@@ -116,16 +121,14 @@
 		</foreach>
   </insert>
 	
-  <insert id="insert" parameterType="org.qboot.sys.dto.SysUserDto" useGeneratedKeys="true" keyProperty="id">
-    insert into sys_user (dept_id, login_name, password, salt, name, mobile, email, user_type, status, create_by, create_date, update_by,
+  <insert id="insert" parameterType="org.qboot.sys.dto.SysUserDto">
+    insert into sys_user (ID, dept_id, login_name, password, salt, name, mobile, email, user_type, status, create_by, create_date, update_by,
     update_date, remarks, fld_n1, fld_n2, fld_s1, fld_s2)
-    values (
-    	#{deptId,jdbcType=VARCHAR}, #{loginName,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=VARCHAR}, #{deptId,jdbcType=VARCHAR}, #{loginName,jdbcType=VARCHAR},
       	#{password,jdbcType=VARCHAR}, #{salt,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
-      	#{mobile,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR},
-      	#{userType,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{createBy,jdbcType=VARCHAR},
-      	#{createDate,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, 
-      	#{remarks,jdbcType=VARCHAR}, 
+      	#{mobile,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR},#{userType,jdbcType=VARCHAR},
+        #{status,jdbcType=INTEGER}, #{createBy,jdbcType=VARCHAR},#{createDate,jdbcType=TIMESTAMP},
+        #{updateBy,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, #{remarks,jdbcType=VARCHAR},
       	#{fldN1,jdbcType=INTEGER}, #{fldN2,jdbcType=INTEGER}, #{fldS1,jdbcType=VARCHAR}, #{fldS2,jdbcType=VARCHAR}
      )
   </insert>
@@ -135,9 +138,6 @@
     <set >
       <if test="deptId != null" >
         dept_id = #{deptId},
-      </if>
-      <if test="loginName != null and loginName != ''" >
-        login_name = #{loginName},
       </if>
       <if test="password != null and password != ''" >
         password = #{password},
@@ -169,7 +169,7 @@
       <if test="updateDate != null" >
         update_date = #{updateDate,jdbcType=TIMESTAMP},
       </if>
-      <if test="remarks != null" >
+      <if test="remarks != null and remarks != ''" >
         remarks = #{remarks},
       </if>
       <if test="fldN1 != null" >
@@ -178,10 +178,10 @@
       <if test="fldN2 != null" >
         fld_n2 = #{fldN2},
       </if>
-      <if test="fldS1 != null" >
+      <if test="fldS1 != null and fldS1 != ''" >
         fld_s1 = #{fldS1},
       </if>
-      <if test="fldS2 != null" >
+      <if test="fldS2 != null and fldS2 != ''" >
         fld_s2 = #{fldS2},
       </if>
     </set>

@@ -9,6 +9,4 @@ import org.qboot.sys.dto.SysParamClassDto;
  * @date 2020-09-25
  */
 public interface SysParamClassDao extends CrudDao<SysParamClassDto> {
-
-    int changeById(SysParamClassDto sysParamClass);
 }

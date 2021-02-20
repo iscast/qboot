@@ -27,14 +27,14 @@ public interface SysMenuService extends ICrudService<SysMenuDao, SysMenuDto> {
 	
 	SysMenuDto findByPermission(String permission);
 	
-	List<SysMenuDto> findShowMenuByUserId(Long userId);
+	List<SysMenuDto> findShowMenuByUserId(String userId);
 	
 	List<SysMenuDto> findShowMenuAll();
 	
 	/**
 	 * 获取用户的权限
 	 */
-	List<SysMenuDto> qryAuth(Long userId);
+	List<SysMenuDto> qryAuth(String userId);
 	
 	int changeShowFlag(String menuId, String isShow);
 }

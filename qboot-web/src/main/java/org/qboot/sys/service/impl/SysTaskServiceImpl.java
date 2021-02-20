@@ -11,7 +11,6 @@ import org.qboot.common.utils.RedisTools;
 import org.qboot.sys.dao.SysTaskDao;
 import org.qboot.sys.dto.SysTaskDto;
 import org.qboot.sys.exception.SysTaskException;
-import org.qboot.sys.service.SysTaskLogService;
 import org.qboot.sys.service.SysTaskService;
 import org.quartz.*;
 import org.springframework.stereotype.Service;
@@ -36,15 +35,13 @@ public class SysTaskServiceImpl extends CrudService<SysTaskDao, SysTaskDto> impl
 	private Scheduler scheduler;
 	@Resource
 	private RedisTools redisTools;
-	@Resource
-    private SysTaskLogService sysTaskLogService;
 
 	@Override
 	public PageInfo<SysTaskDto> findByPage(SysTaskDto sysTask) {
 		PageInfo<SysTaskDto> result = super.findByPage(sysTask) ;
-		Map<Long, String> runningTask = this.getRunningTask() ;
-		Page<SysTaskDto>  iniList = new Page<SysTaskDto>();
-		Page<SysTaskDto>  runningList = new Page<SysTaskDto>();
+		Map<String, String> runningTask = this.getRunningTask() ;
+		Page<SysTaskDto>  iniList = new Page();
+		Page<SysTaskDto>  runningList = new Page();
 		result.getList().forEach(i -> {
 			if(runningTask.containsKey(i.getId())){
 				i.setRunStatus(SysTaskDto.RUN_STATUS_RUNNING);
@@ -120,8 +117,8 @@ public class SysTaskServiceImpl extends CrudService<SysTaskDao, SysTaskDto> impl
 
 	@Override
 	@Transactional
-	public int updateById(SysTaskDto task) {
-		int result = super.updateById(task) ;
+	public int update(SysTaskDto task) {
+		int result = super.update(task) ;
 		SysTaskDto newTask = d.findById(task.getId()) ;
 		// 重置任务
 		try {
@@ -140,7 +137,7 @@ public class SysTaskServiceImpl extends CrudService<SysTaskDao, SysTaskDto> impl
 	}
 
     @Override
-	public void runOnce(Long taskId) {
+	public void runOnce(String taskId) {
 		SysTaskDto task = this.findById(taskId);
 		if (task == null) {
             throw new SysTaskException(SYS_TASK_EXECUTE_NULL);
@@ -215,15 +212,6 @@ public class SysTaskServiceImpl extends CrudService<SysTaskDao, SysTaskDto> impl
 	}
 
     @Override
-	public int deleteTask(Long taskId) {
-        int cnt = this.deleteById(taskId);
-        if(cnt > 0) {
-            sysTaskLogService.deleteByTaskId(taskId);
-        }
-        return  cnt;
-	}
-
-    @Override
 	public Long countByTaskName(SysTaskDto sysTask) {
 		return this.d.countByTaskName(sysTask);
 	}
@@ -280,14 +268,13 @@ public class SysTaskServiceImpl extends CrudService<SysTaskDao, SysTaskDto> impl
 		return  result;
 	}
 
-
     /**
      * 获取JobKey
      * @param taskId
      * @return
      */
-    private JobKey getJobKey(Long taskId) {
-        return JobKey.jobKey(taskId.toString(), SysConstants.TASK_DEFAULT_GROUP);
+    private JobKey getJobKey(String taskId) {
+        return JobKey.jobKey(taskId, SysConstants.TASK_DEFAULT_GROUP);
     }
 
     /**
@@ -295,8 +282,8 @@ public class SysTaskServiceImpl extends CrudService<SysTaskDao, SysTaskDto> impl
      * @param taskId
      * @return
      */
-    private TriggerKey getTriggerKey(Long taskId) {
-        return TriggerKey.triggerKey(taskId.toString(), SysConstants.TASK_DEFAULT_GROUP);
+    private TriggerKey getTriggerKey(String taskId) {
+        return TriggerKey.triggerKey(taskId, SysConstants.TASK_DEFAULT_GROUP);
     }
     /**
      * 检测任务是否存在
@@ -304,7 +291,7 @@ public class SysTaskServiceImpl extends CrudService<SysTaskDao, SysTaskDto> impl
      * @return
      * @throws SchedulerException
      */
-    private boolean checkExists(Long taskId) throws SchedulerException {
+    private boolean checkExists(String taskId) throws SchedulerException {
         return scheduler.checkExists(getJobKey(taskId));
     }
 
@@ -314,7 +301,7 @@ public class SysTaskServiceImpl extends CrudService<SysTaskDao, SysTaskDto> impl
      * @return
      * @throws SchedulerException
      */
-    private SysTaskDto getJobObject(Long taskId) throws SchedulerException {
+    private SysTaskDto getJobObject(String taskId) throws SchedulerException {
         JobDetail jobDetail = scheduler.getJobDetail(getJobKey(taskId));
         return (SysTaskDto)jobDetail.getJobDataMap().get(CacheConstants.JOB_DATA_MAP_KEY);
     }
@@ -336,7 +323,7 @@ public class SysTaskServiceImpl extends CrudService<SysTaskDao, SysTaskDto> impl
         detail.getJobDataMap().put(CacheConstants.JOB_DATA_MAP_KEY, task);
 
         CronScheduleBuilder builder = CronScheduleBuilder.cronSchedule(task.getCronExp());
-        CronTrigger trigger = (CronTrigger) TriggerBuilder.newTrigger()
+        CronTrigger trigger = TriggerBuilder.newTrigger()
                 .withIdentity(getTriggerKey(task.getId()))
                 .withSchedule(builder).build();
 
@@ -381,21 +368,20 @@ public class SysTaskServiceImpl extends CrudService<SysTaskDao, SysTaskDto> impl
 
     /**
      * 所有系统中正在运行的任务
-     *
      * @return
      * @throws SchedulerException
      */
-    private Map<Long,String> getRunningTask(){
+    private Map<String,String> getRunningTask(){
         List<JobExecutionContext> executingJobs;
         try {
             executingJobs = scheduler.getCurrentlyExecutingJobs();
         } catch (SchedulerException e) {
             throw new SysTaskException(SYS_TASK_GET_RUNNING_ERROR);
         }
-        Map<Long,String> runningTaskList = new HashMap<Long,String>();
+        Map<String,String> runningTaskList = new HashMap();
         for (JobExecutionContext executingJob : executingJobs) {
             JobKey jobKey = executingJob.getJobDetail().getKey();
-            runningTaskList.put(Long.parseLong(jobKey.getName()),jobKey.getName());
+            runningTaskList.put(jobKey.getName(),jobKey.getName());
         }
         return runningTaskList;
     }
@@ -405,7 +391,7 @@ public class SysTaskServiceImpl extends CrudService<SysTaskDao, SysTaskDto> impl
      * @return
      * @throws SchedulerException
      */
-    private boolean isRunning(Long taskId){
+    private boolean isRunning(String taskId){
         List<JobExecutionContext> executingJobs;
         try {
             executingJobs = scheduler.getCurrentlyExecutingJobs();
@@ -413,7 +399,7 @@ public class SysTaskServiceImpl extends CrudService<SysTaskDao, SysTaskDto> impl
             throw new SysTaskException(SYS_TASK_GET_RUNNING_ERROR);
         }
         for (JobExecutionContext executingJob : executingJobs) {
-            if(executingJob.getJobDetail().getKey().getName().equalsIgnoreCase(taskId.toString())){
+            if(executingJob.getJobDetail().getKey().getName().equalsIgnoreCase(taskId)){
                 return true;
             }
         }

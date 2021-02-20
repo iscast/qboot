@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.qboot.common.constants.CacheConstants;
 import org.qboot.common.constants.SysConstants;
+import org.qboot.common.utils.IdGen;
 import org.qboot.common.utils.IpUtils;
 import org.qboot.common.utils.RedisTools;
 import org.qboot.common.utils.SpringContextHolder;
@@ -57,10 +58,10 @@ public class JobProxy{
             throw new SysTaskException(SYS_TASK_EXECUTE_NULL);
 		}
 		// 记录任务执行开始日志
-		Long logId = null ;
+		String logId = null ;
 		try {
 			//获取最新任务信息
-			long taskId = sysTask.getId() ;
+			String taskId = sysTask.getId();
 			sysTask = redisTools.get(sysTask.toCacheKeyString()) ;
 			if(sysTask == null){
 				sysTask = sysTaskService.findById(taskId) ;
@@ -86,7 +87,7 @@ public class JobProxy{
 			logId = insertTaskLog(jobCtx.getFireTime(),sysTask.getId());
 			//解析附加参数
 			String paramJson = sysTask.getParams();
-			Map<String, Object> params = new HashMap<String, Object>();
+			Map<String, Object> params = new HashMap<>();
 			if (StringUtils.isNotEmpty(paramJson)) {
 				ObjectMapper mapper = new ObjectMapper();
 				mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
@@ -127,8 +128,9 @@ public class JobProxy{
 	 * @param taskId 任务ID
 	 * @return 日志ID
 	 */
-	public Long insertTaskLog(Date beginTime,Long taskId) {
+	public String insertTaskLog(Date beginTime,String taskId) {
 		SysTaskLogDto taskLog = new SysTaskLogDto();
+        taskLog.setId(IdGen.uuid());
 		taskLog.setTaskId(taskId);
 		taskLog.setBeginTime(beginTime);
 		taskLog.setExecIp(IpUtils.getLocalIp());
@@ -144,7 +146,7 @@ public class JobProxy{
 	 * @param execStatus
 	 * @param execResult
 	 */
-	public void updateTasktLog(Long logId, int execStatus, String execResult, SysTaskDto systask) {
+	public void updateTasktLog(String logId, int execStatus, String execResult, SysTaskDto systask) {
 		SysTaskLogDto taskLog = sysTaskLogService.findById(logId);
 		if (taskLog == null) {
 			logger.error(String.format("任务日志id为%s的记录无法获取，任务结果更新失败", logId));
@@ -157,7 +159,7 @@ public class JobProxy{
 		taskLog.setExecStatus(execStatus);
 		taskLog.setExecResult(execResult);
 		taskLog.setUpdateDate(new Date());
-		sysTaskLogService.updateById(taskLog);
+		sysTaskLogService.update(taskLog);
 		//记录上一次执行成功的时间
 		if(SysConstants.TASK_EXEC_STATUS_SUCCESS==execStatus){
 			systask.setLastResult(execResult);

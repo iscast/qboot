@@ -18,13 +18,13 @@ public interface SysRoleService extends ICrudService<SysRoleDao, SysRoleDto> {
 
 	int update(SysRoleDto t);
 
-	List<SysRoleDto> findByUserId(Long userId);
+	List<SysRoleDto> findByUserId(String userId);
 	
 	List<String> findDeptIdsByRoleId(String roleId);
 
-	int removeUsersByRoleId(String roleId, List<Long> userIds);
+	int removeUsersByRoleId(String roleId, List<String> userIds);
 	
-	int addUsersByRoleId(String roleId, List<Long> userIds);
+	int addUsersByRoleId(String roleId, List<String> userIds);
 
 	List<String> selectMenuIdsByRoleId(Serializable roleId);
 

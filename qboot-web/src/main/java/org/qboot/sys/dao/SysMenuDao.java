@@ -14,10 +14,10 @@ import java.util.List;
 public interface SysMenuDao extends CrudDao<SysMenuDto> {
 
 	List<SysMenuDto> findByRoleId(String roleId);
-	List<SysMenuDto> findByUserId(Long userId);
+	List<SysMenuDto> findByUserId(String userId);
 	List<SysMenuDto> findByPermission(String permission);
 	int deleteRoleMenuByMenuId(Serializable menuId);
 	List<SysMenuDto> findParentMenuList(SysMenuDto sysMenu);
-	List<Long> findChildIdById(String menuId);
+	List<String> findChildIdById(String menuId);
 	int changeShowFlag(SysMenuDto sysMenu);
 }

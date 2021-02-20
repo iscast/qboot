@@ -16,7 +16,7 @@ import java.util.List;
 import static org.qboot.common.exception.errorcode.SystemErrTable.*;
 
 /**
- * @Description:
+ * 增删改查通用实现类
  * @Author: iscast
  * @Date: 2020/8/22 21:52
  */
@@ -38,16 +38,9 @@ public class CrudService<D extends CrudDao<T>, T extends BaseEntity<? extends Se
 
     public int update(T t) {
         MyAssertTools.notNull(t, SYS_UPDATE_POJO_NULL_ERROR);
-        t.setUpdateDate(new Date());
-        int cnt = this.d.update(t);
-        return cnt;
-    }
-
-    public int updateById(T t) {
-        MyAssertTools.notNull(t, SYS_UPDATE_POJO_NULL_ERROR);
         MyAssertTools.notNull(t.getId(), SYS_PARAM_POJO_ID_NULL_ERROR);
         t.setUpdateDate(new Date());
-        int cnt = this.d.updateById(t);
+        int cnt = this.d.update(t);
         return cnt;
     }
 
@@ -90,7 +83,7 @@ public class CrudService<D extends CrudDao<T>, T extends BaseEntity<? extends Se
     public PageInfo<T> findByPage(T t) {
 //        有问题的分页缓存
 //        String clzName = this.getClass().getName();
-//        Long userId = SecurityUtils.getUserId();
+//        String userId = SecurityUtils.getUserId();
 //        if(null != userId && StringUtils.isNotBlank(clzName)) {
 //            String cacheName = CacheConstants.CACHE_PREFIX_USER_QRY_KEY + clzName + userId;
 //            Long totleCount = LocalCacheTools.getL(cacheName);

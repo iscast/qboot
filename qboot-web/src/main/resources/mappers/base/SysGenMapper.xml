@@ -36,15 +36,6 @@
     where id = #{id}
   </select>
   
-  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
-    select 
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from sys_gen
-    where id = #{id,jdbcType=VARCHAR} 
-  </select>
-  
    <select id="findList" resultMap="BaseResultMap" parameterType="org.qboot.sys.dto.SysGenDto" >
     select 
     <include refid="Base_Column_List" />
@@ -100,11 +91,6 @@
     delete from sys_gen
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-
-  <delete id="deleteByPrimaryKey"  >
-    delete from sys_gen
-    where id = #{id,jdbcType=VARCHAR}
-  </delete>
   
   <insert id="insert" parameterType="org.qboot.sys.dto.SysGenDto" >
     insert into sys_gen (id, table_name,pk_type, menu_name, 
@@ -119,7 +105,7 @@
       )
   </insert>
   
-  <update id="updateByPrimaryKeySelective" parameterType="org.qboot.sys.dto.SysGenDto" >
+  <update id="update" parameterType="org.qboot.sys.dto.SysGenDto" >
     update sys_gen
     <set >
       <if test="tableName != null" >

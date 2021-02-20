@@ -32,12 +32,10 @@ public interface SysTaskService extends ICrudService<SysTaskDao, SysTaskDto> {
 
 	int save(SysTaskDto task);
 
-	int updateById(SysTaskDto task);
-
 	/**
 	 * 立即触发一次执行
 	 */
-	void runOnce(Long taskId);
+	void runOnce(String taskId);
 	
 	/**
 	 * 初始化任务，将任务添加到schedule
@@ -71,12 +69,6 @@ public interface SysTaskService extends ICrudService<SysTaskDao, SysTaskDto> {
 	 * @throws SchedulerException
 	 */
 	void runOnce(SysTaskDto task) throws SchedulerException;
-
-	/**
-	 * 删除任务时清理所有任务日志
-	 * @param taskId
-	 */
-	int deleteTask(Long taskId);
 
 	Long countByTaskName(SysTaskDto sysTask);
 

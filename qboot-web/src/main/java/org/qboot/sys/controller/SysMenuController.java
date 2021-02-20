@@ -7,6 +7,7 @@ import org.qboot.common.controller.BaseController;
 import org.qboot.common.entity.AuthTreeEntity;
 import org.qboot.common.entity.ResponeModel;
 import org.qboot.common.security.SecurityUtils;
+import org.qboot.common.utils.IdGen;
 import org.qboot.common.utils.TreeHelper;
 import org.qboot.common.utils.ValidateUtils;
 import org.qboot.sys.dto.SysMenuDto;
@@ -159,6 +160,7 @@ public class SysMenuController extends BaseController {
 			parent = sysMenuService.findById(sysMenu.getParentId());
 		} 
 		treeHelper.setParent(sysMenu, parent);
+		sysMenu.setId(IdGen.uuid());
 		sysMenu.setIsShow("1");
 		sysMenu.setCreateBy(SecurityUtils.getLoginName());
 		sysMenu.setCreateDate(new Date());
@@ -206,7 +208,10 @@ public class SysMenuController extends BaseController {
     @AccLog
 	@PreAuthorize("hasAuthority('sys:menu:save')")
 	@PostMapping("/batchSave")
-	public ResponeModel batchSave(@RequestBody List<SysMenuDto> list ) {
+	public ResponeModel batchSave(@RequestBody List<SysMenuDto> list) {
+	    for(SysMenuDto dto : list) {
+	        dto.setId(IdGen.uuid());
+        }
 		sysMenuService.batchSave(list);
 		return ok();
 	}

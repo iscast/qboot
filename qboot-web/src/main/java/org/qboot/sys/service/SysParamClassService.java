@@ -8,6 +8,4 @@ import org.qboot.sys.dto.SysParamClassDto;
  * 系统类型
  */
 public interface SysParamClassService extends ICrudService<SysParamClassDao, SysParamClassDto> {
-
-	int changeById(SysParamClassDto sysParamClass);
 }

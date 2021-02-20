@@ -67,7 +67,7 @@ public class SysRoleServiceImpl extends CrudService<SysRoleDao, SysRoleDto> impl
 		return super.update(t);
 	}
 
-	public List<SysRoleDto> findByUserId(Long userId) {
+	public List<SysRoleDto> findByUserId(String userId) {
         MyAssertTools.notNull(userId, SYS_ROLE_USER_ID_NULL);
 		return  this.d.findByUserId(userId);
 	}
@@ -77,7 +77,7 @@ public class SysRoleServiceImpl extends CrudService<SysRoleDao, SysRoleDto> impl
 		List<String> depts = this.d.selectDeptIdsByRoleId(roleId);
 		return depts;
 	}
-	public int removeUsersByRoleId(String roleId, List<Long> userIds) {
+	public int removeUsersByRoleId(String roleId, List<String> userIds) {
         MyAssertTools.hasLength(roleId, SYS_ROLE_ID_NULL);
         MyAssertTools.notEmpty(userIds, SYS_ROLE_USER_IDS_NULL);
 		userIds.forEach((userId) -> {
@@ -86,7 +86,7 @@ public class SysRoleServiceImpl extends CrudService<SysRoleDao, SysRoleDto> impl
 		return userIds.size();
 	}
 	
-	public int addUsersByRoleId(String roleId, List<Long> userIds) {
+	public int addUsersByRoleId(String roleId, List<String> userIds) {
         MyAssertTools.hasLength(roleId, SYS_ROLE_ID_NULL);
         MyAssertTools.notEmpty(userIds, SYS_ROLE_USER_IDS_NULL);
 		userIds.forEach((userId) -> {

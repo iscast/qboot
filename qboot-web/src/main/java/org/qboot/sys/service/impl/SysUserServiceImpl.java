@@ -1,9 +1,11 @@
 package org.qboot.sys.service.impl;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.qboot.common.constants.SysConstants;
 import org.qboot.common.service.CrudService;
 import org.qboot.common.utils.CodecUtils;
+import org.qboot.common.utils.IdGen;
 import org.qboot.common.utils.MyAssertTools;
 import org.qboot.sys.dao.SysUserDao;
 import org.qboot.sys.dto.SysUserDto;
@@ -12,6 +14,7 @@ import org.qboot.sys.service.SysLoginLogService;
 import org.qboot.sys.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,17 +40,15 @@ public class SysUserServiceImpl extends CrudService<SysUserDao, SysUserDto> impl
 	}
 
     @Override
-	public boolean checkLoginName(Long userId, String loginName) {
+	public boolean checkLoginName(String userId, String loginName) {
         MyAssertTools.hasLength(loginName, SYS_USER_LOGINNAME_EMPTY);
 		List<SysUserDto> list = this.d.findByLoginName(loginName);
-		
-		if(userId != null && list.isEmpty()) {
-			return false;
-		}
-		if(list.isEmpty()) {
-			return false;
-		}
-		if(userId != null && list.get(0).getId().equals(userId)) {
+
+        if(CollectionUtils.isEmpty(list)) {
+            return false;
+        }
+
+		if(StringUtils.isNotBlank(userId) && list.get(0).getId().equals(userId)) {
 			return false;
 		}
 		return true;
@@ -56,24 +57,24 @@ public class SysUserServiceImpl extends CrudService<SysUserDao, SysUserDto> impl
 	@Override
 	public int save(SysUserDto t) {
 		String salt = RandomStringUtils.randomAlphanumeric(20);
+        String userId = IdGen.uuid();
+        t.setId(userId);
 		t.setSalt(salt);
-		//处理密码
 		t.setPassword(encryptPwd(t.getPassword(), salt));
         //首次登录需要修改密码
 		t.setFldN1(0);
 		int cnt = this.d.insert(t);
 		if(cnt > 0) {
 			// 插入角色
-			this.saveUserRole(t.getRoleIds(), t.getId());
-			return Integer.parseInt(String.valueOf(t.getId()));
+			this.saveUserRole(t.getRoleIds(), userId);
+			return cnt;
 		}else {
 			return 0;
 		}
-			
 	}
 	
 	@Override
-	public int update(SysUserDto t) {
+	public int updateInfo(SysUserDto t) {
 		SysUserDto sysUser = this.findById(t.getId());
         MyAssertTools.notNull(sysUser, SYS_USER_NOTEXISTS);
 		return super.update(t);
@@ -81,7 +82,7 @@ public class SysUserServiceImpl extends CrudService<SysUserDao, SysUserDto> impl
 
 
     @Override
-    public int updateById(SysUserDto t) {
+    public int update(SysUserDto t) {
 		SysUserDto sysUser = this.findById(t.getId());
         MyAssertTools.notNull(sysUser, SYS_USER_NOTEXISTS);
 
@@ -96,15 +97,14 @@ public class SysUserServiceImpl extends CrudService<SysUserDao, SysUserDto> impl
 	}
 
     @Override
-	public int deleteById(Long id) {
-		// 删除用户角色
-		// 删除user关联的所有role
+	public int deleteById(String id) {
+		// 先删除用户关联角色后再删除用户
 		this.d.deleteUserRoleByUserId(id);
 		return super.deleteById(id);
 	}
 
     @Override
-	public boolean validatePwd(String password, Long userId) {
+	public boolean validatePwd(String password, String userId) {
         MyAssertTools.hasLength(password, SYS_USER_PWD_EMPTY);
         MyAssertTools.notNull(userId, SYS_USER_UERID_EMPTY);
         SysUserDto qry = new SysUserDto();
@@ -137,7 +137,7 @@ public class SysUserServiceImpl extends CrudService<SysUserDao, SysUserDto> impl
 	}
 
     @Override
-	public boolean selectFirstLoginUser(Long userId){
+	public boolean selectFirstLoginUser(String userId){
 		SysUserDto sysUser = this.findById(userId);
     	if(sysUser.getFldN1() == null || sysUser.getFldN1() != 1) {
     		return true;
@@ -151,7 +151,7 @@ public class SysUserServiceImpl extends CrudService<SysUserDao, SysUserDto> impl
         return d.findSecretInfo(qry);
     }
 
-    private int saveUserRole(List<String> roleIds, Long userId) {
+    private int saveUserRole(List<String> roleIds, String userId) {
         // 插入角色
         if (null == roleIds || roleIds.isEmpty()) {
             return 0;

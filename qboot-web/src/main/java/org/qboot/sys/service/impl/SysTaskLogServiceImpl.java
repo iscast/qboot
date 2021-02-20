@@ -18,8 +18,7 @@ public class SysTaskLogServiceImpl extends CrudService<SysTaskLogDao, SysTaskLog
 	 * @param taskId
 	 */
     @Override
-	public void deleteByTaskId(Long taskId) {
+	public void deleteByTaskId(String taskId) {
 		this.d.deleteByTaskId(taskId);
 	}
-
 }

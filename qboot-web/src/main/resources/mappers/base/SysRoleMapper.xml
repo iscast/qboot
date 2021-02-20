@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.qboot.sys.dao.SysRoleDao">
 	<resultMap id="BaseResultMap" type="org.qboot.sys.dto.SysRoleDto">
-		<id column="id" property="id" jdbcType="BIGINT" />
+		<id column="id" property="id" jdbcType="VARCHAR" />
 		<result column="name" property="name" jdbcType="VARCHAR" />
 		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
 		<result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
@@ -25,8 +25,7 @@
 	<select id="findByName" resultMap="BaseResultMap" parameterType="java.lang.String">
 		select
 		<include refid="Base_Column_List" />
-		from sys_role
-		where name = #{name}
+		from sys_role where name = #{name}
 	</select>
 	
 	<select id="findList" resultMap="BaseResultMap" parameterType="org.qboot.sys.dto.SysRoleDto">
@@ -40,12 +39,11 @@
 			<if test="createBy !=null and createBy !=''">
     			and create_by = #{createBy}
     		</if>
-			
 		</where>
         order by id desc
 	</select>
 	
-	<select id="findByUserId" parameterType="java.lang.Long"
+	<select id="findByUserId" parameterType="java.lang.String"
 		resultMap="BaseResultMap">
 		select
 		<include refid="Base_Column_List" />
@@ -100,9 +98,10 @@
 	</select>
 	
 	<insert id="insert" parameterType="org.qboot.sys.dto.SysRoleDto">
-		insert into sys_role (name, create_by, create_date, update_by, update_date, remarks)
-		values (#{name,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR},
-		#{updateDate,jdbcType=TIMESTAMP}, #{remarks,jdbcType=VARCHAR})
+		insert into sys_role (id, name, create_by, create_date, update_by, update_date, remarks)
+		values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR},
+                #{createDate,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR},#{updateDate,jdbcType=TIMESTAMP},
+                #{remarks,jdbcType=VARCHAR})
 	</insert>
 	
 	<update id="update" parameterType="org.qboot.sys.dto.SysRoleDto">

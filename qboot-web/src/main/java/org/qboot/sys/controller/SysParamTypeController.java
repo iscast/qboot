@@ -8,6 +8,7 @@ import org.qboot.common.constants.SysConstants;
 import org.qboot.common.controller.BaseController;
 import org.qboot.common.entity.ResponeModel;
 import org.qboot.common.security.SecurityUtils;
+import org.qboot.common.utils.IdGen;
 import org.qboot.common.utils.MyAssertTools;
 import org.qboot.common.utils.RedisTools;
 import org.qboot.common.utils.ValidateUtils;
@@ -59,7 +60,7 @@ public class SysParamTypeController extends BaseController {
 	
 	@PreAuthorize("hasAuthority('sys:param:qry')")
 	@RequestMapping("/get")
-	public ResponeModel get(@RequestParam Long id) {
+	public ResponeModel get(@RequestParam String id) {
 		SysParamTypeDto sysParam = sysParamService.findById(id);
 		if(null == sysParam) {
             return ResponeModel.ok(SYS_PARAM_TYPE_QUERY_FAIL);
@@ -72,6 +73,7 @@ public class SysParamTypeController extends BaseController {
 	@PostMapping("/save")
 	public ResponeModel save(@Validated SysParamTypeDto sysParam, BindingResult bindingResult, HttpServletRequest request) {
         ValidateUtils.checkBind(bindingResult);
+        sysParam.setId(IdGen.uuid());
 		sysParam.setCreateBy(SecurityUtils.getLoginName());
 		sysParam.setPhysicsFlag(SysConstants.SYS_DELFLAG_NORMAL);
 		if(sysParamService.save(sysParam) > 0) {
@@ -97,8 +99,8 @@ public class SysParamTypeController extends BaseController {
     @AccLog
 	@PreAuthorize("hasAuthority('sys:param:delete')")
 	@PostMapping("/delete")
-	public ResponeModel delete(@RequestParam Long id, @RequestParam String paramTypeClass) {
-        MyAssertTools.notNull(id, SYS_PARAM_TYPE_ID_NULL);
+	public ResponeModel delete(@RequestParam String id, @RequestParam String paramTypeClass) {
+        MyAssertTools.hasLength(id, SYS_PARAM_TYPE_ID_NULL);
 		if(sysParamService.deleteById(id) > 0 && StringUtils.isNotBlank(paramTypeClass)) {
             redisTools.del(CacheConstants.CACHE_PREFIX_SYS_PARAMTYPE_KEY + paramTypeClass);
 			return ResponeModel.ok();

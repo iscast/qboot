@@ -8,7 +8,7 @@ import org.qboot.common.constants.CacheConstants;
 /**[sys_task]数据库实体模型
 *@author history
 */
-public class SysTaskDto extends BaseEntity<Long> {
+public class SysTaskDto extends BaseEntity<String> {
 	private static final long serialVersionUID = 1L;
 	/**任务名称.*/
 	private String taskName;
@@ -53,7 +53,7 @@ public class SysTaskDto extends BaseEntity<Long> {
 	public SysTaskDto() {
 		
 	}
-	public SysTaskDto(long id) {
+	public SysTaskDto(String id) {
 		this.setId(id);
 	}
 	/**设置任务名称.*/
@@ -214,8 +214,9 @@ public class SysTaskDto extends BaseEntity<Long> {
 	}
 	@Override
 	public int hashCode() {
-		return getId().intValue();
+		return getId().hashCode();
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if(null==obj||this.getId()==null){
@@ -225,7 +226,7 @@ public class SysTaskDto extends BaseEntity<Long> {
 		if(null==other.getId()){
 			return false ;
 		}
-		return this.getId().longValue()==other.getId().longValue();
+		return this.getId().equals(other.getId());
 	}
 	/**
 	 * 立即执行缓存通知key

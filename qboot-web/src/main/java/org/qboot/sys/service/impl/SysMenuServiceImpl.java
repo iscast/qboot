@@ -89,8 +89,8 @@ public class SysMenuServiceImpl extends CrudService<SysMenuDao, SysMenuDto> impl
 	}
 
     @Override
-	public List<SysMenuDto> findShowMenuByUserId(Long userId){
-	    MyAssertTools.notNull(userId, SYS_MENU_USER_ID_NULL);
+	public List<SysMenuDto> findShowMenuByUserId(String userId){
+	    MyAssertTools.hasLength(userId, SYS_MENU_USER_ID_NULL);
 		return this.d.findByUserId(userId);
 	}
 
@@ -107,13 +107,13 @@ public class SysMenuServiceImpl extends CrudService<SysMenuDao, SysMenuDto> impl
 	 * @return
 	 */
     @Override
-	public List<SysMenuDto> qryAuth(Long userId){
+	public List<SysMenuDto> qryAuth(String userId){
 		return this.d.findByUserId(userId);
 	}
 
     @Override
 	public int changeShowFlag(String menuId, String isShow) {
-		List<Long> childIds = this.d.findChildIdById(menuId);
+		List<String> childIds = this.d.findChildIdById(menuId);
 		SysMenuDto menu = new SysMenuDto();
 		menu.setIsShow(isShow);
 		menu.setIds(childIds);

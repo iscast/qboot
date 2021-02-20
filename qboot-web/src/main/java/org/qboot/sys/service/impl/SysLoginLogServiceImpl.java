@@ -53,7 +53,7 @@ public class SysLoginLogServiceImpl extends CrudService<SysLoginLogDao, SysLogin
 	}
 
 	@Override
-    public void loginLogByLoginId(String status,Long userId,String ip,String userAgent,String browser,String deviceName, String area) {
+    public void loginLogByLoginId(String status,String userId,String ip,String userAgent,String browser,String deviceName, String area) {
         SysLoginLogDto loginLog = initPojo(status, ip, userAgent, browser, deviceName, area, SysConstants.SYS_USER_PWD_STATUS_NORMAL);
         loginLog.setUserId(userId);
         SysUserDto user = sysUserService.findById(userId);
@@ -68,7 +68,7 @@ public class SysLoginLogServiceImpl extends CrudService<SysLoginLogDao, SysLogin
     }
 
     @Override
-	public SysLoginLogDto findLastLoginInfo(Long userId) {
+	public SysLoginLogDto findLastLoginInfo(String userId) {
         MyAssertTools.notNull(userId, SYS_USER_UERID_EMPTY);
 		SysLoginLogDto loginLog = new SysLoginLogDto();
 		loginLog.setPage(1);

@@ -62,7 +62,7 @@ public class SysUserController extends BaseController {
 	
 	@PreAuthorize("hasAuthority('sys:user:qry')")
 	@RequestMapping("/get")
-	public ResponeModel get(@RequestParam Long id, HttpServletRequest request) {
+	public ResponeModel get(@RequestParam String id, HttpServletRequest request) {
 		SysUserDto sysUser = sysUserService.findById(id);
 		if(null == sysUser) {
             return ResponeModel.error(SysUserErrTable.SYS_USER_NOTEXISTS);
@@ -130,7 +130,7 @@ public class SysUserController extends BaseController {
 
 		sysUser.setUpdateBy(SecurityUtils.getLoginName());
 		sysUser.setUpdateDate(new Date());
-		int cnt = sysUserService.updateById(sysUser);
+		int cnt = sysUserService.update(sysUser);
 		if(cnt > 0) {
 			loginSecurityService.clearUserSessions(sysUser.getLoginName());
 			return ok();
@@ -141,7 +141,7 @@ public class SysUserController extends BaseController {
     @AccLog
 	@PreAuthorize("hasAuthority('sys:user:delete')")
 	@PostMapping("/delete")
-	public ResponeModel delete(@RequestParam Long id) {
+	public ResponeModel delete(@RequestParam String id) {
 		SysUserDto user = sysUserService.findById(id);
         MyAssertTools.notNull(user, SYS_USER_NOTEXISTS);
 
@@ -149,7 +149,7 @@ public class SysUserController extends BaseController {
 			return ResponeModel.error(SYS_USER_DEL_NO_ADMIN);
 		}
 
-		if (SecurityUtils.getUserId() == id) {
+		if (SecurityUtils.getUserId().equals(id)) {
 			return ResponeModel.error(SYS_USER_DEL_NO_SELF);
 		}
 		int cnt = sysUserService.deleteById(id);
@@ -162,13 +162,13 @@ public class SysUserController extends BaseController {
     @AccLog
 	@PreAuthorize("hasAuthority('sys:user:update')")
 	@PostMapping("/setStatus")
-	public ResponeModel setStatus(@RequestParam Long id, @RequestParam Integer status) {
+	public ResponeModel setStatus(@RequestParam String id, @RequestParam Integer status) {
 		SysUserDto user = sysUserService.findById(id);
 		MyAssertTools.notNull(user, SYS_USER_NOTEXISTS);
 		if (SecurityUtils.isSuperAdmin(user.getLoginName())) {
 			return ResponeModel.error(SYS_USER_UPDATE_NO_ADMIN);
 		}
-		if (SecurityUtils.getUserId() == id) {
+		if (SecurityUtils.getUserId().equals(id)) {
 			return ResponeModel.error(SYS_USER_UPDATE_NO_SELF);
 		}
 		SysUserDto sysUser = new SysUserDto();
@@ -186,13 +186,13 @@ public class SysUserController extends BaseController {
     @AccLog
 	@PreAuthorize("hasAuthority('sys:user:update')")
 	@PostMapping("/initPwd")
-	public ResponeModel initPwd(@RequestParam Long id, HttpServletRequest request) {
+	public ResponeModel initPwd(@RequestParam String id, HttpServletRequest request) {
 		SysUserDto user = sysUserService.findById(id);
         MyAssertTools.notNull(user, SYS_USER_NOTEXISTS);
 		if (SecurityUtils.isSuperAdmin(user.getLoginName())) {
 			return ResponeModel.error(SYS_USER_UPDATE_NO_ADMIN);
 		}
-		if (SecurityUtils.getUserId() == id) {
+		if (SecurityUtils.getUserId().equals(id)) {
 			return ResponeModel.error(SYS_USER_INIT_PWD_DENIED);
 		}
 		SysUserDto sysUser = new SysUserDto();

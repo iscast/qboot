@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
  * @author iscast
  * @date 2020-09-25
  */
-public class SysParamClassDto extends BaseEntity<Long> {
+public class SysParamClassDto extends BaseEntity<String> {
 
 	private static final long serialVersionUID = 1L;
 

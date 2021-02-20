@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.qboot.sys.dao.SysParamClassDao" >
   <resultMap id="BaseResultMap" type="org.qboot.sys.dto.SysParamClassDto" >
-    <id column="id" property="id" jdbcType="BIGINT" />
+    <id column="id" property="id" jdbcType="VARCHAR" />
     <result column="param_type_class" property="paramTypeClass" jdbcType="VARCHAR" />
     <result column="param_type_name" property="paramTypeName" jdbcType="VARCHAR" />
     <result column="create_by" property="createBy" jdbcType="VARCHAR" />
@@ -18,7 +18,7 @@
     id, param_type_class, param_type_name, visible, physics_flag
   </sql>
   
-  <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+  <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" /> , create_by, create_date, update_by, update_date, remarks
     from sys_param_class
@@ -45,51 +45,40 @@
     </where>
   order by create_date desc
   </select>
-  
-  <update id="changeById" parameterType="org.qboot.sys.dto.SysParamClassDto" >
-    update sys_param_class
-    <set>
-        <if test="visible != null" >
-            visible = #{visible,jdbcType=INTEGER},
-        </if>
-        <if test="physicsFlag != null" >
-            physics_flag = #{physicsFlag,jdbcType=INTEGER},
-        </if>
-        <if test="updateBy != null and updateBy != ''" >
-            update_by = #{updateBy,jdbcType=VARCHAR},
-        </if>
-        <if test="updateDate != null" >
-            update_date = #{updateDate,jdbcType=TIMESTAMP},
-        </if>
-    </set>
-    where id = #{id} 
-  </update>
-  
+
   <insert id="insert" parameterType="org.qboot.sys.dto.SysParamClassDto" >
-    insert into sys_param_class (param_type_class, param_type_name, visible, physics_flag, create_by, create_date, update_by, update_date, remarks)
-    values (#{paramTypeClass,jdbcType=VARCHAR}, #{paramTypeName,jdbcType=VARCHAR}, #{visible,jdbcType=INTEGER}, #{physicsFlag,jdbcType=INTEGER}, #{createBy,jdbcType=VARCHAR}
-    	, #{createDate,jdbcType=TIMESTAMP},  #{updateBy,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, #{remarks,jdbcType=VARCHAR}
-      )
+    insert into sys_param_class (id, param_type_class, param_type_name, visible, physics_flag, create_by, create_date, update_by, update_date, remarks)
+    values (#{id,jdbcType=VARCHAR},#{paramTypeClass,jdbcType=VARCHAR}, #{paramTypeName,jdbcType=VARCHAR},
+            #{visible,jdbcType=INTEGER}, #{physicsFlag,jdbcType=INTEGER}, #{createBy,jdbcType=VARCHAR},
+    	    #{createDate,jdbcType=TIMESTAMP},  #{updateBy,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP},
+            #{remarks,jdbcType=VARCHAR}
+                   )
   </insert>
   
   <update id="update" parameterType="org.qboot.sys.dto.SysParamClassDto" >
     update sys_param_class
     <set >
-      <if test="paramTypeClass != null and paramTypeClass != ''" >
-        param_type_class = #{paramTypeClass,jdbcType=VARCHAR},
-      </if>
-      <if test="paramTypeName != null and paramTypeName != ''" >
-        param_type_name = #{paramTypeName,jdbcType=VARCHAR},
-      </if>
-      <if test="updateBy != null and updateBy != ''" >
-        update_by = #{updateBy,jdbcType=VARCHAR},
-      </if>
-      <if test="updateDate != null" >
-        update_date = #{updateDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="remarks != null and remarks != ''" >
-        remarks = #{remarks,jdbcType=VARCHAR},
-      </if>
+        <if test="visible != null" >
+          visible = #{visible,jdbcType=INTEGER},
+        </if>
+        <if test="physicsFlag != null" >
+          physics_flag = #{physicsFlag,jdbcType=INTEGER},
+        </if>
+        <if test="paramTypeClass != null and paramTypeClass != ''" >
+          param_type_class = #{paramTypeClass,jdbcType=VARCHAR},
+        </if>
+        <if test="paramTypeName != null and paramTypeName != ''" >
+          param_type_name = #{paramTypeName,jdbcType=VARCHAR},
+        </if>
+        <if test="updateBy != null and updateBy != ''" >
+          update_by = #{updateBy,jdbcType=VARCHAR},
+        </if>
+        <if test="updateDate != null" >
+          update_date = #{updateDate,jdbcType=TIMESTAMP},
+        </if>
+        <if test="remarks != null and remarks != ''" >
+          remarks = #{remarks,jdbcType=VARCHAR},
+        </if>
     </set>
     where id = #{id} 
   </update>

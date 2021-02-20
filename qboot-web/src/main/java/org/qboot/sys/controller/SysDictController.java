@@ -53,7 +53,7 @@ public class SysDictController extends BaseController {
 
 	@PreAuthorize("hasAuthority('sys:dict:qry')")
 	@RequestMapping("/get")
-	public ResponeModel get(@RequestParam Long id) {
+	public ResponeModel get(@RequestParam String id) {
         MyAssertTools.notNull(id, SYS_DICT_ID_NULL);
 		SysDictDto sysDict = sysDictService.findById(id);
 		if(null == sysDict) {
@@ -97,7 +97,7 @@ public class SysDictController extends BaseController {
     @AccLog
 	@PreAuthorize("hasAuthority('sys:dict:update')")
 	@PostMapping("/editStatus")
-	public ResponeModel editStatus(@RequestParam Long id, @RequestParam String status) {
+	public ResponeModel editStatus(@RequestParam String id, @RequestParam String status) {
         MyAssertTools.notNull(id, SYS_DICT_ID_NULL);
         SysDictDto sysDict = new SysDictDto();
 		sysDict.setId(id);
@@ -113,8 +113,8 @@ public class SysDictController extends BaseController {
     @AccLog
 	@PreAuthorize("hasAuthority('sys:dict:delete')")
 	@PostMapping("/delete")
-	public ResponeModel delete(@RequestParam Long id) {
-        MyAssertTools.notNull(id, SYS_DICT_ID_NULL);
+	public ResponeModel delete(@RequestParam String id) {
+        MyAssertTools.hasLength(id, SYS_DICT_ID_NULL);
 		if(sysDictService.deleteById(id) > 0) {
 			return ResponeModel.ok();
 		}

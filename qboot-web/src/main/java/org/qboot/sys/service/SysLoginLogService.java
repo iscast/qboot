@@ -11,7 +11,7 @@ public interface SysLoginLogService extends ICrudService<SysLoginLogDao, SysLogi
 
 	void loginLogByLoginName(String status,String loginName,String ip,String userAgent,String browser,String deviceName, String area, int firstLogin);
 
-    void loginLogByLoginId(String status,Long userId,String ip,String userAgent,String browser,String deviceName, String area);
+    void loginLogByLoginId(String status,String userId,String ip,String userAgent,String browser,String deviceName, String area);
 
-	SysLoginLogDto findLastLoginInfo(Long userId);
+	SysLoginLogDto findLastLoginInfo(String userId);
 }

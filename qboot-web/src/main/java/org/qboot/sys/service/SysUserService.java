@@ -11,23 +11,21 @@ public interface SysUserService extends ICrudService<SysUserDao, SysUserDto> {
 
 	SysUserDto findByLoginName(String loginName);
 	
-	boolean checkLoginName(Long userId, String loginName);
+	boolean checkLoginName(String userId, String loginName);
 
 	int save(SysUserDto t);
 	
-	int update(SysUserDto t);
-
-    int updateById(SysUserDto t);
+	int updateInfo(SysUserDto t);
 	
-	int deleteById(Long id);
+	int deleteById(String id);
 
-	boolean validatePwd(String password, Long userId);
+	boolean validatePwd(String password, String userId);
 	
 	int initPwd(SysUserDto t, int initFlag, String ip);
 	
 	int setStatus(SysUserDto t);
 	
-	boolean selectFirstLoginUser(Long userId);
+	boolean selectFirstLoginUser(String userId);
 
 	SysUserDto findSecretInfo(SysUserDto qry);
 }

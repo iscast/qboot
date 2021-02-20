@@ -6,6 +6,7 @@ import org.qboot.common.controller.BaseController;
 import org.qboot.common.entity.ResponeModel;
 import org.qboot.common.security.CustomUser;
 import org.qboot.common.security.SecurityUtils;
+import org.qboot.common.utils.IdGen;
 import org.qboot.common.utils.MyAssertTools;
 import org.qboot.common.utils.ValidateUtils;
 import org.qboot.sys.dto.SysRoleDto;
@@ -107,13 +108,14 @@ public class SysRoleController extends BaseController {
 		if(role != null) {
 			return ResponeModel.error(SYS_ROLE_DUPLICATE);
 		}
-		
+
+        sysRole.setId(IdGen.uuid());
 		sysRole.setCreateBy(SecurityUtils.getLoginName());
 		sysRole.setCreateDate(new Date());
 		int cnt = sysRoleService.save(sysRole);
 		if(cnt > 0) {
 			SysRoleDto newRole = sysRoleService.findByName(sysRole.getName());
-			List<Long> list = new ArrayList();
+			List<String> list = new ArrayList();
 			list.add(SecurityUtils.getUserId());
 			sysRoleService.addUsersByRoleId(newRole.getId(), list);
 			return ok();
@@ -127,7 +129,7 @@ public class SysRoleController extends BaseController {
 	public ResponeModel update(@Validated SysRoleDto sysRole, BindingResult bindingResult) {
         ValidateUtils.checkBind(bindingResult);
 		SysRoleDto role = sysRoleService.findByName(sysRole.getName());
-		if(role != null && !String.valueOf(role.getId()).equals(String.valueOf(sysRole.getId()))) {
+		if(role != null && !role.getId().equals(sysRole.getId())) {
 			return ResponeModel.error(SYS_ROLE_DUPLICATE);
 		}
 		sysRole.setUpdateBy(SecurityUtils.getLoginName());
@@ -142,7 +144,7 @@ public class SysRoleController extends BaseController {
     @AccLog
 	@PreAuthorize("hasAuthority('sys:role:update')")
 	@PostMapping("/removeUser")
-	public ResponeModel removeUser(@RequestParam List<Long> userIds,String roleId) {
+	public ResponeModel removeUser(@RequestParam List<String> userIds,String roleId) {
         MyAssertTools.notEmpty(userIds, SYS_ROLE_REMOVED_USER_NOT_EXIST);
 		int cnt = sysRoleService.removeUsersByRoleId(roleId, userIds);
 		if(cnt > 0) {
@@ -154,7 +156,7 @@ public class SysRoleController extends BaseController {
     @AccLog
 	@PreAuthorize("hasAuthority('sys:role:update')")
 	@PostMapping("/addUser")
-	public ResponeModel addUser(@RequestParam List<Long> userIds,String roleId) {
+	public ResponeModel addUser(@RequestParam List<String> userIds,String roleId) {
 	    MyAssertTools.notEmpty(userIds, SYS_ROLE_ADD_USER_NOT_EXIST);
 		int cnt = sysRoleService.addUsersByRoleId(roleId, userIds);
 		if(cnt > 0) {

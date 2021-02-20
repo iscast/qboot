@@ -80,7 +80,7 @@ public class SysMenuDto extends TreeEntity<String> {
 	private Integer hasSub;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-	private List<Long> ids;
+	private List<String> ids;
 	
 	public String getName() {
 		return name;
@@ -154,11 +154,11 @@ public class SysMenuDto extends TreeEntity<String> {
 		this.isShowString = isShowString;
 	}
 
-	public List<Long> getIds() {
+	public List<String> getIds() {
 		return ids;
 	}
 
-	public void setIds(List<Long> ids) {
+	public void setIds(List<String> ids) {
 		this.ids = ids;
 	}
 }

@@ -76,7 +76,7 @@ public class SysLoginController extends BaseController {
 		sysUser.setEmail(user.getEmail());
 		sysUser.setMobile(user.getMobile());
 		sysUser.setId(SecurityUtils.getUserId());
-		int cnt = sysUserService.update(sysUser);
+		int cnt = sysUserService.updateInfo(sysUser);
         if(cnt > 0) {
             return ok();
         }
@@ -98,7 +98,7 @@ public class SysLoginController extends BaseController {
     @AccLog
 	@PostMapping("/updatePwd")
 	public ResponeModel updatePwd(@RequestParam String password, @RequestParam String oldPassword) {
-		Long userId = SecurityUtils.getUserId();
+		String userId = SecurityUtils.getUserId();
 		if (!sysUserService.validatePwd(oldPassword, userId)) {
 			return ResponeModel.error(SYS_USER_ORIGINAL_PWD_INCORRECT);
 		}
@@ -111,7 +111,7 @@ public class SysLoginController extends BaseController {
 
 	@GetMapping("/switchLanguage")
 	public ResponeModel switchLanguage(@RequestParam String lang){
-		Long userId = SecurityUtils.getUserId();
+		String userId = SecurityUtils.getUserId();
 		if (StringUtils.isEmpty(lang)) {
 			return ResponeModel.error(SYS_USER_LANG_INCORRECT);
 		}

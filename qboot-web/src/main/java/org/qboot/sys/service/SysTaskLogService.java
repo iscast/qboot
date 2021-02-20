@@ -15,6 +15,6 @@ public interface SysTaskLogService extends ICrudService<SysTaskLogDao, SysTaskLo
 	 * 根据taskId删除日志
 	 * @param taskId
 	 */
-	void deleteByTaskId(Long taskId);
+	void deleteByTaskId(String taskId);
 
 }

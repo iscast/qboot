@@ -14,7 +14,7 @@ public class CustomUser implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	private Long userId;
+	private String userId;
 	private String deptId;
 	private String deptName;
 	private String loginName;
@@ -29,7 +29,7 @@ public class CustomUser implements Serializable {
 	
 	private List<SysRoleDto> roles;
 
-	public CustomUser(Long userId, String deptId, String deptName, String loginName,
+	public CustomUser(String userId, String deptId, String deptName, String loginName,
                       String name, Integer status, Integer fldN1, Integer fldN2, String fldS1, String fldS2, String lang) {
 		super();
 		this.userId = userId;
@@ -56,11 +56,11 @@ public class CustomUser implements Serializable {
 	}
 
 
-	public Long getUserId() {
+	public String getUserId() {
 		return userId;
 	}
 
-	public void setUserId(Long userId) {
+	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 

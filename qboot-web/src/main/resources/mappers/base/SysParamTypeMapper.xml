@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.qboot.sys.dao.SysParamTypeDao" >
     <resultMap id="BaseResultMap" type="org.qboot.sys.dto.SysParamTypeDto" >
-        <id column="id" property="id" jdbcType="BIGINT" />
+        <id column="id" property="id" jdbcType="VARCHAR" />
         <result column="param_type_class" property="paramTypeClass" jdbcType="VARCHAR" />
         <result column="param_type_id" property="paramTypeId" jdbcType="INTEGER" />
         <result column="param_type_code" property="paramTypeCode" jdbcType="VARCHAR" />
@@ -19,7 +19,7 @@
         id, param_type_id, param_type_class, param_type_code, param_type_name, physics_flag, remarks
     </sql>
 
-    <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.String" >
         select
         <include refid="Base_Column_List" />
         from sys_param_type where id = #{id} and physics_flag = 1
@@ -69,8 +69,8 @@
     </select>
 
     <insert id="insert" parameterType="org.qboot.sys.dto.SysParamTypeDto" >
-    insert into sys_param_type (param_type_id, param_type_class, param_type_code, param_type_name, physics_flag, create_by, create_date, update_by, update_date, remarks)
-    values (#{paramTypeId,jdbcType=INTEGER}, #{paramTypeClass,jdbcType=VARCHAR}, #{paramTypeCode,jdbcType=VARCHAR}, #{paramTypeName,jdbcType=VARCHAR}
+    insert into sys_param_type (id,param_type_id, param_type_class, param_type_code, param_type_name, physics_flag, create_by, create_date, update_by, update_date, remarks)
+    values (#{id,jdbcType=VARCHAR},#{paramTypeId,jdbcType=INTEGER}, #{paramTypeClass,jdbcType=VARCHAR}, #{paramTypeCode,jdbcType=VARCHAR}, #{paramTypeName,jdbcType=VARCHAR}
         , #{physicsFlag,jdbcType=INTEGER}, #{createBy,jdbcType=VARCHAR}
         , #{createDate,jdbcType=TIMESTAMP},  #{updateBy,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, #{remarks,jdbcType=VARCHAR})
     </insert>

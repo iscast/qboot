@@ -15,7 +15,7 @@ public class AccLogBO {
 
     private String requestIP;
 
-    private Long userId;
+    private String userId;
 
     private Date requestTime;
 
@@ -41,11 +41,11 @@ public class AccLogBO {
         this.requestIP = requestIP;
     }
 
-    public Long getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 

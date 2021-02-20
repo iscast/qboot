@@ -70,7 +70,7 @@ public class SysGenController extends BaseController {
 		List<GenColumnInfoDto> columnInfos = sysGen.getColumnInfos();
 		Collections.sort(columnInfos);
 		sysGen.setColumns(JSON.toJSONString(columnInfos));
-		int cnt = sysGenService.updateById(sysGen);
+		int cnt = sysGenService.update(sysGen);
 		return ResponeModel.ok(cnt);
 	}
 

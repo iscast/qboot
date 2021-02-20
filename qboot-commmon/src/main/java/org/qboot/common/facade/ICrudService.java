@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * @Description:
+ * 增删改查抽象接口
  * @Author: iscast
  * @Date: 2020/8/22 19:14
  */
@@ -16,8 +16,6 @@ public interface ICrudService<D extends CrudDao<T>, T extends BaseEntity<? exten
     int save(T t);
 
     int update(T t);
-
-    int updateById(T t);
 
     T findById(Serializable id);
 
