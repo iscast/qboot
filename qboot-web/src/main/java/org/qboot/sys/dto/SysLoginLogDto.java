@@ -17,14 +17,12 @@ import org.qboot.common.entity.BaseEntity;
 public class SysLoginLogDto extends BaseEntity<String> {
 
 	private static final long serialVersionUID = 1L;
+    /**
+     * 用户名
+     */
+    private String name;
 	/**
-	 * 用户ID
-	 */
-	@NotNull
-	@Length(min = 1, max = 32)
-	private String userId;
-	/**
-	 * 登录状态0:成功;1.密码错误；2.已禁用;3.系统错误
+	 * 登录状态0:成功;1.密码错误；2.已禁用;3.锁定24小时;7.修改密码;8.初始化密码;9.系统错误；
 	 */
 	@NotNull
 	@Length(min = 1, max = 1)
@@ -66,10 +64,6 @@ public class SysLoginLogDto extends BaseEntity<String> {
 	 * 登录名
 	 */
 	private String loginName;
-	/**
-	 * 用户名
-	 */
-	private String userName;
 	
 	/**
 	 * 开始时间
@@ -79,19 +73,6 @@ public class SysLoginLogDto extends BaseEntity<String> {
 	 * 结束时间
 	 */
 	private Date endDate;
-	
-	/**
-	 * 是否需要修改密码：0-正常；1-初始化密码；2-已修改密码
-	 */
-	private int firstLogin = SysConstants.SYS_USER_PWD_STATUS_NORMAL;
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
 
     public Date getLoginTime() {
 		return loginTime;
@@ -149,28 +130,20 @@ public class SysLoginLogDto extends BaseEntity<String> {
 		this.loginName = loginName;
 	}
 
-	public String getUserName() {
-		return userName;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getStatus() {
+    public String getStatus() {
 		return status;
 	}
 
 	public void setStatus(String status) {
 		this.status = status;
-	}
-
-	public int getFirstLogin() {
-		return firstLogin;
-	}
-
-	public void setFirstLogin(int firstLogin) {
-		this.firstLogin = firstLogin;
 	}
 
 	public Date getStartDate() {
@@ -191,10 +164,10 @@ public class SysLoginLogDto extends BaseEntity<String> {
 
 	@Override
 	public String toString() {
-		return "SysLoginLog [userId=" + userId + ", status=" + status + ", loginTime=" + loginTime + ", ip=" + ip
+		return "SysLoginLog [status=" + status + ", loginTime=" + loginTime + ", ip=" + ip
 				+ ", area=" + area + ", userAgent=" + userAgent + ", deviceName=" + deviceName + ", browserName="
-				+ browserName + ", loginName=" + loginName + ", userName=" + userName + ", startDate=" + startDate
-				+ ", endDate=" + endDate + ", firstLogin=" + firstLogin + "]";
+				+ browserName + ", loginName=" + loginName + ", name=" + name + ", startDate=" + startDate
+				+ ", endDate=" + endDate + "]";
 	}
 	
 	

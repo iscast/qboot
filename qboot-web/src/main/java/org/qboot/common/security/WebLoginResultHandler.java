@@ -157,8 +157,6 @@ public class WebLoginResultHandler implements AuthenticationSuccessHandler,Authe
 	}
 
 	private class LogThread extends Thread {
-
-
         private String status;
         private String loginName;
         private String ip;
@@ -168,7 +166,6 @@ public class WebLoginResultHandler implements AuthenticationSuccessHandler,Authe
         private String area;
 
         public LogThread(String status, String loginName, String ip, String userAgentStr, String browserStr, String deviceName, String area) {
-            super();
             this.status = status;
             this.loginName = loginName;
             this.ip = ip;
@@ -180,7 +177,7 @@ public class WebLoginResultHandler implements AuthenticationSuccessHandler,Authe
 
         @Override
         public void run() {
-            sysLoginLogService.loginLogByLoginName(status, loginName, ip, userAgentStr, browserStr, deviceName, area, SysConstants.SYS_USER_PWD_STATUS_NORMAL);
+            sysLoginLogService.loginLogByLoginName(status, loginName, ip, userAgentStr, browserStr, deviceName, area);
         }
     }
 

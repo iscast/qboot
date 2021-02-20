@@ -9,9 +9,5 @@ import org.qboot.sys.dto.SysLoginLogDto;
  */
 public interface SysLoginLogService extends ICrudService<SysLoginLogDao, SysLoginLogDto> {
 
-	void loginLogByLoginName(String status,String loginName,String ip,String userAgent,String browser,String deviceName, String area, int firstLogin);
-
-    void loginLogByLoginId(String status,String userId,String ip,String userAgent,String browser,String deviceName, String area);
-
-	SysLoginLogDto findLastLoginInfo(String userId);
+	void loginLogByLoginName(String status,String loginName,String ip,String userAgent,String browser,String deviceName, String area);
 }

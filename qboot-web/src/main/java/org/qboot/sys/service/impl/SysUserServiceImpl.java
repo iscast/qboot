@@ -119,14 +119,18 @@ public class SysUserServiceImpl extends CrudService<SysUserDao, SysUserDto> impl
         SysUserDto secretInfo = d.findSecretInfo(t);
         MyAssertTools.notNull(secretInfo, SYS_USER_NOTEXISTS);
         secretInfo.setPassword(encryptPwd(t.getPassword(), secretInfo.getSalt()));
+        String pwdStatus;
 		if(initFlag == SysConstants.SYS_USER_PWD_STATUS_CHANGED) {
             secretInfo.setFldN1(1);
+            pwdStatus = SysConstants.SYS_USER_LOGIN_STATUS_INIT_PWD;
 		}else {
             //首次登录需要修改密码
             secretInfo.setFldN1(0);
+            pwdStatus = SysConstants.SYS_USER_LOGIN_STATUS_CHANGE_PWD;
 		}
 		int cnt = d.initPwd(secretInfo);
-		sysLoginLogService.loginLogByLoginName(SysConstants.SYS_USER_LOGIN_STATUS_SUCCESS, secretInfo.getLoginName(), ip, "", "", "", "", initFlag);
+        sysLoginLogService.loginLogByLoginName(pwdStatus, secretInfo.getLoginName(), ip, "", "", "", "");
+
 		return cnt;
 	}
 

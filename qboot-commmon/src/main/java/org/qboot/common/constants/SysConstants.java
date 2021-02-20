@@ -86,6 +86,9 @@ public class SysConstants {
     public static final String  SYS_USER_LOGIN_STATUS_PASSWORD_WRONG = "1";
     public static final String  SYS_USER_LOGIN_STATUS_STAUTS_STOP = "2";
     public static final String  SYS_USER_LOGIN_STATUS_LOCK_24 = "3";
+    public static final String  SYS_USER_LOGIN_STATUS_CHANGE_PWD = "7";
+    public static final String  SYS_USER_LOGIN_STATUS_INIT_PWD = "8";
+    public static final String  SYS_USER_LOGIN_STATUS_SYS_ERR = "9";
 
     public static final String STATUS_NORMAL = "1";
     public static final String STATUS_STOP = "0";

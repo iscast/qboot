@@ -200,7 +200,7 @@ public class SysUserController extends BaseController {
 		String password = RandomStringUtils.randomAlphanumeric(8);
 		sysUser.setPassword(password);
 
-		int cnt = this.sysUserService.initPwd(sysUser, 1, IpUtils.getIpAddr(request));
+		int cnt = this.sysUserService.initPwd(sysUser, SysConstants.SYS_USER_PWD_STATUS_INIT, IpUtils.getIpAddr(request));
 		if(cnt > 0) {
 			return ResponeModel.ok(String.format(initPwdStr, password));
 		}

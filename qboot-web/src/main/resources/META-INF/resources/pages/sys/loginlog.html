@@ -6,7 +6,7 @@
             <span class="layui-i18n" i18n-key="sys.form.label.loginName"></span>
             <input id="loginName" name="loginName" class="layui-input search-input i18n-input-hint" type="text" i18n-key="sys.form.label.loginName"/>&emsp;
             <span class="layui-i18n" i18n-key="sys.form.label.userName"></span>
-            <input id="userName" name="userName" class="layui-input search-input i18n-input-hint" type="text" i18n-key="sys.form.label.userName"/>&emsp;
+            <input id="name" name="name" class="layui-input search-input i18n-input-hint" type="text" i18n-key="sys.form.label.userName"/>&emsp;
             <span class="layui-i18n" i18n-key="sys.form.label.loginTime"></span>
             <input id="startDate" name="startDate" class="layui-input search-input i18n-input-hint" type="text" i18n-key="sys.form.hint.startTime"/>
             -
@@ -40,7 +40,7 @@
             url: _config.base_server + '/sys/loginlog/qryPage',
             where: {
                 access_token: _config.getToken().access_token,
-                userId: $('#userId').val(), loginName: $('#loginName').val(),userName:$('#userName').val(),startDate:$('#startDate').val(),endDate:$('#endDate').val()
+                userId: $('#userId').val(), loginName: $('#loginName').val(),name:$('#name').val(),startDate:$('#startDate').val(),endDate:$('#endDate').val()
             },
             method: 'post',
             page: {
@@ -48,7 +48,7 @@
             },
             cols: [[
                 {field: 'loginName', title: msgs['sys.form.label.loginName']},
-                {field: 'userName', title: msgs['sys.form.label.userName']},
+                {field: 'name', title: msgs['sys.form.label.userName']},
                 {field: 'loginTime', templet: function (d) {
                     return util.toDateString(d.loginTime);
                 }, title: msgs['sys.form.label.loginTime']},
@@ -72,7 +72,7 @@
 
         // 搜索按钮点击事件
         $('#loginLog-btn-search').click(function () {
-            table.reload('loginLog-table', {where: {userId: $('#userId').val(), loginName: $('#loginName').val(),userName:$('#userName').val(),startDate:$('#startDate').val(),endDate:$('#endDate').val()}, page:1});
+            table.reload('loginLog-table', {where: {userId: $('#userId').val(), loginName: $('#loginName').val(),name:$('#name').val(),startDate:$('#startDate').val(),endDate:$('#endDate').val()}, page:1});
         });
 
       //日期时间选择器
