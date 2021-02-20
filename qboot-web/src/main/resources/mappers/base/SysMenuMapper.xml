@@ -158,8 +158,8 @@
     update sys_menu <include refid="update_condition" /> where id = #{id}
   </update>
   
-  <resultMap id="idResult" type="java.lang.Long" >
-    <id column="id" property="id" jdbcType="BIGINT" />
+  <resultMap id="idResult" type="java.lang.String" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
   </resultMap>
 
   <select id="findChildIdById" resultMap="idResult" parameterType="java.lang.String" >

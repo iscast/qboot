@@ -50,14 +50,15 @@ public class SysMenuServiceImpl extends CrudService<SysMenuDao, SysMenuDto> impl
 	
 	@Override
 	public int deleteById(Serializable id) {
-		//删除下级菜单
 		SysMenuDto sysMenu = this.findById(id);
 		MyAssertTools.notNull(sysMenu, SYS_MENU_NO_EXIST);
+		//删除下级菜单
 		List<SysMenuDto> list = this.findByParentIds(sysMenu.getParentIds() + sysMenu.getId());
 		for (SysMenuDto smenu : list) {
 			this.d.deleteRoleMenuByMenuId(smenu.getId());
 			super.deleteById(smenu.getId());
 		}
+
 		this.d.deleteRoleMenuByMenuId(id);
 		return super.deleteById(id);
 	}

@@ -9,7 +9,7 @@ import javax.validation.constraints.Pattern;
 import java.util.List;
 
 /**
- * 菜单权限实体
+ * 系统菜单
  * @author iscast
  * @date 2020-09-25
  */
@@ -39,11 +39,11 @@ public class SysMenuDto extends TreeEntity<String> {
 	private String target;
 
 	/**
-	 * 0：目录 1：菜单 2：按钮
+	 * 0：目录 1：菜单 999：按钮
 	 */
 	@NotNull
-	@Length(max=2)
-	@Pattern(regexp="0|1|2")
+	@Length(max=3)
+	@Pattern(regexp="0|1|999")
 	private String type;
 
 	/**
@@ -56,16 +56,7 @@ public class SysMenuDto extends TreeEntity<String> {
 	/**
 	 * 是否在菜单中显示1显示，0 不显示
 	 */
-	@NotNull
-	@Length(max=1)
-	@Pattern(regexp="0|1")
 	private String isShow;
-	
-	/**
-	 * 改变状态按钮
-	 */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-	private String isShowString;
 
 	/**
 	 * 权限标识
@@ -144,14 +135,6 @@ public class SysMenuDto extends TreeEntity<String> {
 
 	public void setHasSub(Integer hasSub) {
 		this.hasSub = hasSub;
-	}
-
-	public String getIsShowString() {
-		return isShowString;
-	}
-
-	public void setIsShowString(String isShowString) {
-		this.isShowString = isShowString;
 	}
 
 	public List<String> getIds() {
