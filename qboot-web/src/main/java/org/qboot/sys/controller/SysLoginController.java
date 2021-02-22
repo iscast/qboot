@@ -95,20 +95,6 @@ public class SysLoginController extends BaseController {
 		return ResponeModel.ok();
 	}
 
-    @AccLog
-	@PostMapping("/updatePwd")
-	public ResponeModel updatePwd(@RequestParam String password, @RequestParam String oldPassword) {
-		String userId = SecurityUtils.getUserId();
-		if (!sysUserService.validatePwd(oldPassword, userId)) {
-			return ResponeModel.error(SYS_USER_ORIGINAL_PWD_INCORRECT);
-		}
-		SysUserDto sysUser = new SysUserDto();
-		sysUser.setId(userId);
-		sysUser.setPassword(password);
-		int cnt = sysUserService.update(sysUser);
-		return ResponeModel.ok(cnt);
-	}
-
 	@GetMapping("/switchLanguage")
 	public ResponeModel switchLanguage(@RequestParam String lang){
 		String userId = SecurityUtils.getUserId();
