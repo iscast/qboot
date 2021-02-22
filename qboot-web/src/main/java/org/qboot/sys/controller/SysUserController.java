@@ -11,6 +11,7 @@ import org.qboot.common.entity.ResponeModel;
 import org.qboot.common.security.SecurityUtils;
 import org.qboot.common.utils.IpUtils;
 import org.qboot.common.utils.MyAssertTools;
+import org.qboot.common.utils.RSAsecurity;
 import org.qboot.common.utils.ValidateUtils;
 import org.qboot.sys.dto.SysRoleDto;
 import org.qboot.sys.dto.SysUserDto;
@@ -25,6 +26,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -209,17 +211,30 @@ public class SysUserController extends BaseController {
 
     @AccLog
 	@PostMapping("/resetPwd")
-	public ResponeModel resetPwd(@RequestParam String oldPsw, @RequestParam String newPsw, HttpServletRequest request) {
+	public ResponeModel resetPwd(@RequestParam String oldPsw, @RequestParam String newPsw, HttpServletRequest request, HttpSession session) {
 		SysUserDto user = sysUserService.findById(SecurityUtils.getUserId());
         MyAssertTools.notNull(user, SYS_USER_NOTEXISTS);
 		if (SecurityUtils.isSuperAdmin(user.getLoginName())) {
 			return ResponeModel.error(SYS_USER_UPDATE_NO_ADMIN);
 		}
-		boolean validate = sysUserService.validatePwd(oldPsw, SecurityUtils.getUserId());
+
+		if(StringUtils.isBlank(oldPsw) || StringUtils.isBlank(newPsw)) {
+            return ResponeModel.error(SYS_USER_PWD_EMPTY);
+        }
+
+        Object privateKeyObj = session.getAttribute("privateKey");
+        String privateKey = privateKeyObj.toString();
+        session.removeAttribute("privateKey");
+        RSAsecurity instance = RSAsecurity.getInstance();
+
+        String oldPwdDecode = instance.decrypt(privateKey, oldPsw);
+        String newPwdDecode = instance.decrypt(privateKey, newPsw);
+
+        boolean validate = sysUserService.validatePwd(oldPwdDecode, SecurityUtils.getUserId());
 		if(validate) {
 			SysUserDto sysUser = new SysUserDto();
 			sysUser.setId(SecurityUtils.getUserId());
-			sysUser.setPassword(newPsw);
+			sysUser.setPassword(newPwdDecode);
 			int cnt = this.sysUserService.initPwd(sysUser, SysConstants.SYS_USER_PWD_STATUS_CHANGED, IpUtils.getIpAddr(request));
 			if(cnt > 0) {
 				loginSecurityService.clearUserSessions(sysUser.getLoginName());

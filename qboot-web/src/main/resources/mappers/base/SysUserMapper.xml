@@ -219,11 +219,11 @@
   </update>
   
   <update id="initPwd" parameterType="org.qboot.sys.dto.SysUserDto" >
-    update sys_user set password = #{password}, fld_n1 = #{fldN1} where id = #{id} 
+    update sys_user set password = #{password}, update_date = now(), version=version+1, fld_n1 = #{fldN1} where id = #{id}
   </update>
   
   <update id="setStatus" parameterType="org.qboot.sys.dto.SysUserDto" >
-    update sys_user set status = #{status}, update_by = #{updateBy}, update_date = #{updateDate}
+    update sys_user set status = #{status}, version=version+1, update_by = #{updateBy}, update_date = #{updateDate}
       where
       <choose>
           <when test="id !=null">
