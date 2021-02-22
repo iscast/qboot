@@ -18,9 +18,9 @@ public class SysLoginLogDto extends BaseEntity<String> {
 
 	private static final long serialVersionUID = 1L;
     /**
-     * 用户名
+     * 登录名
      */
-    private String name;
+    private String loginName;
 	/**
 	 * 登录状态0:成功;1.密码错误；2.已禁用;3.锁定24小时;7.修改密码;8.初始化密码;9.系统错误；
 	 */
@@ -58,13 +58,7 @@ public class SysLoginLogDto extends BaseEntity<String> {
 	 */
 	@Length(max = 100)
 	private String browserName;
-	/********* 割 *******/
 
-	/**
-	 * 登录名
-	 */
-	private String loginName;
-	
 	/**
 	 * 开始时间
 	 */
@@ -130,14 +124,6 @@ public class SysLoginLogDto extends BaseEntity<String> {
 		this.loginName = loginName;
 	}
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getStatus() {
 		return status;
 	}
@@ -166,7 +152,7 @@ public class SysLoginLogDto extends BaseEntity<String> {
 	public String toString() {
 		return "SysLoginLog [status=" + status + ", loginTime=" + loginTime + ", ip=" + ip
 				+ ", area=" + area + ", userAgent=" + userAgent + ", deviceName=" + deviceName + ", browserName="
-				+ browserName + ", loginName=" + loginName + ", name=" + name + ", startDate=" + startDate
+				+ browserName + ", loginName=" + loginName + ", startDate=" + startDate
 				+ ", endDate=" + endDate + "]";
 	}
 	

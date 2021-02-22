@@ -193,16 +193,15 @@ public class SysUserController extends BaseController {
         MyAssertTools.notNull(user, SYS_USER_NOTEXISTS);
 		if (SecurityUtils.isSuperAdmin(user.getLoginName())) {
 			return ResponeModel.error(SYS_USER_UPDATE_NO_ADMIN);
-		}
-		if (SecurityUtils.getUserId().equals(id)) {
-			return ResponeModel.error(SYS_USER_INIT_PWD_DENIED);
-		}
+		} else if (!SecurityUtils.isSuperAdmin() && !SecurityUtils.getUserId().equals(id)) {
+            return ResponeModel.error(SYS_USER_INIT_PWD_DENIED);
+        }
 		SysUserDto sysUser = new SysUserDto();
 		sysUser.setId(id);
 		String password = RandomStringUtils.randomAlphanumeric(8);
 		sysUser.setPassword(password);
 
-		int cnt = this.sysUserService.initPwd(sysUser, SysConstants.SYS_USER_PWD_STATUS_INIT, IpUtils.getIpAddr(request));
+		int cnt = this.sysUserService.initPwd(sysUser, SysConstants.SYS_USER_PWD_STATUS_INIT, request);
 		if(cnt > 0) {
 			return ResponeModel.ok(String.format(initPwdStr, password));
 		}
@@ -235,7 +234,7 @@ public class SysUserController extends BaseController {
 			SysUserDto sysUser = new SysUserDto();
 			sysUser.setId(SecurityUtils.getUserId());
 			sysUser.setPassword(newPwdDecode);
-			int cnt = this.sysUserService.initPwd(sysUser, SysConstants.SYS_USER_PWD_STATUS_CHANGED, IpUtils.getIpAddr(request));
+			int cnt = this.sysUserService.initPwd(sysUser, SysConstants.SYS_USER_PWD_STATUS_CHANGED, request);
 			if(cnt > 0) {
 				loginSecurityService.clearUserSessions(sysUser.getLoginName());
 				return ResponeModel.ok("changePwdSuccess");

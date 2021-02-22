@@ -3,7 +3,6 @@
 <mapper namespace="org.qboot.sys.dao.SysLoginLogDao" >
   <resultMap id="BaseResultMap" type="org.qboot.sys.dto.SysLoginLogDto" >
     <id column="id" property="id" jdbcType="VARCHAR" />
-    <result column="name" property="userName" jdbcType="VARCHAR" />
     <result column="login_name" property="loginName" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="VARCHAR" />
     <result column="login_time" property="loginTime" jdbcType="TIMESTAMP" />
@@ -20,42 +19,37 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-  		l.status, l.login_time, l.ip, l.area, l.user_agent, l.device_name, l.browser_name, l.create_by, l.create_date, l.update_by
-  		, l.update_date, l.remarks,  u.name, u.login_name
+  	login_name, status, login_time, ip, area, user_agent, device_name, browser_name, create_by
   </sql>
   
   <select id="findList" resultMap="BaseResultMap" parameterType="org.qboot.sys.dto.SysLoginLogDto" >
     select 
     <include refid="Base_Column_List" />
-    from sys_login_log l left join sys_user u on u.id = l.user_id
+    from sys_login_log
     <where>
 	    <if test="startDate!=null">
-				and l.login_time >= #{startDate}
+            and login_time >= #{startDate}
 		</if>
 		<if test="endDate!=null">
-			<![CDATA[  
-				and l.login_time < #{endDate}
-			 ]]>
+            <![CDATA[
+                and login_time < #{endDate}
+             ]]>
 		</if>
 	    <if test="ip !=null and ip!=''">
-	    	and l.ip = #{ip}
+	    	and ip = #{ip}
 	    </if>
 	    <if test="status !=null and status!=''">
-	    	and l.status = #{status}
+	    	and status = #{status}
 	    </if>
-
 	    <if test="loginName !=null and loginName!=''">
-	    	and u.login_name like concat('%',#{loginName},'%')
-	    </if>
-	    <if test="userName !=null and userName != ''">
-	    	and u.name like concat('%',#{userName},'%')
+	    	and login_name like concat('%',#{loginName},'%')
 	    </if>
     </where>
-	order by l.login_time desc
+	order by login_time desc
   </select>
   
   <insert id="insert" parameterType="org.qboot.sys.dto.SysLoginLogDto" >
-    insert into sys_login_log (ID, status,login_time,ip,area,user_agent,device_name,browser_name,create_by,create_date,update_by,update_date,remarks)
-    values (#{id},#{status},#{loginTime},#{ip},#{area},#{userAgent},#{deviceName},#{browserName},#{createBy},#{createDate},#{updateBy},#{updateDate},#{remarks})
+    insert into sys_login_log (ID, login_name, status,login_time,ip,area,user_agent,device_name,browser_name,create_by,create_date,update_by,update_date,remarks)
+    values (#{id},#{loginName},#{status},#{loginTime},#{ip},#{area},#{userAgent},#{deviceName},#{browserName},#{createBy},#{createDate},#{updateBy},#{updateDate},#{remarks})
   </insert>
 </mapper>

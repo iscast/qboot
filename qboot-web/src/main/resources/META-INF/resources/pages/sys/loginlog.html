@@ -1,12 +1,8 @@
 <div class="layui-card">
     <div class="layui-card-body">
         <div class="layui-form toolbar">
-            <span class="layui-i18n" i18n-key="sys.form.label.loginId"></span>
-            <input id="userId" name="userId" class="layui-input search-input i18n-input-hint" type="text" i18n-key="sys.form.label.loginId"/>&emsp;
             <span class="layui-i18n" i18n-key="sys.form.label.loginName"></span>
             <input id="loginName" name="loginName" class="layui-input search-input i18n-input-hint" type="text" i18n-key="sys.form.label.loginName"/>&emsp;
-            <span class="layui-i18n" i18n-key="sys.form.label.userName"></span>
-            <input id="name" name="name" class="layui-input search-input i18n-input-hint" type="text" i18n-key="sys.form.label.userName"/>&emsp;
             <span class="layui-i18n" i18n-key="sys.form.label.loginTime"></span>
             <input id="startDate" name="startDate" class="layui-input search-input i18n-input-hint" type="text" i18n-key="sys.form.hint.startTime"/>
             -
@@ -40,31 +36,40 @@
             url: _config.base_server + '/sys/loginlog/qryPage',
             where: {
                 access_token: _config.getToken().access_token,
-                userId: $('#userId').val(), loginName: $('#loginName').val(),name:$('#name').val(),startDate:$('#startDate').val(),endDate:$('#endDate').val()
+                loginName: $('#loginName').val(),
+                startDate:$('#startDate').val(),endDate:$('#endDate').val()
             },
             method: 'post',
             page: {
                 layout:['prev', 'limit', 'next', 'skip', 'count']
             },
             cols: [[
-                {field: 'loginName', title: msgs['sys.form.label.loginName']},
-                {field: 'name', title: msgs['sys.form.label.userName']},
+                {field: 'loginName', title: msgs['sys.form.label.loginName'], width: '13%'},
                 {field: 'loginTime', templet: function (d) {
                     return util.toDateString(d.loginTime);
-                }, title: msgs['sys.form.label.loginTime']},
-                {field: 'ip', title: msgs['sys.form.label.ipAddress']},
-                {field: 'firstLogin', templet: function (data){
-                        var vname = msgs['sys.form.label.user.normal'];
-                        if(data.firstLogin == 1){
-                            vname = msgs['sys.form.label.user.initPwd'];
-                        }else if(data.firstLogin == 2){
+                }, title: msgs['sys.form.label.loginTime'], width: '14%'},
+                {field: 'ip', title: msgs['sys.form.label.ipAddress'], width: '10%'},
+                {field: 'status', templet: function (data){
+                        var vname = data.status;
+                        if(data.status == 0) {
+                            vname = msgs['sys.form.label.user.normal'];
+                        } else if(data.status == 1) {
+                            vname = msgs['sys.form.label.user.errPwd'];
+                        } else if(data.status == 2) {
+                            vname = msgs['sys.form.label.user.stop'];
+                        } else if(data.status == 3){
+                            vname = msgs['sys.form.label.user.lock24'];
+                        } else if(data.status == 7){
                             vname = msgs['sys.form.label.user.editPwd'];
+                        } else if(data.status == 8){
+                            vname = msgs['sys.form.label.user.initPwd'];
                         }
                         return vname;
-                    }, title: msgs['sys.table.title.status'], width: '8%'},
+                    }, title: msgs['sys.table.title.status'], width: '12%'},
                 {field: 'deviceName', title: msgs['sys.form.label.deviceName']},
                 {field: 'browserName', title: msgs['sys.form.label.browserName']},
-                {field: 'userAgent', title: msgs['sys.form.label.userAgent']}
+                {field: 'userAgent', title: msgs['sys.form.label.userAgent']},
+                {field: 'createBy', title: msgs['sys.table.title.createdBy']}
             ]], done: function(res, curr, count){
                 _i18n.initPage();
             }
@@ -72,7 +77,7 @@
 
         // 搜索按钮点击事件
         $('#loginLog-btn-search').click(function () {
-            table.reload('loginLog-table', {where: {userId: $('#userId').val(), loginName: $('#loginName').val(),name:$('#name').val(),startDate:$('#startDate').val(),endDate:$('#endDate').val()}, page:1});
+            table.reload('loginLog-table', {where: {loginName: $('#loginName').val(),startDate:$('#startDate').val(),endDate:$('#endDate').val()}, page:1});
         });
 
       //日期时间选择器

@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -115,7 +116,7 @@ public class SysUserServiceImpl extends CrudService<SysUserDao, SysUserDto> impl
 	}
 
     @Override
-	public int initPwd(SysUserDto t, int initFlag, String ip) {
+	public int initPwd(SysUserDto t, int initFlag, HttpServletRequest request) {
         SysUserDto secretInfo = d.findSecretInfo(t);
         MyAssertTools.notNull(secretInfo, SYS_USER_NOTEXISTS);
         secretInfo.setPassword(encryptPwd(t.getPassword(), secretInfo.getSalt()));
@@ -129,8 +130,7 @@ public class SysUserServiceImpl extends CrudService<SysUserDao, SysUserDto> impl
             pwdStatus = SysConstants.SYS_USER_LOGIN_STATUS_CHANGE_PWD;
 		}
 		int cnt = d.initPwd(secretInfo);
-        sysLoginLogService.loginLogByLoginName(pwdStatus, secretInfo.getLoginName(), ip, "", "", "", "");
-
+        sysLoginLogService.saveLog(pwdStatus, secretInfo.getLoginName(), request);
 		return cnt;
 	}
 

@@ -4,6 +4,8 @@ import org.qboot.common.facade.ICrudService;
 import org.qboot.sys.dao.SysUserDao;
 import org.qboot.sys.dto.SysUserDto;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * 系统用户service
  */
@@ -21,7 +23,7 @@ public interface SysUserService extends ICrudService<SysUserDao, SysUserDto> {
 
 	boolean validatePwd(String password, String userId);
 	
-	int initPwd(SysUserDto t, int initFlag, String ip);
+	int initPwd(SysUserDto t, int initFlag, HttpServletRequest request);
 	
 	int setStatus(SysUserDto t);
 	
