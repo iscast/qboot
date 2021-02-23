@@ -6,10 +6,11 @@ import org.qboot.common.annotation.AccLog;
 import org.qboot.common.controller.BaseController;
 import org.qboot.common.entity.ResponeModel;
 import org.qboot.common.security.SecurityUtils;
+import org.qboot.common.utils.IdGen;
 import org.qboot.sys.dto.SysTaskDto;
 import org.qboot.sys.exception.SysTaskException;
 import org.qboot.sys.exception.errorcode.SysModuleErrTable;
-import org.qboot.sys.service.impl.SysTaskService;
+import org.qboot.sys.service.SysTaskService;
 import org.quartz.CronExpression;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,7 +32,7 @@ import static org.qboot.sys.exception.errorcode.SysModuleErrTable.*;
 public class SysTaskController extends BaseController {
 	
 	@Autowired
-	SysTaskService sysTaskService;
+    private SysTaskService sysTaskService;
 	
 	@PreAuthorize("hasAuthority('sys:task:qry')")
 	@GetMapping("/qryPage")
@@ -54,6 +55,7 @@ public class SysTaskController extends BaseController {
 	@PreAuthorize("hasAuthority('sys:task:save')")
 	@PostMapping("/save")
 	public ResponeModel save(SysTaskDto sysTask) {
+        sysTask.setId(IdGen.uuid());
 		sysTask.setUpdateDate(new Date());
 		sysTask.setCreateDate(new Date());
 		sysTask.setCreateBy(SecurityUtils.getLoginName());
@@ -71,7 +73,7 @@ public class SysTaskController extends BaseController {
 	@PostMapping("/updateSelect")
 	public ResponeModel updateSelect(SysTaskDto sysTask) {
 		this.checkParams(sysTask);
-        int cnt = sysTaskService.updateById(sysTask);
+        int cnt = sysTaskService.update(sysTask);
         if(cnt > 0) {
             return ok();
         }
@@ -99,7 +101,7 @@ public class SysTaskController extends BaseController {
 	@PreAuthorize("hasAuthority('sys:task:delete')")
 	@PostMapping("/delete")
 	public ResponeModel delete(SysTaskDto sysTask) {
-        int cnt = sysTaskService.deleteTask(sysTask.getId());
+        int cnt = sysTaskService.deleteById(sysTask.getId());
         if(cnt > 0) {
             return ok();
         }

@@ -3,17 +3,17 @@ package org.qboot.sys.controller;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.qboot.common.annotation.AccLog;
-import org.qboot.common.constants.SysConstants;
 import org.qboot.common.controller.BaseController;
 import org.qboot.common.entity.AuthTreeEntity;
 import org.qboot.common.entity.ResponeModel;
 import org.qboot.common.security.SecurityUtils;
+import org.qboot.common.utils.IdGen;
 import org.qboot.common.utils.TreeHelper;
 import org.qboot.common.utils.ValidateUtils;
 import org.qboot.sys.dto.SysMenuDto;
 import org.qboot.sys.dto.SysRoleDto;
-import org.qboot.sys.service.impl.SysMenuService;
-import org.qboot.sys.service.impl.SysRoleService;
+import org.qboot.sys.service.SysMenuService;
+import org.qboot.sys.service.SysRoleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -160,6 +160,7 @@ public class SysMenuController extends BaseController {
 			parent = sysMenuService.findById(sysMenu.getParentId());
 		} 
 		treeHelper.setParent(sysMenu, parent);
+		sysMenu.setId(IdGen.uuid());
 		sysMenu.setIsShow("1");
 		sysMenu.setCreateBy(SecurityUtils.getLoginName());
 		sysMenu.setCreateDate(new Date());
@@ -207,7 +208,10 @@ public class SysMenuController extends BaseController {
     @AccLog
 	@PreAuthorize("hasAuthority('sys:menu:save')")
 	@PostMapping("/batchSave")
-	public ResponeModel batchSave(@RequestBody List<SysMenuDto> list ) {
+	public ResponeModel batchSave(@RequestBody List<SysMenuDto> list) {
+	    for(SysMenuDto dto : list) {
+	        dto.setId(IdGen.uuid());
+        }
 		sysMenuService.batchSave(list);
 		return ok();
 	}

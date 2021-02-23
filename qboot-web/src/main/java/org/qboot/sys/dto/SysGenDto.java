@@ -9,7 +9,6 @@ import java.util.List;
 
 /**
  * 代码生成类
- * 
  * @author history
  */
 public class SysGenDto extends BaseEntity<String> {

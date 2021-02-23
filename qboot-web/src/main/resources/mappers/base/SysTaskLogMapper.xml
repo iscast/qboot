@@ -6,9 +6,9 @@
 
 	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="org.qboot.sys.dto.SysTaskLogDto">
 		insert into sys_task_log
-			(task_id,begin_time,end_time,cost_time,exec_ip,exec_status,exec_result,create_date,update_date,create_by,update_by) 
+			(id,task_id,begin_time,end_time,cost_time,exec_ip,exec_status,exec_result,create_date,update_date,create_by,update_by)
 		values 
-			(#{taskId},#{beginTime},#{endTime},#{costTime},#{execIp},#{execStatus},#{execResult},#{createDate},#{updateDate},#{createBy},#{updateBy})
+			(#{id},#{taskId},#{beginTime},#{endTime},#{costTime},#{execIp},#{execStatus},#{execResult},#{createDate},#{updateDate},#{createBy},#{updateBy})
 	</insert>
 
 	<select id="findAll" resultType="org.qboot.sys.dto.SysTaskLogDto">
@@ -21,7 +21,7 @@
 		order by t.begin_time desc 
 	</select>
 
-	<update id="updateById" parameterType="org.qboot.sys.dto.SysTaskLogDto">
+	<update id="update" parameterType="org.qboot.sys.dto.SysTaskLogDto">
 		update sys_task_log
 		<set>
 			<if test="endTime != null">
@@ -40,11 +40,12 @@
 		where id = #{id}
 	</update>
 
-	<delete id="deleteById" parameterType="java.lang.Long">
+	<delete id="deleteById" parameterType="java.lang.String">
 		delete from sys_task_log where id = #{id}
 	</delete>
+
 	<!-- 清空日志,仅保留最后一条 -->
-	<delete id="deleteByTaskId" parameterType="java.lang.Long">
+	<delete id="deleteByTaskId" parameterType="java.lang.String">
 		DELETE FROM sys_task_log WHERE task_id = #{taskId} 
 			AND id NOT IN (
 			SELECT a.maxId FROM 
@@ -52,7 +53,7 @@
 			)
 	</delete>
 
-	<select id="findById" parameterType="java.lang.Long" resultType="org.qboot.sys.dto.SysTaskLogDto">
+	<select id="findById" parameterType="java.lang.String" resultType="org.qboot.sys.dto.SysTaskLogDto">
 		select * from sys_task_log where id = #{id}
 	</select>
 	

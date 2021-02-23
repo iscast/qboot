@@ -8,6 +8,7 @@ import org.qboot.sys.dto.SysRoleDto;
 import org.qboot.sys.dto.SysRoleDeptDto;
 import org.qboot.sys.dto.SysRoleMenuDto;
 import org.qboot.common.service.CrudService;
+import org.qboot.sys.service.SysRoleService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +25,7 @@ import static org.qboot.sys.exception.errorcode.SysModuleErrTable.*;
  * @date 2020-09-25
  */
 @Service
-public class SysRoleService extends CrudService<SysRoleDao, SysRoleDto> {
+public class SysRoleServiceImpl extends CrudService<SysRoleDao, SysRoleDto> implements SysRoleService {
 
 	@Override
 	public int save(SysRoleDto t) {
@@ -66,29 +67,7 @@ public class SysRoleService extends CrudService<SysRoleDao, SysRoleDto> {
 		return super.update(t);
 	}
 
-	private int saveRoleMenus(String roleId, List<String> menuIds) {
-		if (null != menuIds && !menuIds.isEmpty()) {
-			List<SysRoleMenuDto> roleMenus = new ArrayList<>();
-			for (String menuId : menuIds) {
-				roleMenus.add(new SysRoleMenuDto(roleId, menuId));
-			}
-			return this.d.insertRoleMenu(roleMenus);
-		}
-		return 0;
-	}
-	
-	private int saveRoleDepts(String roleId, List<String> deptIds) {
-		if (null != deptIds && !deptIds.isEmpty()) {
-			List<SysRoleDeptDto> roleDepts =  new ArrayList<>();
-			for (String deptId : deptIds) {
-				roleDepts.add(new SysRoleDeptDto(roleId, deptId));
-			}
-			return this.d.insertRoleDept(roleDepts);
-		}
-		return 0;
-	}
-
-	public List<SysRoleDto> findByUserId(Long userId) {
+	public List<SysRoleDto> findByUserId(String userId) {
         MyAssertTools.notNull(userId, SYS_ROLE_USER_ID_NULL);
 		return  this.d.findByUserId(userId);
 	}
@@ -98,7 +77,7 @@ public class SysRoleService extends CrudService<SysRoleDao, SysRoleDto> {
 		List<String> depts = this.d.selectDeptIdsByRoleId(roleId);
 		return depts;
 	}
-	public int removeUsersByRoleId(String roleId, List<Long> userIds) {
+	public int removeUsersByRoleId(String roleId, List<String> userIds) {
         MyAssertTools.hasLength(roleId, SYS_ROLE_ID_NULL);
         MyAssertTools.notEmpty(userIds, SYS_ROLE_USER_IDS_NULL);
 		userIds.forEach((userId) -> {
@@ -107,7 +86,7 @@ public class SysRoleService extends CrudService<SysRoleDao, SysRoleDto> {
 		return userIds.size();
 	}
 	
-	public int addUsersByRoleId(String roleId, List<Long> userIds) {
+	public int addUsersByRoleId(String roleId, List<String> userIds) {
         MyAssertTools.hasLength(roleId, SYS_ROLE_ID_NULL);
         MyAssertTools.notEmpty(userIds, SYS_ROLE_USER_IDS_NULL);
 		userIds.forEach((userId) -> {
@@ -128,4 +107,26 @@ public class SysRoleService extends CrudService<SysRoleDao, SysRoleDto> {
 		return d.findByName(name);
 	}
 
+
+    private int saveRoleMenus(String roleId, List<String> menuIds) {
+        if (null != menuIds && !menuIds.isEmpty()) {
+            List<SysRoleMenuDto> roleMenus = new ArrayList<>();
+            for (String menuId : menuIds) {
+                roleMenus.add(new SysRoleMenuDto(roleId, menuId));
+            }
+            return this.d.insertRoleMenu(roleMenus);
+        }
+        return 0;
+    }
+
+    private int saveRoleDepts(String roleId, List<String> deptIds) {
+        if (null != deptIds && !deptIds.isEmpty()) {
+            List<SysRoleDeptDto> roleDepts =  new ArrayList<>();
+            for (String deptId : deptIds) {
+                roleDepts.add(new SysRoleDeptDto(roleId, deptId));
+            }
+            return this.d.insertRoleDept(roleDepts);
+        }
+        return 0;
+    }
 }

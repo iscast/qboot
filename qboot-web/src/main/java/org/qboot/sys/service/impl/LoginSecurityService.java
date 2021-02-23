@@ -7,6 +7,7 @@ import org.qboot.common.security.SecurityUtils;
 import org.qboot.common.service.BaseService;
 import org.qboot.common.utils.RedisTools;
 import org.qboot.sys.dto.SysUserDto;
+import org.qboot.sys.service.SysUserService;
 import org.redisson.api.RSet;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;

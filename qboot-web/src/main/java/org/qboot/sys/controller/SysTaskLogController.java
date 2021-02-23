@@ -1,10 +1,10 @@
 package org.qboot.sys.controller;
 
 import com.github.pagehelper.PageInfo;
-import org.qboot.sys.dto.SysTaskLogDto;
-import org.qboot.sys.service.impl.SysTaskLogService;
 import org.qboot.common.controller.BaseController;
 import org.qboot.common.entity.ResponeModel;
+import org.qboot.sys.dto.SysTaskLogDto;
+import org.qboot.sys.service.SysTaskLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class SysTaskLogController extends BaseController {
 	
 	@Autowired
-	SysTaskLogService sysTaskLogService ;
+    private SysTaskLogService sysTaskLogService;
 	
 	@PreAuthorize("hasAuthority('sys:task:qry')")
 	@GetMapping("/qryPage")

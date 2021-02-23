@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.qboot.sys.dao.SysMenuDao" >
   <resultMap id="BaseResultMap" type="org.qboot.sys.dto.SysMenuDto" >
-    <id column="id" property="id" jdbcType="BIGINT" />
+    <id column="id" property="id" jdbcType="VARCHAR" />
     <result column="parent_id" property="parentId" jdbcType="VARCHAR" />
     <result column="parent_ids" property="parentIds" jdbcType="VARCHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
@@ -81,7 +81,7 @@
     where m.id = rm.menu_id  and rm.role_id = #{roleId}
   </select>
   
-  <select id="findByUserId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="findByUserId" parameterType="java.lang.String" resultMap="BaseResultMap">
    select 
     distinct <include refid="Base_Column_List" />
     from sys_menu m,sys_role_menu rm ,sys_user_role ur
@@ -98,12 +98,12 @@
   </delete>
   
   <insert id="insert" parameterType="org.qboot.sys.dto.SysMenuDto" >
-    insert into sys_menu (parent_id, parent_ids, 
+    insert into sys_menu (ID, parent_id, parent_ids,
       name, sort, href, target, 
       type, icon, is_show, permission, 
       create_by, create_date, update_by, 
       update_date, remarks)
-    values (#{parentId,jdbcType=VARCHAR}, #{parentIds,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, #{parentIds,jdbcType=VARCHAR},
       #{name,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER}, #{href,jdbcType=VARCHAR}, #{target,jdbcType=VARCHAR}, 
       #{type,jdbcType=VARCHAR}, #{icon,jdbcType=VARCHAR}, #{isShow,jdbcType=CHAR}, #{permission,jdbcType=VARCHAR}, 
       #{createBy,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, 
@@ -158,8 +158,8 @@
     update sys_menu <include refid="update_condition" /> where id = #{id}
   </update>
   
-  <resultMap id="idResult" type="java.lang.Long" >
-    <id column="id" property="id" jdbcType="BIGINT" />
+  <resultMap id="idResult" type="java.lang.String" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
   </resultMap>
 
   <select id="findChildIdById" resultMap="idResult" parameterType="java.lang.String" >

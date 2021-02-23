@@ -10,7 +10,7 @@
 		background-color: white;
 	}
 </style>
-<div class="layui-row layui-col-space10 tableBG">  
+<div class="layui-row layui-col-space10 tableBG">
     <div class="layui-col-md8 tableBG">
           <div class="layui-btn-group tableBG">
 			  <button id="menu-btn-add" class="layui-btn layui-icon layui-icon-add-circle-fine layui-i18n" i18n-key="sys.btn.addMenu" data-auth="sys:menu:save"></button>
@@ -45,6 +45,7 @@
     var ptable=null,treeGrid=null,tableId='sys_menu_treeTable',layer=null;
     var admin = null;
     var form = null;
+    var menu_msgs = null;
     layui.use(['jquery','treeGrid', 'table', 'layer', '_config', 'form', 'admin','_i18n'], function(){
         var $=layui.jquery;
         var _config=layui._config;
@@ -55,6 +56,7 @@
         admin = layui.admin;
 		var _i18n = layui._i18n;
 		var msgs = _i18n.getMsg('sys');
+        menu_msgs = msgs;
 
         ptable=treeGrid.render({
             id:tableId
@@ -85,8 +87,8 @@
                             }
                         }
                 	return originalName;
-					},width: '180', align:'center'}
-                ,{width: '60', templet: function (d) {
+					},width: '25%', align:'center'}
+                ,{width: '10%', templet: function (d) {
                     	if(d.type == 0){
                             return msgs['sys.form.label.menuType.module'];
                     	}else if(d.type == 1){
@@ -96,32 +98,31 @@
                     	}
                     }, title: msgs['sys.table.title.type'], align:'left'
                 }
-                ,{field:'href', title: msgs['sys.table.title.menuAddr'], width: '120', align:'left'}
-                ,{field:'permission', title: msgs['sys.table.title.authority'], width: '80', align:'left'}
-                ,{field:'sort', title: msgs['sys.table.title.order'], width: '60', align:'left'}
-                ,{width: '10%', title: msgs['sys.table.title.status'], align:'left'
+                ,{field:'href', title: msgs['sys.table.title.menuAddr'], width: '20%', align:'left'}
+                ,{field:'permission', title: msgs['sys.table.title.authority'], width: '20%', align:'left'}
+                ,{field:'isShow', width: '10%', title: msgs['sys.table.title.status'], align:'left'
                     ,templet: function(d){
                         var auth = JSON.parse(sessionStorage.getItem("auth"));
                     	var page = location.hash.substring(2);
-                		var swiftBtn = '';
+                		var qbootBtn = '';
                     	if(auth[page] && auth[page]['sys:menu:update']){
                     		if(d.isShow == 0){
-                    			swiftBtn ='<input type="checkbox" lay-filter="menu-tpl-state" value="'+d.id+'" lay-skin="switch" lay-text="'
+                    			qbootBtn ='<input type="checkbox" lay-filter="menu-tpl-state" value="'+d.id+'" lay-skin="switch" lay-text="'
 										+ msgs['sys.form.operation.valid']+'|'+ msgs['sys.form.operation.invalid'] +'"/>';
                     		}else{
-                    			swiftBtn ='<input type="checkbox" lay-filter="menu-tpl-state" value="'+d.id+'" lay-skin="switch" lay-text="'
+                    			qbootBtn ='<input type="checkbox" lay-filter="menu-tpl-state" value="'+d.id+'" lay-skin="switch" lay-text="'
 										+ msgs['sys.form.operation.valid']+'|'+ msgs['sys.form.operation.invalid'] +'" checked="checked"/>';
                     		}
                 	    }
                     	
-                    	if((swiftBtn) == ''){
+                    	if((qbootBtn) == ''){
                     		return _i18n.getGlobalVal('layui.operation.tips.noPermission');
                     	}else{
-                    		return swiftBtn;
+                    		return qbootBtn;
                     	}
                     }
                 }
-                ,{width: '60', title:  msgs['sys.table.title.operation'], align:'left'
+                ,{width: '15%', title:  msgs['sys.table.title.operation'], align:'left'
                     ,templet: function(d){
                         var auth = JSON.parse(sessionStorage.getItem("auth"));
                     	var page = location.hash.substring(2);
@@ -134,6 +135,10 @@
                     	if(auth[page] && auth[page]['sys:menu:update']){
                     		upBtn = '<button class="sys_menu_auth layui-btn layui-btn-xs" lay-event="edit">'+msgs['sys.form.operation.edit']+'</button>';
                 	    }
+
+                        if(auth[page] && auth[page]['sys:menu:delete']){
+                            upBtn+='<button class="sys_menu_auth layui-btn layui-btn-danger layui-btn-xs" lay-event="del" data-auth="sys:menu:delete">'+msgs['sys.form.operation.delete']+'</button>';
+                        }
                     	
                     	if((addBtn+upBtn) == ''){
                     		return _i18n.getGlobalVal('layui.operation.tips.noPermission');
@@ -172,7 +177,7 @@
         });
         treeGrid.on('tool(sys_menu_treeTable)',function (obj) {
             if(obj.event === 'del'){//删除行
-                del(obj, obj.data.id);
+                del(obj.data.id);
             }else if(obj.event==="add"){//添加行
             	admin.putTempData('t_menu', {});
             	var title = msgs['sys.btn.addMenu'];
@@ -201,41 +206,45 @@
                 page: false,
                 height: 550,
                 width: 415,
+                // width: 520,
                 cols: [[
-                    {align: 'left', field: 'name', title: msgs['sys.table.title.name'], width: '80'},
-                    {align: 'left', field:'permission', title: msgs['sys.table.title.authority'], width: '110'},
-                    {align: 'left', field: 'status', templet: function(d){
-                    	var auth = JSON.parse(sessionStorage.getItem("auth"));
-                    	var page = location.hash.substring(2);
-                    	var swiftBtn = '';
-                    	if(auth[page] && auth[page]['sys:menu:update']){
-                    		swiftBtn = '<input type="checkbox" lay-filter="menubtn-tpl-state" value="'+d.id+'" lay-skin="switch" lay-text="'
-							+ msgs['sys.form.operation.valid']+'|'+ msgs['sys.form.operation.invalid'] +'"';
-                    		if(d.isShow == 0){
-                    			swiftBtn+='/>&nbsp;';
-                    		}else{
-                    			swiftBtn+=' checked="checked" />&nbsp;';
-                    		}
-                	    }
-                    	if(swiftBtn == ''){
-                    		return _i18n.getGlobalVal('layui.operation.tips.noPermission');
-                    	}else{
-                    		return swiftBtn;
-                    	}
-                    }, title: msgs['sys.table.title.status'], width: '90'},
+                    {align: 'left', field: 'name', title: msgs['sys.table.title.name'], width: '15%'},
+                    {align: 'left', field:'permission', title: msgs['sys.table.title.authority'], width: '30%'},
                     {align: 'left', field: 'isShow', templet: function(d){
                     	var auth = JSON.parse(sessionStorage.getItem("auth"));
                     	var page = location.hash.substring(2);
-                    	var swiftBtn = '';
+                    	var qbootBtn = '';
                     	if(auth[page] && auth[page]['sys:menu:update']){
-                    		swiftBtn+='<button class="sys_menu_auth layui-btn layui-btn-xs" lay-event="edit" data-auth="sys:menu:update" onclick="edit('+d.id+','+d.type+','+')">'+msgs['sys.form.operation.edit']+'</button>';
-                    	}
-                    	if(swiftBtn == ''){
+                    		qbootBtn = '<input type="checkbox" lay-filter="menubtn-tpl-state" value="'+d.id+'" lay-skin="switch" lay-text="'
+							+ msgs['sys.form.operation.valid']+'|'+ msgs['sys.form.operation.invalid'] +'"';
+                    		if(d.isShow == 0){
+                    			qbootBtn+='/>&nbsp;';
+                    		}else{
+                    			qbootBtn+=' checked="checked" />&nbsp;';
+                    		}
+                	    }
+                    	if(qbootBtn == ''){
                     		return _i18n.getGlobalVal('layui.operation.tips.noPermission');
                     	}else{
-                    		return swiftBtn;
+                    		return qbootBtn;
                     	}
-                    }, title:  msgs['sys.table.title.operation'], width: '60'}
+                    }, title: msgs['sys.table.title.status'], width: '24%'},
+                    {align: 'left', templet: function(d){
+                    	var auth = JSON.parse(sessionStorage.getItem("auth"));
+                    	var page = location.hash.substring(2);
+                    	var qbootBtn = '';
+                    	if(auth[page] && auth[page]['sys:menu:update']){
+                    		qbootBtn+='<button class="sys_menu_auth layui-btn layui-btn-xs" lay-event="edit" data-auth="sys:menu:update" onclick="edit('+d.id+','+d.type+','+')">'+msgs['sys.form.operation.edit']+'</button>';
+                    	}
+                        if(auth[page] && auth[page]['sys:menu:delete']){
+                            qbootBtn+='<button class="sys_menu_auth layui-btn layui-btn-danger layui-btn-xs" lay-event="del" data-auth="sys:menu:delete" onclick="del(\''+d.id+'\')">'+msgs['sys.form.operation.delete']+'</button>';
+                        }
+                    	if(qbootBtn == ''){
+                    		return _i18n.getGlobalVal('layui.operation.tips.noPermission');
+                    	}else{
+                    		return qbootBtn;
+                    	}
+                    }, title:  msgs['sys.table.title.operation'], width: '26%'}
                 ]]
             });
         }
@@ -267,7 +276,7 @@
             });
         });
         
-     // 修改menu状态
+        // 修改menu状态
         form.on('switch(menu-tpl-state)', function (obj) {
             layer.load(2);
             admin.req('/sys/menu/changeShowFlag', {
@@ -288,46 +297,47 @@
         });
         
 
-        // 修改menu状态
-           form.on('switch(menubtn-tpl-state)', function (obj) {
-               layer.load(2);
-               admin.req('/sys/menu/changeShowFlag', {
-                   id: obj.elem.value,
-                   isShow: obj.elem.checked ? 1 : 0
-               }, function (data) {
-                   layer.closeAll('loading');
-                   if (data.code != 0) {
-                       layer.msg(msgs['layer.error.code'] + data.code + msgs['layer.error.msg'] + data.msg, {icon: 2});
-                       $(obj.elem).prop('checked', !obj.elem.checked);
-                       form.render('checkbox');
-                       return
-                   }
-
-                   //admin.refresh();
+        // 修改menu btn状态
+       form.on('switch(menubtn-tpl-state)', function (obj) {
+           layer.load(2);
+           admin.req('/sys/menu/changeShowFlag', {
+               id: obj.elem.value,
+               isShow: obj.elem.checked ? 1 : 0
+           }, function (data) {
+               layer.closeAll('loading');
+               if (data.code != 0) {
+                   layer.msg(msgs['layer.error.code'] + data.code + msgs['layer.error.msg'] + data.msg, {icon: 2});
+                   $(obj.elem).prop('checked', !obj.elem.checked);
                    form.render('checkbox');
-                   //window.reload();
-               }, 'GET');
-           });
+                   return
+               }
+
+               //admin.refresh();
+               form.render('checkbox');
+               //window.reload();
+           }, 'GET');
+       });
            
-     // 工具条点击事件
+        // 工具条点击事件
         table.on('tool(menu-table)', function (obj) {
             var data = obj.data;
             var layEvent = obj.event;
-            if (layEvent == 'edit') { // 修改
+            if (layEvent == 'edit') {
             	edit(data.id, data.type,msgs['sys.btn.editMenu']);
-            } else if (layEvent == 'del') { // 重置密码
-            	del(obj, data.id);
+            } else if (layEvent == 'del') {
+            	del(data.id);
             }
         });
 
     });
-	function del(obj, id) {
-		layer.confirm("你确定删除数据吗？如果存在下级节点则一并删除，此操作不能撤销！", {icon: 3, title:'提示'},
+
+	function del(id) {
+		layer.confirm("你确定删除数据吗？如果存在下级节点则一并删除，此操作不能撤销！", {icon: 3, title:menu_msgs['layer.confirm.delete']},
             function(index){//确定回调
                 admin.req('/sys/menu/delete?id=' + id, {}, function (data) {
                     layer.closeAll('loading');
                     if (data.code != 0) {
-                        layer.msg(msgs['layer.error.code'] + data.code + msgs['layer.error.msg'] + data.msg, {icon: 2});
+                        layer.msg(menu_msgs['layer.error.code'] + data.code + menu_msgs['layer.error.msg'] + data.msg, {icon: 2});
                         return
                     }
 
@@ -341,14 +351,14 @@
 	}
 
 	function edit(menuId, type,title) {
-		var title = title?title:"修改菜单";
+		var title = title?title:menu_msgs['sys.btn.editMenu'];
 		if(menuId){
 			admin.req('/sys/menu/get', {
 				id: menuId
 			}, function (data) {
 				layer.closeAll('loading');
 				if (data.code != 0) {
-                    layer.msg(msgs['layer.error.code'] + data.code + msgs['layer.error.msg'] + data.msg, {icon: 2});
+                    layer.msg(menu_msgs['layer.error.code'] + data.code + menu_msgs['layer.error.msg'] + data.msg, {icon: 2});
                     return
                 }
 

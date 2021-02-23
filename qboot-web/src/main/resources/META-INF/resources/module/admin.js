@@ -74,7 +74,7 @@ layui.define(['_config', 'layer'], function (exports) {
             var sCallBack = param.success;
             param.type = 1;
             param.area = param.area ? param.area : '450px';
-            param.offset = param.offset ? param.offset : '120px';
+            param.offset = param.offset ? param.offset : '80px';
             param.resize ? param.resize : false;
             param.shade ? param.shade : .2;
             param.success = function (layero, index) {
@@ -97,7 +97,8 @@ layui.define(['_config', 'layer'], function (exports) {
             if (token) {
                 data.access_token = token.access_token;
             }
-            if(typeof(contentType) == "undefined" && contentType != null) {
+            if(typeof(contentType) != "undefined" && contentType != null) {
+                // console.log("修改报文头" + contentType);
                 admin.ajax({
                     url: _config.base_server + url,
                     data: data,

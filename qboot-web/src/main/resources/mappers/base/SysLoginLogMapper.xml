@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.qboot.sys.dao.SysLoginLogDao" >
   <resultMap id="BaseResultMap" type="org.qboot.sys.dto.SysLoginLogDto" >
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="login_name" property="loginName" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="VARCHAR" />
     <result column="login_time" property="loginTime" jdbcType="TIMESTAMP" />
     <result column="ip" property="ip" jdbcType="VARCHAR" />
@@ -16,71 +16,40 @@
     <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
     <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
     <result column="remarks" property="remarks" jdbcType="VARCHAR" />
-    <!-- DB 字段截止 -->
-    <result column="login_name" property="loginName" jdbcType="VARCHAR" />
-    <result column="name" property="userName" jdbcType="VARCHAR" />
-    <result column="first_login" property="firstLogin" jdbcType="INTEGER" />
   </resultMap>
   
   <sql id="Base_Column_List" >
-  		l.user_id, l.status, l.login_time, l.ip, l.area, l.user_agent, l.device_name, l.browser_name, l.create_by, l.create_date, l.update_by
-  		, l.update_date, l.remarks, first_login, u.name, u.login_name
+  	login_name, status, login_time, ip, area, user_agent, device_name, browser_name, create_by
   </sql>
-  
-   <sql id="Join_Table" >
-    	sys_login_log l left join sys_user u on u.id = l.user_id
-  </sql>
-  
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="String" >
-    select 
-    <include refid="Base_Column_List" />
-    from <include refid="Join_Table" />
-    where l.id = #{id}
-  </select>
   
   <select id="findList" resultMap="BaseResultMap" parameterType="org.qboot.sys.dto.SysLoginLogDto" >
     select 
     <include refid="Base_Column_List" />
-    from <include refid="Join_Table" />
+    from sys_login_log
     <where>
 	    <if test="startDate!=null">
-				and l.login_time >= #{startDate}
+            and login_time >= #{startDate}
 		</if>
 		<if test="endDate!=null">
-			<![CDATA[  
-				and l.login_time < #{endDate}
-			 ]]>
+            <![CDATA[
+                and login_time < #{endDate}
+             ]]>
 		</if>
 	    <if test="ip !=null and ip!=''">
-	    	and l.ip = #{ip}
+	    	and ip = #{ip}
 	    </if>
 	    <if test="status !=null and status!=''">
-	    	and l.status = #{status}
+	    	and status = #{status}
 	    </if>
-	    
-	    <if test="firstLogin !=null and firstLogin !=''">
-	    	and l.first_login = #{firstLogin}
-	    </if>
-	    
 	    <if test="loginName !=null and loginName!=''">
-	    	and u.login_name like concat('%',#{loginName},'%')
-	    </if>
-	    <if test="userName !=null and userName != ''">
-	    	and u.name like concat('%',#{userName},'%')
-	    </if>
-	    <if test="userId !=null">
-	    	and l.user_id = #{userId}
+	    	and login_name like concat('%',#{loginName},'%')
 	    </if>
     </where>
-	order by l.login_time desc
+	order by login_time desc
   </select>
   
-  <delete id="deleteByPrimaryKey" >
-    delete l from sys_login_log l  where l.id = #{id}
-  </delete>
-  
   <insert id="insert" parameterType="org.qboot.sys.dto.SysLoginLogDto" >
-    insert into sys_login_log (user_id,status,login_time,ip,area,user_agent,device_name,browser_name,create_by,create_date,update_by,update_date,remarks, first_login)
-    values (#{userId},#{status},#{loginTime},#{ip},#{area},#{userAgent},#{deviceName},#{browserName},#{createBy},#{createDate},#{updateBy},#{updateDate},#{remarks},#{firstLogin})
+    insert into sys_login_log (ID, login_name, status,login_time,ip,area,user_agent,device_name,browser_name,create_by,create_date,update_by,update_date,remarks)
+    values (#{id},#{loginName},#{status},#{loginTime},#{ip},#{area},#{userAgent},#{deviceName},#{browserName},#{createBy},#{createDate},#{updateBy},#{updateDate},#{remarks})
   </insert>
 </mapper>

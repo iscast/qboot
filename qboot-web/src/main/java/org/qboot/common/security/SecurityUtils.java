@@ -5,13 +5,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
- * current login user tool
+ * login user tools
  * @author iscast
  * @date 2020-09-25
  */
 public class SecurityUtils {
 	
-	public static Long getUserId() {
+	public static String getUserId() {
 		CustomUser user = getUser();
 		if(null!=user){
 			return user.getUserId();

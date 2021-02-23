@@ -1,17 +1,18 @@
 package org.qboot.sys.controller;
 
 import com.github.pagehelper.PageInfo;
-import org.qboot.common.constants.CacheConstants;
-import org.qboot.common.utils.MyAssertTools;
-import org.qboot.common.utils.RedisTools;
-import org.qboot.common.utils.ValidateUtils;
-import org.qboot.sys.dto.SysDictDto;
-import org.qboot.sys.service.impl.SysDictService;
 import org.qboot.common.annotation.AccLog;
+import org.qboot.common.constants.CacheConstants;
 import org.qboot.common.constants.SysConstants;
 import org.qboot.common.controller.BaseController;
 import org.qboot.common.entity.ResponeModel;
 import org.qboot.common.security.SecurityUtils;
+import org.qboot.common.utils.IdGen;
+import org.qboot.common.utils.MyAssertTools;
+import org.qboot.common.utils.RedisTools;
+import org.qboot.common.utils.ValidateUtils;
+import org.qboot.sys.dto.SysDictDto;
+import org.qboot.sys.service.SysDictService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.CollectionUtils;
@@ -53,7 +54,7 @@ public class SysDictController extends BaseController {
 
 	@PreAuthorize("hasAuthority('sys:dict:qry')")
 	@RequestMapping("/get")
-	public ResponeModel get(@RequestParam Long id) {
+	public ResponeModel get(@RequestParam String id) {
         MyAssertTools.notNull(id, SYS_DICT_ID_NULL);
 		SysDictDto sysDict = sysDictService.findById(id);
 		if(null == sysDict) {
@@ -70,6 +71,7 @@ public class SysDictController extends BaseController {
         if(null == sysDict.getSort()) {
             sysDict.setSort(0);
         }
+        sysDict.setId(IdGen.uuid());
         sysDict.setStatus(SysConstants.SYS_ENABLE);
         sysDict.setCreateBy(SecurityUtils.getLoginName());
 		if(sysDictService.save(sysDict) > 0) {
@@ -97,7 +99,7 @@ public class SysDictController extends BaseController {
     @AccLog
 	@PreAuthorize("hasAuthority('sys:dict:update')")
 	@PostMapping("/editStatus")
-	public ResponeModel editStatus(@RequestParam Long id, @RequestParam String status) {
+	public ResponeModel editStatus(@RequestParam String id, @RequestParam String status) {
         MyAssertTools.notNull(id, SYS_DICT_ID_NULL);
         SysDictDto sysDict = new SysDictDto();
 		sysDict.setId(id);
@@ -113,8 +115,8 @@ public class SysDictController extends BaseController {
     @AccLog
 	@PreAuthorize("hasAuthority('sys:dict:delete')")
 	@PostMapping("/delete")
-	public ResponeModel delete(@RequestParam Long id) {
-        MyAssertTools.notNull(id, SYS_DICT_ID_NULL);
+	public ResponeModel delete(@RequestParam String id) {
+        MyAssertTools.hasLength(id, SYS_DICT_ID_NULL);
 		if(sysDictService.deleteById(id) > 0) {
 			return ResponeModel.ok();
 		}

@@ -11,6 +11,7 @@ import org.qboot.common.utils.RedisTools;
 import org.qboot.sys.dao.SysTaskDao;
 import org.qboot.sys.dto.SysTaskDto;
 import org.qboot.sys.exception.SysTaskException;
+import org.qboot.sys.service.SysTaskService;
 import org.quartz.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,21 +29,19 @@ import static org.qboot.sys.exception.errorcode.SysModuleErrTable.*;
  * @author history
  */
 @Service
-public class SysTaskService extends CrudService<SysTaskDao, SysTaskDto> {
+public class SysTaskServiceImpl extends CrudService<SysTaskDao, SysTaskDto> implements SysTaskService{
 
 	@Resource
 	private Scheduler scheduler;
 	@Resource
 	private RedisTools redisTools;
-	@Resource
-	SysTaskLogService sysTaskLogService;
 
 	@Override
 	public PageInfo<SysTaskDto> findByPage(SysTaskDto sysTask) {
 		PageInfo<SysTaskDto> result = super.findByPage(sysTask) ;
-		Map<Long, String> runningTask = this.getRunningTask() ;
-		Page<SysTaskDto>  iniList = new Page<SysTaskDto>();
-		Page<SysTaskDto>  runningList = new Page<SysTaskDto>();
+		Map<String, String> runningTask = this.getRunningTask() ;
+		Page<SysTaskDto>  iniList = new Page();
+		Page<SysTaskDto>  runningList = new Page();
 		result.getList().forEach(i -> {
 			if(runningTask.containsKey(i.getId())){
 				i.setRunStatus(SysTaskDto.RUN_STATUS_RUNNING);
@@ -61,28 +60,17 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTaskDto> {
 		return result;
 	}
 
-	/**
-	 * 查询所有任务
-	 * @return
-	 */
+    @Override
 	public List<SysTaskDto> findAll(){
 		return this.d.findAll() ;
 	}
-	
-	/**
-	 * 根据任务名称查询任务
-	 * @param taskName
-	 * @return
-	 */
+
+    @Override
 	public SysTaskDto findByName(String taskName){
 		return this.d.findByName(taskName) ;
 	}
-	
-	/**
-	 * 更新启用状态
-	 * @param task
-	 * @return
-	 */
+
+    @Override
 	@Transactional
 	public int updateStatus(SysTaskDto task){
 		int result = this.d.updateStatus(task) ;
@@ -129,8 +117,8 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTaskDto> {
 
 	@Override
 	@Transactional
-	public int updateById(SysTaskDto task) {
-		int result = super.updateById(task) ;
+	public int update(SysTaskDto task) {
+		int result = super.update(task) ;
 		SysTaskDto newTask = d.findById(task.getId()) ;
 		// 重置任务
 		try {
@@ -148,10 +136,8 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTaskDto> {
 		return result;
 	}
 
-	/**
-	 * 立即触发一次执行
-	 */
-	public void runOnce(Long taskId) {
+    @Override
+	public void runOnce(String taskId) {
 		SysTaskDto task = this.findById(taskId);
 		if (task == null) {
             throw new SysTaskException(SYS_TASK_EXECUTE_NULL);
@@ -184,11 +170,8 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTaskDto> {
 			}
 		}
 	}
-	
-	/**
-	 * 初始化任务，将任务添加到schedule
-	 * @throws SchedulerException 
-	 */
+
+    @Override
 	public void initTask() {
 		List<SysTaskDto> tasks =  this.findAll();
 		tasks.forEach(task -> {
@@ -206,214 +189,34 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTaskDto> {
 		});
 	}
 
-	/**
-	 * 获取JobKey
-	 * @param taskId
-	 * @param group
-	 * @return
-	 */
-	public JobKey getJobKey(Long taskId) {
-		return JobKey.jobKey(taskId.toString(), SysConstants.TASK_DEFAULT_GROUP);
-	}
 
-	/**
-	 * 获取triggerKey
-	 * @param taskId
-	 * @param group
-	 * @return
-	 */
-	public TriggerKey getTriggerKey(Long taskId) {
-		return TriggerKey.triggerKey(taskId.toString(), SysConstants.TASK_DEFAULT_GROUP);
-	}
-	/**
-	 * 检测任务是否存在
-	 * @param taskId
-	 * @param group
-	 * @return
-	 * @throws SchedulerException
-	 */
-	public boolean checkExists(Long taskId) throws SchedulerException {
-		return scheduler.checkExists(getJobKey(taskId));
-	}
-	
-	/**
-	 * 获取计划中的任务对象
-	 * @param taskId
-	 * @param group
-	 * @return
-	 * @throws SchedulerException
-	 */
-	public SysTaskDto getJobObject(Long taskId) throws SchedulerException {
-		JobDetail jobDetail = scheduler.getJobDetail(getJobKey(taskId));
-		return (SysTaskDto)jobDetail.getJobDataMap().get(CacheConstants.JOB_DATA_MAP_KEY);
-	}
-	
-	/**
-	 * 将任务加入调度中心
-	 * @param scheduler
-	 * @param task
-	 * @throws SchedulerException
-	 */
-	public void createScheduleJob(SysTaskDto task) throws SchedulerException {
-		// 设置是否允许并发执行
-		Class<? extends Job> clazz = DisallowConcurrentExecutionJob.class;
-		if(task.isConcurrentExecutionAllow()){
-			clazz = AllowConcurrentExecutionJob.class;
-		}
-		JobDetail detail = JobBuilder.newJob(clazz)
-				.withIdentity(getJobKey(task.getId()))
-				.build();
-		detail.getJobDataMap().put(CacheConstants.JOB_DATA_MAP_KEY, task);
-		
-		CronScheduleBuilder builder = CronScheduleBuilder.cronSchedule(task.getCronExp());
-		CronTrigger trigger = (CronTrigger) TriggerBuilder.newTrigger()
-				.withIdentity(getTriggerKey(task.getId()))
-				.withSchedule(builder).build();
-		
-		scheduler.scheduleJob(detail, trigger);
-	}
-	
-	/**
-	 * 单次执行
-	 * @param scheduler
-	 * @param task
-	 * @throws SchedulerException
-	 */
-	public void createSimpleJob(SysTaskDto task) throws SchedulerException {
-		// 设置是否允许并发执行
-		Class<? extends Job> clazz = DisallowConcurrentExecutionJob.class;
-		JobDetail detail = JobBuilder.newJob(clazz)
-				.withIdentity(getJobKey(task.getId()))
-				.build();
-		detail.getJobDataMap().put(CacheConstants.JOB_DATA_MAP_KEY, task);
-		
-	    SimpleScheduleBuilder builder =  SimpleScheduleBuilder.simpleSchedule();
-		SimpleTrigger trigger = (SimpleTrigger) TriggerBuilder.newTrigger()
-				.withIdentity(getTriggerKey(task.getId()))
-				.withSchedule(builder).build();
-		scheduler.scheduleJob(detail, trigger);
-	}
-	
-	
-
-	/**
-	 * 更新调度中心的任务
-	 * @param scheduler
-	 * @param task
-	 * @throws SchedulerException
-	 */
-	public void updateScheduleJob(SysTaskDto task) throws SchedulerException {
-		TriggerKey triggerKey = getTriggerKey(task.getId());
-		CronTrigger trigger = (CronTrigger) scheduler.getTrigger(triggerKey);
-		
-		CronScheduleBuilder builder = CronScheduleBuilder.cronSchedule(task.getCronExp());
-		trigger = trigger.getTriggerBuilder().withIdentity(triggerKey)
-				.withSchedule(builder).build();
-		scheduler.rescheduleJob(triggerKey, trigger);
-	}
-	
-	/**
-	 * 从调度中心删除任务
-	 * @param scheduler
-	 * @param task
-	 * @throws SchedulerException
-	 */
+    @Override
 	public void deleteScheduleJob(SysTaskDto task) throws SchedulerException {
 		scheduler.deleteJob(getJobKey(task.getId()));
 	}
-	
-	/**
-	 * 暂停任务
-	 * @param scheduler
-	 * @param task
-	 * @throws SchedulerException
-	 */
+
+    @Override
 	public void pauseScheduleJob(SysTaskDto task) throws SchedulerException {
 		scheduler.pauseJob(getJobKey(task.getId()));
 	}
-	
-	/**
-	 * 重启任务
-	 * @param scheduler
-	 * @param task
-	 * @throws SchedulerException
-	 */
+
+    @Override
 	public void resumeScheduleJob(SysTaskDto task) throws SchedulerException {
 		scheduler.resumeJob(getJobKey(task.getId()));
 	}
-	
-	/**
-	 * 立即执行
-	 * @param scheduler
-	 * @param task
-	 * @throws SchedulerException
-	 */
+
+    @Override
 	public void runOnce(SysTaskDto task) throws SchedulerException {
 		JobKey jobKey = getJobKey(task.getId());
 		scheduler.triggerJob(jobKey);
 	}
-	
-	/**    
-	 * 所有系统中正在运行的任务
-	 *     
-	 * @return    
-	 * @throws SchedulerException    
-	 */    
-	private Map<Long,String> getRunningTask(){    
-		List<JobExecutionContext> executingJobs;
-		try {
-			executingJobs = scheduler.getCurrentlyExecutingJobs();
-		} catch (SchedulerException e) {
-            throw new SysTaskException(SYS_TASK_GET_RUNNING_ERROR);
-		}
-		Map<Long,String> runningTaskList = new HashMap<Long,String>();    
-		for (JobExecutionContext executingJob : executingJobs) {    
-			JobKey jobKey = executingJob.getJobDetail().getKey();    
-			runningTaskList.put(Long.parseLong(jobKey.getName()),jobKey.getName());    
-		}    
-		return runningTaskList;    
-	}
-	
-	/**    
-	 * Task 是否下在运行
-	 * @return    
-	 * @throws SchedulerException    
-	 */    
-	private boolean isRunning(Long taskId){    
-		List<JobExecutionContext> executingJobs;
-		try {
-			executingJobs = scheduler.getCurrentlyExecutingJobs();
-		} catch (SchedulerException e) {
-            throw new SysTaskException(SYS_TASK_GET_RUNNING_ERROR);
-		}
-		for (JobExecutionContext executingJob : executingJobs) {
-			if(executingJob.getJobDetail().getKey().getName().equalsIgnoreCase(taskId.toString())){
-				return true;
-			}
-		}    
-		return false;    
-	}
-	/**
-	 * 删除任务时清理所有任务日志
-	 * @param id
-	 */
-	public int deleteTask(Long taskId) {
-        int cnt = this.deleteById(taskId);
-        if(cnt > 0) {
-            sysTaskLogService.deleteByTaskId(taskId);
-        }
-        return  cnt;
-	}
 
+    @Override
 	public Long countByTaskName(SysTaskDto sysTask) {
 		return this.d.countByTaskName(sysTask);
 	}
-	/**
-	 * 使任务信息更新部分生效到任务调度器
-	 *  主要是时间表达式变更,这项变更必须重置任务调度器内对应的任务
-	 *  注意,此处只更新有变更的任务
-	 * @param updatedList
-	 */
+
+    @Override
 	public void reloadTask() {
 		logger.debug("==============start============守护线程扫描定时任务更新=========start=================");
 		List<SysTaskDto> tasks = this.findAll() ;
@@ -454,10 +257,8 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTaskDto> {
 		}
 		logger.debug("==============end============守护线程扫描定时任务更新===========end===================");
 	}
-	/**
-	 * 更新上一次成功执行结果
-	 * @param systask
-	 */
+
+	@Override
 	public int updateResult(SysTaskDto systask) {
 		systask.setUpdateDate(new Date());
 		int result = d.updateResult(systask) ;
@@ -466,5 +267,142 @@ public class SysTaskService extends CrudService<SysTaskDao, SysTaskDto> {
 		redisTools.set(newTask.toCacheKeyString(), newTask);
 		return  result;
 	}
-	
+
+    /**
+     * 获取JobKey
+     * @param taskId
+     * @return
+     */
+    private JobKey getJobKey(String taskId) {
+        return JobKey.jobKey(taskId, SysConstants.TASK_DEFAULT_GROUP);
+    }
+
+    /**
+     * 获取triggerKey
+     * @param taskId
+     * @return
+     */
+    private TriggerKey getTriggerKey(String taskId) {
+        return TriggerKey.triggerKey(taskId, SysConstants.TASK_DEFAULT_GROUP);
+    }
+    /**
+     * 检测任务是否存在
+     * @param taskId
+     * @return
+     * @throws SchedulerException
+     */
+    private boolean checkExists(String taskId) throws SchedulerException {
+        return scheduler.checkExists(getJobKey(taskId));
+    }
+
+    /**
+     * 获取计划中的任务对象
+     * @param taskId
+     * @return
+     * @throws SchedulerException
+     */
+    private SysTaskDto getJobObject(String taskId) throws SchedulerException {
+        JobDetail jobDetail = scheduler.getJobDetail(getJobKey(taskId));
+        return (SysTaskDto)jobDetail.getJobDataMap().get(CacheConstants.JOB_DATA_MAP_KEY);
+    }
+
+    /**
+     * 将任务加入调度中心
+     * @param task
+     * @throws SchedulerException
+     */
+    private void createScheduleJob(SysTaskDto task) throws SchedulerException {
+        // 设置是否允许并发执行
+        Class<? extends Job> clazz = DisallowConcurrentExecutionJob.class;
+        if(task.isConcurrentExecutionAllow()){
+            clazz = AllowConcurrentExecutionJob.class;
+        }
+        JobDetail detail = JobBuilder.newJob(clazz)
+                .withIdentity(getJobKey(task.getId()))
+                .build();
+        detail.getJobDataMap().put(CacheConstants.JOB_DATA_MAP_KEY, task);
+
+        CronScheduleBuilder builder = CronScheduleBuilder.cronSchedule(task.getCronExp());
+        CronTrigger trigger = TriggerBuilder.newTrigger()
+                .withIdentity(getTriggerKey(task.getId()))
+                .withSchedule(builder).build();
+
+        scheduler.scheduleJob(detail, trigger);
+    }
+
+    /**
+     * 单次执行
+     * @param task
+     * @throws SchedulerException
+     */
+    private void createSimpleJob(SysTaskDto task) throws SchedulerException {
+        // 设置是否允许并发执行
+        Class<? extends Job> clazz = DisallowConcurrentExecutionJob.class;
+        JobDetail detail = JobBuilder.newJob(clazz)
+                .withIdentity(getJobKey(task.getId()))
+                .build();
+        detail.getJobDataMap().put(CacheConstants.JOB_DATA_MAP_KEY, task);
+
+        SimpleScheduleBuilder builder =  SimpleScheduleBuilder.simpleSchedule();
+        SimpleTrigger trigger = (SimpleTrigger) TriggerBuilder.newTrigger()
+                .withIdentity(getTriggerKey(task.getId()))
+                .withSchedule(builder).build();
+        scheduler.scheduleJob(detail, trigger);
+    }
+
+
+    /**
+     * 更新调度中心的任务
+     * @param task
+     * @throws SchedulerException
+     */
+    private void updateScheduleJob(SysTaskDto task) throws SchedulerException {
+        TriggerKey triggerKey = getTriggerKey(task.getId());
+        CronTrigger trigger = (CronTrigger) scheduler.getTrigger(triggerKey);
+
+        CronScheduleBuilder builder = CronScheduleBuilder.cronSchedule(task.getCronExp());
+        trigger = trigger.getTriggerBuilder().withIdentity(triggerKey)
+                .withSchedule(builder).build();
+        scheduler.rescheduleJob(triggerKey, trigger);
+    }
+
+    /**
+     * 所有系统中正在运行的任务
+     * @return
+     * @throws SchedulerException
+     */
+    private Map<String,String> getRunningTask(){
+        List<JobExecutionContext> executingJobs;
+        try {
+            executingJobs = scheduler.getCurrentlyExecutingJobs();
+        } catch (SchedulerException e) {
+            throw new SysTaskException(SYS_TASK_GET_RUNNING_ERROR);
+        }
+        Map<String,String> runningTaskList = new HashMap();
+        for (JobExecutionContext executingJob : executingJobs) {
+            JobKey jobKey = executingJob.getJobDetail().getKey();
+            runningTaskList.put(jobKey.getName(),jobKey.getName());
+        }
+        return runningTaskList;
+    }
+
+    /**
+     * Task 是否下在运行
+     * @return
+     * @throws SchedulerException
+     */
+    private boolean isRunning(String taskId){
+        List<JobExecutionContext> executingJobs;
+        try {
+            executingJobs = scheduler.getCurrentlyExecutingJobs();
+        } catch (SchedulerException e) {
+            throw new SysTaskException(SYS_TASK_GET_RUNNING_ERROR);
+        }
+        for (JobExecutionContext executingJob : executingJobs) {
+            if(executingJob.getJobDetail().getKey().getName().equalsIgnoreCase(taskId)){
+                return true;
+            }
+        }
+        return false;
+    }
 }

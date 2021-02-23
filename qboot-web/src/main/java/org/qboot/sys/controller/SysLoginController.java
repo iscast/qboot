@@ -11,8 +11,8 @@ import org.qboot.common.utils.RSAsecurity;
 import org.qboot.common.utils.TreeHelper;
 import org.qboot.sys.dto.SysMenuDto;
 import org.qboot.sys.dto.SysUserDto;
-import org.qboot.sys.service.impl.SysMenuService;
-import org.qboot.sys.service.impl.SysUserService;
+import org.qboot.sys.service.SysMenuService;
+import org.qboot.sys.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
@@ -76,7 +76,7 @@ public class SysLoginController extends BaseController {
 		sysUser.setEmail(user.getEmail());
 		sysUser.setMobile(user.getMobile());
 		sysUser.setId(SecurityUtils.getUserId());
-		int cnt = sysUserService.update(sysUser);
+		int cnt = sysUserService.updateInfo(sysUser);
         if(cnt > 0) {
             return ok();
         }
@@ -95,23 +95,9 @@ public class SysLoginController extends BaseController {
 		return ResponeModel.ok();
 	}
 
-    @AccLog
-	@PostMapping("/updatePwd")
-	public ResponeModel updatePwd(@RequestParam String password, @RequestParam String oldPassword) {
-		Long userId = SecurityUtils.getUserId();
-		if (!sysUserService.validatePwd(oldPassword, userId)) {
-			return ResponeModel.error(SYS_USER_ORIGINAL_PWD_INCORRECT);
-		}
-		SysUserDto sysUser = new SysUserDto();
-		sysUser.setId(userId);
-		sysUser.setPassword(password);
-		int cnt = sysUserService.update(sysUser);
-		return ResponeModel.ok(cnt);
-	}
-
 	@GetMapping("/switchLanguage")
 	public ResponeModel switchLanguage(@RequestParam String lang){
-		Long userId = SecurityUtils.getUserId();
+		String userId = SecurityUtils.getUserId();
 		if (StringUtils.isEmpty(lang)) {
 			return ResponeModel.error(SYS_USER_LANG_INCORRECT);
 		}

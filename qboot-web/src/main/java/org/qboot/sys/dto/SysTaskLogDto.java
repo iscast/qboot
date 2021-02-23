@@ -4,13 +4,14 @@ import java.util.Date;
 
 import org.qboot.common.entity.BaseEntity;
 
-/**[sys_task_log]数据库实体模型
-*@author history
+/**
+ * 任务日志
+ * @author history
 */
-public class SysTaskLogDto extends BaseEntity<Long> {
+public class SysTaskLogDto extends BaseEntity<String> {
 	private static final long serialVersionUID = 1L;
 	/**任务ID.*/
-	private Long taskId;
+	private String taskId;
 	/**执行开始时间.*/
 	private Date beginTime;
 	/**执行结束时间.*/
@@ -25,11 +26,11 @@ public class SysTaskLogDto extends BaseEntity<Long> {
 	private String execResult;
 
 	/**设置任务ID.*/
-	public void setTaskId(Long taskId){
+	public void setTaskId(String taskId){
 		this.taskId=taskId;
 	}
 	/**获取任务ID.*/
-	public Long getTaskId(){
+	public String getTaskId(){
 		return taskId;
 	}
 	/**设置执行开始时间.*/

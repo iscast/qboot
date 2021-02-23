@@ -1,18 +1,12 @@
 package org.qboot.common.security;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import eu.bitwalker.useragentutils.Browser;
-import eu.bitwalker.useragentutils.OperatingSystem;
-import eu.bitwalker.useragentutils.UserAgent;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.qboot.sys.service.impl.LoginSecurityService;
-import org.qboot.sys.service.impl.SysLoginLogService;
 import org.qboot.common.constants.SysConstants;
-import org.qboot.common.utils.IpUtils;
-import org.qboot.common.utils.RSAsecurity;
 import org.qboot.common.entity.ResponeModel;
+import org.qboot.common.utils.RSAsecurity;
+import org.qboot.sys.service.SysLoginLogService;
+import org.qboot.sys.service.impl.LoginSecurityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,11 +28,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
- * 登录结果处理器
+ * 处理登录结果
  * @author iscast
  * @date 2020-09-25
  */
@@ -50,40 +43,42 @@ public class WebLoginResultHandler implements AuthenticationSuccessHandler,Authe
 	private LoginSecurityService loginSecurityService;
 	@Autowired
 	private SysLoginLogService sysLoginLogService;
-	@Override
 
-	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
-			AuthenticationException exception) throws IOException, ServletException {
+	@Override
+	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
 		String loginName = this.obtainUsername(request);
-		logger.warn("userName:[{}] login fail msg:[{}]", loginName, exception.getMessage());
 		ResponeModel result = ResponeModel.error();
 		if (exception instanceof UsernameNotFoundException) {
 			result.setMsg("user or pwd error");
 			logger.warn("user:{} or pwd error", loginName);
-			loginLog(SysConstants.SYS_USER_LOGIN_STATUS_PASSWORD_WRONG, loginName, request);
+            sysLoginLogService.saveLog(SysConstants.SYS_USER_LOGIN_STATUS_PASSWORD_WRONG, loginName, request);
 		} else if (exception instanceof BadCredentialsException) {
 			loginSecurityService.incrementLoginFailTimes(loginName);
 			result.setMsg("pwd error, fail 5 times will lock your account");
 			logger.warn("user:{} pwd error", loginName);
-			loginLog(SysConstants.SYS_USER_LOGIN_STATUS_PASSWORD_WRONG, loginName, request);
+            sysLoginLogService.saveLog(SysConstants.SYS_USER_LOGIN_STATUS_PASSWORD_WRONG, loginName, request);
 		} else if (exception instanceof LockedException) {
 			result.setMsg("user is lock");
 			logger.warn("user is lock loginName:{}", loginName);
-			loginLog(SysConstants.SYS_USER_LOGIN_STATUS_LOCK_24, loginName, request);
+            sysLoginLogService.saveLog(SysConstants.SYS_USER_LOGIN_STATUS_LOCK_24, loginName, request);
 		} else if (exception instanceof DisabledException) {
 			result.setMsg(exception.getMessage());
 			logger.warn("user:{} login fail {}" , loginName, exception.getMessage());
-			loginLog(SysConstants.SYS_USER_LOGIN_STATUS_STAUTS_STOP, loginName, request);
-		} 
+            sysLoginLogService.saveLog(SysConstants.SYS_USER_LOGIN_STATUS_STAUTS_STOP, loginName, request);
+		} else {
+            result.setMsg(exception.getMessage());
+            logger.warn("userName:[{}] login fail msg:[{}]", loginName, exception.getMessage());
+            sysLoginLogService.saveLog(SysConstants.SYS_USER_LOGIN_STATUS_SYS_ERR, loginName, request);
+        }
 		this.print(response, JSON.toJSONString(result));
 	}
 
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-			Authentication authentication) throws IOException, ServletException {
+			Authentication authentication) throws IOException {
 		ResponeModel ok = ResponeModel.ok();
 		String loginName = this.obtainUsername(request);
-		loginLog(SysConstants.SYS_USER_LOGIN_STATUS_SUCCESS, loginName, request);
+        sysLoginLogService.saveLog(SysConstants.SYS_USER_LOGIN_STATUS_SUCCESS, loginName, request);
 		logger.info("user:[{}] login success ！", loginName);
 		String sessionId = request.getSession().getId();
 		loginSecurityService.setUserSessionId(loginName, sessionId);
@@ -108,8 +103,7 @@ public class WebLoginResultHandler implements AuthenticationSuccessHandler,Authe
 	}
 
 	@Override
-	public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
-			throws IOException, ServletException {
+	public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException{
 		List list = new ArrayList<>();
 		list.add(new CustomPermission("anonymous"));
 		AnonymousAuthenticationToken anonymous = new AnonymousAuthenticationToken("anonymous", "anonymous", list);
@@ -121,67 +115,5 @@ public class WebLoginResultHandler implements AuthenticationSuccessHandler,Authe
 		}
 		this.print(response, JSON.toJSONString(ResponeModel.ok("logout success")));
 	}
-
-	/**
-	 * 登录日志
-	 * @param status
-	 * @param loginName
-	 * @param request
-	 */
-	private void loginLog(String status,String loginName,HttpServletRequest request) {
-		String ip = IpUtils.getIpAddr(request);
-		String userAgentStr = request.getHeader("User-Agent");
-		UserAgent userAgent = UserAgent.parseUserAgentString(userAgentStr);  
-		Browser browser = userAgent.getBrowser();
-		OperatingSystem os = userAgent.getOperatingSystem();
-		String deviceName = os.getName() + " "+ os.getDeviceType();
-		String area = "";
-		String browserStr = browser.getName() +" "+ browser.getVersion(userAgentStr);
-		try {
-			if (StringUtils.isNotEmpty(ip)) {
-				HashMap<String, String> params = new HashMap<>();
-				params.put("ip",ip);
-				String ipInfo = ""; 
-				if (StringUtils.isNotEmpty(ipInfo)) {
-					JSONObject parseObject = JSON.parseObject(ipInfo);
-					if (parseObject.containsKey("data")) {
-						JSONObject data = parseObject.getJSONObject("data");
-						area = data.getString("region") + data.getString("city");
-					}
-				}
-			}
-            new LogThread(status, loginName, ip, userAgentStr, browserStr, deviceName, area).run();
-		} catch (Exception e) {
-			logger.error("登录日记记录异常，{}....", ExceptionUtils.getStackTrace(e));
-		}
-	}
-
-	private class LogThread extends Thread {
-
-
-        private String status;
-        private String loginName;
-        private String ip;
-        private String userAgentStr;
-        private String browserStr;
-        private String deviceName;
-        private String area;
-
-        public LogThread(String status, String loginName, String ip, String userAgentStr, String browserStr, String deviceName, String area) {
-            super();
-            this.status = status;
-            this.loginName = loginName;
-            this.ip = ip;
-            this.userAgentStr = userAgentStr;
-            this.browserStr = browserStr;
-            this.deviceName = deviceName;
-            this.area = area;
-        }
-
-        @Override
-        public void run() {
-            sysLoginLogService.loginLogByLoginName(status, loginName, ip, userAgentStr, browserStr, deviceName, area, SysConstants.SYS_USER_PWD_STATUS_NORMAL);
-        }
-    }
 
 }

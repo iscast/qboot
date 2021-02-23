@@ -1,18 +1,16 @@
 package org.qboot.sys.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import org.hibernate.validator.constraints.Length;
 import org.qboot.common.entity.BaseEntity;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 
 /**
  * 系统字典
  * @author iscast
  * @date 2020-09-25
  */
-public class SysDictDto extends BaseEntity<Long>{
+public class SysDictDto extends BaseEntity<String>{
 	private static final long serialVersionUID = 1L;
 
 	/**

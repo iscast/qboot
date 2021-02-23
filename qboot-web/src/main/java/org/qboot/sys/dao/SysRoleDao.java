@@ -18,10 +18,10 @@ import org.qboot.common.dao.CrudDao;
 public interface SysRoleDao extends CrudDao<SysRoleDto>{
     int deleteRoleMenuByRoleId(Serializable roleId);
     int deleteUserRoleByRoleId(Serializable roleId);
-    int deleteUserRoleByRoleIdAndUserId(@Param("roleId") String roleId,@Param("userId") Long userId);
-    int insertUserRole(@Param("roleId") String roleId,@Param("userId") Long userId);
+    int deleteUserRoleByRoleIdAndUserId(@Param("roleId") String roleId,@Param("userId") String userId);
+    int insertUserRole(@Param("roleId") String roleId,@Param("userId") String userId);
     int insertRoleMenu(List<SysRoleMenuDto> roleMenus);
-    List<SysRoleDto> findByUserId(Long userId);
+    List<SysRoleDto> findByUserId(String userId);
     int deleteRoleDeptByRoleId(Serializable roleId);
     int insertRoleDept(List<SysRoleDeptDto> list);
     

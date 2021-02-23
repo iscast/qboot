@@ -1,16 +1,14 @@
 package org.qboot.common.task.job;
 
-import java.util.concurrent.TimeUnit;
-
-import javax.annotation.PostConstruct;
-
+import org.qboot.sys.service.SysTaskService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-import org.qboot.sys.service.impl.SysTaskService;
+import javax.annotation.PostConstruct;
+import java.util.concurrent.TimeUnit;
 
 
 /**

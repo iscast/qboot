@@ -4,10 +4,10 @@
 
 <mapper namespace="org.qboot.sys.dao.SysTaskDao">
 
-	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="org.qboot.sys.dto.SysTaskDto">
+	<insert id="insert" parameterType="org.qboot.sys.dto.SysTaskDto">
 		insert into 
-			sys_task(task_name,group_name,cron_exp,task_target,status,last_run_time,last_result,remarks,params,create_date,update_date,create_by,update_by,exec_type) 
-			values(#{taskName},#{groupName},#{cronExp},#{taskTarget},#{status},#{lastRunTime},#{lastResult},#{remarks},#{params},#{createDate},#{updateDate},#{createBy},#{updateBy},#{execType})
+			sys_task(id,task_name,group_name,cron_exp,task_target,status,last_run_time,last_result,remarks,params,create_date,update_date,create_by,update_by,exec_type)
+			values(#{id},#{taskName},#{groupName},#{cronExp},#{taskTarget},#{status},#{lastRunTime},#{lastResult},#{remarks},#{params},#{createDate},#{updateDate},#{createBy},#{updateBy},#{execType})
 	</insert>
 
 	<select id="findAll" resultType="org.qboot.sys.dto.SysTaskDto">
@@ -39,7 +39,7 @@
 		order by t.id desc 
 	</select>
 
-	<update id="updateById" parameterType="org.qboot.sys.dto.SysTaskDto">
+	<update id="update" parameterType="org.qboot.sys.dto.SysTaskDto">
 		update sys_task 
 		<set>
 			params = #{params},remarks = #{remarks},group_name = #{groupName},
@@ -78,11 +78,11 @@
 		WHERE id = #{id} 
 	</update>
 
-	<delete id="deleteById" parameterType="java.lang.Long">
+	<delete id="deleteById" parameterType="java.lang.String">
 		delete from sys_task where id = #{id}
 	</delete>
 
-	<select id="findById" parameterType="java.lang.Long" resultType="org.qboot.sys.dto.SysTaskDto">
+	<select id="findById" parameterType="java.lang.String" resultType="org.qboot.sys.dto.SysTaskDto">
 		select * from sys_task where id = #{id}
 	</select>
 	
