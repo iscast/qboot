@@ -71,7 +71,7 @@ DROP TABLE IF EXISTS `sys_login_log`;
 CREATE TABLE `sys_login_log`
 (
     `ID`           varchar(32)   NOT NULL COMMENT '编号',
-    `NAME`         varchar(50)   DEFAULT NULL COMMENT '姓名',
+    `LOGIN_NAME`   varchar(50)   DEFAULT NULL COMMENT '姓名',
     `STATUS`       tinyint(4)    NOT NULL COMMENT '登录状态 0:成功;1.密码错误；2.已禁用;3.锁定24小时;7.修改密码;8.待初始化密码;9.系统错误;',
     `LOGIN_TIME`   datetime      NOT NULL COMMENT '登录时间',
     `IP`           varchar(16)   DEFAULT NULL COMMENT 'IP地址',
@@ -101,7 +101,7 @@ CREATE TABLE `sys_menu`
     `SORT`          int(10)       NOT NULL COMMENT '排序',
     `HREF`          varchar(200)  DEFAULT NULL COMMENT '链接',
     `TARGET`        varchar(10)   DEFAULT NULL COMMENT '目标',
-    `TYPE`          varchar(4)    NOT NULL COMMENT '0：目录   1：菜单   2：按钮',
+    `TYPE`          varchar(4)    NOT NULL COMMENT '0：目录 1：菜单 999：按钮',
     `ICON`          varchar(50)   DEFAULT NULL COMMENT '图标',
     `IS_SHOW`       tinyint(4)    NOT NULL COMMENT '是否在菜单中显示',
     `PERMISSION`    varchar(200)  DEFAULT NULL COMMENT '权限标识',
