@@ -1,154 +1,69 @@
 -- ----------------------------
--- Records of sys_dept
--- ----------------------------
-BEGIN;
-INSERT INTO `sys_dept`(ID, PARENT_ID, PARENT_IDS, NAME, SORT, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS) VALUES (1, '1', '0,1', '超级管理', 1, 'system', now(), 'system', now(), '');
-COMMIT;
-
--- ----------------------------
 -- Records of sys_dict
 -- ----------------------------
 BEGIN;
-INSERT INTO `sys_dict`(ID, TYPE, CODE, NAME, SORT, STATUS, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS) VALUES (1, 'YES_NO', '1', '是', 1, '1', 'system', now(), 'system', now(), '');
-INSERT INTO `sys_dict`(ID, TYPE, CODE, NAME, SORT, STATUS, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS) VALUES (2, 'YES_NO', '0', '否', 2, '1', 'system', now(), 'system', now(), '');
-INSERT INTO `sys_dict`(ID, TYPE, CODE, NAME, SORT, STATUS, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS) VALUES (3, 'SYS_USER_TYPE', '1', '系统管理员', 1, '1', 'system', now(), 'system', now(), '');
-INSERT INTO `sys_dict`(ID, TYPE, CODE, NAME, SORT, STATUS, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS) VALUES (4, 'SYS_USER_TYPE', '2', '普通用户', 2, '1', 'system', now(), 'system', now(), '');
+INSERT INTO `sys_dict`(ID, TYPE, CODE, NAME, SORT, STATUS, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS) VALUES ('bce245bc65444aaeb37f068727d23b11', 'YES_NO', '1', '是', 1, '1', 'system', now(), 'system', now(), '');
+INSERT INTO `sys_dict`(ID, TYPE, CODE, NAME, SORT, STATUS, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS) VALUES ('aa183a7ab2044e97b01becb96b1504c6', 'YES_NO', '0', '否', 2, '1', 'system', now(), 'system', now(), '');
+INSERT INTO `sys_dict`(ID, TYPE, CODE, NAME, SORT, STATUS, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS) VALUES ('edd284b92b2445d28ca8e0711b9e4bd6', 'SYS_USER_TYPE', '1', '系统管理员', 1, '1', 'system', now(), 'system', now(), '');
+INSERT INTO `sys_dict`(ID, TYPE, CODE, NAME, SORT, STATUS, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS) VALUES ('bab202265cad4c1384b7cedca5a19e75', 'SYS_USER_TYPE', '2', '普通用户', 2, '1', 'system', now(), 'system', now(), '');
 COMMIT;
 
 -- ----------------------------
 -- Records of sys_menu
 -- ----------------------------
 BEGIN;
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (1, '0', '0,', '系统管理', 1, '', '', '', 'layui-icon-set', '1', 'sys', 'system', now(), 'system', now(), NULL);
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (2, '1', '0,1', '用户管理', 1, '/sys/user.html', 'main', '', '', '1', 'sys:user', 'system', now(), 'system', now(), NULL);
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (3, '1', '0,1', '角色管理', 2, '/sys/role.html', 'main', '1', '', '1', 'sys:role', 'system', now(), 'system', now(), '');
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (4, '1', '0,1', '菜单管理', 3, '/sys/menu.html', 'main', '1', '', '1', 'sys:menu', 'system', now(), 'system', now(), '');
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (5, '1', '0,1', '部门管理', 4, '/sys/dept.html', 'main', '1', NULL, '0', 'sys:dept', 'system', now(), 'system', now(), '');
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (6, '1', '0,1', '系统字典', 5, '/sys/dict.html', 'main', '1', '', '1', 'sys:dict', 'system', now(), 'system', now(), '');
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (7, '1', '0,1', '系统类型', 6, '/sys/param.html', 'main', '1', '', '1', 'sys:param', 'system', now(), 'system', now(), '');
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (8, '1', '0,1', '任务管理', 10, '/sys/task.html', 'main', '1', '', '1', 'sys:task', 'system', now(), 'system', now(), '');
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (9, '1', '0,1', '代码生成', 999, '/sys/gen.html', 'main', '1', '', '1', 'sys:gen', 'system', now(), 'system', now(), NULL);
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (10, '0', '0,', '系统监控', 2, '', '', '0', 'layui-icon-console', '1', 'sys:monitor', 'system', now(), 'system', now(), '');
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (11, '10', '0,10', '登录日志', 1, '/sys/loginlog.html', 'main', '1', '', '1', 'sys:loginlog', 'system', now(), 'system', now(), '');
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (13, '10', '0,10', '访问日志', 3, '/sys/operatlog.html', '2', '0', '', '1', 'sys:operatelog', 'system', now(), 'system', now(), '');
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (14, '10', '0,10', '在线用户', 4, '/sys/online.html', '1', '1', '', '0', 'sys:online', 'system', now(), 'system', now(), '');
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (15, '10', '0,10', 'DB请求监控', 5, '/sys/dbmonitor.html', '3', '1', '', '0', 'sys:dbmonitor', 'system', now(), 'system', now(), '');
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (16, '10', '0,10', '服务器监控', 6, '/sys/sysmonitor.html', '4', '1', '', '0', 'sys:sysmonitor', 'system', now(), 'system', now(), '');
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (17, '2', '0,1,2', '查询', 1, NULL, NULL, '999', NULL, '1', 'sys:user:qry', 'system' ,now(), 'system', now(), NULL);
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (18, '2', '0,1,2,', '修改', 1, NULL, NULL, '999', NULL, '1', 'sys:user:update', 'system', now(), 'system', now(), NULL);
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (19, '2', '0,1,2', '删除', 2, NULL, NULL, '999', NULL, '1', 'sys:user:delete', 'system', now(), 'system', now(), NULL);
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (20, '2', '0,1,2', '添加', 3, NULL, NULL, '999', '', '1', 'sys:user:save', 'system', now(), 'system', now(), NULL);
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (21, '3', '0,1,3', '查询', 1, NULL, NULL, '999', NULL, '1', 'sys:role:qry', 'system', now(), 'system', now(), NULL);
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (22, '3', '0,1,3,', '添加', 10, NULL, NULL, '999', NULL, '1', 'sys:role:save', 'system', now(), 'system', now(), NULL);
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (23, '3', '0,1,3,', '删除', 10, NULL, NULL, '999', NULL, '1', 'sys:role:delete', 'system', now(), 'system', now(), NULL);
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (24, '3', '0,1,3,', '修改', 10, NULL, NULL, '999', NULL, '1', 'sys:role:update', 'system', now(), 'system', now(), NULL);
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (25, '4', '0,1,4', '查询', 1, NULL, '', '999', NULL, '1', 'sys:menu:qry', 'system', now(), 'system', now(), '');
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (26, '4', '0,1,4,', '删除', 10, NULL, NULL, '999', NULL, '1', 'sys:menu:delete', 'system', now(), 'system', now(), NULL);
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (27, '4', '0,1,4,', '修改', 10, NULL, NULL, '999', NULL, '1', 'sys:menu:update', 'system', now(), 'system', now(), NULL);
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (28, '4', '0,1,4,', '添加', 10, NULL, NULL, '999', NULL, '1', 'sys:menu:save', 'system', now(), 'system', now(), NULL);
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (29, '5', '0,1,5', '查询', 1, NULL, '', '999', NULL, '0', 'sys:dept:qry', 'system', now(), 'system', now(), '');
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (30, '5', '0,1,5', '添加', 10, NULL, NULL, '999', NULL, '0', 'sys:dept:save', 'system', now(), 'system', now(), NULL);
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (31, '5', '0,1,5,', '删除', 10, NULL, NULL, '999', NULL, '0', 'sys:dept:delete', 'system', now(), 'system', now(), NULL);
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (32, '5', '0,1,5,', '修改', 10, NULL, NULL, '999', NULL, '0', 'sys:dept:update', 'system', now(), 'system', now(), NULL);
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (33, '6', '0,1,6', '查询', 1, NULL, NULL, '999', '', '1', 'sys:dict:qry', 'system', now(), 'system', now(), '');
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (34, '6', '0,1,6', '删除', 10, NULL, NULL, '999', NULL, '1', 'sys:dict:delete', 'system', now(), 'system', now(), NULL);
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (35, '6', '0,1,6,', '修改', 10, NULL, NULL, '999', NULL, '1', 'sys:dict:update', 'system', now(), 'system', now(), NULL);
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (36, '6', '0,1,6,', '添加', 10, NULL, NULL, '999', NULL, '1', 'sys:dict:save', 'system', now(), 'system', now(), NULL);
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (37, '7', '0,1,7', '查询', 1, NULL, NULL, '999', '', '1', 'sys:param:qry', 'system', now(), 'system', now(), '');
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (38, '7', '0,1,7,', '修改', 10, NULL, NULL, '999', NULL, '1', 'sys:param:update', 'system', now(), 'system', now(), NULL);
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (39, '7', '0,1,7,', '添加', 10, NULL, NULL, '999', NULL, '1', 'sys:param:save', 'system', now(), 'system', now(), NULL);
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (40, '7', '0,1,7,', '删除', 10, NULL, NULL, '999', NULL, '1', 'sys:param:delete', 'system', now(), 'system', now(), NULL);
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (41, '8', '0,1,8', '新增', 1, NULL, NULL, '999', '', '1', 'sys:task:save', 'system', now(), 'system', now(), NULL);
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (42, '8', '0,1,8', '删除', 2, NULL, NULL, '999', '', '1', 'sys:task:delete', 'system', now(), 'system', now(), NULL);
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (43, '8', '0,1,8', '查询', 3, NULL, NULL, '999', '', '1', 'sys:task:qry', 'system', now(), 'system', now(), NULL);
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (44, '8', '0,1,8', '编辑', 4, NULL, NULL, '999', '', '1', 'sys:task:update', 'system', now(), 'system', now(), NULL);
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (45, '8', '0,1,8', '执行', 5, NULL, NULL, '999', '', '1', 'sys:task:execute', 'system', now(), 'system', now(), NULL);
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (46, '9', '0,1,9,', '查询', 1, NULL, NULL, '999', NULL, '1', 'sys:gen:qry', 'system', now(), 'system', now(), NULL);
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (47, '9', '0,1,9,', '修改', 2, NULL, NULL, '999', NULL, '1', 'sys:gen:update', 'system', now(), 'system', now(), NULL);
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (48, '9', '0,1,9,', '删除', 3, NULL, NULL, '999', NULL, '1', 'sys:gen:delete', 'system', now(), 'system', now(), NULL);
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (49, '9', '0,1,9,', '添加', 4, NULL, NULL, '999', NULL, '1', 'sys:gen:save', 'system', now(), 'system', now(), NULL);
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (50, '11', '0,10,11', '查询', 1, NULL, NULL, '999', NULL, '0', 'sys:loginlog:qry', 'system', now(), 'system', now(), '');
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (51, '11', '0,10,11', '删除', 2, NULL, NULL, '999', NULL, '0', 'sys:loginlog:delete', 'system', now(), 'system', now(), NULL);
-INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES (52, '13', '0,10,13', '查询', 1, NULL, '', '999', 'layui-icon-search', '1', 'sys:operatelog:qry', 'system', now(), 'system', now(), '');
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('7c12029e77ae4630914b4341d6570d62', '0', '0,', '系统管理', 1, '', '', '', 'layui-icon-set', '1', 'sys', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('2c3ee7afc5e34b7987f4ff1a08309da1', '7c12029e77ae4630914b4341d6570d62', '0,7c12029e77ae4630914b4341d6570d62,', '用户管理', 1, '/sys/user.html', 'main', '', '', '1', 'sys:user', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('036f0f54e3ea449e8300e084b32163cf', '7c12029e77ae4630914b4341d6570d62', '0,7c12029e77ae4630914b4341d6570d62,', '角色管理', 2, '/sys/role.html', 'main', '1', '', '1', 'sys:role', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('9f7e046e5eab4e408b0ef00cabdd1a9d', '7c12029e77ae4630914b4341d6570d62', '0,7c12029e77ae4630914b4341d6570d62,', '菜单管理', 3, '/sys/menu.html', 'main', '1', '', '1', 'sys:menu', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('33a3c4316aee438fb29c247f8f905182', '7c12029e77ae4630914b4341d6570d62', '0,7c12029e77ae4630914b4341d6570d62,', '部门管理', 4, '/sys/dept.html', 'main', '1', '', '0', 'sys:dept', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('95678a7ca4e6466180a4b27c6ad15802', '7c12029e77ae4630914b4341d6570d62', '0,7c12029e77ae4630914b4341d6570d62,', '系统字典', 5, '/sys/dict.html', 'main', '1', '', '1', 'sys:dict', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('68341b06f67944c5b3848f1df091211c', '7c12029e77ae4630914b4341d6570d62', '0,7c12029e77ae4630914b4341d6570d62,', '系统类型', 6, '/sys/param.html', 'main', '1', '', '1', 'sys:param', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('518520e04c1640d5956874c3b2479df6', '7c12029e77ae4630914b4341d6570d62', '0,7c12029e77ae4630914b4341d6570d62,', '任务管理', 10, '/sys/task.html', 'main', '1', '', '1', 'sys:task', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('6d0dc5258c6e4356a05cd0b6d192a0b3', '7c12029e77ae4630914b4341d6570d62', '0,7c12029e77ae4630914b4341d6570d62,', '代码生成', 999, '/sys/gen.html', 'main', '1', '', '1', 'sys:gen', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('14189325fa2e41e090d4f630e4f58412', '0', '0,', '系统监控', 2, '', '', '0', 'layui-icon-console', '1', 'sys:monitor', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('9c908792c8644f0f94d6afaf5cde3611', '14189325fa2e41e090d4f630e4f58412', '0,14189325fa2e41e090d4f630e4f58412,', '登录日志', 1, '/sys/loginlog.html', 'main', '1', '', '1', 'sys:loginlog', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('0e4920df6cd644bc8e5682973a8cc4cd', '14189325fa2e41e090d4f630e4f58412', '0,14189325fa2e41e090d4f630e4f58412,', '访问日志', 2, '/sys/operatlog.html', '2', '0', '', '1', 'sys:operatelog', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('8b758aac17a142ccbbca46c15d7072ad', '14189325fa2e41e090d4f630e4f58412', '0,14189325fa2e41e090d4f630e4f58412,', '在线用户', 4, '/sys/online.html', '1', '1', '', '0', 'sys:online', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('935c1761b488416ba0f92949493f6b08', '14189325fa2e41e090d4f630e4f58412', '0,14189325fa2e41e090d4f630e4f58412,', 'DB请求监控', 5, '/sys/dbmonitor.html', '3', '1', '', '0', 'sys:dbmonitor', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('b6dce8a6caef4b3f83bc9046232207d4', '14189325fa2e41e090d4f630e4f58412', '0,14189325fa2e41e090d4f630e4f58412,', '服务器监控', 6, '/sys/sysmonitor.html', '4', '1', '', '0', 'sys:sysmonitor', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('63e8076cc12e45adab3c58c1d65196eb', '2c3ee7afc5e34b7987f4ff1a08309da1', '0,7c12029e77ae4630914b4341d6570d62,2c3ee7afc5e34b7987f4ff1a08309da1,', '查询', 1, NULL, NULL, '999', NULL, '1', 'sys:user:qry', 'system' ,now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('232f9732cbda49979a18efc94618feb0', '2c3ee7afc5e34b7987f4ff1a08309da1', '0,7c12029e77ae4630914b4341d6570d62,2c3ee7afc5e34b7987f4ff1a08309da1,', '修改', 2, NULL, NULL, '999', NULL, '1', 'sys:user:update', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('6da206a10226463f84a3b65c317de55e', '2c3ee7afc5e34b7987f4ff1a08309da1', '0,7c12029e77ae4630914b4341d6570d62,2c3ee7afc5e34b7987f4ff1a08309da1,', '删除', 3, NULL, NULL, '999', NULL, '1', 'sys:user:delete', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('9b604acfb3b84fafae439bdb616a2af8', '2c3ee7afc5e34b7987f4ff1a08309da1', '0,7c12029e77ae4630914b4341d6570d62,2c3ee7afc5e34b7987f4ff1a08309da1,', '添加', 4, NULL, NULL, '999', '', '1', 'sys:user:save', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('8f8521e4811d4a54bc6d87d2cdca7596', '036f0f54e3ea449e8300e084b32163cf', '0,7c12029e77ae4630914b4341d6570d62,036f0f54e3ea449e8300e084b32163cf,', '查询', 1, NULL, NULL, '999', NULL, '1', 'sys:role:qry', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('9c6fb0a563994495b909ec4b3323472f', '036f0f54e3ea449e8300e084b32163cf', '0,7c12029e77ae4630914b4341d6570d62,036f0f54e3ea449e8300e084b32163cf,', '添加', 2, NULL, NULL, '999', NULL, '1', 'sys:role:save', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('36b3e8da88b24fc7a3ce8173e8a802cd', '036f0f54e3ea449e8300e084b32163cf', '0,7c12029e77ae4630914b4341d6570d62,036f0f54e3ea449e8300e084b32163cf,', '删除', 3, NULL, NULL, '999', NULL, '1', 'sys:role:delete', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('8e725de701f84386bdff686b05323cc2', '036f0f54e3ea449e8300e084b32163cf', '0,7c12029e77ae4630914b4341d6570d62,036f0f54e3ea449e8300e084b32163cf,', '修改', 4, NULL, NULL, '999', NULL, '1', 'sys:role:update', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('38259f0d1fcb4356bf1ee000142cdc08', '9f7e046e5eab4e408b0ef00cabdd1a9d', '0,7c12029e77ae4630914b4341d6570d62,9f7e046e5eab4e408b0ef00cabdd1a9d,', '查询', 1, NULL, NULL, '999', NULL, '1', 'sys:menu:qry', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('c96cb8ad2f234f539de9cc60ceb950b7', '9f7e046e5eab4e408b0ef00cabdd1a9d', '0,7c12029e77ae4630914b4341d6570d62,9f7e046e5eab4e408b0ef00cabdd1a9d,', '删除', 2, NULL, NULL, '999', NULL, '1', 'sys:menu:delete', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('c9e9a1eae7584f7ea2fb8c2b46b84804', '9f7e046e5eab4e408b0ef00cabdd1a9d', '0,7c12029e77ae4630914b4341d6570d62,9f7e046e5eab4e408b0ef00cabdd1a9d,', '修改', 3, NULL, NULL, '999', NULL, '1', 'sys:menu:update', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('9ea0aa8ff3444acc9b428d78e13748b1', '9f7e046e5eab4e408b0ef00cabdd1a9d', '0,7c12029e77ae4630914b4341d6570d62,9f7e046e5eab4e408b0ef00cabdd1a9d,', '添加', 4, NULL, NULL, '999', NULL, '1', 'sys:menu:save', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('b7a232320de247128def9ce0c2d8cb69', '33a3c4316aee438fb29c247f8f905182', '0,7c12029e77ae4630914b4341d6570d62,33a3c4316aee438fb29c247f8f905182,', '查询', 1, NULL, NULL, '999', NULL, '0', 'sys:dept:qry', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('b1ea31f507e948ab8bca887657849ec5', '33a3c4316aee438fb29c247f8f905182', '0,7c12029e77ae4630914b4341d6570d62,33a3c4316aee438fb29c247f8f905182,', '添加', 2, NULL, NULL, '999', NULL, '0', 'sys:dept:save', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('1792e770ff7d464386ab217f11ee255b', '33a3c4316aee438fb29c247f8f905182', '0,7c12029e77ae4630914b4341d6570d62,33a3c4316aee438fb29c247f8f905182,', '删除', 3, NULL, NULL, '999', NULL, '0', 'sys:dept:delete', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('fee02dd2ecef48689b7b6f93ff7fcc69', '33a3c4316aee438fb29c247f8f905182', '0,7c12029e77ae4630914b4341d6570d62,33a3c4316aee438fb29c247f8f905182,', '修改', 4, NULL, NULL, '999', NULL, '0', 'sys:dept:update', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('4584708165894a75bb88c5a963618e2b', '95678a7ca4e6466180a4b27c6ad15802', '0,7c12029e77ae4630914b4341d6570d62,95678a7ca4e6466180a4b27c6ad15802,', '查询', 1, NULL, NULL, '999', '', '1', 'sys:dict:qry', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('b718fc6db4164da78dd3508f444c7675', '95678a7ca4e6466180a4b27c6ad15802', '0,7c12029e77ae4630914b4341d6570d62,95678a7ca4e6466180a4b27c6ad15802,', '删除', 2, NULL, NULL, '999', NULL, '1', 'sys:dict:delete', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('f45c7d9ac3084c8a822698a38b94f30e', '95678a7ca4e6466180a4b27c6ad15802', '0,7c12029e77ae4630914b4341d6570d62,95678a7ca4e6466180a4b27c6ad15802,', '修改', 3, NULL, NULL, '999', NULL, '1', 'sys:dict:update', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('d50289ec88484ead814fd5aedde3a279', '95678a7ca4e6466180a4b27c6ad15802', '0,7c12029e77ae4630914b4341d6570d62,95678a7ca4e6466180a4b27c6ad15802,', '添加', 4, NULL, NULL, '999', NULL, '1', 'sys:dict:save', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('2a2d79d7f9c642db85e97a7c664ad2b4', '68341b06f67944c5b3848f1df091211c', '0,7c12029e77ae4630914b4341d6570d62,68341b06f67944c5b3848f1df091211c,', '查询', 1, NULL, NULL, '999', '', '1', 'sys:param:qry', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('1f8e85d47387497aa57928cee51c7c88', '68341b06f67944c5b3848f1df091211c', '0,7c12029e77ae4630914b4341d6570d62,68341b06f67944c5b3848f1df091211c,', '修改', 2, NULL, NULL, '999', NULL, '1', 'sys:param:update', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('e048a4ef68464d889f93fa2617734c29', '68341b06f67944c5b3848f1df091211c', '0,7c12029e77ae4630914b4341d6570d62,68341b06f67944c5b3848f1df091211c,', '添加', 3, NULL, NULL, '999', NULL, '1', 'sys:param:save', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('6c9c2d7f25614b78abd370b093454780', '68341b06f67944c5b3848f1df091211c', '0,7c12029e77ae4630914b4341d6570d62,68341b06f67944c5b3848f1df091211c,', '删除', 4, NULL, NULL, '999', NULL, '1', 'sys:param:delete', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('c2e9b2320c4541eb9059040d82c73303', '518520e04c1640d5956874c3b2479df6', '0,7c12029e77ae4630914b4341d6570d62,518520e04c1640d5956874c3b2479df6,', '新增', 1, NULL, NULL, '999', '', '1', 'sys:task:save', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('e163e1d066c946d7b1cefaf55251e46d', '518520e04c1640d5956874c3b2479df6', '0,7c12029e77ae4630914b4341d6570d62,518520e04c1640d5956874c3b2479df6,', '删除', 2, NULL, NULL, '999', '', '1', 'sys:task:delete', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('cc299d841dc8462e8a0dec561fb3e3a8', '518520e04c1640d5956874c3b2479df6', '0,7c12029e77ae4630914b4341d6570d62,518520e04c1640d5956874c3b2479df6,', '查询', 3, NULL, NULL, '999', '', '1', 'sys:task:qry', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('815251d4e27c45908902436c63f780e5', '518520e04c1640d5956874c3b2479df6', '0,7c12029e77ae4630914b4341d6570d62,518520e04c1640d5956874c3b2479df6,', '编辑', 4, NULL, NULL, '999', '', '1', 'sys:task:update', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('3b199346de594da484eef7de37a9ac0c', '518520e04c1640d5956874c3b2479df6', '0,7c12029e77ae4630914b4341d6570d62,518520e04c1640d5956874c3b2479df6,', '执行', 5, NULL, NULL, '999', '', '1', 'sys:task:execute', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('03f387ed993949d68f8a913e98d1597b', '6d0dc5258c6e4356a05cd0b6d192a0b3', '0,7c12029e77ae4630914b4341d6570d62,6d0dc5258c6e4356a05cd0b6d192a0b3,', '查询', 1, NULL, NULL, '999', NULL, '1', 'sys:gen:qry', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('ce4c44f49a874eca9aac36ce5a3bc423', '6d0dc5258c6e4356a05cd0b6d192a0b3', '0,7c12029e77ae4630914b4341d6570d62,6d0dc5258c6e4356a05cd0b6d192a0b3,', '修改', 2, NULL, NULL, '999', NULL, '1', 'sys:gen:update', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('c65faa5426954220bcd4bb1f2fb3c5a3', '6d0dc5258c6e4356a05cd0b6d192a0b3', '0,7c12029e77ae4630914b4341d6570d62,6d0dc5258c6e4356a05cd0b6d192a0b3,', '删除', 3, NULL, NULL, '999', NULL, '1', 'sys:gen:delete', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('badc31a58b164e3b98a0eb2bd9433b7f', '6d0dc5258c6e4356a05cd0b6d192a0b3', '0,7c12029e77ae4630914b4341d6570d62,6d0dc5258c6e4356a05cd0b6d192a0b3,', '添加', 4, NULL, NULL, '999', NULL, '1', 'sys:gen:save', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('e87afee168ba4abd91bcb1220d07ed31', '9c908792c8644f0f94d6afaf5cde3611', '0,14189325fa2e41e090d4f630e4f58412,9c908792c8644f0f94d6afaf5cde3611,', '查询', 1, NULL, NULL, '999', NULL, '1', 'sys:loginlog:qry', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('5b170a188b6849508799f3a871a0f43f', '9c908792c8644f0f94d6afaf5cde3611', '0,14189325fa2e41e090d4f630e4f58412,9c908792c8644f0f94d6afaf5cde3611,', '删除', 2, NULL, NULL, '999', NULL, '0', 'sys:loginlog:delete', 'system', now(), 'system', now(), NULL);
+INSERT INTO `sys_menu` (ID, PARENT_ID, PARENT_IDS, NAME, SORT, HREF, TARGET, TYPE, ICON, IS_SHOW, PERMISSION, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS)VALUES ('fdfa5a2fa0124ba88211cc35e069cd1b', '0e4920df6cd644bc8e5682973a8cc4cd', '0,14189325fa2e41e090d4f630e4f58412,0e4920df6cd644bc8e5682973a8cc4cd,', '查询', 1, NULL, NULL, '999', 'layui-icon-search', '1', 'sys:operatelog:qry', 'system', now(), 'system', now(), NULL);
 COMMIT;
-
-/**
-'{"zh_CN":"查询","zh_HK":"查詢","vi_VN":"Hỏi thăm","en_US":"query"}'
-'{"zh_CN":"新增","zh_HK":"新增","vi_VN":"Thêm vào","en_US":"add"}'
-'{"zh_CN":"删除","zh_HK":"刪除","vi_VN":"xóa bỏ","en_US":"delete"}'
-'{"zh_CN":"编辑","zh_HK":"編輯","vi_VN":"biên tập","en_US":"edit"}'
- */
-
--- ----------------------------
--- Records of sys_role
--- ----------------------------
-BEGIN;
-INSERT INTO `sys_role`(ID, NAME, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS) VALUES (1, 'systemManager', 'system', now(), 'system', now(), 'systemManager');
-COMMIT;
-
--- ----------------------------
--- Records of sys_role_menu
--- ----------------------------
-BEGIN;
-INSERT INTO `sys_role_menu` VALUES ('2', '');
-INSERT INTO `sys_role_menu` VALUES ('2', '273');
-INSERT INTO `sys_role_menu` VALUES ('2', '274');
-INSERT INTO `sys_role_menu` VALUES ('2', '275');
-INSERT INTO `sys_role_menu` VALUES ('2', '276');
-INSERT INTO `sys_role_menu` VALUES ('2', '277');
-INSERT INTO `sys_role_menu` VALUES ('2', '278');
-INSERT INTO `sys_role_menu` VALUES ('2', '279');
-INSERT INTO `sys_role_menu` VALUES ('2', '280');
-INSERT INTO `sys_role_menu` VALUES ('2', '281');
-INSERT INTO `sys_role_menu` VALUES ('2', '282');
-INSERT INTO `sys_role_menu` VALUES ('2', '283');
-INSERT INTO `sys_role_menu` VALUES ('2', '284');
-INSERT INTO `sys_role_menu` VALUES ('2', '287');
-INSERT INTO `sys_role_menu` VALUES ('2', '288');
-INSERT INTO `sys_role_menu` VALUES ('2', '289');
-INSERT INTO `sys_role_menu` VALUES ('2', '290');
-INSERT INTO `sys_role_menu` VALUES ('2', '291');
-INSERT INTO `sys_role_menu` VALUES ('2', '292');
-INSERT INTO `sys_role_menu` VALUES ('2', '293');
-INSERT INTO `sys_role_menu` VALUES ('2', '294');
-INSERT INTO `sys_role_menu` VALUES ('2', '295');
-INSERT INTO `sys_role_menu` VALUES ('2', '296');
-INSERT INTO `sys_role_menu` VALUES ('2', '297');
-INSERT INTO `sys_role_menu` VALUES ('2', '298');
-INSERT INTO `sys_role_menu` VALUES ('2', '299');
-INSERT INTO `sys_role_menu` VALUES ('2', '300');
-INSERT INTO `sys_role_menu` VALUES ('2', '301');
-INSERT INTO `sys_role_menu` VALUES ('2', '307');
-INSERT INTO `sys_role_menu` VALUES ('2', '308');
-INSERT INTO `sys_role_menu` VALUES ('2', '309');
-INSERT INTO `sys_role_menu` VALUES ('2', '311');
-INSERT INTO `sys_role_menu` VALUES ('2', '312');
-INSERT INTO `sys_role_menu` VALUES ('2', '313');
-INSERT INTO `sys_role_menu` VALUES ('2', '314');
-INSERT INTO `sys_role_menu` VALUES ('2', '316');
-INSERT INTO `sys_role_menu` VALUES ('2', '318');
-INSERT INTO `sys_role_menu` VALUES ('2', '319');
-INSERT INTO `sys_role_menu` VALUES ('2', '320');
-INSERT INTO `sys_role_menu` VALUES ('2', '321');
-INSERT INTO `sys_role_menu` VALUES ('2', '322');
-INSERT INTO `sys_role_menu` VALUES ('2', '323');
-INSERT INTO `sys_role_menu` VALUES ('2', '324');
-INSERT INTO `sys_role_menu` VALUES ('2', '325');
-INSERT INTO `sys_role_menu` VALUES ('2', '326');
-INSERT INTO `sys_role_menu` VALUES ('2', '327');
-INSERT INTO `sys_role_menu` VALUES ('2', '328');
-INSERT INTO `sys_role_menu` VALUES ('2', '329');
-INSERT INTO `sys_role_menu` VALUES ('2', '330');
-INSERT INTO `sys_role_menu` VALUES ('2', '331');
-COMMIT;
-
--- ----------------------------
--- Records of sys_task
--- demo
--- ----------------------------
--- # BEGIN;
--- # INSERT INTO `sys_task` VALUES (1, '心跳检测', 'heartBeatJob', '0 */5 * * * ?', 'heartBeatJob', 0, now(), '执行成功,发送心跳数据到设备台数:26', '', '', now(), now(), '1', '1', 0);
--- # COMMIT;
 
 
 -- ----------------------------
@@ -156,9 +71,9 @@ COMMIT;
 -- Records of sys_param_type
 -- ----------------------------
 BEGIN;
-INSERT INTO sys_param_class (PARAM_TYPE_CLASS, PARAM_TYPE_NAME, VISIBLE, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS, PHYSICS_FLAG, version) VALUES ('SYS_USER_TYPE', 'SYS_USER_TYPE', 1, 'system', now(), 'system', now(), 'SYS_USER_TYPE', 1, 1);
-INSERT INTO sys_param_type (PARAM_TYPE_CLASS, PARAM_TYPE_ID, PARAM_TYPE_CODE, PARAM_TYPE_NAME, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS, PHYSICS_FLAG, version) VALUES ('SYS_USER_TYPE', 1, 'MANAGER', '管理员', 'system', now(), 'system', now(), '', 1, 1);
-INSERT INTO sys_param_type (PARAM_TYPE_CLASS, PARAM_TYPE_ID, PARAM_TYPE_CODE, PARAM_TYPE_NAME, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS, PHYSICS_FLAG, version) VALUES ('SYS_USER_TYPE', 2, 'USER', '普通用户', 'system', now(), 'system', now(), '', 1, 1);
+INSERT INTO sys_param_class (ID, PARAM_TYPE_CLASS, PARAM_TYPE_NAME, VISIBLE, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS, PHYSICS_FLAG, version) VALUES ('d9b642d844a04d23be96b104f3be5ea9', 'SYS_USER_TYPE', 'SYS_USER_TYPE', 1, 'system', now(), 'system', now(), 'SYS_USER_TYPE', 1, 1);
+INSERT INTO sys_param_type (ID, PARAM_TYPE_CLASS, PARAM_TYPE_ID, PARAM_TYPE_CODE, PARAM_TYPE_NAME, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS, PHYSICS_FLAG, version) VALUES ('f8f7c20028e34fe49db08c990e780857', 'SYS_USER_TYPE', 1, 'MANAGER', '管理员', 'system', now(), 'system', now(), '', 1, 1);
+INSERT INTO sys_param_type (ID, PARAM_TYPE_CLASS, PARAM_TYPE_ID, PARAM_TYPE_CODE, PARAM_TYPE_NAME, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS, PHYSICS_FLAG, version) VALUES ('5fa4ccc8e8ed46999615e796eea1c8d4', 'SYS_USER_TYPE', 2, 'USER', '普通用户', 'system', now(), 'system', now(), '', 1, 1);
 COMMIT;
 
 -- ----------------------------
@@ -167,6 +82,6 @@ COMMIT;
 -- ----------------------------
 BEGIN;
 INSERT INTO `sys_user`(ID, DEPT_ID, LOGIN_NAME, PASSWORD, SALT, NAME, MOBILE, EMAIL, USER_TYPE, STATUS, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS, lang) VALUES
-(1, NULL, 'superadmin', '573cb6da1a1c15ebe3040eb9f7b46c483355b8e7edbd4d531bf8a0c0201ab064', 'rNBdNtjuefmwLGzXjHoN', 'Administrator', '18999999999', 'test@gmail.com', '1', '1', 'system', now(), 'system', now(), 'super Administrator', 'zh_CN');
+('bc1fd564372b4fef841a96a6ba007787', NULL, 'superadmin', '573cb6da1a1c15ebe3040eb9f7b46c483355b8e7edbd4d531bf8a0c0201ab064', 'rNBdNtjuefmwLGzXjHoN', 'SUPERADMIN', '18822222222', 'test@gmail.com', '1', '1', 'system', now(), 'system', now(), 'Super Administrator', 'zh_CN');
 COMMIT;
 

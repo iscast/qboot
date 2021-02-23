@@ -10,10 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.io.Serializable;
 
 /**
  * 系统登陆日志
@@ -33,19 +30,4 @@ public class SysLoginLogController extends BaseController {
 		PageInfo<SysLoginLogDto> page = sysLoginLogService.findByPage(sysLoginLog);
 		return ResponeModel.ok(page);
 	}
-	
-	@PreAuthorize("hasAuthority('sys:loginlog:qry')")
-	@RequestMapping("/get")
-	public ResponeModel get(@RequestParam Serializable id) {
-		SysLoginLogDto sysLoginLog = sysLoginLogService.findById(id);
-		//富文本处理
-		return ResponeModel.ok(sysLoginLog);
-	}
-
-	@PreAuthorize("hasAuthority('sys:loginlog:qry')")
-	@PostMapping("/qryOnlineUser")
-	public ResponeModel qryOnlineUser() {
-        return ResponeModel.error();
-	}
-	
 }
