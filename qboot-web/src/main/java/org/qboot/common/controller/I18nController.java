@@ -1,6 +1,7 @@
 package org.qboot.common.controller;
 
 import org.apache.commons.lang.StringUtils;
+import org.qboot.common.annotation.AccLog;
 import org.qboot.common.entity.ResponeModel;
 import org.qboot.common.security.CustomUser;
 import org.qboot.common.security.SecurityUtils;
@@ -23,9 +24,10 @@ import java.util.Locale;
 @RequestMapping("/i18n")
 public class I18nController extends BaseController {
 
+    @AccLog
     @GetMapping("/getLocale")
     public ResponeModel getLocale(HttpSession session, String lang){
-        if(StringUtils.isNotBlank(lang)) {
+        if(StringUtils.isNotBlank(lang) && !"null".equalsIgnoreCase(lang)) {
             String[] i18nStr = lang.split("_");
             Locale locale = new Locale(i18nStr[0],i18nStr[1]);
             session.setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, locale);
