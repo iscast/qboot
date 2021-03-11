@@ -24,6 +24,8 @@ import java.util.Locale;
 @RequestMapping("/i18n")
 public class I18nController extends BaseController {
 
+    private final static Locale DEFAULT_LOCATE = Locale.SIMPLIFIED_CHINESE;
+
     @AccLog
     @GetMapping("/getLocale")
     public ResponeModel getLocale(HttpSession session, String lang){
@@ -35,7 +37,7 @@ public class I18nController extends BaseController {
         }
 
         Object sessionAttr = session.getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
-        if(null != sessionAttr) {
+        if(null != sessionAttr && !"null".equalsIgnoreCase(lang)) {
             return ResponeModel.ok(sessionAttr);
         }
 
@@ -47,7 +49,6 @@ public class I18nController extends BaseController {
             return ResponeModel.ok(userLocale);
         }
 
-        Locale locale = LocaleContextHolder.getLocale();
-        return ResponeModel.ok(locale);
+        return ResponeModel.ok(DEFAULT_LOCATE);
     }
 }
