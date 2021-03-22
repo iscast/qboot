@@ -97,7 +97,7 @@ layui.define(['_config', 'layer'], function (exports) {
             if (token) {
                 data.access_token = token.access_token;
             }
-            if(typeof(contentType) == "undefined" && contentType != null) {
+            if(typeof(contentType) != "undefined" && contentType != null) {
                 admin.ajax({
                     url: _config.base_server + url,
                     data: data,
@@ -114,6 +114,7 @@ layui.define(['_config', 'layer'], function (exports) {
                 });
                 return;
             }
+
             admin.ajax({
                 url: _config.base_server + url,
                 data: data,
