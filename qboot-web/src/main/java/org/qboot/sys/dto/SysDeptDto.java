@@ -16,12 +16,11 @@ public class SysDeptDto extends TreeEntity<String> {
 	/**
 	 * 部门名称
 	 */
-	@NotNull
-	@Length(min=1,max=50)
 	private String name;
 	
 	private String type;
 	private Integer hasSub=0;
+    private String parentName;
 
 	public String getName() {
 		return name;
@@ -53,4 +52,11 @@ public class SysDeptDto extends TreeEntity<String> {
 		this.hasSub = hasSub;
 	}
 
+    public String getParentName() {
+        return parentName;
+    }
+
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
+    }
 }
