@@ -110,38 +110,15 @@ public class SysDeptController extends BaseController {
     @AccLog
     @PreAuthorize("hasAuthority('sys:dept:save')")
     @PostMapping({"/save"})
-    @Transactional(rollbackFor = Exception.class)
     public ResponeModel save(@Validated SysDeptDto sysDept) {
-        try {
-            int count = sysDeptService.checkNameUnique(sysDept);
-            if(count > 0 ){
-                return ResponeModel.error("部门名称重复");
-            }
-            SysDeptDto parent = null;
-            if (StringUtils.isNotEmpty(sysDept.getParentId())) {
-                parent = (SysDeptDto)this.sysDeptService.findById(sysDept.getParentId());
-            }
-            if (StringUtils.isEmpty(sysDept.getParentId())) {
-                sysDept.setParentId("0");
-                sysDept.setParentIds("0");
-            } else if (parent != null && parent.getParentId().equals("0")) {
-                sysDept.setParentId((String)parent.getId());
-                sysDept.setParentIds("1");
-            } else if (parent != null && parent.getParentIds().contains("1")) {
-                sysDept.setParentId((String)parent.getId());
-                sysDept.setParentIds("2");
-            }
-            sysDept.setCreateBy(SecurityUtils.getLoginName());
-            sysDept.setUpdateBy(SecurityUtils.getLoginName());
-            int cnt = this.sysDeptService.save(sysDept);
-            if (cnt > 0) {
-                return ResponeModel.ok();
-            } else {
-                return ResponeModel.error("");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+        int count = sysDeptService.checkNameUnique(sysDept);
+        if(count > 0 ){
+            return ResponeModel.error("部门名称重复");
+        }
+        int cnt = this.sysDeptService.save(sysDept);
+        if (cnt > 0) {
+            return ResponeModel.ok();
+        } else {
             return ResponeModel.error("");
         }
     }

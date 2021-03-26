@@ -90,39 +90,44 @@
     <include refid="Base_Column_List" />
     from <include refid="Join_Table" />
     <where>
-    		<if test="id !=null">
-    			and u.id = #{id}
-    		</if>
-    		<if test="deptId !=null and deptId!=''">
-    			and (d.id = #{deptId} or d.parent_ids like concat('%', #{deptId},'%'))
-    		</if>
-    		<if test="status !=null">
-    			and u.status = #{status}
-    		</if>
-    		<if test="loginName !=null and loginName!=''">
-    			and u.login_name like concat('%', #{loginName}, '%')
-    		</if>
-    		<if test="name !=null and name!=''">
-    			and u.name like concat('%',#{name},'%')
-    		</if>
-    		<if test="mobile !=null and mobile !=''">
-    			and u.mobile like concat('%',#{mobile},'%')
-    		</if>
-    		<if test="fldN1 !=null">
-    			and u.fld_n1 = #{fldN1}
-    		</if>
-    		<if test="fldN2 !=null">
-    			and u.fld_n2 = #{fldN2}
-    		</if>
-    		<if test="fldS1 !=null and fldS1 !=''">
-    			and u.fld_s1 like concat('%', #{fldS1},'%')
-    		</if>
-    		<if test="fldS2 !=null and fldS2 !=''">
-    			and u.fld_s2 like concat('%', #{fldS2},'%')
-    		</if>
-    		<if test="createBy !=null and createBy !=''">
-    			and u.create_by = #{createBy}
-    		</if>
+        <if test="id !=null">
+            and u.id = #{id}
+        </if>
+        <choose>
+            <when test='deptId !=null and deptId!="" and deptId.contains(",")'>
+                or d.parent_ids like concat('%', #{deptId},'%')
+            </when>
+            <when test="deptId !=null and deptId!=''">
+                and d.id = #{deptId}
+            </when>
+        </choose>
+        <if test="status !=null">
+            and u.status = #{status}
+        </if>
+        <if test="loginName !=null and loginName!=''">
+            and u.login_name like concat('%', #{loginName}, '%')
+        </if>
+        <if test="name!=null and name!=''">
+            and u.name like concat('%',#{name},'%')
+        </if>
+        <if test="mobile !=null and mobile !=''">
+            and u.mobile like concat('%',#{mobile},'%')
+        </if>
+        <if test="fldN1 !=null">
+            and u.fld_n1 = #{fldN1}
+        </if>
+        <if test="fldN2 !=null">
+            and u.fld_n2 = #{fldN2}
+        </if>
+        <if test="fldS1 !=null and fldS1 !=''">
+            and u.fld_s1 like concat('%', #{fldS1},'%')
+        </if>
+        <if test="fldS2 !=null and fldS2 !=''">
+            and u.fld_s2 like concat('%', #{fldS2},'%')
+        </if>
+        <if test="createBy !=null and createBy !=''">
+            and u.create_by = #{createBy}
+        </if>
     </where>
       order by id desc
   </select>

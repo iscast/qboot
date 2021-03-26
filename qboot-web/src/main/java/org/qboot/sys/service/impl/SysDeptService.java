@@ -1,10 +1,13 @@
 package org.qboot.sys.service.impl;
 
 import org.apache.commons.lang3.StringUtils;
+import org.qboot.common.constants.SysConstants;
+import org.qboot.common.security.SecurityUtils;
 import org.qboot.common.service.CrudService;
 import org.qboot.sys.dao.SysDeptDao;
 import org.qboot.sys.dto.SysDeptDto;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.io.Serializable;
@@ -17,6 +20,27 @@ import java.util.List;
  */
 @Service
 public class SysDeptService extends CrudService<SysDeptDao, SysDeptDto> {
+
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public int save(SysDeptDto sysDept) {
+        SysDeptDto parent = null;
+        if (StringUtils.isNotEmpty(sysDept.getParentId())) {
+            parent = (SysDeptDto)this.d.findById(sysDept.getParentId());
+        }
+        if (StringUtils.isEmpty(sysDept.getParentId()) || parent == null) {
+            sysDept.setParentId("0");
+            sysDept.setParentIds("0");
+        } else {
+            sysDept.setParentId((String)parent.getId());
+            sysDept.setParentIds(parent.getParentIds() + SysConstants.SEPARATOR + parent.getId());
+        }
+        sysDept.setCreateBy(SecurityUtils.getLoginName());
+        sysDept.setUpdateBy(SecurityUtils.getLoginName());
+        return super.save(sysDept);
+    }
+
 
     public List<SysDeptDto> findDeptByParentId(String parentId){
         SysDeptDto sysMenu = new SysDeptDto();
