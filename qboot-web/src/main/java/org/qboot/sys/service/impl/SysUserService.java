@@ -29,21 +29,31 @@ public class SysUserService extends CrudService<SysUserDao, SysUserDto> {
 
 	public SysUserDto findByLoginName(String loginName) {
         MyAssertTools.hasLength(loginName, SYS_USER_LOGINNAME_EMPTY);
-		List<SysUserDto> list = this.d.findByLoginName(loginName);
-		return list.isEmpty() ? null : list.get(0);
+        SysUserDto qry = new SysUserDto();
+        qry.setLoginName(loginName);
+		return this.d.findByDto(qry);
 	}
+
+    public SysUserDto findByMobile(String mobile) {
+        MyAssertTools.hasLength(mobile, SYS_USER_MOBILE_EMPTY);
+        SysUserDto qry = new SysUserDto();
+        qry.setMobile(mobile);
+        return this.d.findByDto(qry);
+    }
+
+    public SysUserDto findByDto(SysUserDto dto) {
+        return this.d.findByDto(dto);
+    }
 	
 	public boolean checkLoginName(Long userId, String loginName) {
         MyAssertTools.hasLength(loginName, SYS_USER_LOGINNAME_EMPTY);
-		List<SysUserDto> list = this.d.findByLoginName(loginName);
+        SysUserDto qry = new SysUserDto();
+        qry.setLoginName(loginName);
+		SysUserDto exesitUser = this.d.findByDto(qry);
 		
-		if(userId != null && list.isEmpty()) {
+		if(exesitUser == null) {
 			return false;
-		}
-		if(list.isEmpty()) {
-			return false;
-		}
-		if(userId != null && list.get(0).getId().equals(userId)) {
+		}else if(userId != null && exesitUser.getId().equals(userId)) {
 			return false;
 		}
 		return true;

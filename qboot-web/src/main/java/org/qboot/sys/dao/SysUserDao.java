@@ -1,10 +1,10 @@
 package org.qboot.sys.dao;
 
-import java.util.List;
-
+import org.qboot.common.dao.CrudDao;
 import org.qboot.sys.dto.SysUserDto;
 import org.qboot.sys.dto.SysUserRoleDto;
-import org.qboot.common.dao.CrudDao;
+
+import java.util.List;
 
 /**
  * 系统用户
@@ -17,12 +17,12 @@ public interface SysUserDao extends CrudDao<SysUserDto> {
 	
 	int insertUserRole(List<SysUserRoleDto> list);
 	
-	List<SysUserDto> findByLoginName(String loginName);
-	
 	int updateSelect(SysUserDto sysUser);
 
 	int initPwd(SysUserDto sysUser);
 	int setStatus(SysUserDto sysUser);
 
     SysUserDto findSecretInfo(SysUserDto qry);
+
+    SysUserDto findByDto(SysUserDto qry);
 }
