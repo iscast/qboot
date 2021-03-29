@@ -27,13 +27,13 @@ public class SysDeptService extends CrudService<SysDeptDao, SysDeptDto> {
     public int save(SysDeptDto sysDept) {
         SysDeptDto parent = null;
         if (StringUtils.isNotEmpty(sysDept.getParentId())) {
-            parent = (SysDeptDto)this.d.findById(sysDept.getParentId());
+            parent = this.d.findById(sysDept.getParentId());
         }
         if (StringUtils.isEmpty(sysDept.getParentId()) || parent == null) {
             sysDept.setParentId("0");
             sysDept.setParentIds("0");
         } else {
-            sysDept.setParentId((String)parent.getId());
+            sysDept.setParentId(parent.getId());
             sysDept.setParentIds(parent.getParentIds() + SysConstants.SEPARATOR + parent.getId());
         }
         sysDept.setCreateBy(SecurityUtils.getLoginName());
@@ -83,39 +83,8 @@ public class SysDeptService extends CrudService<SysDeptDao, SysDeptDto> {
         return d.getDeptIds(id);
     }
 
-    /**
-     * 方法表述: 获取受理部门上级部门名称
-     */
-    public String getParentName(String deptNo) {
-        String parentName = "";
-        if (StringUtils.isBlank(deptNo)) {
-            return parentName;
-        }
-        try {
-            SysDeptDto deptDto = this.d.findById(deptNo);
-            if (null != deptDto) {
-                SysDeptDto dto = this.d.findById(deptDto.getParentId());
-                if (null != dto) {
-                    parentName = dto.getName();
-                } else {
-                    parentName = "";
-                }
-            }
-        } catch (Exception e) {
-            parentName = "";
-            e.printStackTrace();
-        }
-        return parentName;
-    }
-
     public List<SysDeptDto> relationQueryDept(SysDeptDto dto) {
         List<SysDeptDto> list = d.relationQueryDept(dto);
-        list.forEach(i -> {
-            SysDeptDto deptDto = d.findById(i.getParentId());
-            if (null != deptDto) {
-                i.setParentName(deptDto.getName());
-            }
-        });
         return list;
     }
 }

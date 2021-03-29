@@ -40,12 +40,11 @@
                 and parent_ids in (0,1)
             </if>
             <if test="name !=null and name!=''">
-                and name like concat('%',#{name},'%')
+                and name = #{name}
             </if>
             <if test="physicsFlag !=null">
                 and PHYSICS_FLAG = #{physicsFlag}
             </if>
-
         </where>
         order by sort desc
     </select>

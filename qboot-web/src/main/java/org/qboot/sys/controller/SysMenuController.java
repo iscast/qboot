@@ -3,7 +3,6 @@ package org.qboot.sys.controller;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.qboot.common.annotation.AccLog;
-import org.qboot.common.constants.SysConstants;
 import org.qboot.common.controller.BaseController;
 import org.qboot.common.entity.AuthTreeEntity;
 import org.qboot.common.entity.ResponeModel;
@@ -38,7 +37,7 @@ import static org.qboot.sys.exception.errorcode.SysModuleErrTable.*;
 @RequestMapping("${admin.path}/sys/menu")
 public class SysMenuController extends BaseController {
 	
-	protected Logger logger = LoggerFactory.getLogger(getClass());
+	protected Logger logger = LoggerFactory.getLogger(SysMenuController.class);
 
 	@Autowired
 	private SysMenuService sysMenuService;
