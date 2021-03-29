@@ -1,13 +1,9 @@
 <div class="admin-content-body">
-
     <div class="rdp-table-card">
-
         <div class="table-action-group">
             <div class="left">
-                <!--<button class="layui-btn table-action-btn default layui-i18n" i18n-res="global" i18n-key="layui.table.btn.batchAudit"></button>-->
             </div>
             <div class="right">
-                <!--<button class="layui-btn table-action-btn default layui-i18n" i18n-res="global" i18n-key="layui.table.btn.export"></button>-->
                 <button id="dept-btn-add" type="button" class="layui-btn layui-btn-add table-action-btn primary data-auth" data-auth="sys:dept:save"></button>
             </div>
         </div>
@@ -28,38 +24,31 @@
         var _i18n = layui._i18n;
         var msgs = _i18n.getMsg('sys');
         var tableId='sys_dept_treeTable';
-
         var sysDeptIdArr = [100,110,120,130,140,150];
         var ptable = treeGrid.render({
             id:tableId
             ,elem: '#'+tableId
             ,idField:'id'
-            ,url: _config.base_server + '/sys/dept/qryDepts'
+            ,url: _config.base_server + '/sys/dept/qryAll'
             ,method: "get"
             ,treeId:'id'//树形id字段名称
             ,treeUpId:'parentId'//树形父id字段名称
             ,treeShowName:'name'//以树形式显示的字段
-            ,height:'full-550'
-            ,skin: 'nob'
+            // ,height:'full-550'
+            // ,skin: 'nob'
             ,isOpenDefault: false//节点默认是展开还是折叠
+            ,page:false
             ,cols: [[
                 {field:'name',
                     title: "部门名称",
-                    templet: function(d){
-                        return _i18n.getGlobalVal(d.name);
-                    },
                     align:'left',
                     minWidth: 100
                 }
-                ,{title: msgs['sys.table.title.operation'], align:'right'
+                ,{title: '操作', align:'right'
                     ,templet: function(d){
                         var upBtn = '';
                         if(admin.haveAuth('sys:dept:update')){
-                            upBtn +=
-                                '<a class="row-edit tb-action-line hint--left" lay-event="edit" ' +
-                                ' aria-label="'+msgs['sys.form.operation.edit']+'">' +
-                                '<i class="tb-action-line-icon iconfont iconxiugaibianji"/>' +
-                                '</a>';
+                            upBtn = '<button class="sys_menu_auth layui-btn layui-btn-xs" lay-event="edit">'+msgs['sys.form.operation.edit']+'</button>';
                         }
                         if(upBtn === ''){
                             return _i18n.getGlobalVal('layui.operation.tips.noPermission');
@@ -96,9 +85,7 @@
                 deptLayTableToggleClass();
             },
             done: function(res, curr, count){
-                admin.checkResponseData(res);
-                //分页条国际化
-                _i18n.initPageBar();
+                _i18n.initPage();
             }
         });
 
@@ -107,18 +94,19 @@
                 //编辑菜单
                 admin.req('/sys/dept/get', {id: obj.data.id}, function (data) {
                     layer.closeAll('loading');
-                    if (data.code === '0') {
+                    if (data.code == '0') {
                         admin.putTempData('t_dept', data.data);
                         var modalTitle =  '<p class="breadcrumb"><span>'+ '部门管理' + " / </span>"
                             + '<span>' + data.data.name + ' / </span>'
                             + '<span class="bc-strong">'+  '编辑部门' + '</span>' + '</p>';
-                        admin.popupBottom({
+                        admin.popupCenter({
                             title: modalTitle,
-                            area: ['100vw', '100vh'],
+                            area: ['900px', '500px'],
+                            offset:'20px',
                             path: 'pages/sys/dept_form.html'
                         });
                     } else {
-                        admin.toast({txt: data.msg, type: 'error'});
+                        layer.msg(data.msg, {icon: 5});
                     }
                 }, 'post');
 
@@ -134,17 +122,16 @@
 
         // 添加
         $('#dept-btn-add').click(function () {
-            admin.putTempData('t_dept', {});
+            admin.putTempData('t_dept', null);
             var modalTitle =  '<p class="breadcrumb"><span>'+ '部门管理' + " / </span>"
                 + '<span class="bc-strong">'+  '添加部门' + '</span>' + '</p>';
-            admin.popupBottom({
+            admin.popupCenter({
                 title: modalTitle,
-                area: ['100vw', '100vh'],
+                area: ['900px', '500px'],
+                offset:'20px',
                 path: 'pages/sys/dept_form.html'
             });
         });
-
-
 
         _i18n.initPage(function () {
             //点击行变色

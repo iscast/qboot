@@ -24,8 +24,7 @@
 		<div class="layui-form-item">
         <label class="layui-form-label">父级部门</label>
         	<div class="layui-input-block">
-            	<select id="parentId" name="parentId" xm-select="parentId" lay-verify="required">
-	            </select>
+            	<select id="parentId" name="parentId" xm-select-radio xm-select="parentId" lay-verify="required"></select>
         	</div>
     	</div>
         <div class="layui-form-item">
@@ -59,22 +58,22 @@
                 var deptSelectData = new Array();
                 for (var i = 0; i < data.data.length; i++) {
                 	deptSelectData.push({name: data.data[i].name, value: data.data[i].id});
-                } 
+                }
                 formSelects.data('parentId', 'local', {arr: deptSelectData});
-                
+
              // 回显dept数据
                 var dept = admin.getTempData('t_dept');
                 $('#dept-form').attr('method', 'POST');
                 if (dept) {
                     form.val('dept-form', dept);
-                    
+
                     var rds = new Array();
                     for (var i = 0; i < dept.parentId.length; i++) {
                         rds.push(dept.parentId[i]);
                     }
                     formSelects.value('parentId', rds);
                 }
-                
+
             } else {
                 layer.msg('获取部门列表失败', {icon: 2});
             }

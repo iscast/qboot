@@ -1,93 +1,134 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.qboot.sys.dao.SysDeptDao" >
-  <resultMap id="BaseResultMap" type="org.qboot.sys.dto.SysDeptDto" >
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="parent_id" property="parentId" jdbcType="VARCHAR" />
-    <result column="parent_ids" property="parentIds" jdbcType="VARCHAR" />
-    <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="sort" property="sort" jdbcType="INTEGER" />
-    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
-    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
-    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
-    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
-    <result column="remarks" property="remarks" jdbcType="VARCHAR" />
-    <result column="hasSub" property="hasSub" jdbcType="INTEGER" />
-  </resultMap>
-  
-  <sql id="Base_Column_List" >
-    id, parent_id, parent_ids, name, sort, create_by, create_date, update_by, update_date, 
-    remarks
-  </sql>
-  
-  <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select 
-    <include refid="Base_Column_List" />
-    from sys_dept
-    where id = #{id}
-  </select>
-  
-  <select id="findList" resultMap="BaseResultMap" parameterType="org.qboot.sys.dto.SysDeptDto" >
-    select 
-    <include refid="Base_Column_List" />
-    	, (select count(1) from sys_dept where parent_id = d.id) as hasSub
-    from sys_dept d
-    <where>
-    		<if test="parentId !=null and parentId!=''">
-    			parent_id = #{parentId}
-    		</if>
-    		<if test="parentIds !=null and parentIds!=''">
-    			and parent_ids like concat(#{parentIds},'%')
-    		</if>
-    		<if test="name !=null and name!=''">
-    			and name like concat('%',#{name},'%')
-    		</if>
-    </where>
-    order by id desc
-  </select>
-  
-  <delete id="deleteById" >
-    delete from sys_dept where id = #{id}
-  </delete>
-  
-  <delete id="deleteRoleDeptByDeptId" parameterType="java.lang.String">
-		delete from sys_role_dept where dept_id= #{deptId}
-  </delete>
-	
-  <insert id="insert" parameterType="org.qboot.sys.dto.SysDeptDto" >
-    insert into sys_dept (parent_id, parent_ids, name, sort, create_by, create_date, update_by, update_date, remarks)
-    values (#{parentId,jdbcType=VARCHAR}, #{parentIds,jdbcType=VARCHAR}, 
-      #{name,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER}, #{createBy,jdbcType=VARCHAR}, 
-      #{createDate,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, 
-      #{remarks,jdbcType=VARCHAR})
-  </insert>
-  
-  <update id="update" parameterType="org.qboot.sys.dto.SysDeptDto" >
-    update sys_dept
-    <set >
-      <if test="parentId != null" >
-        parent_id = #{parentId,jdbcType=VARCHAR},
-      </if>
-      <if test="parentIds != null" >
-        parent_ids = #{parentIds,jdbcType=VARCHAR},
-      </if>
-      <if test="name != null" >
-        name = #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="sort != null" >
-        sort = #{sort,jdbcType=INTEGER},
-      </if>
-      <if test="updateBy != null" >
-        update_by = #{updateBy,jdbcType=VARCHAR},
-      </if>
-      <if test="updateDate != null" >
-        update_date = #{updateDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="remarks != null" >
-        remarks = #{remarks,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{id}
-  </update>
-  
+    <resultMap id="BaseResultMap" type="org.qboot.sys.dto.SysDeptDto" >
+        <id column="id" property="id" jdbcType="VARCHAR" />
+        <result column="parent_id" property="parentId" jdbcType="VARCHAR" />
+        <result column="parent_ids" property="parentIds" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="sort" property="sort" jdbcType="INTEGER" />
+        <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+        <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+        <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+        <result column="PHYSICS_FLAG" property="physicsFlag" jdbcType="TINYINT" />
+        <result column="hasSub" property="hasSub" jdbcType="INTEGER" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        id, parent_id, parent_ids, name, sort, create_by, create_date, update_by, update_date,remarks,PHYSICS_FLAG
+    </sql>
+
+    <select id="findById" resultMap="BaseResultMap"  >
+        select
+        <include refid="Base_Column_List" />
+        from sys_dept
+        where id = #{id}
+    </select>
+
+    <select id="findList" resultMap="BaseResultMap" parameterType="org.qboot.sys.dto.SysDeptDto" >
+        select
+        <include refid="Base_Column_List" />
+        , (select count(1) from sys_dept where parent_id = d.id) as hasSub
+        from sys_dept d
+        <where>
+            <if test="parentId !=null and parentId!=''">
+                parent_id = #{parentId}
+            </if>
+            <if test="parentIds !=null and parentIds!=''">
+                and parent_ids in (0,1)
+            </if>
+            <if test="name !=null and name!=''">
+                and name like concat('%',#{name},'%')
+            </if>
+            <if test="physicsFlag !=null">
+                and PHYSICS_FLAG = #{physicsFlag}
+            </if>
+
+        </where>
+        order by sort desc
+    </select>
+
+    <select id="relationQueryDept" resultMap="BaseResultMap" parameterType="org.qboot.sys.dto.SysDeptDto" >
+        select
+        <include refid="Base_Column_List" />
+        , (select count(1) from sys_dept where parent_id = d.id) as hasSub
+        from sys_dept d
+        <where>
+            <if test="parentId !=null and parentId!=''">
+                parent_id = #{parentId}
+            </if>
+            <if test="parentIds !=null and parentIds!=''">
+                and parent_ids = #{parentIds}
+            </if>
+            <if test="name !=null and name!=''">
+                and name like concat('%',#{name},'%')
+            </if>
+            <if test="physicsFlag !=null">
+                and PHYSICS_FLAG = #{physicsFlag}
+            </if>
+        </where>
+        order by sort desc
+    </select>
+
+    <update id="deleteById">
+        update sys_dept set PHYSICS_FLAG=0,update_date=now() where id = #{id}
+    </update>
+
+    <delete id="deleteRoleDeptByDeptId" parameterType="java.lang.String">
+        delete from sys_role_dept where dept_id= #{deptId}
+    </delete>
+
+    <insert id="insert" parameterType="org.qboot.sys.dto.SysDeptDto" useGeneratedKeys="true" keyProperty="id" >
+        insert into sys_dept (parent_id, parent_ids, name, sort, create_by, create_date, update_by, update_date, remarks)
+        values (#{parentId,jdbcType=VARCHAR}, #{parentIds,jdbcType=VARCHAR},
+                #{name,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER}, #{createBy,jdbcType=VARCHAR},
+                #{createDate,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP},
+                #{remarks,jdbcType=VARCHAR})
+    </insert>
+
+    <update id="update" parameterType="org.qboot.sys.dto.SysDeptDto" >
+        update sys_dept
+        <set >
+            <if test="parentId != null " >
+                parent_id = #{parentId,jdbcType=VARCHAR},
+            </if>
+            <if test="parentIds != null " >
+                parent_ids = #{parentIds,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null and name != '' " >
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="sort != null and sort != '' " >
+                sort = #{sort,jdbcType=INTEGER},
+            </if>
+            <if test="updateBy != null" >
+                update_by = #{updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null" >
+                update_date = #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="remarks != null and remarks != '' " >
+                remarks = #{remarks,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="checkNameUnique" parameterType="org.qboot.sys.dto.SysDeptDto" resultType="int">
+        select count(1) from sys_dept
+        <where>
+            <if test="name != null  and name != '' "> and name =#{name} </if>
+            <if test="id != null "> and id != #{id}</if>
+            and PHYSICS_FLAG = 1
+        </where>
+    </select>
+
+    <select id="getDeptIds" resultType="java.lang.String">
+        SELECT GROUP_CONCAT(id)
+        FROM sys_dept
+        WHERE FIND_IN_SET(id,getChildList(#{id}));
+    </select>
+
 </mapper>

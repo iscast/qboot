@@ -13,7 +13,9 @@ import java.util.List;
  */
 public interface SysDeptService extends ICrudService<SysDeptDao, SysDeptDto> {
 
+    int checkNameUnique(SysDeptDto deptDto);
+    List<SysDeptDto> findDeptByParentId(String parentId);
 	List<SysDeptDto> findByParentIds(String parentId);
-	
+    List<SysDeptDto> relationQueryDept(SysDeptDto dto);
 	int deleteById(Serializable id);
 }
