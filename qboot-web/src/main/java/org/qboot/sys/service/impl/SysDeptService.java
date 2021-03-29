@@ -36,8 +36,12 @@ public class SysDeptService extends CrudService<SysDeptDao, SysDeptDto> {
             sysDept.setParentId(parent.getId());
             sysDept.setParentIds(parent.getParentIds() + SysConstants.SEPARATOR + parent.getId());
         }
-        sysDept.setCreateBy(SecurityUtils.getLoginName());
-        sysDept.setUpdateBy(SecurityUtils.getLoginName());
+        if(StringUtils.isBlank(sysDept.getCreateBy())) {
+            sysDept.setCreateBy(SecurityUtils.getLoginName());
+        }
+        if(StringUtils.isBlank(sysDept.getUpdateBy())) {
+            sysDept.setUpdateBy(SecurityUtils.getLoginName());
+        }
         return super.save(sysDept);
     }
 
