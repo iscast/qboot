@@ -162,17 +162,11 @@ var userType = null;
             // 渲染多选下拉框
             var seled = "";
             for (var i = 0; i < data.data.length; i++) {
-                if(userType == 2){
-                    if(userType == data.data[i].paramTypeId){
-                        seled = 'selected="selected"';
-                        $("#userType").append('<option value="'+data.data[i].paramTypeId+'" '+seled+'>'+data.data[i].paramTypeName+'</option>');
-                    }
-                }else{
-                    if(userType == data.data[i].paramTypeId){
-                        seled = 'selected="selected"';
-                    }
-                    $("#userType").append('<option value="'+data.data[i].paramTypeId+'" '+seled+'>'+data.data[i].paramTypeName+'</option>');
+                seled = ""
+                if(userType == data.data[i].paramTypeId){
+                    seled = 'selected="selected"';
                 }
+                $("#userType").append('<option value="'+data.data[i].paramTypeId+'" '+seled+'>'+data.data[i].paramTypeName+'</option>');
             }
             form.render('select');
         }, 'GET');
