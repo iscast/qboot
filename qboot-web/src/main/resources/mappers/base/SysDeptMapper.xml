@@ -81,10 +81,9 @@
 
     <insert id="insert" parameterType="org.qboot.sys.dto.SysDeptDto" useGeneratedKeys="true" keyProperty="id" >
         insert into sys_dept (parent_id, parent_ids, name, sort, create_by, create_date, update_by, update_date, remarks)
-        values (#{parentId,jdbcType=VARCHAR}, #{parentIds,jdbcType=VARCHAR},
-                #{name,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER}, #{createBy,jdbcType=VARCHAR},
-                #{createDate,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP},
-                #{remarks,jdbcType=VARCHAR})
+        values (#{parentId,jdbcType=VARCHAR}, #{parentIds,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},
+                #{sort,jdbcType=INTEGER}, #{createBy,jdbcType=VARCHAR},#{createDate,jdbcType=TIMESTAMP},
+                #{updateBy,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP},#{remarks,jdbcType=VARCHAR})
     </insert>
 
     <update id="update" parameterType="org.qboot.sys.dto.SysDeptDto" >

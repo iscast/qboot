@@ -86,7 +86,7 @@
     </select>
 
   <select id="findList" resultMap="BaseResultMap" parameterType="org.qboot.sys.dto.SysUserDto" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from <include refid="Join_Table" />
     <where>
@@ -127,6 +127,12 @@
         </if>
         <if test="createBy !=null and createBy !=''">
             and u.create_by = #{createBy}
+        </if>
+        <if test="startDate!=null">
+            and u.create_date > #{startDate}
+        </if>
+        <if test="endDate!=null">
+            and <![CDATA[ u.create_date < #{endDate} ]]>
         </if>
     </where>
       order by id desc
