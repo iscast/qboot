@@ -28,18 +28,22 @@ public class SysDeptServiceImpl extends CrudService<SysDeptDao, SysDeptDto> impl
     public int save(SysDeptDto sysDept) {
         SysDeptDto parent = null;
         if (StringUtils.isNotEmpty(sysDept.getParentId())) {
-            parent = (SysDeptDto)this.d.findById(sysDept.getParentId());
+            parent = this.d.findById(sysDept.getParentId());
         }
         if (StringUtils.isEmpty(sysDept.getParentId()) || parent == null) {
             sysDept.setParentId("0");
             sysDept.setParentIds("0");
         } else {
-            sysDept.setParentId((String)parent.getId());
+            sysDept.setParentId(parent.getId());
             sysDept.setParentIds(parent.getParentIds() + SysConstants.SEPARATOR + parent.getId());
         }
         sysDept.setId(IdGen.uuid());
-        sysDept.setCreateBy(SecurityUtils.getLoginName());
-        sysDept.setUpdateBy(SecurityUtils.getLoginName());
+        if(StringUtils.isBlank(sysDept.getCreateBy())) {
+            sysDept.setCreateBy(SecurityUtils.getLoginName());
+        }
+        if(StringUtils.isBlank(sysDept.getUpdateBy())) {
+            sysDept.setUpdateBy(SecurityUtils.getLoginName());
+        }
         return super.save(sysDept);
     }
 
@@ -110,14 +114,9 @@ public class SysDeptServiceImpl extends CrudService<SysDeptDao, SysDeptDto> impl
         return parentName;
     }
 
+    @Override
     public List<SysDeptDto> relationQueryDept(SysDeptDto dto) {
         List<SysDeptDto> list = d.relationQueryDept(dto);
-        list.forEach(i -> {
-            SysDeptDto deptDto = d.findById(i.getParentId());
-            if (null != deptDto) {
-                i.setParentName(deptDto.getName());
-            }
-        });
         return list;
     }
 }
