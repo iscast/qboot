@@ -154,6 +154,7 @@
                     admin.putTempData('t_user', data.data);
                     admin.popupCenter({
                         title: title,
+                        offset:'15px',
                         path: 'pages/sys/user_form.html',
                         finish: function () {
                             table.reload('user-table', {});
@@ -164,6 +165,7 @@
                 admin.putTempData('t_user', null);
                 admin.popupCenter({
                     title: title,
+                    offset:'15px',
                     path: 'pages/sys/user_form.html',
                     finish: function () {
                         table.reload('user-table', {});
