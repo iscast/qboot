@@ -169,7 +169,13 @@ public class RedisTools {
             }
 
             try {
-                Long result = atomicLong.addAndGet(incrVaule);
+                Long result = null;
+                if(incrVaule > 0L) {
+                    result = atomicLong.addAndGet(incrVaule);
+                } else {
+                    result = atomicLong.get();
+                }
+
                 return result;
             } catch (Exception e) {
                 logger.error("increase redis longValue error:{}", ExceptionUtils.getStackTrace(e));
