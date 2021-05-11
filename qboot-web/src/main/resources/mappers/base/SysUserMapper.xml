@@ -244,6 +244,12 @@
       <if test="remarks != null and remarks != ''" >
           remarks = #{remarks},
       </if>
+      <if test="fldN1 != null" >
+          fld_n1 = #{fldN1},
+      </if>
+      <if test="fldN2 != null" >
+          fld_n2 = #{fldN2},
+      </if>
       <if test="fldS1 != null and fldS1 != ''" >
           fld_s1 = #{fldS1},
       </if>
