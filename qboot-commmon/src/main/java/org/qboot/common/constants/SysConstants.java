@@ -72,12 +72,12 @@ public class SysConstants {
 	 */
 	public static final String TASK_MAP_PARAMS_KEY_LAST_RESULT = "lastResult";
 
+	/** user begin */
+	// 1：正常，2：禁用 3:初始化
+    public static final Integer SYS_USER_STATUS_NORMAL = 1;
+    public static final Integer SYS_USER_STATUS_FORBIDDEN = 2;
+    public static final Integer SYS_USER_STATUS_INIT = 3;
 
-	/** log param begin */
-
-    /** log param end */
-
-	/** login status begin */
     public static final int SYS_USER_PWD_STATUS_NORMAL = 0;
     public static final int SYS_USER_PWD_STATUS_INIT = 1;
     public static final int SYS_USER_PWD_STATUS_CHANGED = 2;
@@ -93,7 +93,7 @@ public class SysConstants {
     public static final String STATUS_NORMAL = "1";
     public static final String STATUS_STOP = "0";
 
-	/** login status end */
+	/** user end */
 
     public static final char GAP_VERTICAL = '|';
     public static final char GAP_COMMA = ',';

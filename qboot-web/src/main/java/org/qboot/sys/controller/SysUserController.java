@@ -93,7 +93,7 @@ public class SysUserController extends BaseController {
 		if(user) {
 			return ResponeModel.error(SysUserErrTable.SYS_USER_DUPLICATE);
 		}
-        sysUser.setStatus(SysConstants.SYS_ENABLED);
+        sysUser.setStatus(SysConstants.SYS_USER_STATUS_INIT);
 		sysUser.setCreateBy(SecurityUtils.getLoginName());
 		String password = RandomStringUtils.randomAlphanumeric(8);
 		sysUser.setPassword(password);
@@ -163,8 +163,8 @@ public class SysUserController extends BaseController {
 
     @AccLog
 	@PreAuthorize("hasAuthority('sys:user:update')")
-	@PostMapping("/setStatus")
-	public ResponeModel setStatus(@RequestParam String id, @RequestParam Integer status) {
+	@PostMapping("/switchStatus")
+	public ResponeModel switchStatus(@RequestParam String id) {
 		SysUserDto user = sysUserService.findById(id);
 		MyAssertTools.notNull(user, SYS_USER_NOTEXISTS);
 		if (SecurityUtils.isSuperAdmin(user.getLoginName())) {
@@ -173,9 +173,14 @@ public class SysUserController extends BaseController {
 		if (SecurityUtils.getUserId().equals(id)) {
 			return ResponeModel.error(SYS_USER_UPDATE_NO_SELF);
 		}
-		SysUserDto sysUser = new SysUserDto();
+        Integer hisStatus = user.getStatus();
+        Integer currentStatus = SysConstants.SYS_USER_STATUS_NORMAL;
+        if(SysConstants.SYS_USER_STATUS_NORMAL.equals(hisStatus)) {
+            currentStatus = SysConstants.SYS_USER_STATUS_FORBIDDEN;
+        }
+        SysUserDto sysUser = new SysUserDto();
 		sysUser.setId(id);
-		sysUser.setStatus(status);
+		sysUser.setStatus(currentStatus);
         sysUser.setUpdateDate(new Date());
         sysUser.setUpdateBy(SecurityUtils.getLoginName());
 		if(sysUserService.setStatus(sysUser) > 0) {

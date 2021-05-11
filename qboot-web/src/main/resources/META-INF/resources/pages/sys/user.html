@@ -191,10 +191,8 @@
         form.on('switch(user-tpl-state)', function (obj) {
             // msgs['layer.confirm.msg.unlock']
             layer.load(2);
-            admin.req('/sys/user/setStatus', {
-                id: obj.elem.value,
-                status: obj.elem.checked ? 1 : 2
-            }, function (data) {
+            admin.req('/sys/user/switchStatus', {
+                id: obj.elem.value}, function (data) {
                 layer.closeAll('loading');
                 if (data.code == 0) {
                     layer.msg(data.msg, {icon: 1});
