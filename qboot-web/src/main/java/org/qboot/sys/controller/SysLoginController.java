@@ -58,7 +58,7 @@ public class SysLoginController extends BaseController {
 		return ResponeModel.ok(treeMenus);
 	}
 
-	@GetMapping("/getUserInfo")
+	@PostMapping("/getUserInfo")
 	public ResponeModel getUserInfo() {
 		CustomUser sysUser = SecurityUtils.getUser();
 		if(null == sysUser) {

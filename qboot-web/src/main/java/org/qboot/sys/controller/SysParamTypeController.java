@@ -2,6 +2,7 @@ package org.qboot.sys.controller;
 
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.StringEscapeUtils;
 import org.qboot.common.annotation.AccLog;
 import org.qboot.common.constants.CacheConstants;
 import org.qboot.common.constants.SysConstants;
@@ -51,7 +52,7 @@ public class SysParamTypeController extends BaseController {
 	@PostMapping("/qryList")
 	public ResponeModel qryList(SysParamTypeDto sysParam) {
 		if(StringUtils.isBlank(sysParam.getParamTypeClass())) {
-			return ResponeModel.ok(SYS_PARAM_TYPE_QUERY_FAIL);
+			return ResponeModel.error(SYS_PARAM_TYPE_QUERY_FAIL);
 		}
 		List<SysParamTypeDto> list = sysParamService.findList(sysParam);
 		return ResponeModel.ok(list);
@@ -62,7 +63,7 @@ public class SysParamTypeController extends BaseController {
 	public ResponeModel get(@RequestParam Long id) {
 		SysParamTypeDto sysParam = sysParamService.findById(id);
 		if(null == sysParam) {
-            return ResponeModel.ok(SYS_PARAM_TYPE_QUERY_FAIL);
+            return ResponeModel.error(SYS_PARAM_TYPE_QUERY_FAIL);
         }
 		return ResponeModel.ok(sysParam);
 	}
@@ -72,6 +73,17 @@ public class SysParamTypeController extends BaseController {
 	@PostMapping("/save")
 	public ResponeModel save(@Validated SysParamTypeDto sysParam, BindingResult bindingResult, HttpServletRequest request) {
         ValidateUtils.checkBind(bindingResult);
+
+        if(StringUtils.isNotBlank(sysParam.getParamTypeName())) {
+            sysParam.setParamTypeName(StringEscapeUtils.unescapeHtml4(sysParam.getParamTypeName()));
+        }
+        if(StringUtils.isNotBlank(sysParam.getParamTypeCode())) {
+            sysParam.setParamTypeCode(StringEscapeUtils.unescapeHtml4(sysParam.getParamTypeCode()));
+        }
+        if(StringUtils.isNotBlank(sysParam.getRemarks())) {
+            sysParam.setRemarks(StringEscapeUtils.unescapeHtml4(sysParam.getRemarks()));
+        }
+
 		sysParam.setCreateBy(SecurityUtils.getLoginName());
 		sysParam.setPhysicsFlag(SysConstants.SYS_DELFLAG_NORMAL);
 		if(sysParamService.save(sysParam) > 0) {
@@ -86,6 +98,17 @@ public class SysParamTypeController extends BaseController {
 	@PostMapping("/update")
 	public ResponeModel update(@Validated SysParamTypeDto sysParam, BindingResult bindingResult, HttpServletRequest request) {
         ValidateUtils.checkBind(bindingResult);
+
+        if(StringUtils.isNotBlank(sysParam.getParamTypeName())) {
+            sysParam.setParamTypeName(StringEscapeUtils.unescapeHtml4(sysParam.getParamTypeName()));
+        }
+        if(StringUtils.isNotBlank(sysParam.getParamTypeCode())) {
+            sysParam.setParamTypeCode(StringEscapeUtils.unescapeHtml4(sysParam.getParamTypeCode()));
+        }
+        if(StringUtils.isNotBlank(sysParam.getRemarks())) {
+            sysParam.setRemarks(StringEscapeUtils.unescapeHtml4(sysParam.getRemarks()));
+        }
+
 		sysParam.setUpdateBy(SecurityUtils.getLoginName());
 		if(sysParamService.update(sysParam) > 0) {
             redisTools.del(CacheConstants.CACHE_PREFIX_SYS_PARAMTYPE_KEY + sysParam.getParamTypeClass());

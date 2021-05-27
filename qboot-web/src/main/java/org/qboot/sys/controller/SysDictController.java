@@ -1,6 +1,8 @@
 package org.qboot.sys.controller;
 
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.StringEscapeUtils;
 import org.qboot.common.constants.CacheConstants;
 import org.qboot.common.utils.MyAssertTools;
 import org.qboot.common.utils.RedisTools;
@@ -70,6 +72,17 @@ public class SysDictController extends BaseController {
         if(null == sysDict.getSort()) {
             sysDict.setSort(0);
         }
+
+        if(StringUtils.isNotBlank(sysDict.getCode())) {
+            sysDict.setCode(StringEscapeUtils.unescapeHtml4(sysDict.getCode()));
+        }
+        if(StringUtils.isNotBlank(sysDict.getName())) {
+            sysDict.setName(StringEscapeUtils.unescapeHtml4(sysDict.getName()));
+        }
+        if(StringUtils.isNotBlank(sysDict.getRemarks())) {
+            sysDict.setRemarks(StringEscapeUtils.unescapeHtml4(sysDict.getRemarks()));
+        }
+
         sysDict.setStatus(SysConstants.SYS_ENABLE);
         sysDict.setCreateBy(SecurityUtils.getLoginName());
 		if(sysDictService.save(sysDict) > 0) {
@@ -85,6 +98,17 @@ public class SysDictController extends BaseController {
 	@PostMapping("/update")
 	public ResponeModel update(@Validated SysDictDto sysDict, BindingResult bindingResult) {
         ValidateUtils.checkBind(bindingResult);
+
+        if(StringUtils.isNotBlank(sysDict.getCode())) {
+            sysDict.setCode(StringEscapeUtils.unescapeHtml4(sysDict.getCode()));
+        }
+        if(StringUtils.isNotBlank(sysDict.getName())) {
+            sysDict.setName(StringEscapeUtils.unescapeHtml4(sysDict.getName()));
+        }
+        if(StringUtils.isNotBlank(sysDict.getRemarks())) {
+            sysDict.setRemarks(StringEscapeUtils.unescapeHtml4(sysDict.getRemarks()));
+        }
+
 		sysDict.setUpdateBy(SecurityUtils.getLoginName());
 		if(sysDictService.update(sysDict) > 0) {
             redisTools.del(CacheConstants.CACHE_PREFIX_SYS_DICT_TYPE + sysDict.getType());

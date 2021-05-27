@@ -234,7 +234,7 @@ var form,table, table1,_config,layer,util,admin,formSelects, msgs;
             $.ajax({
                 url: _config.base_server + '/sys/paramclass/get?id=' + data.id,
                 dataType: 'json',
-                method: 'get',
+                method: 'post',
                 success: function(data){
                     layer.closeAll('loading');
                     if (data.code != 0) {
@@ -260,7 +260,7 @@ var form,table, table1,_config,layer,util,admin,formSelects, msgs;
                 $.ajax({
                     url: _config.base_server + '/sys/paramtype/get?id=' + data.id,
                     dataType: 'json',
-                    method: 'get',
+                    method: 'post',
                     success: function(data){
                         layer.closeAll('loading');
                         if (data.code != 0) {

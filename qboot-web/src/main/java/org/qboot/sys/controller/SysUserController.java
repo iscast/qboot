@@ -50,7 +50,7 @@ public class SysUserController extends BaseController {
     final String initPwdStr = "initPwdSuccess, your password is %s";
 
 	@PreAuthorize("hasAuthority('sys:user:qry')")
-	@GetMapping("/qryPage")
+	@PostMapping("/qryPage")
 	public ResponeModel qryPage(SysUserDto user) {
 		if(!SecurityUtils.isSuperAdmin()) {
 			user.setCreateBy(SecurityUtils.getLoginName());

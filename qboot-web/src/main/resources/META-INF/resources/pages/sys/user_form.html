@@ -169,7 +169,7 @@ var userType = null;
                 $("#userType").append('<option value="'+data.data[i].paramTypeId+'" '+seled+'>'+data.data[i].paramTypeName+'</option>');
             }
             form.render('select');
-        }, 'GET');
+        }, 'POST');
 
         // 表单提交事件
         form.on('submit(user-form-submit)', function (data) {

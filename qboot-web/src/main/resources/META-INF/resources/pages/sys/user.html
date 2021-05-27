@@ -1,3 +1,4 @@
+
 <div class="layui-card">
     <div class="layui-card-body">
         <div class="layui-form toolbar">
@@ -36,7 +37,7 @@
         table.render({
             elem: '#user-table',
             url: _config.base_server + '/sys/user/qryPage',
-            method: 'GET',
+            method: 'post',
             page: {
                 layout:['prev', 'limit', 'next', 'skip', 'count']
             },

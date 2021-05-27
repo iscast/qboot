@@ -2,6 +2,7 @@
 <form id="menu-form" lay-filter="menu-form" class="layui-form model-form">
     <input id="id" name="id" type="hidden"/>
     <input id="menuType" name="menuType" type="hidden"/>
+    <input id="isShow" name="isShow" type="hidden"/>
     <div class="layui-form-item">
         <label class="layui-form-label layui-i18n" i18n-key="sys.table.title.menuName"></label>
         <div class="layui-input-inline">
@@ -25,6 +26,7 @@
         </div>
         <div class="layui-form-mid">*</div>
     </div>
+
     <div class="layui-form-item">
         <label class="layui-form-label layui-i18n" i18n-key="sys.table.title.order"></label>
         <div class="layui-input-inline">
@@ -33,6 +35,7 @@
         </div>
         <div class="layui-form-mid">*</div>
     </div>
+
     <div class="layui-form-item">
         <label class="layui-form-label layui-i18n" i18n-key="sys.form.label.icon"></label>
         <div class="layui-input-block">
@@ -45,8 +48,8 @@
         <label class="layui-form-label layui-i18n" i18n-key="sys.form.label.menuType"></label>
         <div class="layui-input-block">
             <select id="type" name="type" lay-filter="type">
-		        <option value="0">模块</option>
-	            <option value="1">菜单</option>
+		        <option value="0" class="layui-i18n" i18n-key="sys.form.label.menuType.module">module</option>
+	            <option value="1" class="layui-i18n" i18n-key="sys.form.label.menuType.menu">menu</option>
 		    </select>
         </div>
     </div>
@@ -56,7 +59,7 @@
         <div class="layui-input-block">
         	<input id="parentId" name="parentId" type="hidden">
             <select id="parentMenu" name="parentMenu" >
-		        <option value="">select parent menu</option>
+		        <option value="">--</option>
             </select>
         </div>
     </div>
@@ -89,6 +92,7 @@
         var iconPicker = layui.iconPicker;
         var _i18n = layui._i18n;
         var msgs = _i18n.getMsg('sys');
+        msgs = _i18n.getMsg('sys');
 
         iconPicker.render({
             // 选择器，推荐使用input
@@ -108,6 +112,8 @@
         $('#menu-form').attr('method', 'POST');
         _i18n.initPage();
         if (menu) {
+            console.log("编辑")
+            console.log(menu)
         	if(menu.id != null && menu.id != ''){
         		m_parentId = menu.parentId;
         	}else{
@@ -115,7 +121,7 @@
         	}
 
         	if("999" == menu.type) {
-                $("#type").append('<option value="999" selected="selected">按钮</option>');
+                $("#type").append('<option value="999" selected="selected" class="layui-i18n" i18n-key="sys.form.label.menuType.btn">'+ msgs['sys.form.label.menuType.btn'] +'</option>');
                 $("#type").attr("disabled","disabled");
             }
 
