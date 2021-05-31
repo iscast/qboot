@@ -44,6 +44,11 @@ public class SysUserService extends CrudService<SysUserDao, SysUserDto> {
     public SysUserDto findByDto(SysUserDto dto) {
         return this.d.findByDto(dto);
     }
+
+    public List<Long> findUserIds(SysUserDto dto) {
+        return this.d.findUserIds(dto);
+    }
+
 	
 	public boolean checkLoginName(Long userId, String loginName) {
         MyAssertTools.hasLength(loginName, SYS_USER_LOGINNAME_EMPTY);

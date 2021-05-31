@@ -25,4 +25,6 @@ public interface SysUserDao extends CrudDao<SysUserDto> {
     SysUserDto findSecretInfo(SysUserDto qry);
 
     SysUserDto findByDto(SysUserDto qry);
+
+    List<Long> findUserIds(SysUserDto qry);
 }
