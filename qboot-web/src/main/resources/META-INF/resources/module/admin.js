@@ -98,7 +98,6 @@ layui.define(['_config', 'layer'], function (exports) {
                 data.access_token = token.access_token;
             }
             if(typeof(contentType) != "undefined" && contentType != null) {
-                // console.log("修改报文头" + contentType);
                 admin.ajax({
                     url: _config.base_server + url,
                     data: data,

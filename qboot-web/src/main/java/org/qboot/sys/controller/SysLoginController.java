@@ -58,7 +58,7 @@ public class SysLoginController extends BaseController {
 		return ResponeModel.ok(treeMenus);
 	}
 
-	@GetMapping("/getUserInfo")
+	@PostMapping("/getUserInfo")
 	public ResponeModel getUserInfo() {
 		CustomUser sysUser = SecurityUtils.getUser();
 		if(null == sysUser) {
@@ -68,6 +68,7 @@ public class SysLoginController extends BaseController {
         return ResponeModel.ok(sysUser);
 	}
 
+	@AccLog
 	@PostMapping("/updateInfo")
 	public ResponeModel updateInfo(SysUserDto user) {
         MyAssertTools.hasLength(user.getName(), SYS_USER_NAME_EMPTY);
@@ -95,6 +96,7 @@ public class SysLoginController extends BaseController {
 		return ResponeModel.ok();
 	}
 
+    @AccLog
 	@GetMapping("/switchLanguage")
 	public ResponeModel switchLanguage(@RequestParam String lang){
 		String userId = SecurityUtils.getUserId();

@@ -38,7 +38,7 @@ import static org.qboot.sys.exception.errorcode.SysModuleErrTable.*;
 @RequestMapping("${admin.path}/sys/menu")
 public class SysMenuController extends BaseController {
 	
-	protected Logger logger = LoggerFactory.getLogger(getClass());
+	protected Logger logger = LoggerFactory.getLogger(SysMenuController.class);
 
 	@Autowired
 	private SysMenuService sysMenuService;

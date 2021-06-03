@@ -1,10 +1,10 @@
 package org.qboot.common.controller;
 
 import org.apache.commons.lang.StringUtils;
+import org.qboot.common.annotation.AccLog;
 import org.qboot.common.entity.ResponeModel;
 import org.qboot.common.security.CustomUser;
 import org.qboot.common.security.SecurityUtils;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,9 +23,12 @@ import java.util.Locale;
 @RequestMapping("/i18n")
 public class I18nController extends BaseController {
 
+    private final static Locale DEFAULT_LOCATE = Locale.SIMPLIFIED_CHINESE;
+
+    @AccLog
     @GetMapping("/getLocale")
     public ResponeModel getLocale(HttpSession session, String lang){
-        if(StringUtils.isNotBlank(lang)) {
+        if(StringUtils.isNotBlank(lang) && !"null".equalsIgnoreCase(lang)) {
             String[] i18nStr = lang.split("_");
             Locale locale = new Locale(i18nStr[0],i18nStr[1]);
             session.setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, locale);
@@ -33,7 +36,7 @@ public class I18nController extends BaseController {
         }
 
         Object sessionAttr = session.getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
-        if(null != sessionAttr) {
+        if(null != sessionAttr && !"null".equalsIgnoreCase(lang)) {
             return ResponeModel.ok(sessionAttr);
         }
 
@@ -45,7 +48,6 @@ public class I18nController extends BaseController {
             return ResponeModel.ok(userLocale);
         }
 
-        Locale locale = LocaleContextHolder.getLocale();
-        return ResponeModel.ok(locale);
+        return ResponeModel.ok(DEFAULT_LOCATE);
     }
 }

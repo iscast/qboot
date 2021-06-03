@@ -7,7 +7,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.util.List;
 
 /**
- * 国际化配置
+ * 登陆校验配置
  * @author history
  */
 @Configuration

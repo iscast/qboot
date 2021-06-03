@@ -261,7 +261,7 @@ layui.define(['_config', 'admin', 'layer', 'laytpl', 'element', 'form','_i18n'],
                     _config.removeToken();
                     location.replace(_config.getLoginPage());
                 }
-            }, 'GET');
+            }, 'POST');
         },
 
         switchLang:function(user_lang){
