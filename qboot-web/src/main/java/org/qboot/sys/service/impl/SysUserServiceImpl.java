@@ -10,13 +10,10 @@ import org.qboot.common.utils.MyAssertTools;
 import org.qboot.sys.dao.SysUserDao;
 import org.qboot.sys.dto.SysUserDto;
 import org.qboot.sys.dto.SysUserRoleDto;
-import org.qboot.sys.service.SysLoginLogService;
 import org.qboot.sys.service.SysUserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,9 +26,6 @@ import static org.qboot.sys.exception.errorcode.SysUserErrTable.*;
  */
 @Service
 public class SysUserServiceImpl extends CrudService<SysUserDao, SysUserDto> implements SysUserService {
-
-    @Autowired
-    private SysLoginLogService sysLoginLogService;
 
     @Override
 	public SysUserDto findByLoginName(String loginName) {
@@ -62,16 +56,10 @@ public class SysUserServiceImpl extends CrudService<SysUserDao, SysUserDto> impl
         t.setId(userId);
 		t.setSalt(salt);
 		t.setPassword(encryptPwd(t.getPassword(), salt));
-        //首次登录需要修改密码
-		t.setFldN1(0);
-		int cnt = this.d.insert(t);
-		if(cnt > 0) {
-			// 插入角色
-			this.saveUserRole(t.getRoleIds(), userId);
-			return cnt;
-		}else {
-			return 0;
+		if(this.d.insert(t) > 0) {
+			return this.saveUserRole(t.getRoleIds(), userId);
 		}
+        return 0;
 	}
 	
 	@Override
@@ -84,13 +72,8 @@ public class SysUserServiceImpl extends CrudService<SysUserDao, SysUserDto> impl
 
     @Override
     public int update(SysUserDto t) {
-		SysUserDto sysUser = this.findById(t.getId());
-        MyAssertTools.notNull(sysUser, SYS_USER_NOTEXISTS);
-
-		t.setVersion(sysUser.getVersion());
-		int cnt = this.d.updateSelect(t);
+		int cnt = this.d.update(t);
 		if(cnt > 0) {
-			// 删除user关联的所有role
 			this.d.deleteUserRoleByUserId(t.getId());
 			this.saveUserRole(t.getRoleIds(), t.getId());
 		}
@@ -99,7 +82,6 @@ public class SysUserServiceImpl extends CrudService<SysUserDao, SysUserDto> impl
 
     @Override
 	public int deleteById(String id) {
-		// 先删除用户关联角色后再删除用户
 		this.d.deleteUserRoleByUserId(id);
 		return super.deleteById(id);
 	}
@@ -116,22 +98,11 @@ public class SysUserServiceImpl extends CrudService<SysUserDao, SysUserDto> impl
 	}
 
     @Override
-	public int initPwd(SysUserDto t, int initFlag, HttpServletRequest request) {
-        SysUserDto secretInfo = d.findSecretInfo(t);
-        MyAssertTools.notNull(secretInfo, SYS_USER_NOTEXISTS);
-        secretInfo.setPassword(encryptPwd(t.getPassword(), secretInfo.getSalt()));
-        String pwdStatus;
-		if(initFlag == SysConstants.SYS_USER_PWD_STATUS_CHANGED) {
-            secretInfo.setFldN1(1);
-            pwdStatus = SysConstants.SYS_USER_LOGIN_STATUS_INIT_PWD;
-		}else {
-            //首次登录需要修改密码
-            secretInfo.setFldN1(0);
-            pwdStatus = SysConstants.SYS_USER_LOGIN_STATUS_CHANGE_PWD;
-		}
-		int cnt = d.initPwd(secretInfo);
-        sysLoginLogService.saveLog(pwdStatus, secretInfo.getLoginName(), request);
-		return cnt;
+	public int changePwd(SysUserDto secretInfo) {
+        String salt = RandomStringUtils.randomAlphanumeric(20);
+        secretInfo.setSalt(salt);
+        secretInfo.setPassword(encryptPwd(secretInfo.getPassword(), salt));
+		return d.changePwd(secretInfo);
 	}
 
     @Override
@@ -143,10 +114,7 @@ public class SysUserServiceImpl extends CrudService<SysUserDao, SysUserDto> impl
     @Override
 	public boolean selectFirstLoginUser(String userId){
 		SysUserDto sysUser = this.findById(userId);
-    	if(sysUser.getFldN1() == null || sysUser.getFldN1() != 1) {
-    		return true;
-    	}
-    	return false;
+        return null != sysUser && SysConstants.SYS_USER_STATUS_INIT.equals(sysUser.getStatus());
 	}
 
     @Override
@@ -156,7 +124,6 @@ public class SysUserServiceImpl extends CrudService<SysUserDao, SysUserDto> impl
     }
 
     private int saveUserRole(List<String> roleIds, String userId) {
-        // 插入角色
         if (null == roleIds || roleIds.isEmpty()) {
             return 0;
         }

@@ -23,7 +23,7 @@ public interface SysUserService extends ICrudService<SysUserDao, SysUserDto> {
 
 	boolean validatePwd(String password, String userId);
 	
-	int initPwd(SysUserDto t, int initFlag, HttpServletRequest request);
+	int changePwd(SysUserDto t);
 	
 	int setStatus(SysUserDto t);
 	

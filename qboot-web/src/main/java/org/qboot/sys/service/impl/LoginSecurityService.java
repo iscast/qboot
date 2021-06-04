@@ -19,7 +19,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 安全登录</p>
+ * Login Security Check
  * @author iscast
  * @date 2020-09-25
  */
@@ -41,7 +41,7 @@ public class LoginSecurityService extends BaseService {
 		redisTools.del(CacheConstants.CACHE_PREFIX_LOGIN_FAILCOUNT + loginName);
 		SysUserDto unlockUser = new SysUserDto();
 		unlockUser.setLoginName(loginName);
-		unlockUser.setStatus(SysConstants.SYS_ENABLED);
+		unlockUser.setStatus(SysConstants.SYS_USER_STATUS_NORMAL);
         unlockUser.setUpdateDate(new Date());
         String currentUser = SecurityUtils.getLoginName();
         if(StringUtils.isBlank(currentUser)) {
@@ -61,12 +61,11 @@ public class LoginSecurityService extends BaseService {
 	}
 
 	public Long incrementLoginFailTimes(String loginName) {
-	    // 账户锁定
 		Long increment = redisTools.incrWithTime(CacheConstants.CACHE_PREFIX_LOGIN_FAILCOUNT + loginName, 1L, LOGIN_FAIL_EXPIRE_TIME);
 		if(null != increment && increment >= LOGIN_FAIL_COUNT) {
 			SysUserDto lockUser = new SysUserDto();
 			lockUser.setLoginName(loginName);
-			lockUser.setStatus(SysConstants.SYS_DISABLED);
+			lockUser.setStatus(SysConstants.SYS_USER_STATUS_FORBIDDEN);
             lockUser.setUpdateDate(new Date());
             lockUser.setUpdateBy(SysConstants.SYSTEM_CRATER_NAME);
 			sysUserService.setStatus(lockUser);
@@ -83,7 +82,7 @@ public class LoginSecurityService extends BaseService {
 	 * @param loginName
 	 */
 	public void clearUserSessions(String loginName) {
-		logger.info("force logout user loginName:{}", loginName);
+		logger.info("clear login user:{} session force logout", loginName);
 		Set<Object> sessionIdSet = redissonClient.getSet(CacheConstants.CACHE_PREFIX_LOGIN_USERNAME_SESSION + loginName);
 		if (sessionIdSet != null) {
 			sessionIdSet.forEach((sessionId) -> redisTools.del("redisson_spring_session:" + sessionId));

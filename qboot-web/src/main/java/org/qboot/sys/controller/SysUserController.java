@@ -15,6 +15,7 @@ import org.qboot.common.utils.ValidateUtils;
 import org.qboot.sys.dto.SysRoleDto;
 import org.qboot.sys.dto.SysUserDto;
 import org.qboot.sys.exception.errorcode.SysUserErrTable;
+import org.qboot.sys.service.SysLoginLogService;
 import org.qboot.sys.service.SysRoleService;
 import org.qboot.sys.service.SysUserService;
 import org.qboot.sys.service.impl.LoginSecurityService;
@@ -22,7 +23,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -47,8 +51,10 @@ public class SysUserController extends BaseController {
 	private SysRoleService sysRoleService;
 	@Autowired
 	private LoginSecurityService loginSecurityService;
+    @Autowired
+    private SysLoginLogService sysLoginLogService;
 
-    final String initPwdStr = "initPwdSuccess, your password is %s";
+    final String initPwdStr = "user:%s password is %s";
 
 	@PreAuthorize("hasAuthority('sys:user:qry')")
 	@PostMapping("/qryPage")
@@ -69,7 +75,6 @@ public class SysUserController extends BaseController {
             return ResponeModel.error(SysUserErrTable.SYS_USER_NOTEXISTS);
         }
 
-		//用户所拥有的角色
 		List<SysRoleDto> roleList = sysRoleService.findByUserId(sysUser.getId());
 		List<String> roleIds = Lists.newArrayList();
 		StringBuffer roleSB = new StringBuffer();
@@ -88,8 +93,8 @@ public class SysUserController extends BaseController {
 	@PostMapping("/save")
 	public ResponeModel save(@Validated SysUserDto sysUser, BindingResult bindingResult) {
         ValidateUtils.checkBind(bindingResult);
-		boolean user = sysUserService.checkLoginName(null, sysUser.getLoginName());
-		if(user) {
+		boolean isExist = sysUserService.checkLoginName(null, sysUser.getLoginName());
+		if(isExist) {
 			return ResponeModel.error(SysUserErrTable.SYS_USER_DUPLICATE);
 		}
         sysUser.setStatus(SysConstants.SYS_USER_STATUS_INIT);
@@ -101,11 +106,10 @@ public class SysUserController extends BaseController {
 		}
 		sysUser.setCreateDate(new Date());
 		if(sysUserService.save(sysUser) > 0) {
-			return ResponeModel.ok(String.format(initPwdStr, password));
+			return ResponeModel.ok(String.format(initPwdStr, sysUser.getName(), password));
 		}
 		return ResponeModel.error(SYS_USER_SAVE_FAIL);
 	}
-
 
     @AccLog
 	@PreAuthorize("hasAuthority('sys:user:update')")
@@ -138,6 +142,22 @@ public class SysUserController extends BaseController {
 		}
 		return ResponeModel.error(SYS_USER_UPDATE_FAIL);
 	}
+
+//    @AccLog
+//    @PreAuthorize("hasAuthority('sys:user:update')")
+//    @PostMapping("/updateInfo")
+//    public ResponeModel updateInfo(SysUserDto user) {
+//        MyAssertTools.hasLength(user.getName(), SYS_USER_NAME_EMPTY);
+//        SysUserDto sysUser = new SysUserDto();
+//        sysUser.setName(user.getName());
+//        sysUser.setEmail(user.getEmail());
+//        sysUser.setMobile(user.getMobile());
+//        sysUser.setId(SecurityUtils.getUserId());
+//        if(sysUserService.updateInfo(user) > 0) {
+//            return ok();
+//        }
+//        return ResponeModel.error();
+//    }
 
     @AccLog
 	@PreAuthorize("hasAuthority('sys:user:delete')")
@@ -172,18 +192,15 @@ public class SysUserController extends BaseController {
 		if (SecurityUtils.getUserId().equals(id)) {
 			return ResponeModel.error(SYS_USER_UPDATE_NO_SELF);
 		}
-        Integer hisStatus = user.getStatus();
         Integer currentStatus = SysConstants.SYS_USER_STATUS_NORMAL;
-        if(SysConstants.SYS_USER_STATUS_NORMAL.equals(hisStatus)) {
+        if(SysConstants.SYS_USER_STATUS_NORMAL.equals(user.getStatus())) {
             currentStatus = SysConstants.SYS_USER_STATUS_FORBIDDEN;
         }
-        SysUserDto sysUser = new SysUserDto();
-		sysUser.setId(id);
-		sysUser.setStatus(currentStatus);
-        sysUser.setUpdateDate(new Date());
-        sysUser.setUpdateBy(SecurityUtils.getLoginName());
-		if(sysUserService.setStatus(sysUser) > 0) {
-			loginSecurityService.clearUserSessions(sysUser.getLoginName());
+        user.setStatus(currentStatus);
+        user.setUpdateDate(new Date());
+        user.setUpdateBy(SecurityUtils.getLoginName());
+		if(sysUserService.setStatus(user) > 0) {
+			loginSecurityService.clearUserSessions(user.getLoginName());
 			return ok();
 		}
 		return ResponeModel.error(SYS_USER_STATUS_UPDATE_FAIL);
@@ -200,14 +217,13 @@ public class SysUserController extends BaseController {
 		} else if (!SecurityUtils.isSuperAdmin() && !SecurityUtils.getUserId().equals(id)) {
             return ResponeModel.error(SYS_USER_INIT_PWD_DENIED);
         }
-		SysUserDto sysUser = new SysUserDto();
-		sysUser.setId(id);
-		String password = RandomStringUtils.randomAlphanumeric(8);
-		sysUser.setPassword(password);
 
-		int cnt = this.sysUserService.initPwd(sysUser, SysConstants.SYS_USER_PWD_STATUS_INIT, request);
-		if(cnt > 0) {
-			return ResponeModel.ok(String.format(initPwdStr, password));
+		String password = RandomStringUtils.randomAlphanumeric(8);
+        user.setPassword(password);
+		if(sysUserService.changePwd(user) > 0) {
+            sysLoginLogService.saveLog(SysConstants.SYS_USER_LOGIN_STATUS_CHANGE_PWD, user.getLoginName(), request);
+            loginSecurityService.clearUserSessions(user.getLoginName());
+			return ResponeModel.ok(String.format(initPwdStr, user.getLoginName(), password));
 		}
 		return ResponeModel.error(SYS_USER_PWD_UPDATE_FAIL);
 	}
@@ -215,36 +231,35 @@ public class SysUserController extends BaseController {
     @AccLog
 	@PostMapping("/resetPwd")
 	public ResponeModel resetPwd(@RequestParam String oldPsw, @RequestParam String newPsw, HttpServletRequest request, HttpSession session) {
-		SysUserDto user = sysUserService.findById(SecurityUtils.getUserId());
-        MyAssertTools.notNull(user, SYS_USER_NOTEXISTS);
-		if (SecurityUtils.isSuperAdmin(user.getLoginName())) {
-			return ResponeModel.error(SYS_USER_UPDATE_NO_ADMIN);
-		}
+		SysUserDto existUser = sysUserService.findById(SecurityUtils.getUserId());
+        MyAssertTools.notNull(existUser, SYS_USER_NOTEXISTS);
 
 		if(StringUtils.isBlank(oldPsw) || StringUtils.isBlank(newPsw)) {
             return ResponeModel.error(SYS_USER_PWD_EMPTY);
         }
 
         Object privateKeyObj = session.getAttribute("privateKey");
-        String privateKey = privateKeyObj.toString();
         session.removeAttribute("privateKey");
-        RSAsecurity instance = RSAsecurity.getInstance();
+        String privateKey = privateKeyObj.toString();
 
+        RSAsecurity instance = RSAsecurity.getInstance();
         String oldPwdDecode = instance.decrypt(privateKey, oldPsw);
         String newPwdDecode = instance.decrypt(privateKey, newPsw);
 
-        boolean validate = sysUserService.validatePwd(oldPwdDecode, SecurityUtils.getUserId());
-		if(validate) {
-			SysUserDto sysUser = new SysUserDto();
-			sysUser.setId(SecurityUtils.getUserId());
-			sysUser.setPassword(newPwdDecode);
-			int cnt = this.sysUserService.initPwd(sysUser, SysConstants.SYS_USER_PWD_STATUS_CHANGED, request);
-			if(cnt > 0) {
-				loginSecurityService.clearUserSessions(sysUser.getLoginName());
-				return ResponeModel.ok("changePwdSuccess");
-			}
-            return ResponeModel.error(SYS_USER_PWD_UPDATE_FAIL);
-		}
-		return ResponeModel.error(SYS_USER_ORIGINAL_PWD_INCORRECT);
+        if(!sysUserService.validatePwd(oldPwdDecode, SecurityUtils.getUserId())) {
+            return ResponeModel.error(SYS_USER_ORIGINAL_PWD_INCORRECT);
+        }
+
+        existUser.setId(SecurityUtils.getUserId());
+        existUser.setPassword(newPwdDecode);
+        existUser.setUpdateBy(SecurityUtils.getLoginName());
+        existUser.setUpdateDate(new Date());
+        existUser.setStatus(SysConstants.SYS_USER_STATUS_NORMAL);
+        if(this.sysUserService.changePwd(existUser) > 0) {
+            sysLoginLogService.saveLog(SysConstants.SYS_USER_LOGIN_STATUS_INIT_PWD, existUser.getLoginName(), request);
+            loginSecurityService.clearUserSessions(existUser.getLoginName());
+            return ResponeModel.ok();
+        }
+        return ResponeModel.error(SYS_USER_PWD_UPDATE_FAIL);
 	}
 }

@@ -63,7 +63,7 @@
                 </div>
 
                 <div class="layui-form-item">
-                    <button lay-filter="login-submit" class="layui-btn layui-btn-fluid layui-i18n" i18n-key="login.form.title.login" lay-submit>login in</button>
+                    <button id="qboot_login_btn" lay-filter="login-submit" class="layui-btn layui-btn-fluid layui-i18n" i18n-key="login.form.title.login" lay-submit>login in</button>
                 </div>
             </div>
         </div>
@@ -114,6 +114,18 @@
 
         $('#loginLang').change(function () {
             switchLangFuc();
+        });
+
+        $('#password').bind('keypress',function(event){
+            if(event.keyCode == 13) {
+                $("#qboot_login_btn").click();
+            }
+        });
+
+        $('#verifyCode').bind('keypress',function(event){
+            if(event.keyCode == 13) {
+                $("#qboot_login_btn").click();
+            }
         });
 
         $.get('/i18n/getLocale', {}, function (d) {

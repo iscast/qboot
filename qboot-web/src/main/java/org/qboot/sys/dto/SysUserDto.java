@@ -59,7 +59,7 @@ public class SysUserDto extends BaseEntity<String> {
 	private String userType;
 
 	/**
-	 * 状态1：正常，2：禁用
+	 * 状态1：正常，2：禁用 3：初始化
 	 */
 	private Integer status;
 
