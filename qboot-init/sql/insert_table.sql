@@ -2,8 +2,6 @@
 -- Records of sys_dict
 -- ----------------------------
 BEGIN;
-INSERT INTO `sys_dict`(ID, TYPE, CODE, NAME, SORT, STATUS, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS) VALUES ('bce245bc65444aaeb37f068727d23b11', 'YES_NO', '1', '是', 1, '1', 'system', now(), 'system', now(), '');
-INSERT INTO `sys_dict`(ID, TYPE, CODE, NAME, SORT, STATUS, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS) VALUES ('aa183a7ab2044e97b01becb96b1504c6', 'YES_NO', '0', '否', 2, '1', 'system', now(), 'system', now(), '');
 INSERT INTO `sys_dict`(ID, TYPE, CODE, NAME, SORT, STATUS, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS) VALUES ('edd284b92b2445d28ca8e0711b9e4bd6', 'SYS_USER_TYPE', '1', '系统管理员', 1, '1', 'system', now(), 'system', now(), '');
 INSERT INTO `sys_dict`(ID, TYPE, CODE, NAME, SORT, STATUS, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS) VALUES ('bab202265cad4c1384b7cedca5a19e75', 'SYS_USER_TYPE', '2', '普通用户', 2, '1', 'system', now(), 'system', now(), '');
 COMMIT;
@@ -75,13 +73,3 @@ INSERT INTO sys_param_class (ID, PARAM_TYPE_CLASS, PARAM_TYPE_NAME, VISIBLE, CRE
 INSERT INTO sys_param_type (ID, PARAM_TYPE_CLASS, PARAM_TYPE_ID, PARAM_TYPE_CODE, PARAM_TYPE_NAME, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS, PHYSICS_FLAG, version) VALUES ('f8f7c20028e34fe49db08c990e780857', 'SYS_USER_TYPE', 1, 'MANAGER', '管理员', 'system', now(), 'system', now(), '', 1, 1);
 INSERT INTO sys_param_type (ID, PARAM_TYPE_CLASS, PARAM_TYPE_ID, PARAM_TYPE_CODE, PARAM_TYPE_NAME, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS, PHYSICS_FLAG, version) VALUES ('5fa4ccc8e8ed46999615e796eea1c8d4', 'SYS_USER_TYPE', 2, 'USER', '普通用户', 'system', now(), 'system', now(), '', 1, 1);
 COMMIT;
-
--- ----------------------------
--- Records of sys_user
--- Default Password is 123456
--- ----------------------------
-BEGIN;
-INSERT INTO `sys_user`(ID, DEPT_ID, LOGIN_NAME, PASSWORD, SALT, NAME, MOBILE, EMAIL, USER_TYPE, STATUS, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS, lang) VALUES
-('bc1fd564372b4fef841a96a6ba007787', NULL, 'superadmin', '573cb6da1a1c15ebe3040eb9f7b46c483355b8e7edbd4d531bf8a0c0201ab064', 'rNBdNtjuefmwLGzXjHoN', 'SUPERADMIN', '18822222222', 'test@gmail.com', '1', '1', 'system', now(), 'system', now(), 'Super Administrator', 'zh_CN');
-COMMIT;
-

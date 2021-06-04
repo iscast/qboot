@@ -37,13 +37,20 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService{
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Assert.hasLength(username, "username为空");
+		Assert.hasLength(username, "name is null");
+
+		// check superadmin
+		if(SecurityUtils.isSuperAdmin(username)) {
+            SysUserDto admin = SecurityUtils.getAdminUser(username);
+            CustomUser user = new CustomUser(admin);
+            return new CustomUserDetails(user, admin.getPassword(), getAuthorities(admin.getId(), username), false);
+        }
+
 		SysUserDto sysUser = sysUserService.findByLoginName(username);
 		if (null == sysUser) {
-			throw new UsernameNotFoundException(username + "账号不存在");
+			throw new UsernameNotFoundException(username + "not exist");
 		}
-		CustomUser user = new CustomUser(sysUser.getId(), sysUser.getDeptId(), sysUser.getDeptName(),
-				sysUser.getLoginName(), sysUser.getName(), sysUser.getStatus(),sysUser.getFldN1(),sysUser.getFldN2(),sysUser.getFldS1(),sysUser.getFldS2(),sysUser.getLang());
+		CustomUser user = new CustomUser(sysUser);
 		List<SysRoleDto> roles = sysRoleService.findByUserId(sysUser.getId());
 		user.setRoles(roles);
         SysUserDto userSecretInfo = sysUserService.findSecretInfo(sysUser);
@@ -52,7 +59,7 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService{
 	}
 	
 	private List<GrantedAuthority> getAuthorities(String userId,String username){
-		Assert.hasLength(username, "username 为空");
+		Assert.hasLength(username, "username is null");
 		List<GrantedAuthority> authorities = new ArrayList<>();
 		List<SysMenuDto> menus = null;
 		if (SecurityUtils.isSuperAdmin(username)) {

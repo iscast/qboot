@@ -4,9 +4,10 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.qboot.sys.dto.SysRoleDto;
+import org.qboot.sys.dto.SysUserDto;
 
 /**
- * 用户信息
+ * for spring Security Custom User
  * @author iscast
  * @date 2020-09-25
  */
@@ -29,20 +30,19 @@ public class CustomUser implements Serializable {
 	
 	private List<SysRoleDto> roles;
 
-	public CustomUser(String userId, String deptId, String deptName, String loginName,
-                      String name, Integer status, Integer fldN1, Integer fldN2, String fldS1, String fldS2, String lang) {
+	public CustomUser(SysUserDto sysUser) {
 		super();
-		this.userId = userId;
-		this.deptId = deptId;
-		this.deptName = deptName;
-		this.loginName = loginName;
-		this.name = name;
-		this.status = status;
-		this.fldN1 = fldN1;
-		this.fldN2 = fldN2;
-		this.fldS1 = fldS1;
-		this.fldS2 = fldS2;
-		this.lang = lang;
+		this.userId = sysUser.getId();
+		this.deptId = sysUser.getDeptId();
+		this.deptName = sysUser.getDeptName();
+		this.loginName = sysUser.getLoginName();
+		this.name = sysUser.getName();
+		this.status = sysUser.getStatus();
+		this.fldN1 = sysUser.getFldN1();
+		this.fldN2 = sysUser.getFldN2();
+		this.fldS1 = sysUser.getFldS1();
+		this.fldS2 = sysUser.getFldS2();
+		this.lang = sysUser.getLang();
 	}
 
 

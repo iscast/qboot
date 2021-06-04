@@ -55,3 +55,12 @@ sys:
       #当多个节点配置为true时,任务根据redis锁竞争执行.
       #此设置在做任务与查询服务分离时非常有用,当您的系统用户量上升系统负载变重时,可以考虑部署单独的查询服务,此时该值设置为false,即为快服务.
       loadTaskOnStartup: false
+
+qboot:
+  admins:
+    - id: 0
+      name: superadmin
+      password: 123456
+      mobile: 18123456
+      email: 18123456@qboot.com
+      lang: zh_CN

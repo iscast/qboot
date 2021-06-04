@@ -47,3 +47,18 @@ sys:
     task:
       checkUpdateInterval: 10
       loadTaskOnStartup: false
+
+qboot:
+  admins:
+    - id: 自定义超管ID1
+      name: 自定义超管名称1
+      password: 自定义超管登陆密码1
+      mobile: 自定义超管手机号1
+      email: 自定义超管邮箱1
+      lang: 自定义超管语言1
+    - id: 自定义超管ID2
+      name: 自定义超管名称2
+      password: 自定义超管登陆密码2
+      mobile: 自定义超管手机号2
+      email: 自定义超管邮箱2
+      lang: 自定义超管语言2

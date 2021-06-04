@@ -47,3 +47,24 @@ sys:
     task:
       checkUpdateInterval: 10
       loadTaskOnStartup: false
+
+qboot:
+  admins:
+    - id: 0
+      name: superadmin
+      password: 123456
+      mobile: 18123456
+      email: 18123456@qboot.com
+      lang: zh_CN
+    - id: 2
+      name: admin1
+      password: 111111
+      mobile: 18111111
+      email: 18111111@qboot.com
+      lang: zh_CN
+    - id: 3
+      name: admin2
+      password: 222222
+      mobile: 18222222
+      email: 18222222@qboot.com
+      lang: zh_CN

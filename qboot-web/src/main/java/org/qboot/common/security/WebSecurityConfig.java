@@ -141,8 +141,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Bean
 	public CustomUserDetailsServiceImpl customUserDetailsService() {
-		CustomUserDetailsServiceImpl customUserDetailsService = new CustomUserDetailsServiceImpl();
-		return customUserDetailsService;
+		return new CustomUserDetailsServiceImpl();
 	}
 	
 	@Bean

@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 /**
- * spring上下文工具类
+ * custom spring context
  * @Author: iscast
  * @Date: 2020/8/22 19:15
  */
@@ -25,7 +25,7 @@ public class SpringContextHolder implements ApplicationContextAware {
     public void setApplicationContext(ApplicationContext applicationContext) {
         logger.debug("注入ApplicationContext到SpringContextHolder:" + applicationContext);
         if (applicationContext != null) {
-            logger.warn("SpringContextHolder中的ApplicationContext被覆盖, 原有ApplicationContext为:" + applicationContext);
+            logger.info("SpringContextHolder中的ApplicationContext被覆盖, 原有ApplicationContext为:" + applicationContext);
         }
         this.applicationContext = applicationContext;
     }
@@ -50,18 +50,18 @@ public class SpringContextHolder implements ApplicationContextAware {
         try {
             t = applicationContext.getBean(clazz);
         } catch (NoSuchBeanDefinitionException e) {
-            logger.warn("springContext can't find {} no exist, err msg:{}  return null", clazz.getName(), e.getMessage());
+            logger.info("springContext can't find {} no exist, err msg:{}  return null", clazz.getName(), e.getMessage());
         }
         return t;
     }
 
     public static void clear() {
-        logger.debug("清除SpringContextHolder中的ApplicationContext:" + applicationContext);
+        logger.debug("clear ApplicationContext in the SpringContextHolder");
         applicationContext = null;
     }
 
     /**
-     * 获取spring.profiles.active
+     * get spring.profiles.active
      */
     public static String getActiveProfile() {
         return getApplicationContext().getEnvironment().getActiveProfiles()[0];
@@ -69,7 +69,7 @@ public class SpringContextHolder implements ApplicationContextAware {
 
     private static void assertContextInjected() {
         if (applicationContext == null) {
-            throw new IllegalStateException("applicaitonContext未注入,请在applicationContext.xml中定义SpringContextHolder");
+            throw new IllegalStateException("applicaitonContext not exist,plz config SpringContextHolder in applicationContext.xml");
         }
     }
 }
