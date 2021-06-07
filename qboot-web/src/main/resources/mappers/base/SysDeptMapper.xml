@@ -28,9 +28,7 @@
     </select>
 
     <select id="findList" resultMap="BaseResultMap" parameterType="org.qboot.sys.dto.SysDeptDto" >
-        select
-        <include refid="Base_Column_List" />
-        , (select count(1) from sys_dept where parent_id = d.id) as hasSub
+        select id, parent_id, parent_ids, name, sort, (select count(1) from sys_dept where parent_id = d.id) as hasSub
         from sys_dept d
         <where>
             <if test="parentId !=null and parentId!=''">

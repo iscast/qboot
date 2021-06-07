@@ -23,66 +23,47 @@
         var admin = layui.admin;
         var _i18n = layui._i18n;
         var msgs = _i18n.getMsg('sys');
-        var tableId='sys_dept_treeTable';
-        var sysDeptIdArr = [100,110,120,130,140,150];
         var ptable = treeGrid.render({
-            id:tableId
-            ,elem: '#'+tableId
+            id:'sys_dept_treeTable'
+            ,elem: '#sys_dept_treeTable'
             ,idField:'id'
-            ,url: _config.base_server + '/sys/dept/qryAll'
+            ,url: _config.base_server + '/sys/dept/qryDepts'
             ,method: "get"
             ,treeId:'id'//树形id字段名称
             ,treeUpId:'parentId'//树形父id字段名称
             ,treeShowName:'name'//以树形式显示的字段
-            // ,height:'full-550'
-            // ,skin: 'nob'
+            ,height:'full-550'
+            ,isFilter:false
+            ,buttonType : 999  //按钮类型
+            ,dataType: 2
             ,isOpenDefault: false//节点默认是展开还是折叠
-            ,page:false
             ,cols: [[
-                {field:'name',
-                    title: "部门名称",
-                    align:'left',
-                    minWidth: 100
-                }
-                ,{title: '操作', align:'right'
-                    ,templet: function(d){
+                {field:'name', title: msgs['sys.table.title.dept.name'], align:'left', width: '85%'}
+                ,{title: msgs['sys.table.title.operation'], align:'right',width: '15%',
+                    templet: function(d){
                         var upBtn = '';
+                        upBtn = '<button class="sys_menu_auth layui-btn layui-btn-xs" lay-event="edit">'+msgs['sys.form.operation.edit']+'</button>';
                         if(admin.haveAuth('sys:dept:update')){
-                            upBtn = '<button class="sys_menu_auth layui-btn layui-btn-xs" lay-event="edit">'+msgs['sys.form.operation.edit']+'</button>';
                         }
                         if(upBtn === ''){
                             return _i18n.getGlobalVal('layui.operation.tips.noPermission');
                         }else{
                             return upBtn;
                         }
-                    },
-                    minWidth: 30
-                }
+                    }}
             ]],
             getMenu: function(id, index) {
                 var load = layer.load(2);
-                admin.req('/sys/dept/qryDepts?parentId=' + id,{}, function(ret) {
-                    if(!!ret && ret.code ==='0'){
-                        for( var i = 0; i < ret.data.length; i ++ ) {
-                            treeGrid.addRow(tableId, index + i, ret.data[i]);
-                        }
-                        //重新渲染表格
-                        form.render();
-                        //setButtons([], id);
-                        layer.close(load);
+                $.get(_config.base_server + '/sys/dept/qryDepts?parentId=' + id, function(res) {
+                    for( var i = 0; i < res.data.length; i ++ ) {
+                        treeGrid.addRow('sys_dept_treeTable', index + i, res.data[i]);
                     }
-                },'get');
+                    form.render();
+                    layer.close(load);
+                } );
             },
             getButtons: function( data, index, id ) {
-                /*if( typeof data !== "object") {
-                    $.get(_config.base_server + '/sys/menu/qryMenusButtons?parentId=' + id, function(res) {
-                        treeGrid.addChildren(tableId, id, res.data);
-                        setButtons(res.data, id);
-                    });
-                } else {
-                    setButtons(data, id);
-                }*/
-                deptLayTableToggleClass();
+                // console.log("click:" + id)
             },
             done: function(res, curr, count){
                 _i18n.initPage();
@@ -91,14 +72,13 @@
 
         treeGrid.on('tool(sys_dept_treeTable)',function (obj) {
             if(obj.event==="edit"){
-                //编辑菜单
                 admin.req('/sys/dept/get', {id: obj.data.id}, function (data) {
                     layer.closeAll('loading');
                     if (data.code == '0') {
                         admin.putTempData('t_dept', data.data);
-                        var modalTitle =  '<p class="breadcrumb"><span>'+ '部门管理' + " / </span>"
+                        var modalTitle =  '<p class="breadcrumb"><span>'+ 'dept' + " / </span>"
                             + '<span>' + data.data.name + ' / </span>'
-                            + '<span class="bc-strong">'+  '编辑部门' + '</span>' + '</p>';
+                            + '<span class="bc-strong">'+  msgs['sys.form.operation.edit'] + '</span>' + '</p>';
                         admin.popupCenter({
                             title: modalTitle,
                             area: ['900px', '500px'],
@@ -109,22 +89,14 @@
                         layer.msg(data.msg, {icon: 5});
                     }
                 }, 'post');
-
             }
         });
 
-        function deptLayTableToggleClass() {
-            //点击行变色
-            $('#deptLayTable').on('click', 'tbody tr', function (e) {
-                $(this).toggleClass('layui-table-click');
-            });
-        }
 
-        // 添加
         $('#dept-btn-add').click(function () {
             admin.putTempData('t_dept', null);
-            var modalTitle =  '<p class="breadcrumb"><span>'+ '部门管理' + " / </span>"
-                + '<span class="bc-strong">'+  '添加部门' + '</span>' + '</p>';
+            var modalTitle =  '<p class="breadcrumb"><span>'+ 'dept' + " / </span>"
+                + '<span class="bc-strong">'+  msgs['sys.form.operation.add'] + '</span>' + '</p>';
             admin.popupCenter({
                 title: modalTitle,
                 area: ['900px', '500px'],
@@ -133,12 +105,6 @@
             });
         });
 
-        _i18n.initPage(function () {
-            //点击行变色
-            $('#sys_dept_treeTable').on('click', 'tbody tr', function (e) {
-                $(this).toggleClass('layui-table-click');
-            });
-        });
     });
 
 </script>

@@ -102,7 +102,7 @@ public class SysDeptController extends BaseController {
     public ResponeModel save(@Validated SysDeptDto sysDept) {
         int count = sysDeptService.checkNameUnique(sysDept);
         if(count > 0 ){
-            return ResponeModel.error("部门名称重复");
+            return ResponeModel.error("dept name repetition");
         }
         int cnt = this.sysDeptService.save(sysDept);
         if (cnt > 0) {
