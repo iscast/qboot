@@ -113,6 +113,7 @@
     "sys.table.title.remarks":"备注",
     "sys.table.title.operation":"操作",
 
+    "sys.table.title.dept.name":"部门名称",
 
 	"sys.btn.addMenu":"添加菜单",
 	"sys.btn.editMenu":"修改菜单",

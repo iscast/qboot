@@ -1,60 +1,58 @@
-<!-- task表单弹窗 -->
 <form id="task-form" lay-filter="task-form" class="layui-form model-form">
-		
 		<input type="hidden" name="id" id="id" />
 		
 	    <div class="layui-form-item">
-	        <label class="layui-form-label">任务名称</label>
+            <label class="layui-form-label layui-i18n" i18n-key="sys.task.table.name"></label>
 	        <div class="layui-input-block">
 	            <input id="taskName" name="taskName" type="text" class="layui-input" maxlength="64"
 	                   lay-verify="required"/>
 	        </div>
 	    </div>
 	    <div class="layui-form-item">
-	        <label class="layui-form-label">分组名称</label>
+            <label class="layui-form-label layui-i18n" i18n-key="sys.task.group"></label>
 	        <div class="layui-input-block">
 	            <input id="groupName" name="groupName" type="text" class="layui-input" maxlength="32" />
 	        </div>
 	    </div>
 	    <div class="layui-form-item">
-	        <label class="layui-form-label">时间表达式</label>
+            <label class="layui-form-label layui-i18n" i18n-key="sys.task.table.cronExp"></label>
 	        <div class="layui-input-block">
-	            <input id="cronExp" name="cronExp" type="text" placeholder="如0 0/8 * * * ?" class="layui-input" maxlength="32"
+	            <input id="cronExp" name="cronExp" type="text" placeholder="0 0/8 * * * ?" class="layui-input" maxlength="32"
 	                   lay-verify="required" required/>
 	        </div>
 	    </div>
 	    <div class="layui-form-item">
-	        <label class="layui-form-label">Job实例</label>
+            <label class="layui-form-label layui-i18n" i18n-key="sys.task.table.taskTarget"></label>
 	        <div class="layui-input-block">
 	            <input id="taskTarget" name="taskTarget" type="text" class="layui-input" maxlength="128"
 	                   lay-verify="required" required/>
 	        </div>
 	    </div>
 	    <div class="layui-form-item">
-	        <label class="layui-form-label">执行方式</label>
+            <label class="layui-form-label layui-i18n" i18n-key="sys.task.table.execType"></label>
 	            <div class="layui-input-block">
-			      <input type="radio" id="execType_0" name="execType" value="0" title="阻塞" checked>
-			      <input type="radio" id="execType_1" name="execType" value="1" title="非阻塞" >
+			      <input type="radio" id="execType_0" name="execType" value="0" title="block" checked>
+			      <input type="radio" id="execType_1" name="execType" value="1" title="noBlock" >
 			    </div>
 	    </div>
 	    <div class="layui-form-item">
-	        <label class="layui-form-label">附加参数</label>
+            <label class="layui-form-label layui-i18n" i18n-key="sys.task.table.params"></label>
 	        <div class="layui-input-block">
-	            <input id="params" name="params" placeholder='json串,如:{key:"value"}' type="text" class="layui-input" maxlength="512"/>
+	            <input id="params" name="params" placeholder='json extra param, such as:{key:"value"}' type="text" class="layui-input" maxlength="512"/>
 	        </div>
 	    </div>
 	   <div class="layui-form-item">
-		    <label class="layui-form-label">是否启用</label>
+		    <label class="layui-form-label">isEnable</label>
 		    <div class="layui-input-block">
-		      <input type="checkbox" id="status" name="status" value="1" lay-skin="switch" lay-text="启用|关闭">
+		      <input type="checkbox" id="status" name="status" value="1" lay-skin="switch" lay-text="Enable|Forbid">
 		    </div>
 	    </div>
 	    
       <div class="layui-form-item">
-	        <label class="layui-form-label">备注</label>
-	        <div class="layui-input-block">
-	            <input id="remarks" name="remarks" placeholder="" type="text" class="layui-input" maxlength="512"/>
-	        </div>
+            <label class="layui-form-label layui-i18n" i18n-key="sys.form.label.remark"></label>
+            <div class="layui-input-block">
+                <input id="remarks" name="remarks" placeholder="" type="text" class="layui-input" maxlength="512"/>
+            </div>
 	  </div>
 	    
     <div class="layui-form-item model-form-footer">
@@ -64,10 +62,11 @@
 </form>
 
 <script>
-    layui.use(['layer', 'admin', 'form', 'formSelects'], function () {
+    layui.use(['layer', 'admin', 'form', 'formSelects', '_i18n'], function () {
         var layer = layui.layer;
         var admin = layui.admin;
         var form = layui.form;
+        var _i18n = layui._i18n;
         var formSelects = layui.formSelects;
         var t_task = admin.getTempData('t_task');
         
@@ -100,7 +99,7 @@
         		$(n).siblings("div").find("input").val(t_task.params);
         	  break;
         	case 6:
-        		$(n).siblings("div").find("input").attr("lay-text","启用|禁用");
+        		$(n).siblings("div").find("input").attr("lay-text","Enable|Forbid");
         		if(t_task.status==1){
         			$(n).siblings("div").find("input").attr("checked",true);
         		}else{
@@ -114,10 +113,9 @@
         		break;
         	}
         });
-        
+        _i18n.initPage();
         form.render();
 
-        // 表单提交事件
         form.on('submit(task-form-submit)', function (data) {
             layer.load(2);
             var id = $('#id').val();

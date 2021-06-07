@@ -113,6 +113,8 @@
   "sys.table.title.remarks":"remark",
   "sys.table.title.operation":"operation",
 
+  "sys.table.title.dept.name":"Dept Name",
+
 
   "sys.btn.addMenu":"Add Menu",
   "sys.btn.editMenu":"Edit Menu",

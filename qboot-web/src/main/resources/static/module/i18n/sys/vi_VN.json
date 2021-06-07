@@ -113,6 +113,7 @@
   "sys.table.title.remarks":"nhận xét",
   "sys.table.title.operation":"hoạt động",
 
+  "sys.table.title.dept.name":"Tên bộ phận",
 
   "sys.btn.addMenu":"Thêm thực đơn",
   "sys.btn.editMenu":"Chỉnh sửa Menu",

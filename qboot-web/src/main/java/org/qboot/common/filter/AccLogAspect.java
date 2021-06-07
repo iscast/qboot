@@ -22,7 +22,7 @@ import java.util.Map;
 import static org.qboot.common.constants.SysConstants.GLOBAL_DEFAULT_ERROR;
 
 /**
- * 通过切面记录操作日志
+ * acc log
  * @author iscast
  * @date 2020-12-24
  */

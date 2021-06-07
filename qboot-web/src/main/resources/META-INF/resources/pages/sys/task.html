@@ -8,14 +8,15 @@
 			<span class="layui-i18n" i18n-key="sys.task.table.taskTarget"></span>
 			<input id="search_taskTarget" name="taskTarget" class="layui-input search-input i18n-input-hint" type="text" i18n-key="sys.task.table.taskTarget" type="text"/>&emsp;
 			<select name="taskStatus" lay-verify="">
-			  <option value="">请选择状态</option>
-			  <option value="1">启用</option>
-			  <option value="0">禁用</option>
+			  <option value="">--</option>
+			  <option value="1">enable</option>
+			  <option value="0">forbid</option>
 			</select>&emsp;
+
 			<select name="runStatus" lay-verify="">
-			  <option value="">请选择执行状态</option>
-			  <option value="0">初始</option>
-			  <option value="1">执行中</option>
+			  <option value="">--</option>
+			  <option value="0">init</option>
+			  <option value="1">running</option>
 			</select>&emsp; 
 			<button id="task-btn-search" class="layui-btn icon-btn  layui-btn-search task_auth" data-auth="sys:task:qry"></button>
 			<button id="task-btn-add" class="layui-btn icon-btn layui-icon layui-icon-add-circle-fine task_auth layui-i18n" i18n-key="sys.form.operation.add" data-auth="sys:task:save"></button>
@@ -53,7 +54,6 @@
         var groupName = $('#search_groupName').val();
         var taskTarget = $('#search_taskTarget').val();
 
-        // 渲染表格
         table.render({
             elem: '#task-table',
             url: _config.base_server + '/sys/task/qryPage',
@@ -75,7 +75,7 @@
                 	var auth = JSON.parse(sessionStorage.getItem("auth"));
                 	var page = location.hash.substring(2);
                 	if(auth[page] && auth[page]['sys:task:update']){
-                		var swiftBtn = '<input type="checkbox" lay-filter="task-tpl-state" value="'+d.id+'" lay-skin="switch" lay-text="启用|禁用"';
+                		var swiftBtn = '<input type="checkbox" lay-filter="task-tpl-state" value="'+d.id+'" lay-skin="switch" lay-text="Enable|Forbid"';
                 		if(d.status == 1){
                 			swiftBtn+=' checked="checked" />';
                 		}else{
@@ -98,9 +98,9 @@
                 {field: 'taskTarget', title: msgs['sys.task.table.taskTarget'],width:200},
                 {field: 'execType', templet: function (d) {
                 		if(d.execType==1){
-                			return "非阻塞" ;
+                			return "noBlock" ;
                 		}else{
-                			return "阻塞";
+                			return "block";
                 		}
                 	}, title: msgs['sys.task.table.execType'],width:150},
                 {field: 'params', title: msgs['sys.task.table.params'],width:150},
@@ -129,16 +129,14 @@
             }
         });
 
-        // 添加按钮点击事件
         $('#task-btn-add').click(function () {
             showEditModel();
         });
 
-        // 工具条点击事件
         table.on('tool(task-table)', function (obj) {
             var data = obj.data;
             var layEvent = obj.event;
-            if (layEvent === 'edit') { // 修改
+            if (layEvent === 'edit') {
                 showEditModel(data);
             }else if(layEvent === 'execute'){
             	layer.confirm("确认立即执行?", {icon: 3, title:"提示"}, function(index){
@@ -177,7 +175,6 @@
         	showTaskLog('#task-log-table',obj.data);
        	});
       
-        //显示任务日志
         var showTaskLog = function(elem,data){
         	var taskId = -1 ;
         	if(data&&data.id){
