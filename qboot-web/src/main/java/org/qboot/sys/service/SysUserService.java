@@ -17,7 +17,7 @@ public interface SysUserService extends ICrudService<SysUserDao, SysUserDto> {
 
     SysUserDto findByDto(SysUserDto dto);
 
-    List<Long> findUserIds(SysUserDto dto);
+    List<String> findUserIds(SysUserDto dto);
 
 	boolean checkLoginName(String userId, String loginName);
 

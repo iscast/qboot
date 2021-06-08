@@ -76,7 +76,7 @@
         </where>
     </select>
 
-    <select id="findUserIds" resultType="java.lang.Long" parameterType="java.lang.String" >
+    <select id="findUserIds" resultType="java.lang.String" parameterType="org.qboot.sys.dto.SysUserDto">
         select u.id
         from <include refid="Join_Table" />
         <where>

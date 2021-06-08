@@ -47,7 +47,7 @@ public class SysUserServiceImpl extends CrudService<SysUserDao, SysUserDto> impl
     }
 
     @Override
-    public List<Long> findUserIds(SysUserDto dto) {
+    public List<String> findUserIds(SysUserDto dto) {
         return this.d.findUserIds(dto);
     }
 
