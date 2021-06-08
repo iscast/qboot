@@ -15,8 +15,9 @@ public interface SysUserDao extends CrudDao<SysUserDto> {
 
 	int deleteUserRoleByUserId(String userId);
 	int insertUserRole(List<SysUserRoleDto> list);
-	List<SysUserDto> findByLoginName(String loginName);
 	int changePwd(SysUserDto sysUser);
 	int setStatus(SysUserDto sysUser);
     SysUserDto findSecretInfo(SysUserDto qry);
+    SysUserDto findByDto(SysUserDto qry);
+    List<Long> findUserIds(SysUserDto qry);
 }

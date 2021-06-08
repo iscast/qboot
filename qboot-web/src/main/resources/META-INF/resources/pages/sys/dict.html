@@ -44,7 +44,7 @@
                 {field: 'name', title: msgs['sys.table.title.name'], width: '12%'},
                 {field: 'type', title: msgs['sys.form.label.paramKey'], width: '12%'},
                 {field: 'code', title: msgs['sys.form.label.paramValue']},
-                {align: 'center', field: 'status', width: '8%',  templet: function(d){
+                {align: 'center', field: 'status', width: '9%',  templet: function(d){
                         var auth = JSON.parse(sessionStorage.getItem("auth"));
                         var page = location.hash.substring(2);
                         if(auth[page] && auth[page]['sys:dict:update']){
@@ -65,7 +65,7 @@
                             return status;
                         }
                     }, title: msgs['sys.table.title.status']},
-                {field: 'createBy', title: msgs['sys.table.title.createdBy'], width: '10%'},
+                {field: 'createBy', title: msgs['sys.table.title.createdBy'], width: '9%'},
                 {
                     field: 'createDate', templet: function (d) {
                         return util.toDateString(d.createDate);

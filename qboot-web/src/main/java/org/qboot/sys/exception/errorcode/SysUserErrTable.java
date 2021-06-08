@@ -27,9 +27,10 @@ public class SysUserErrTable {
     public static final ErrorCode SYS_USER_SALT_EMPTY = new ErrorCode(30114, "sys.user.salt.empty");
     public static final ErrorCode SYS_USER_UERID_EMPTY = new ErrorCode(30115, "sys.user.id.empty");
     public static final ErrorCode SYS_USER_NAME_EMPTY = new ErrorCode(30116, "sys.user.name.empty");
-    public static final ErrorCode SYS_USER_LOGIN_STATUS_EMPTY = new ErrorCode(30117, "sys.user.login.status.empty");
-    public static final ErrorCode SYS_USER_PWD_UPDATE_FAIL = new ErrorCode(30118, "sys.user.pwd.update.fail");
-    public static final ErrorCode SYS_USER_STATUS_UPDATE_FAIL = new ErrorCode(30119, "sys.user.status.update.fail");
+    public static final ErrorCode SYS_USER_MOBILE_EMPTY = new ErrorCode(30117, "sys.user.mobile.empty");
+    public static final ErrorCode SYS_USER_LOGIN_STATUS_EMPTY = new ErrorCode(30118, "sys.user.login.status.empty");
+    public static final ErrorCode SYS_USER_PWD_UPDATE_FAIL = new ErrorCode(30119, "sys.user.pwd.update.fail");
+    public static final ErrorCode SYS_USER_STATUS_UPDATE_FAIL = new ErrorCode(30120, "sys.user.status.update.fail");
 
 
     public static final ErrorCode SYS_USER_SAVE_FAIL = new ErrorCode(30140, "sys.user.save.fail");

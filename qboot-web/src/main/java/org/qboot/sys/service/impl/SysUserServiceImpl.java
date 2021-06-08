@@ -1,7 +1,6 @@
 package org.qboot.sys.service.impl;
 
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.qboot.common.constants.SysConstants;
 import org.qboot.common.service.CrudService;
 import org.qboot.common.utils.CodecUtils;
@@ -12,7 +11,6 @@ import org.qboot.sys.dto.SysUserDto;
 import org.qboot.sys.dto.SysUserRoleDto;
 import org.qboot.sys.service.SysUserService;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,23 +28,42 @@ public class SysUserServiceImpl extends CrudService<SysUserDao, SysUserDto> impl
     @Override
 	public SysUserDto findByLoginName(String loginName) {
         MyAssertTools.hasLength(loginName, SYS_USER_LOGINNAME_EMPTY);
-		List<SysUserDto> list = this.d.findByLoginName(loginName);
-		return list.isEmpty() ? null : list.get(0);
+        SysUserDto qry = new SysUserDto();
+        qry.setLoginName(loginName);
+        return this.d.findByDto(qry);
 	}
+
+    @Override
+    public SysUserDto findByMobile(String mobile) {
+        MyAssertTools.hasLength(mobile, SYS_USER_MOBILE_EMPTY);
+        SysUserDto qry = new SysUserDto();
+        qry.setMobile(mobile);
+        return this.d.findByDto(qry);
+    }
+
+    @Override
+    public SysUserDto findByDto(SysUserDto dto) {
+        return this.d.findByDto(dto);
+    }
+
+    @Override
+    public List<Long> findUserIds(SysUserDto dto) {
+        return this.d.findUserIds(dto);
+    }
 
     @Override
 	public boolean checkLoginName(String userId, String loginName) {
         MyAssertTools.hasLength(loginName, SYS_USER_LOGINNAME_EMPTY);
-		List<SysUserDto> list = this.d.findByLoginName(loginName);
+        SysUserDto qry = new SysUserDto();
+        qry.setLoginName(loginName);
+        SysUserDto exesitUser = this.d.findByDto(qry);
 
-        if(CollectionUtils.isEmpty(list)) {
+        if(exesitUser == null) {
+            return false;
+        }else if(userId != null && exesitUser.getId().equals(userId)) {
             return false;
         }
-
-		if(StringUtils.isNotBlank(userId) && list.get(0).getId().equals(userId)) {
-			return false;
-		}
-		return true;
+        return true;
 	}
 
 	@Override

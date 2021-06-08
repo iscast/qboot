@@ -4,7 +4,7 @@ import org.qboot.common.facade.ICrudService;
 import org.qboot.sys.dao.SysUserDao;
 import org.qboot.sys.dto.SysUserDto;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * 系统用户service
@@ -12,7 +12,13 @@ import javax.servlet.http.HttpServletRequest;
 public interface SysUserService extends ICrudService<SysUserDao, SysUserDto> {
 
 	SysUserDto findByLoginName(String loginName);
-	
+
+    SysUserDto findByMobile(String mobile);
+
+    SysUserDto findByDto(SysUserDto dto);
+
+    List<Long> findUserIds(SysUserDto dto);
+
 	boolean checkLoginName(String userId, String loginName);
 
 	int save(SysUserDto t);
