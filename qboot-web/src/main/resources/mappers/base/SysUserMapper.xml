@@ -206,7 +206,7 @@
   <update id="update" parameterType="org.qboot.sys.dto.SysUserDto" >
     update sys_user
     <set>
-        version=#{version}+1
+        version=#{version}+1,
       <if test="deptId != null" >
         dept_id = #{deptId},
       </if>
