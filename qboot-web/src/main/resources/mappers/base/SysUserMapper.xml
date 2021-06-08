@@ -165,6 +165,12 @@
         <if test="createBy !=null and createBy !=''">
             and u.create_by = #{createBy}
         </if>
+        <if test="startDate!=null">
+            and u.create_date > #{startDate}
+        </if>
+        <if test="endDate!=null">
+            and <![CDATA[ u.create_date < #{endDate} ]]>
+        </if>
     </where>
       order by id desc
   </select>

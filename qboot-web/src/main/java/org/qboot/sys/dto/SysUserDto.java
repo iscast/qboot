@@ -1,5 +1,6 @@
 package org.qboot.sys.dto;
 
+import java.util.Date;
 import java.util.List;
 import javax.validation.constraints.*;
 
@@ -125,6 +126,20 @@ public class SysUserDto extends BaseEntity<String> {
 	 */
     @JsonInclude(JsonInclude.Include.NON_NULL)
 	private String roleId;
+
+    /**
+     * 查询创建时间开始
+     */
+    @JSONField(serialize = false)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Date startDate;
+
+    /**
+     * 查询创建时间结束
+     */
+    @JSONField(serialize = false)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Date endDate;
 
 	public String getDeptId() {
 		return deptId;
@@ -269,4 +284,20 @@ public class SysUserDto extends BaseEntity<String> {
 	public void setLang(String lang) {
 		this.lang = lang;
 	}
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
 }
