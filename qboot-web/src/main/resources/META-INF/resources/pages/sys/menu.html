@@ -234,7 +234,7 @@
                     	var page = location.hash.substring(2);
                     	var qbootBtn = '';
                     	if(auth[page] && auth[page]['sys:menu:update']){
-                    		qbootBtn+='<button class="sys_menu_auth layui-btn layui-btn-xs" lay-event="edit" data-auth="sys:menu:update" onclick="edit('+d.id+','+d.type+','+')">'+msgs['sys.form.operation.edit']+'</button>';
+                    		qbootBtn+='<button class="sys_menu_auth layui-btn layui-btn-xs" lay-event="edit" data-auth="sys:menu:update" onclick="edit(\''+d.id+'\','+d.type+')">'+msgs['sys.form.operation.edit']+'</button>';
                     	}
                         if(auth[page] && auth[page]['sys:menu:delete']){
                             qbootBtn+='<button class="sys_menu_auth layui-btn layui-btn-danger layui-btn-xs" lay-event="del" data-auth="sys:menu:delete" onclick="del(\''+d.id+'\')">'+msgs['sys.form.operation.delete']+'</button>';
