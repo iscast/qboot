@@ -28,7 +28,8 @@ public class CodecUtils {
     public static String urlEncode(String text) {
         try {
             return URLEncoder.encode(text, "UTF-8");
-        } catch (UnsupportedEncodingException var2) {
+        } catch (Exception e) {
+            logger.error("url encode fail", e);
             return null;
         }
     }
@@ -36,7 +37,8 @@ public class CodecUtils {
     public static String urlDecode(String text) {
         try {
             return URLDecoder.decode(text, "UTF-8");
-        } catch (UnsupportedEncodingException var2) {
+        } catch (Exception e) {
+            logger.error("url decode fail", e);
             return null;
         }
     }
@@ -67,14 +69,19 @@ public class CodecUtils {
     public static String decodeHex(String hex) {
         try {
             return new String(Hex.decodeHex(hex.toCharArray()));
-        } catch (DecoderException e) {
-            logger.error("encode hex fail", e);
+        } catch (Exception e) {
+            logger.error("decode hex fail", e);
         }
         return null;
     }
 
     public static String encodeHex(String str) {
-        return new String(Hex.encodeHex(str.getBytes()));
+        try {
+            return new String(Hex.encodeHex(str.getBytes()));
+        } catch (Exception e) {
+            logger.error("encode hex fail", e);
+        }
+        return null;
     }
 
 }

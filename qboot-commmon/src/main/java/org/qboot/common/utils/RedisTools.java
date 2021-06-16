@@ -149,40 +149,50 @@ public class RedisTools {
         return map;
     }
 
-    public Long incr(String key, Long value) {
-        return incrWithTime(key, value, null);
-    }
-
-    public Long incrWithTime(String key, Long value, Long time) {
-        Long incrVaule = Math.abs(value);
+    public Long incr(String key, Long time) {
         if (StringUtils.isBlank(key)) {
             return -1L;
-        } else {
-            RAtomicLong atomicLong = this.redissonClient.getAtomicLong(key);
+        }
 
+        RAtomicLong atomicLong = this.redissonClient.getAtomicLong(key);
+        try {
             if (!atomicLong.isExists()) {
-                atomicLong.set(incrVaule);
+                atomicLong.set(1L);
                 if(null != time) {
                     atomicLong.expire(time, TimeUnit.SECONDS);
                 }
-                return incrVaule;
+                return 1L;
             }
+            return atomicLong.incrementAndGet();
+        } catch (Exception e) {
+            logger.error("increase redis longValue error:{}", ExceptionUtils.getStackTrace(e));
+        }
+        return -1L;
+    }
 
-            try {
-                Long result = null;
-                if(incrVaule > 0L) {
-                    result = atomicLong.addAndGet(incrVaule);
-                } else {
-                    result = atomicLong.get();
-                }
+    public Long decr(String key) {
+        if (StringUtils.isBlank(key)) {
+            return -1L;
+        }
 
-                return result;
-            } catch (Exception e) {
-                logger.error("increase redis longValue error:{}", ExceptionUtils.getStackTrace(e));
+        RAtomicLong atomicLong = this.redissonClient.getAtomicLong(key);
+        try {
+            if (!atomicLong.isExists()) {
                 return -1L;
             }
-
+            return atomicLong.decrementAndGet();
+        } catch (Exception e) {
+            logger.error("decrease redis longValue error:{}", ExceptionUtils.getStackTrace(e));
         }
+        return -1L;
+    }
+
+    public Long getLong(String key) {
+        RAtomicLong atomicLong = this.redissonClient.getAtomicLong(key);
+        if (null != atomicLong && atomicLong.isExists()) {
+            return atomicLong.get();
+        }
+        return -1L;
     }
 
     public <V> List<V> getList(String key) {
