@@ -40,15 +40,13 @@
         var _i18n = layui._i18n;
         var msgs = _i18n.getMsg('sys') ;
 
-        // 搜索按钮点击事件
         $('#operateLog-btn-search').click(function () {
-            let url = _config.base_server + '/sys/operatelog/download?date=' + $("#optDate").val() + '&level=' + $("#logLevle").val();
+            let url = _config.base_server + '/mon/operatelog/download?date=' + $("#optDate").val() + '&level=' + $("#logLevle").val();
             // var _$a = $('<a href="'+url+'" target="_blank">下载</a>');
             // _$a.click();
             window.open(url);
             // downBtn += '<a href="'+d.pdf+'" download="'+d.pdf+'" class="layui-btn layui-btn-primary layui-btn-xs" data-auth="order:invoice:list:down" target="_blank">下载</a>';
             // window.location.href=;
-            console.log("收到");
         });
 
         laydate.render({

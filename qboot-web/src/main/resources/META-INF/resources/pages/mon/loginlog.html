@@ -8,12 +8,12 @@
             -
             <input id="endDate" name="endDate" class="layui-input search-input i18n-input-hint" type="text" i18n-key="sys.form.hint.endTime"/>
 
-            <button id="loginLog-btn-search" class="layui-btn icon-btn layui-btn-search"><i class="layui-icon">&#xe615;</i>搜索</button>
+            <button id="loginLog-btn-search" class="layui-btn icon-btn layui-btn-search"></button>
             <br>
         </div>
 
         <div id="loginLogLayTable">
-        	<table class="layui-table loginLog_auth" id="loginLog-table" lay-filter="loginLog-table" data-auth="sys:loginLog:qry"></table>
+        	<table class="layui-table loginLog_auth" id="loginLog-table" lay-filter="loginLog-table" data-auth="mon:loginLog:qry"></table>
         </div>
     </div>
 </div>
@@ -33,7 +33,7 @@
         //渲染表格
         table.render({
             elem: '#loginLog-table',
-            url: _config.base_server + '/sys/loginlog/qryPage',
+            url: _config.base_server + '/mon/loginlog/qryPage',
             where: {
                 access_token: _config.getToken().access_token,
                 loginName: $('#loginName').val(),
@@ -75,17 +75,15 @@
             }
         });
 
-        // 搜索按钮点击事件
         $('#loginLog-btn-search').click(function () {
             table.reload('loginLog-table', {where: {loginName: $('#loginName').val(),startDate:$('#startDate').val(),endDate:$('#endDate').val()}, page:1});
         });
 
-      //日期时间选择器
         laydate.render({
           elem: '#startDate'
           ,type: 'datetime'
         });
-      //日期时间选择器
+
         laydate.render({
           elem: '#endDate'
           ,type: 'datetime'

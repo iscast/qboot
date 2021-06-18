@@ -1,0 +1,11 @@
+{
+  "mon": "monitor manage",
+  "mon:loginlog": "login logs",
+  "mon:operateinfo": "optlog config",
+  "mon:operatelog": "operate logs",
+  "mon:online": "online user",
+  "mon:dbmonitor": "db monitor",
+  "mon:sysmonitor": "server monitor",
+
+  "sys...":""
+}

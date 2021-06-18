@@ -40,6 +40,6 @@ public class CacheConstants {
 
     public static final String CACHE_PREFIX_LOGIN_FAILCOUNT = "qboot:login:failcount:";
 
-    public static final String CACHE_PREFIX_LOGIN_USERNAME_SESSION = "qboot:login:username:session";
+    public static final String CACHE_PREFIX_LOGIN_USER = "qboot:login:user:";
 	
 }

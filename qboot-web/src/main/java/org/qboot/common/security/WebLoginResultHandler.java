@@ -80,8 +80,7 @@ public class WebLoginResultHandler implements AuthenticationSuccessHandler,Authe
 		String loginName = this.obtainUsername(request);
         sysLoginLogService.saveLog(SysConstants.SYS_USER_LOGIN_STATUS_SUCCESS, loginName, request);
 		logger.info("user:[{}] login success ！", loginName);
-		String sessionId = request.getSession().getId();
-		loginSecurityService.setUserSessionId(loginName, sessionId);
+		loginSecurityService.setUserSessionId(loginName, request.getSession().getId());
 		loginSecurityService.clearLoginFailTimes(loginName);
 		this.print(response, JSON.toJSONString(ok));
 	}

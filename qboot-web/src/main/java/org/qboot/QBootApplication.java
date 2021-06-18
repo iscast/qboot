@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
                 classes = {org.springframework.web.bind.annotation.RestController.class, org.springframework.stereotype.Controller.class})})
 @MapperScan({"org.qboot.**.dao", "com.**.dao"})
 @EnableTransactionManagement(proxyTargetClass=true)
-@EnableRedissonHttpSession(maxInactiveIntervalInSeconds=2*60*60, keyPrefix="qsession")
+@EnableRedissonHttpSession(maxInactiveIntervalInSeconds=2 * 60 * 60)
 @RestController
 @EnableCaching
 public class QBootApplication extends SpringBootServletInitializer{

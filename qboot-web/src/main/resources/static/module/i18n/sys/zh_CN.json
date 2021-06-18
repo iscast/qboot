@@ -8,14 +8,6 @@
     "sys:param": "系统类型",
     "sys:task": "任务管理",
     "sys:gen": "代码生成",
-    "sys:monitor": "系统监控",
-    "sys:loginlog": "登陆日志",
-    "sys:operateinfo": "日志配置",
-    "sys:operatelog": "访问日志",
-    "sys:online": "在线用户",
-    "sys:dbmonitor": "DB请求监控",
-    "sys:sysmonitor": "服务器监控",
-
 
 	"sys.form.label.loginName":"登录账户",
 	"sys.form.label.loginId":"用户ID",

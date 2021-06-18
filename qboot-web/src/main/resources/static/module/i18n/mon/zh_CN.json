@@ -1,0 +1,10 @@
+{
+    "mon": "系统监控",
+    "mon:loginlog": "登陆日志",
+    "mon:operatelog": "访问日志",
+    "mon:online": "在线用户",
+    "mon:dbmonitor": "DB请求监控",
+    "mon:sysmonitor": "服务器监控",
+
+    "mon...":""
+}

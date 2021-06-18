@@ -9,8 +9,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -40,6 +42,18 @@ public class RedisTools {
             logger.warn("get {} = {}", new Object[]{key, value, ExceptionUtils.getStackTrace(e)});
         }
         return value;
+    }
+
+    public Set<String> getKeys(String pattern) {
+        Set<String> result = new HashSet<>();
+        try {
+            RKeys keys = redissonClient.getKeys();
+            Iterable<String> keysByPattern = keys.getKeysByPattern(pattern);
+            keysByPattern.forEach(result::add);
+        } catch (Exception e) {
+            logger.error("get patten keys fail ", e);
+        }
+        return result;
     }
 
     public <V> void set(String key, V value) {

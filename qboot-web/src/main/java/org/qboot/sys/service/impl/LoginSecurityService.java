@@ -82,12 +82,13 @@ public class LoginSecurityService extends BaseService {
 	 * @param loginName
 	 */
 	public void clearUserSessions(String loginName) {
-		logger.info("clear login user:{} session force logout", loginName);
-		Set<Object> sessionIdSet = redissonClient.getSet(CacheConstants.CACHE_PREFIX_LOGIN_USERNAME_SESSION + loginName);
-		if (sessionIdSet != null) {
-			sessionIdSet.forEach((sessionId) -> redisTools.del("redisson_spring_session:" + sessionId));
-		}
-		redisTools.del(CacheConstants.CACHE_PREFIX_LOGIN_USERNAME_SESSION + loginName);
+		logger.info("clear logined user:{} session force logout", loginName);
+        Object cache = redisTools.get(CacheConstants.CACHE_PREFIX_LOGIN_USER + loginName);
+        if(null != cache) {
+            String sessionId = cache.toString();
+            redisTools.del("redisson_spring_session:" + sessionId);
+        }
+		redisTools.del(CacheConstants.CACHE_PREFIX_LOGIN_USER + loginName);
 	}
 
 	/**
@@ -96,8 +97,7 @@ public class LoginSecurityService extends BaseService {
 	 * @param sessionId
 	 */
 	public void setUserSessionId(String loginName, String sessionId) {
-		RSet<String> set = redissonClient.getSet(CacheConstants.CACHE_PREFIX_LOGIN_USERNAME_SESSION + loginName);
-		set.add(sessionId);
-		set.expire(24 * 60 * 60, TimeUnit.SECONDS);
+	    clearUserSessions(loginName);
+	    redisTools.set(CacheConstants.CACHE_PREFIX_LOGIN_USER + loginName, sessionId, 2 * 60 * 60);
 	}
 }

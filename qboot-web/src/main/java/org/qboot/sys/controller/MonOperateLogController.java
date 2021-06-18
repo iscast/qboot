@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.qboot.common.annotation.AccLog;
 import org.qboot.common.controller.BaseController;
 import org.qboot.common.entity.ResponeModel;
+import org.qboot.common.utils.IdGen;
 import org.qboot.sys.exception.errorcode.SysModuleErrTable;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,15 +27,19 @@ import java.util.zip.ZipOutputStream;
  * @date: 2020/12/24 18:11
  */
 @Controller
-@RequestMapping("${admin.path}/sys/operatelog")
-public class SysOperateLogController extends BaseController {
+@RequestMapping("${admin.path}/mon/operatelog")
+public class MonOperateLogController extends BaseController {
 
     @Value("${server.logPath:}")
     private String logPath = "logs";
     private final static String access = "access";
 
+    public static void main(String[] args) {
+        System.out.println(IdGen.uuid());
+    }
+
     @AccLog
-	@PreAuthorize("hasAuthority('sys:operatelog:qry')")
+	@PreAuthorize("hasAuthority('mon:operatelog:qry')")
 	@GetMapping("/download")
 	public ResponeModel download(String date, String level, HttpServletResponse response) throws Exception {
         if(StringUtils.isBlank(level)) {
