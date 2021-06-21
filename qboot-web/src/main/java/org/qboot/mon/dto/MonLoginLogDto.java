@@ -1,20 +1,17 @@
-package org.qboot.sys.dto;
-
-import java.util.Date;
-
-import javax.validation.constraints.NotNull;
+package org.qboot.mon.dto;
 
 import org.hibernate.validator.constraints.Length;
-
-import org.qboot.common.constants.SysConstants;
 import org.qboot.common.entity.BaseEntity;
 
+import javax.validation.constraints.NotNull;
+import java.util.Date;
+
 /**
- * 登陆日志实体
+ * 登陆日志
  * @author iscast
  * @date 2020-09-25
  */
-public class SysLoginLogDto extends BaseEntity<String> {
+public class MonLoginLogDto extends BaseEntity<String> {
 
 	private static final long serialVersionUID = 1L;
     /**

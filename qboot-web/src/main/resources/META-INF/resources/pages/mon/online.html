@@ -1,14 +1,15 @@
 <div class="layui-card">
     <div class="layui-card-body">
         <div class="layui-form toolbar">
+            <button id="online-btn-search" class="layui-btn icon-btn layui-btn-search" data-auth="mon:online:qry"></button>
         </div>
-        <div id="loginLogLayTable">
-            <table class="layui-table loginLog_auth" id="loginLog-table" lay-filter="loginLog-table" data-auth="mon:loginLog:qry"></table>
+        <div id="onlineLayTable">
+            <table class="layui-table online_auth" id="online-table" lay-filter="online-table" data-auth="mon:online:qry"></table>
         </div>
     </div>
 </div>
 <script>
-    layui.use(['laydate', 'form', 'table', 'util', '_config', 'admin', 'formSelects'], function () {
+    layui.use(['laydate', 'form', 'table', 'util', '_config', 'admin', '_i18n'], function () {
         var laydate = layui.laydate;
         var form = layui.form;
         var table = layui.table;
@@ -16,47 +17,37 @@
         var layer = layui.layer;
         var util = layui.util;
         var admin = layui.admin;
-        var formSelects = layui.formSelects;
+        var _i18n = layui._i18n;
+        var msgs = _i18n.getMsg('sys');
 
         table.render({
-            elem: '#loginLog-table',
-            url: _config.base_server + '/mon/loginlog/qryOnlineUser',
-            where: {
-                userId: $('#userId').val(), loginName: $('#loginName').val(),userName:$('#userName').val()
-            },
+            elem: '#online-table',
+            url: _config.base_server + '/mon/online/qry',
+            where: {},
             method: 'post',
+            page: false,
             cols: [[
                 {type: 'numbers'},
-                {field: 'userId', sort: true, title: '用户ID'},
-                {field: 'loginName', sort: true, title: '登录名'},
-                {field: 'userName', sort: true, title: '用户名'},
-                {field: 'loginTime', sort: true, templet: function (d) {
-                        return util.toDateString(d.loginTime);
-                    }, title: '登录时间'},
-                {field: 'ip', sort: true, title: 'IP地址'},
-                {field: 'firstLogin', templet: function (data){
-                        var vname = '正常';
-                        if(data.firstLogin == 1){
-                            vname = '初始化密码';
-                        }else if(data.firstLogin == 2){
-                            vname = '修改密码';
+                {field: 'loginName', title: msgs['sys.form.label.loginName'],},
+                {field: 'loginTime', title: msgs['sys.form.label.loginTime']},
+                {field: 'ip', title: msgs['sys.form.label.ipAddress']},
+                {align: 'center', templet: function(d){
+                        var auth = JSON.parse(sessionStorage.getItem("auth"));
+                        var page = location.hash.substring(2);
+                        var btn = '';
+                        if(btn == ''){
+                            return _i18n.getGlobalVal('layui.operation.tips.noPermission');
+                        }else{
+                            return btn;
                         }
-                        return vname;
-                    }, title: '状态标识'}
-            ]]
-        });
-
-        $('#loginLogLayTable').on('click', 'tbody tr', function (e) {
-            var fals = $(this).hasClass('layui-table-click');
-            if(!fals){
-                $(this).addClass('layui-table-click');
-            }else{
-                $(this).removeClass('layui-table-click');
+                    }, title: msgs['sys.table.title.operation']}
+            ]], done: function(res, curr, count){
+                _i18n.initPage();
             }
         });
 
-        $('#loginLog-btn-search').click(function () {
-            table.reload('loginLog-table', {where: {userId: $('#userId').val(), loginName: $('#loginName').val(),userName:$('#userName').val(),startDate:$('#startDate').val(),endDate:$('#endDate').val()}, page:1});
+        $('#online-btn-search').click(function () {
+            table.reload('online-table', {});
         });
 
     });

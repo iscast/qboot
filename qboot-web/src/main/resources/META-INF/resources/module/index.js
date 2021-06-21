@@ -298,8 +298,9 @@ layui.define(['_config', 'admin', 'layer', 'laytpl', 'element', 'form','_i18n'],
             $('#btnLogout').click(function () {
                 layer.confirm(_i18n.getGlobalVal('layer.confirm.logout.msg'),
                     _i18n.getBtns(),function () {
+                    var user = _config.getUser();
                     $.ajax({
-                		url: _config.base_server + '/logout',
+                		url: _config.base_server + '/logout?username='+user.loginName,
                 		cache: false,
                 		method: 'post',
                 		success: function(res) {

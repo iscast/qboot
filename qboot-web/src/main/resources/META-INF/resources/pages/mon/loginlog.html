@@ -8,7 +8,7 @@
             -
             <input id="endDate" name="endDate" class="layui-input search-input i18n-input-hint" type="text" i18n-key="sys.form.hint.endTime"/>
 
-            <button id="loginLog-btn-search" class="layui-btn icon-btn layui-btn-search"></button>
+            <button id="loginLog-btn-search" class="layui-btn icon-btn layui-btn-search" data-auth="mon:loginLog:qry"></button>
             <br>
         </div>
 
@@ -66,10 +66,9 @@
                         }
                         return vname;
                     }, title: msgs['sys.table.title.status'], width: '12%'},
-                {field: 'deviceName', title: msgs['sys.form.label.deviceName']},
-                {field: 'browserName', title: msgs['sys.form.label.browserName']},
+                {field: 'deviceName', title: msgs['sys.form.label.deviceName'], width: '15%'},
+                {field: 'browserName', title: msgs['sys.form.label.browserName'], width: '15%'},
                 {field: 'userAgent', title: msgs['sys.form.label.userAgent']},
-                {field: 'createBy', title: msgs['sys.table.title.createdBy']}
             ]], done: function(res, curr, count){
                 _i18n.initPage();
             }

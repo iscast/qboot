@@ -1,17 +1,20 @@
-package org.qboot.sys.controller;
+package org.qboot.mon.controller;
 
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.lang3.StringUtils;
 import org.qboot.common.constants.CacheConstants;
 import org.qboot.common.controller.BaseController;
 import org.qboot.common.entity.ResponeModel;
 import org.qboot.common.utils.RedisTools;
-import org.qboot.sys.dto.SysLoginLogDto;
+import org.qboot.mon.bo.CacheUserBO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -21,7 +24,7 @@ import java.util.Set;
  */
 @RestController
 @RequestMapping("${admin.path}/mon/online")
-public class OnlineController extends BaseController {
+public class MonOnlineController extends BaseController {
 
     @Autowired
     private RedisTools redisTools;
@@ -30,7 +33,17 @@ public class OnlineController extends BaseController {
 	@PostMapping("/qry")
 	public ResponeModel qry() {
         Set<String> keys = redisTools.getKeys(CacheConstants.CACHE_PREFIX_LOGIN_USER + "*");
-        PageInfo<SysLoginLogDto> page = null;
+        List<CacheUserBO> result = new ArrayList<>();
+        keys.stream().forEach(key ->  {
+            if(StringUtils.isNotBlank(key)) {
+                CacheUserBO cache = redisTools.get(key);
+                if(null != cache) {
+                    result.add(cache);
+                }
+            }
+        });
+
+        PageInfo<CacheUserBO> page = new PageInfo<>(result);
 		return ResponeModel.ok(page);
 	}
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="org.qboot.sys.dao.SysLoginLogDao" >
-  <resultMap id="BaseResultMap" type="org.qboot.sys.dto.SysLoginLogDto" >
+<mapper namespace="org.qboot.mon.dao.MonLoginLogDao" >
+  <resultMap id="BaseResultMap" type="org.qboot.mon.dto.MonLoginLogDto" >
     <id column="id" property="id" jdbcType="VARCHAR" />
     <result column="login_name" property="loginName" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="VARCHAR" />
@@ -11,18 +11,14 @@
     <result column="user_agent" property="userAgent" jdbcType="VARCHAR" />
     <result column="device_name" property="deviceName" jdbcType="VARCHAR" />
     <result column="browser_name" property="browserName" jdbcType="VARCHAR" />
-    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
-    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
-    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
-    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
     <result column="remarks" property="remarks" jdbcType="VARCHAR" />
   </resultMap>
   
   <sql id="Base_Column_List" >
-  	login_name, status, login_time, ip, area, user_agent, device_name, browser_name, create_by
+  	login_name, status, login_time, ip, area, user_agent, device_name, browser_name
   </sql>
   
-  <select id="findList" resultMap="BaseResultMap" parameterType="org.qboot.sys.dto.SysLoginLogDto" >
+  <select id="findList" resultMap="BaseResultMap" parameterType="org.qboot.mon.dto.MonLoginLogDto" >
     select 
     <include refid="Base_Column_List" />
     from sys_login_log
@@ -48,8 +44,8 @@
 	order by login_time desc
   </select>
   
-  <insert id="insert" parameterType="org.qboot.sys.dto.SysLoginLogDto" >
-    insert into sys_login_log (ID, login_name, status,login_time,ip,area,user_agent,device_name,browser_name,create_by,create_date,update_by,update_date,remarks)
-    values (#{id},#{loginName},#{status},#{loginTime},#{ip},#{area},#{userAgent},#{deviceName},#{browserName},#{createBy},#{createDate},#{updateBy},#{updateDate},#{remarks})
+  <insert id="insert" parameterType="org.qboot.mon.dto.MonLoginLogDto" >
+    insert into sys_login_log (ID, login_name, status,login_time,ip,area,user_agent,device_name,browser_name,remarks)
+    values (#{id},#{loginName},#{status},#{loginTime},#{ip},#{area},#{userAgent},#{deviceName},#{browserName},#{remarks})
   </insert>
 </mapper>

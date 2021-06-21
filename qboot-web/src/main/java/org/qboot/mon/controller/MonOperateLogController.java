@@ -1,4 +1,4 @@
-package org.qboot.sys.controller;
+package org.qboot.mon.controller;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -6,7 +6,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.qboot.common.annotation.AccLog;
 import org.qboot.common.controller.BaseController;
 import org.qboot.common.entity.ResponeModel;
-import org.qboot.common.utils.IdGen;
 import org.qboot.sys.exception.errorcode.SysModuleErrTable;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,10 +32,6 @@ public class MonOperateLogController extends BaseController {
     @Value("${server.logPath:}")
     private String logPath = "logs";
     private final static String access = "access";
-
-    public static void main(String[] args) {
-        System.out.println(IdGen.uuid());
-    }
 
     @AccLog
 	@PreAuthorize("hasAuthority('mon:operatelog:qry')")

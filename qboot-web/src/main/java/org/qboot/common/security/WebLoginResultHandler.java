@@ -4,8 +4,9 @@ import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang3.StringUtils;
 import org.qboot.common.constants.SysConstants;
 import org.qboot.common.entity.ResponeModel;
+import org.qboot.common.utils.IpUtils;
 import org.qboot.common.utils.RSAsecurity;
-import org.qboot.sys.service.SysLoginLogService;
+import org.qboot.mon.service.MonLoginLogService;
 import org.qboot.sys.service.impl.LoginSecurityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +23,6 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -42,7 +42,7 @@ public class WebLoginResultHandler implements AuthenticationSuccessHandler,Authe
 	@Autowired
 	private LoginSecurityService loginSecurityService;
 	@Autowired
-	private SysLoginLogService sysLoginLogService;
+	private MonLoginLogService sysLoginLogService;
 
 	@Override
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
@@ -80,7 +80,7 @@ public class WebLoginResultHandler implements AuthenticationSuccessHandler,Authe
 		String loginName = this.obtainUsername(request);
         sysLoginLogService.saveLog(SysConstants.SYS_USER_LOGIN_STATUS_SUCCESS, loginName, request);
 		logger.info("user:[{}] login success ！", loginName);
-		loginSecurityService.setUserSessionId(loginName, request.getSession().getId());
+		loginSecurityService.setUserSessionId(loginName, request.getSession().getId(), IpUtils.getIpAddr(request));
 		loginSecurityService.clearLoginFailTimes(loginName);
 		this.print(response, JSON.toJSONString(ok));
 	}

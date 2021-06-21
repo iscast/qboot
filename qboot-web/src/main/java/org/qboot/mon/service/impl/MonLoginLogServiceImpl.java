@@ -1,36 +1,29 @@
-package org.qboot.sys.service.impl;
+package org.qboot.mon.service.impl;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import eu.bitwalker.useragentutils.Browser;
 import eu.bitwalker.useragentutils.OperatingSystem;
 import eu.bitwalker.useragentutils.UserAgent;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.qboot.common.security.SecurityUtils;
 import org.qboot.common.service.CrudService;
 import org.qboot.common.utils.IdGen;
 import org.qboot.common.utils.IpUtils;
-import org.qboot.sys.dao.SysLoginLogDao;
-import org.qboot.sys.dto.SysLoginLogDto;
-import org.qboot.sys.service.SysLoginLogService;
+import org.qboot.mon.dao.MonLoginLogDao;
+import org.qboot.mon.dto.MonLoginLogDto;
+import org.qboot.mon.service.MonLoginLogService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
-import java.util.HashMap;
 
 /**
  * 登录日志
  * @author history
  */
 @Service
-public class SysLoginLogServiceImpl extends CrudService<SysLoginLogDao, SysLoginLogDto> implements SysLoginLogService {
-
-	protected Logger logger = LoggerFactory.getLogger(SysLoginLogServiceImpl.class);
+public class MonLoginLogServiceImpl extends CrudService<MonLoginLogDao, MonLoginLogDto> implements MonLoginLogService {
+	protected Logger logger = LoggerFactory.getLogger(MonLoginLogServiceImpl.class);
 
     /**
      * 登录日志
@@ -66,11 +59,7 @@ public class SysLoginLogServiceImpl extends CrudService<SysLoginLogDao, SysLogin
             String deviceName = os.getName() + " "+ os.getDeviceType();
             String browserStr = browser.getName() +" "+ browser.getVersion(userAgentStr);
             try {
-                String currentLoginName = SecurityUtils.getLoginName();
-                if(StringUtils.isBlank(currentLoginName)) {
-                    currentLoginName = loginName;
-                }
-                SysLoginLogDto loginLog = new SysLoginLogDto();
+                MonLoginLogDto loginLog = new MonLoginLogDto();
                 loginLog.setLoginName(loginName);
                 loginLog.setId(IdGen.uuid());
                 loginLog.setStatus(status);
@@ -79,11 +68,9 @@ public class SysLoginLogServiceImpl extends CrudService<SysLoginLogDao, SysLogin
                 loginLog.setIp(ip);
                 loginLog.setUserAgent(userAgentStr);
                 loginLog.setLoginTime(new Date());
-                loginLog.setCreateBy(currentLoginName);
-                loginLog.setUpdateBy(currentLoginName);
                 save(loginLog);
             } catch (Exception e) {
-                logger.error("保存登录日记记录异常，{}....", ExceptionUtils.getStackTrace(e));
+                logger.error("save login log err : {}", ExceptionUtils.getStackTrace(e));
             }
 
         }

@@ -5,18 +5,17 @@ import org.qboot.common.constants.CacheConstants;
 import org.qboot.common.constants.SysConstants;
 import org.qboot.common.security.SecurityUtils;
 import org.qboot.common.service.BaseService;
+import org.qboot.common.utils.DateUtils;
 import org.qboot.common.utils.RedisTools;
+import org.qboot.mon.bo.CacheUserBO;
 import org.qboot.sys.dto.SysUserDto;
 import org.qboot.sys.service.SysUserService;
-import org.redisson.api.RSet;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.util.Date;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Login Security Check
@@ -83,21 +82,26 @@ public class LoginSecurityService extends BaseService {
 	 */
 	public void clearUserSessions(String loginName) {
 		logger.info("clear logined user:{} session force logout", loginName);
-        Object cache = redisTools.get(CacheConstants.CACHE_PREFIX_LOGIN_USER + loginName);
+        CacheUserBO cache = redisTools.get(CacheConstants.CACHE_PREFIX_LOGIN_USER + loginName);
         if(null != cache) {
-            String sessionId = cache.toString();
-            redisTools.del("redisson_spring_session:" + sessionId);
+            redisTools.del("redisson_spring_session:" + cache.getSessionId());
+            redisTools.del(CacheConstants.CACHE_PREFIX_LOGIN_USER + loginName);
         }
-		redisTools.del(CacheConstants.CACHE_PREFIX_LOGIN_USER + loginName);
 	}
 
 	/**
      * add username and sessionId cache set
-	 * @param loginName
-	 * @param sessionId
-	 */
-	public void setUserSessionId(String loginName, String sessionId) {
+     * @param loginName
+     * @param sessionId
+     * @param ip
+     */
+	public void setUserSessionId(String loginName, String sessionId, String ip) {
 	    clearUserSessions(loginName);
-	    redisTools.set(CacheConstants.CACHE_PREFIX_LOGIN_USER + loginName, sessionId, 2 * 60 * 60);
+        CacheUserBO cache = new CacheUserBO();
+        cache.setIp(ip);
+        cache.setSessionId(sessionId);
+        cache.setLoginName(loginName);
+        cache.setLoginTime(DateUtils.getDateTime());
+	    redisTools.set(CacheConstants.CACHE_PREFIX_LOGIN_USER + loginName, cache, 2 * 60 * 60);
 	}
 }

@@ -15,7 +15,7 @@ import org.qboot.common.utils.ValidateUtils;
 import org.qboot.sys.dto.SysRoleDto;
 import org.qboot.sys.dto.SysUserDto;
 import org.qboot.sys.exception.errorcode.SysUserErrTable;
-import org.qboot.sys.service.SysLoginLogService;
+import org.qboot.mon.service.MonLoginLogService;
 import org.qboot.sys.service.SysRoleService;
 import org.qboot.sys.service.SysUserService;
 import org.qboot.sys.service.impl.LoginSecurityService;
@@ -52,7 +52,7 @@ public class SysUserController extends BaseController {
 	@Autowired
 	private LoginSecurityService loginSecurityService;
     @Autowired
-    private SysLoginLogService sysLoginLogService;
+    private MonLoginLogService sysLoginLogService;
 
     final String initPwdStr = "user:%s password is %s";
 
