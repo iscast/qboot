@@ -1,4 +1,4 @@
-package org.qboot.common.controller;
+package org.qboot.common.security;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.text.StringEscapeUtils;
