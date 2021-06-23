@@ -17,10 +17,13 @@ import org.qboot.sys.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import reactor.util.function.Tuple2;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Locale;
 
 import static org.qboot.sys.exception.errorcode.SysUserErrTable.*;
 
@@ -68,7 +71,7 @@ public class SysLoginController extends BaseController {
         return ResponeModel.ok(sysUser);
 	}
 
-    @GetMapping("/checkFirstLogin")
+    @PostMapping("/checkFirstLogin")
     public ResponeModel checkFirstLogin() {
     	if (!SecurityUtils.isSuperAdmin(SecurityUtils.getLoginName())
                 && sysUserService.selectFirstLoginUser(SecurityUtils.getUserId())) {
@@ -78,7 +81,7 @@ public class SysLoginController extends BaseController {
 	}
 
     @AccLog
-	@GetMapping("/switchLanguage")
+	@PostMapping("/switchLanguage")
 	public ResponeModel switchLanguage(@RequestParam String lang){
 		if (StringUtils.isBlank(lang)) {
 			return ResponeModel.error(SYS_USER_LANG_INCORRECT);
@@ -91,24 +94,46 @@ public class SysLoginController extends BaseController {
     @GetMapping("/getLoginPage")
     public ResponeModel getLoginPage(){
         JSONObject data = new JSONObject();
-        data.put("loginPage", loginPage());
+        String loginPage = "/login_pc.html";
+        // 判断是否自定义了登陆页面
+        if(StringUtils.isNotBlank(adminLoginUrl) && adminLoginUrl.contains("html")) {
+            int i = adminLoginUrl.lastIndexOf("/");
+            loginPage = adminLoginUrl.substring(i);
+        }
+        data.put("loginPage", loginPage);
         return ResponeModel.ok(data);
     }
 
-	@GetMapping("/getPublicKey")
+	@PostMapping("/getPublicKey")
 	public ResponeModel getPublicKey(HttpServletRequest request) {
 		Tuple2<String, String> keyPair = RSAsecurity.getInstance().generateKeyPair();
 		request.getSession().setAttribute("privateKey", keyPair.getT2());
 		return ResponeModel.ok(SysConstants.SUCCESS, keyPair.getT1());
 	}
 
-    private String loginPage() {
-        // 判断是否自定义了登陆页面
-        String loginPage = "/login_pc.html";
-        if(StringUtils.isNotBlank(adminLoginUrl) && adminLoginUrl.contains("html")) {
-            int i = adminLoginUrl.lastIndexOf("/");
-            loginPage = adminLoginUrl.substring(i);
+    @AccLog
+    @PostMapping("/getLocale")
+    public ResponeModel getLocale(HttpSession session, String lang){
+        if(org.apache.commons.lang.StringUtils.isNotBlank(lang) && !"null".equalsIgnoreCase(lang)) {
+            String[] i18nStr = lang.split("_");
+            Locale locale = new Locale(i18nStr[0],i18nStr[1]);
+            session.setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, locale);
+            return ResponeModel.ok(locale);
         }
-        return loginPage;
+
+        Object sessionAttr = session.getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
+        if(null != sessionAttr && !"null".equalsIgnoreCase(lang)) {
+            return ResponeModel.ok(sessionAttr);
+        }
+
+        CustomUser user = SecurityUtils.getUser();
+        if(user!=null && org.apache.commons.lang.StringUtils.isNotBlank(user.getLang())) {
+            String[] i18nStr = user.getLang().split("_");
+            Locale userLocale = new Locale(i18nStr[0],i18nStr[1]);
+            session.setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, userLocale);
+            return ResponeModel.ok(userLocale);
+        }
+
+        return ResponeModel.ok(Locale.SIMPLIFIED_CHINESE);
     }
 }

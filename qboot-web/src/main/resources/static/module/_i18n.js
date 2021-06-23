@@ -3,7 +3,7 @@ layui.define(['_config', 'admin'], function (exports) {
     var $ = layui.jquery;
     var lang = sessionStorage.getItem("lang");
     var localeData = !lang ? {} : {lang: lang};
-    $.get('/i18n/getLocale', localeData, function (d) {
+    $.post('/user/getLocale', localeData, function (d) {
         locale = d.data;
         var msgs;
         var moduleMsg = {};

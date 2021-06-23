@@ -283,7 +283,7 @@ layui.define(['_config', 'admin', 'layer', 'laytpl', 'element', 'form','_i18n'],
                 sessionStorage.setItem("lang",user.lang);
             }else {
                 $.ajaxSettings.async = false;
-                $.get('/i18n/getLocale', {}, function (data) {
+                $.post('/user/getLocale', {}, function (data) {
                     $('#setLang').val(data.data);
                     sessionStorage.setItem("lang",user.lang);
                 })
@@ -322,7 +322,7 @@ layui.define(['_config', 'admin', 'layer', 'laytpl', 'element', 'form','_i18n'],
             $('#setLang').change(function () {
                 var newLang = $(this).val();
                 // $.ajaxSettings.async = false;
-                $.get(_config.base_server + '/user/switchLanguage', {lang:newLang}, function(res) {
+                $.post(_config.base_server + '/user/switchLanguage', {lang:newLang}, function(res) {
                     index.switchLang(newLang);
                     location.reload();
                 });
@@ -383,7 +383,7 @@ layui.define(['_config', 'admin', 'layer', 'laytpl', 'element', 'form','_i18n'],
         	layer.msg(data.msg, {icon: 1, time: 5000});
         	admin.popupRight('pages/sys/password.html');
         }
-    }, 'get');
+    }, 'post');
 
     exports('index', index);
 });

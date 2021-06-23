@@ -64,9 +64,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				"/assets/**",
 				"/module/i18n/*",
 				"/user/getLoginPage",
-				"/i18n/getLocale",
-				"/favicon.ico",
+				"/user/getLocale",
 				"/user/getPublicKey",
+				"/favicon.ico",
                 loginPage).permitAll()
 		.antMatchers((adminPath + "/**")).authenticated()
 		// 允许跨域

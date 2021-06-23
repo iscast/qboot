@@ -128,7 +128,7 @@
             }
         });
 
-        $.get('/i18n/getLocale', {}, function (d) {
+        $.post('/user/getLocale', {}, function (d) {
             let getLocale = d.data;
             $('#loginLang').val(getLocale)
             switchLangFuc();
@@ -152,7 +152,7 @@
             $.ajax({
                 url: base_server + "/user/getPublicKey",
                 async: false,
-                type: 'get',
+                type: 'post',
                 success: function (data) {
                     if (data.code == 0) {
                     	publicKey = data.data;
