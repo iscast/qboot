@@ -206,29 +206,37 @@ public class RedisTools {
     }
 
     public <V> PageInfo<V> getPage(String key, int pages, int pageLimit) {
-        PageInfo<V> result = null;
+        PageInfo<V> result = new PageInfo<>();
+        result.setTotal(0);
+        if(pages <= 0 || pageLimit <= 0) {
+            result.setPages(1);
+            result.setPageSize(0);
+            return result;
+        }
+
+        result.setPageSize(pageLimit);
+        result.setPages(pages--);
+
         try {
             RList<V> rList = this.redissonClient.getList(key);
             if (null == rList || !rList.isExists()) {
                 logger.error("getCachePage {} fail no exist", key);
-                return null;
+                return result;
             }
             int start = pages * pageLimit;
             int end = start + pageLimit;
             int size = rList.size();
             if(start >= size) {
                 logger.error("getCachePage {} fail pages:{} greater than size{}", key, pages, size);
-                return null;
+                result.setTotal(size);
+                return result;
             }
             if(end > size) {
                 end = size;
             }
 
             RList<V> subLst = rList.subList(start, end);
-            List<V> list = subLst.readAll();
-            result = new PageInfo<>(list);
-            result.setPageSize(pageLimit);
-            result.setPages(pages);
+            result.setList(subLst.readAll());
             result.setTotal(size);
         } catch (Exception e) {
             logger.error("getCachePage {} fail", key, e);
