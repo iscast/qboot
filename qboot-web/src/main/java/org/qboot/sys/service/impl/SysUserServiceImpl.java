@@ -6,6 +6,7 @@ import org.qboot.common.service.CrudService;
 import org.qboot.common.utils.CodecUtils;
 import org.qboot.common.utils.IdGen;
 import org.qboot.common.utils.MyAssertTools;
+import org.qboot.common.utils.PwdUtils;
 import org.qboot.sys.dao.SysUserDao;
 import org.qboot.sys.dto.SysUserDto;
 import org.qboot.sys.dto.SysUserRoleDto;
@@ -72,7 +73,7 @@ public class SysUserServiceImpl extends CrudService<SysUserDao, SysUserDto> impl
         String userId = IdGen.uuid();
         t.setId(userId);
 		t.setSalt(salt);
-		t.setPassword(encryptPwd(t.getPassword(), salt));
+		t.setPassword(PwdUtils.encrypt(t.getPassword(), salt));
 		if(this.d.insert(t) > 0) {
 			return this.saveUserRole(t.getRoleIds(), userId);
 		}
@@ -111,14 +112,14 @@ public class SysUserServiceImpl extends CrudService<SysUserDao, SysUserDto> impl
         qry.setId(userId);
         SysUserDto secretInfo = d.findSecretInfo(qry);
         MyAssertTools.notNull(secretInfo, SYS_USER_NOTEXISTS);
-		return secretInfo.getPassword().equals(CodecUtils.sha256(password + secretInfo.getSalt()));
+		return secretInfo.getPassword().equals(PwdUtils.encrypt(password, secretInfo.getSalt()));
 	}
 
     @Override
 	public int changePwd(SysUserDto secretInfo) {
         String salt = RandomStringUtils.randomAlphanumeric(20);
         secretInfo.setSalt(salt);
-        secretInfo.setPassword(encryptPwd(secretInfo.getPassword(), salt));
+        secretInfo.setPassword(PwdUtils.encrypt(secretInfo.getPassword(), salt));
 		return d.changePwd(secretInfo);
 	}
 
@@ -149,11 +150,5 @@ public class SysUserServiceImpl extends CrudService<SysUserDao, SysUserDto> impl
             userRoleList.add(new SysUserRoleDto(String.valueOf(userId), roleId));
         }
         return this.d.insertUserRole(userRoleList);
-    }
-
-    private String encryptPwd(String password,String salt) {
-        MyAssertTools.hasLength(password, SYS_USER_PWD_EMPTY);
-        MyAssertTools.hasLength(salt, SYS_USER_SALT_EMPTY);
-        return CodecUtils.sha256(password + salt);
     }
 }

@@ -60,7 +60,8 @@ qboot:
   admins:
     - id: 0
       name: superadmin
-      password: 123456
+      password: 36823cefd10fa1fc7b22cbc3c16fe08dfc3206f9736feb2436be792eed32ebda
+      salt: t1QHQ6jsRvXRh4RvDjJw
       mobile: 18123456
       email: 18123456@qboot.com
       lang: zh_CN

@@ -1,8 +1,6 @@
 package org.qboot.common.security;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.qboot.common.constants.SysConstants;
-import org.qboot.common.utils.CodecUtils;
 import org.qboot.sys.dto.SysUserDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,21 +39,16 @@ public class SecurityUtils {
     @PostConstruct
     public void init() {
         if(CollectionUtils.isEmpty(admins)) {
-            logger.info("system don't set admin or config is incomplete");
+            logger.info("qboot system found none admin or config is incomplete");
             return;
         }
 
         for(SysUserDto adm : admins) {
-            String password = adm.getPassword();
             String name = adm.getName();
-            String salt = RandomStringUtils.randomAlphanumeric(20);
             adm.setLoginName(name);
-            adm.setSalt(salt);
             adm.setStatus(SysConstants.SYS_USER_STATUS_NORMAL);
-            adm.setPassword(CodecUtils.sha256(password + salt));
             adminMap.put(name, adm);
         }
-
         admins = null;
     }
 
