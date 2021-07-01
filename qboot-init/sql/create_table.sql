@@ -12,7 +12,7 @@ CREATE TABLE `sys_dept`
     `UPDATE_DATE` datetime     NOT NULL COMMENT '更新时间',
     `REMARKS`     varchar(255) DEFAULT NULL COMMENT '备注信息',
     `PHYSICS_FLAG` tinyint(4) DEFAULT '1' COMMENT '删除标识：1-正常；0-删除',
-    `version` bigint DEFAULT '1' COMMENT '版本',
+    `version` bigint unsigned DEFAULT '1' COMMENT '版本',
     PRIMARY KEY (`ID`) USING BTREE,
     KEY `IDX_SD_PARENT_ID` (`PARENT_ID`) USING BTREE,
     KEY `IDX_SD_CREATE_DATE` (`CREATE_DATE`) USING BTREE,
@@ -34,7 +34,7 @@ CREATE TABLE `sys_dict`
     `UPDATE_DATE` datetime     DEFAULT NULL COMMENT '更新时间',
     `REMARKS`     varchar(255) DEFAULT NULL COMMENT '备注信息',
     `PHYSICS_FLAG` tinyint(4) DEFAULT '1' COMMENT '删除标识：1-正常；0-删除',
-    `version` bigint DEFAULT '1' COMMENT '版本',
+    `version` bigint unsigned DEFAULT '1' COMMENT '版本',
     PRIMARY KEY (`ID`) USING BTREE,
     KEY `TYPE` (`TYPE`) USING BTREE,
     KEY `CREATE_DATE` (`CREATE_DATE`) USING BTREE,
@@ -59,7 +59,7 @@ CREATE TABLE `sys_gen`
     `UPDATE_DATE`   datetime    NOT NULL COMMENT '更新时间',
     `REMARKS`       varchar(255) DEFAULT NULL COMMENT '备注信息',
     `PHYSICS_FLAG`  tinyint(4) DEFAULT '1' COMMENT '删除标识：1-正常；0-删除',
-    `version` bigint DEFAULT '1' COMMENT '版本',
+    `version` bigint unsigned DEFAULT '1' COMMENT '版本',
     PRIMARY KEY (`ID`) USING BTREE,
     KEY `CREATE_DATE` (`CREATE_DATE`) USING BTREE,
     KEY `CREATE_BY` (`CREATE_BY`) USING BTREE,
@@ -96,7 +96,7 @@ CREATE TABLE `sys_menu`
 (
     `ID`            varchar(32)   NOT NULL COMMENT '编号',
     `PARENT_ID`     varchar(32)   NOT NULL COMMENT '父级编号',
-    `PARENT_IDS`    varchar(160)  NOT NULL COMMENT '所有父级编号',
+    `PARENT_IDS`    varchar(160)  DEFAULT NULL COMMENT '所有父级编号',
     `NAME`          varchar(50)   NOT NULL COMMENT '名称',
     `SORT`          int(10)       NOT NULL COMMENT '排序',
     `HREF`          varchar(200)  DEFAULT NULL COMMENT '链接',
@@ -111,7 +111,7 @@ CREATE TABLE `sys_menu`
     `UPDATE_DATE`   datetime      DEFAULT NULL COMMENT '更新时间',
     `REMARKS`       varchar(255)  DEFAULT NULL COMMENT '备注信息',
     `PHYSICS_FLAG`  tinyint(4)    DEFAULT '1' COMMENT '删除标识：1-正常；0-删除',
-    `version`       bigint(20)    DEFAULT '1' COMMENT '版本',
+    `version`       bigint unsigned  DEFAULT '1' COMMENT '版本',
     PRIMARY KEY (`ID`) USING BTREE,
     KEY `PARENT_ID` (`PARENT_ID`) USING BTREE,
     KEY `NAME` (`NAME`) USING BTREE
@@ -130,7 +130,7 @@ CREATE TABLE `sys_param_class`
     `UPDATE_DATE`      datetime     DEFAULT NULL COMMENT '更新时间',
     `REMARKS`          varchar(255) DEFAULT NULL COMMENT '备注信息',
     `PHYSICS_FLAG`     tinyint(4)   DEFAULT '1' COMMENT '删除标识：1-正常；0-删除',
-    `version`          bigint(20)   DEFAULT '1' COMMENT '版本',
+    `version`          bigint unsigned DEFAULT '1' COMMENT '版本',
     PRIMARY KEY (`ID`) USING BTREE,
     UNIQUE KEY `PARAM_KEY` (`PARAM_TYPE_NAME`) USING BTREE,
     KEY `CREATE_BY` (`CREATE_BY`) USING BTREE,
@@ -151,7 +151,7 @@ CREATE TABLE `sys_param_type`
     `UPDATE_DATE`      datetime     DEFAULT NULL COMMENT '更新时间',
     `REMARKS`          varchar(255) DEFAULT NULL COMMENT '备注信息',
     `PHYSICS_FLAG`     tinyint(4)   DEFAULT '1' COMMENT '删除标识：1-正常；0-删除',
-    `version`          bigint(20)   DEFAULT '1' COMMENT '版本',
+    `version`          bigint unsigned DEFAULT '1' COMMENT '版本',
     PRIMARY KEY (`ID`) USING BTREE,
     KEY `CREATE_BY` (`CREATE_BY`) USING BTREE,
     KEY `CREATE_DATE` (`CREATE_DATE`) USING BTREE,
@@ -169,7 +169,7 @@ CREATE TABLE `sys_role`
     `UPDATE_DATE`   datetime     DEFAULT NULL COMMENT '更新时间',
     `REMARKS`       varchar(255) DEFAULT NULL COMMENT '备注信息',
     `PHYSICS_FLAG`  tinyint(4)      DEFAULT '1' COMMENT '删除标识：1-正常；0-删除',
-    `version`       bigint DEFAULT '1' COMMENT '版本',
+    `version`       bigint unsigned DEFAULT '1' COMMENT '版本',
     PRIMARY KEY (`ID`) USING BTREE,
     KEY `NAME` (`NAME`) USING BTREE,
     KEY `CREATE_BY` (`CREATE_BY`) USING BTREE,
@@ -216,7 +216,7 @@ CREATE TABLE `sys_task`
     `UPDATE_BY`     varchar(64)  DEFAULT NULL COMMENT '更新者',
     `EXEC_TYPE`     tinyint(1)   NOT NULL DEFAULT '0' COMMENT '执行方式:0阻塞 1非阻塞.',
     `PHYSICS_FLAG`  tinyint(4)   DEFAULT '1' COMMENT '删除标识：1-正常；0-删除',
-    `version`       bigint(20)   DEFAULT '1' COMMENT '版本',
+    `version`       bigint unsigned DEFAULT '1' COMMENT '版本',
     PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COMMENT ='任务表.';
 
@@ -236,14 +236,14 @@ CREATE TABLE `sys_task_log`
     `CREATE_BY`   varchar(64)         DEFAULT NULL COMMENT '创建者',
     `UPDATE_BY`   varchar(64)         DEFAULT NULL COMMENT '更新者',
     PRIMARY KEY (`ID`) USING BTREE,
-    KEY `bi_task_log_idx1` (`TASK_ID`) USING BTREE
+    KEY `bi_task_log_idx` (`TASK_ID`) USING BTREE
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COMMENT ='任务日志表.';
 
 DROP TABLE IF EXISTS `sys_user`;
 CREATE TABLE `sys_user`
 (
     `ID`            varchar(32)   NOT NULL COMMENT '编号',
-    `DEPT_ID`       varchar(32)   DEFAULT NULL COMMENT '部门',
+    `DEPT_ID`       varchar(32)   DEFAULT NULL COMMENT '部门ID',
     `LOGIN_NAME`    varchar(50)   NOT NULL COMMENT '登录名',
     `PASSWORD`      varchar(100)  NOT NULL COMMENT '密码',
     `SALT`          varchar(32)   NOT NULL,
@@ -263,7 +263,7 @@ CREATE TABLE `sys_user`
     `FLD_S2`        varchar(256)  DEFAULT NULL COMMENT '扩展字符字段1',
     `lang`          varchar(5)    DEFAULT NULL COMMENT '语言',
     `PHYSICS_FLAG`  tinyint(4)    DEFAULT '1' COMMENT '删除标识：1-正常；0-删除',
-    `version`       bigint(20)    DEFAULT '1' COMMENT '版本',
+    `version`       bigint unsigned DEFAULT '1' COMMENT '版本',
     PRIMARY KEY (`ID`) USING BTREE,
     UNIQUE KEY `LOGIN_NAME` (`LOGIN_NAME`) USING BTREE,
     KEY `DEPT_ID` (`DEPT_ID`) USING BTREE,
