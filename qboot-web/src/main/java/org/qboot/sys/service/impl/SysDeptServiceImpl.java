@@ -9,7 +9,6 @@ import org.qboot.sys.dao.SysDeptDao;
 import org.qboot.sys.dto.SysDeptDto;
 import org.qboot.sys.service.SysDeptService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.io.Serializable;
@@ -23,7 +22,6 @@ import java.util.List;
 @Service
 public class SysDeptServiceImpl extends CrudService<SysDeptDao, SysDeptDto> implements SysDeptService {
 
-    @Transactional(rollbackFor = Exception.class)
     @Override
     public int save(SysDeptDto sysDept) {
         SysDeptDto parent = null;
